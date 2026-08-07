@@ -1,0 +1,1133 @@
+[
+  {
+    "id": "retail-online-order",
+    "title": "One Online Order",
+    "subtitle": "Buy Now to the doorstep",
+    "industry": "Retail, Supply Chain & Logistics",
+    "learningObjective": "Map the process, find the decisions, judge whether AI fits, and design only the decisions that survive.",
+    "throughline": "Hunt for the diamonds — that is where AI replaces judgment.",
+    "introduction": {
+      "title": "What happens after a customer selects Buy Now?",
+      "context": "An online order looks like one transaction to the customer, but fulfilling it crosses commerce, fraud operations, warehouse, carrier, and support teams. Each handoff can change whether the order is accepted, where inventory is sourced, what delivery promise is made, and how an exception is resolved.",
+      "workflow": "The workflow follows one order through address and payment checks, inventory and carrier assignment, picking and packing, delivery monitoring, and customer support. The exception paths reveal the manual review, oversold inventory, late-delivery, and remedy work hidden behind the normal path.",
+      "startsWhen": "The customer submits items, delivery details, payment, and account context.",
+      "endsWhen": "The order is delivered and kept, or its final exception and remedy are resolved."
+    },
+    "stages": [
+      {"id": "input", "label": "Inputs", "description": "Items, address, card, account history"},
+      {"id": "process", "label": "Process", "description": "Verify, allocate stock, pick, pack, label"},
+      {"id": "decision", "label": "Decision", "description": "Is this payment good? Which carrier?"},
+      {"id": "action", "label": "Action", "description": "Ship, hold for review, or cancel"},
+      {"id": "outcome", "label": "Outcome", "description": "It arrived Thursday, and they kept it"}
+    ],
+    "baseline": [
+      {"value": "40,000", "label": "orders per month", "note": "Synthetic assumption"},
+      {"value": "3.1%", "label": "flagged for manual review", "note": "Synthetic assumption"},
+      {"value": "4 min", "label": "per manual review", "note": "Synthetic assumption"},
+      {"value": "1.8%", "label": "delivered late", "note": "Synthetic assumption"},
+      {"value": "83 hrs", "label": "monthly payment review", "note": "40,000 × 3.1% × 4 ÷ 60"}
+    ],
+    "lanes": [
+      {"id": "customer", "label": "Customer", "order": 0},
+      {"id": "commerce", "label": "Commerce system", "order": 1},
+      {"id": "fraud", "label": "Fraud operations", "order": 2},
+      {"id": "warehouse", "label": "Warehouse", "order": 3},
+      {"id": "carrier", "label": "Carrier", "order": 4},
+      {"id": "support", "label": "Support", "order": 5}
+    ],
+    "nodes": [
+      {"id": "order", "label": "Order placed", "lane": "customer", "kind": "start", "x": 30, "documented": true},
+      {"id": "address", "label": "Address deliverable?", "lane": "commerce", "kind": "decision", "x": 165, "documented": true, "decisionId": "address"},
+      {"id": "payment", "label": "Payment fraudulent?", "lane": "commerce", "kind": "decision", "x": 335, "documented": true, "decisionId": "payment"},
+      {"id": "manual-review", "label": "Manual review queue", "lane": "fraud", "kind": "process", "x": 355, "documented": false},
+      {"id": "allocate", "label": "Warehouse & carrier?", "lane": "warehouse", "kind": "decision", "x": 515, "documented": true, "decisionId": "allocation"},
+      {"id": "pick-pack", "label": "Pick and pack", "lane": "warehouse", "kind": "process", "x": 685, "documented": true},
+      {"id": "contact", "label": "Contact customer", "lane": "support", "kind": "process", "x": 555, "documented": false},
+      {"id": "promise", "label": "Arrive when promised?", "lane": "carrier", "kind": "decision", "x": 830, "documented": true, "decisionId": "delivery"},
+      {"id": "ship", "label": "Ship order", "lane": "carrier", "kind": "action", "x": 995, "documented": true},
+      {"id": "message", "label": "What do we tell them?", "lane": "support", "kind": "decision", "x": 840, "documented": false, "decisionId": "message"},
+      {"id": "remedy", "label": "Refund, replace, deny?", "lane": "support", "kind": "decision", "x": 1010, "documented": false, "decisionId": "remedy"},
+      {"id": "delivered", "label": "Delivered & kept", "lane": "customer", "kind": "outcome", "x": 1110, "documented": true}
+    ],
+    "edges": [
+      {"id": "e1", "from": "order", "to": "address", "label": "submit", "kind": "normal", "documented": true},
+      {"id": "e2", "from": "address", "to": "payment", "label": "yes", "kind": "normal", "documented": true},
+      {"id": "e3", "from": "payment", "to": "allocate", "label": "clear", "kind": "normal", "documented": true},
+      {"id": "e4", "from": "allocate", "to": "pick-pack", "label": "assigned", "kind": "normal", "documented": true},
+      {"id": "e5", "from": "pick-pack", "to": "promise", "label": "packed", "kind": "normal", "documented": true},
+      {"id": "e6", "from": "promise", "to": "ship", "label": "on track", "kind": "normal", "documented": true},
+      {"id": "e7", "from": "ship", "to": "delivered", "label": "delivered", "kind": "normal", "documented": true},
+      {"id": "x1", "from": "payment", "to": "manual-review", "label": "flagged", "kind": "exception", "documented": false},
+      {"id": "x2", "from": "manual-review", "to": "allocate", "label": "approve", "kind": "exception", "documented": false},
+      {"id": "x3", "from": "allocate", "to": "contact", "label": "item oversold", "kind": "exception", "documented": false},
+      {"id": "x4", "from": "contact", "to": "pick-pack", "label": "split shipment", "kind": "loop", "documented": false},
+      {"id": "x5", "from": "promise", "to": "message", "label": "late risk", "kind": "exception", "documented": false},
+      {"id": "x6", "from": "ship", "to": "message", "label": "carrier exception", "kind": "exception", "documented": false},
+      {"id": "x7", "from": "message", "to": "remedy", "label": "unresolved", "kind": "exception", "documented": false},
+      {"id": "x8", "from": "remedy", "to": "delivered", "label": "resolved", "kind": "loop", "documented": false}
+    ],
+    "decisions": [
+      {
+        "id": "address",
+        "label": "Is this address deliverable?",
+        "owner": "Commerce system",
+        "frequency": "Every order",
+        "wrongCost": "A parcel goes nowhere",
+        "verdict": "rule",
+        "verdictLabel": "Use a rule",
+        "testAnswer": "No. Another year of data does not change a published postal rule.",
+        "why": "The format and service-area logic are stable and known in advance.",
+        "recommendation": "Implement deterministic validation and address correction, not a model.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "payment",
+        "label": "Is this payment fraudulent?",
+        "owner": "Fraud analyst",
+        "frequency": "1,240 reviews per month",
+        "wrongCost": "A chargeback, or a good customer lost",
+        "verdict": "ai-classification",
+        "verdictLabel": "AI · Classification",
+        "testAnswer": "Yes. New outcomes reveal changing fraud patterns that nobody has fully written down.",
+        "why": "The decision depends on patterns across many prior examples and changes as fraud tactics move.",
+        "recommendation": "Rank payments into approve, review, and decline buckets; route ambiguity to an analyst.",
+        "aiRelevant": true,
+        "placement": "decision",
+        "design": {
+          "data": {
+            "summary": "Three years of orders and final outcomes, not only analyst approvals.",
+            "owner": "Commerce and fraud operations",
+            "readiness": "Synthetic readiness assumption: owned, labelled, refreshing",
+            "fields": ["Order amount", "Card and account history", "Device and location signals", "Chargebacks", "Confirmed fraud", "Refund outcomes"],
+            "risk": "Historical labels record what analysts decided, not necessarily what was true."
+          },
+          "method": {
+            "pattern": "classification",
+            "output": "Approve, review, or decline",
+            "technique": "Explainable gradient-boosted classifier on tabular features"
+          },
+          "metric": {
+            "technical": "Catch 85% of currently detected fraud while sending under 3% of good orders to review.",
+            "business": "Halve 83 monthly review hours without increasing chargebacks or rejecting good customers.",
+            "baseline": "40,000 orders × 3.1% flagged × 4 minutes = 83 staff-hours per month"
+          },
+          "human": {
+            "role": "Fraud analyst",
+            "checkpoint": "Review genuinely ambiguous payments with evidence and enough time to decide.",
+            "falsePositiveCost": "A legitimate customer is blocked and may not return.",
+            "falseNegativeCost": "Fraud succeeds; the retailer loses goods, payment, and a chargeback fee."
+          },
+          "architecture": ["Order and outcome data", "Feature and policy service", "Classification model", "Decision thresholds", "Analyst review queue", "Outcome monitoring and retraining"]
+        }
+      },
+      {
+        "id": "delivery",
+        "label": "Will it arrive when promised?",
+        "owner": "Commerce system",
+        "frequency": "Every order",
+        "wrongCost": "A broken promise and a support ticket",
+        "verdict": "ai-prediction",
+        "verdictLabel": "AI · Prediction",
+        "testAnswer": "Yes. Weather, seasonal volume, route, and carrier performance change with new data.",
+        "why": "The outcome is uncertain and must be estimated from historical delivery results.",
+        "recommendation": "Predict the probability or expected delay, then surface risk before promising a date.",
+        "aiRelevant": true,
+        "placement": "decision",
+        "design": {
+          "data": {
+            "summary": "Historical promised and actual delivery times joined to route conditions.",
+            "owner": "Fulfilment and carrier management",
+            "readiness": "Cross-team data; expect ownership and integration work",
+            "fields": ["Warehouse", "Carrier", "Route", "Promised date", "Actual delivery", "Weather", "Volume", "Seasonality"],
+            "risk": "Averages hide the expensive late tail; actual outcomes must be captured consistently."
+          },
+          "method": {
+            "pattern": "prediction",
+            "output": "Expected arrival or probability of missing the promise",
+            "technique": "Supervised delivery-time prediction with calibrated uncertainty"
+          },
+          "metric": {
+            "technical": "MAE or RMSE in delivery days, plus performance on the worst 5% of misses.",
+            "business": "Reduce broken promises and related support tickets from the 1.8% late baseline.",
+            "baseline": "1.8% of orders delivered late under the synthetic baseline"
+          },
+          "human": {
+            "role": "Fulfilment manager",
+            "checkpoint": "Set acceptable risk thresholds and review persistent carrier or route failures.",
+            "falsePositiveCost": "An unnecessarily conservative promise may reduce conversion.",
+            "falseNegativeCost": "A confident but late promise creates support cost and lost trust."
+          },
+          "architecture": ["Delivery outcome history", "Weather and volume features", "Prediction service", "Promise-date policy", "Operations monitoring"]
+        }
+      },
+      {
+        "id": "allocation",
+        "label": "Which warehouse, which carrier?",
+        "owner": "Commerce system",
+        "frequency": "Every order",
+        "wrongCost": "Extra freight cost, or a late delivery",
+        "verdict": "optimization",
+        "verdictLabel": "Optimization · Usually not ML",
+        "testAnswer": "No training data is required if the objective and constraints can be written exactly.",
+        "why": "This is an assignment problem with costs, capacity, inventory, service levels, and routes.",
+        "recommendation": "Use an operations-research solver before considering machine learning.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "message",
+        "label": "What do we tell an unhappy customer?",
+        "owner": "Support agent",
+        "frequency": "About 900 per month",
+        "wrongCost": "Churn, or a refund the retailer never owed",
+        "verdict": "ai-generation",
+        "verdictLabel": "AI · Generation with a human",
+        "testAnswer": "The policy decision stays separate; generation can draft the communication from grounded facts.",
+        "why": "Generation produces an artifact inside a process box rather than resolving the policy diamond.",
+        "recommendation": "Ground a draft in actual order status and policy, then require agent review before sending.",
+        "aiRelevant": true,
+        "placement": "process",
+        "design": {
+          "data": {
+            "summary": "Current order, tracking events, approved policy, prior contact, and tone guidance.",
+            "owner": "Customer support and commerce operations",
+            "readiness": "Operational sources exist but must be joined and permissioned",
+            "fields": ["Order status", "Tracking events", "Customer message", "Refund policy", "Service commitments", "Brand tone"],
+            "risk": "A fluent draft can still invent status, policy, or compensation."
+          },
+          "method": {
+            "pattern": "generation",
+            "output": "A grounded draft response",
+            "technique": "Retrieval-grounded text generation with policy and order tools"
+          },
+          "metric": {
+            "technical": "Groundedness and unsupported-claim rate.",
+            "business": "Human acceptance rate, response time, repeat contacts, and avoidable refunds.",
+            "baseline": "About 900 monthly support cases in the synthetic baseline"
+          },
+          "human": {
+            "role": "Support agent",
+            "checkpoint": "Verify facts, policy, tone, and remedy before sending.",
+            "falsePositiveCost": "The system offers compensation or makes a promise that policy does not support.",
+            "falseNegativeCost": "The response omits a real issue and the customer contacts support again."
+          },
+          "architecture": ["Order-status tool", "Policy retrieval", "Grounded generation", "Claim checks", "Agent review", "Approved send action"]
+        }
+      },
+      {
+        "id": "remedy",
+        "label": "Refund, replace, or deny?",
+        "owner": "Support lead",
+        "frequency": "About 400 per month",
+        "wrongCost": "Margin, or a customer who never returns",
+        "verdict": "human",
+        "verdictLabel": "Keep the human",
+        "testAnswer": "The costs are lopsided and the judgment combines policy, context, and customer impact.",
+        "why": "A model can prepare evidence, but it should not own the consequential remedy decision in this first design.",
+        "recommendation": "Improve the evidence shown to the support lead; keep final authority with the human.",
+        "aiRelevant": false,
+        "placement": "decision"
+      }
+    ],
+    "featuredDecisionId": "payment",
+    "source": "synthetic-workflow-assumption"
+  },
+  {
+    "id": "manufacturing-maintenance",
+    "title": "One Equipment Alert",
+    "subtitle": "From noisy signal to safe return to service",
+    "industry": "Manufacturing",
+    "learningObjective": "Separate signal validation, failure prediction, inspection prioritization, diagnostic support, and accountable equipment action.",
+    "throughline": "A risk score can focus attention; it cannot authorize a shutdown.",
+    "introduction": {
+      "title": "Why one machine alert becomes a cross-team decision",
+      "context": "Industrial equipment produces a steady stream of alarms and sensor readings, but many alerts are duplicates, noise, or signs that do not require immediate intervention. Reliability and maintenance teams must identify real failure risk, use scarce technicians and parts well, and protect production without allowing a prediction to control equipment directly.",
+      "workflow": "The workflow follows one alert through signal validation, asset-history enrichment, 48-hour failure-risk estimation, inspection prioritization, work-order creation, field diagnosis, and an accountable decision to monitor, repair, run at reduced output, or stop the equipment.",
+      "startsWhen": "A monitored machine produces an alert that may indicate changing equipment condition.",
+      "endsWhen": "The alert is closed as noise, the asset remains under monitoring, or repair is verified and the asset is safe to operate."
+    },
+    "stages": [
+      {"id": "input", "label": "Inputs", "description": "Telemetry, asset history, operating context"},
+      {"id": "process", "label": "Process", "description": "Validate, enrich, triage, inspect"},
+      {"id": "decision", "label": "Decision", "description": "Failure risk? Inspect first? Stop equipment?"},
+      {"id": "action", "label": "Action", "description": "Monitor, diagnose, repair, or shut down"},
+      {"id": "outcome", "label": "Outcome", "description": "Safe availability with fewer surprise stops"}
+    ],
+    "baseline": [
+      {"value": "1,800", "label": "asset alerts per month", "note": "Synthetic assumption"},
+      {"value": "62%", "label": "closed as duplicate or noise", "note": "Synthetic assumption"},
+      {"value": "140", "label": "monthly field inspections", "note": "Synthetic assumption"},
+      {"value": "6", "label": "unplanned stops per month", "note": "Synthetic assumption"},
+      {"value": "360 hrs", "label": "monthly first-pass triage", "note": "1,800 × 12 minutes ÷ 60"}
+    ],
+    "lanes": [
+      {"id": "asset", "label": "Machine or asset", "order": 0},
+      {"id": "monitoring", "label": "Monitoring platform", "order": 1},
+      {"id": "reliability", "label": "Reliability engineering", "order": 2},
+      {"id": "planning", "label": "Maintenance planning", "order": 3},
+      {"id": "parts", "label": "Parts and inventory", "order": 4},
+      {"id": "technician", "label": "Field technician", "order": 5},
+      {"id": "operations", "label": "Operations supervisor", "order": 6}
+    ],
+    "nodes": [
+      {"id": "alert", "label": "Asset alert", "lane": "asset", "kind": "start", "x": 25, "documented": true},
+      {"id": "signal", "label": "Signal valid?", "lane": "monitoring", "kind": "decision", "x": 155, "documented": true, "decisionId": "signal"},
+      {"id": "context", "label": "Join asset context", "lane": "monitoring", "kind": "process", "x": 300, "documented": true},
+      {"id": "risk", "label": "Fail within 48 hours?", "lane": "reliability", "kind": "decision", "x": 445, "documented": true, "decisionId": "risk"},
+      {"id": "priority", "label": "Inspect which asset first?", "lane": "planning", "kind": "decision", "x": 590, "documented": true, "decisionId": "priority"},
+      {"id": "work-order", "label": "Open work order?", "lane": "planning", "kind": "decision", "x": 735, "documented": true, "decisionId": "work-order"},
+      {"id": "diagnostic", "label": "Suggest diagnostic steps", "lane": "technician", "kind": "process", "x": 875, "documented": true, "decisionId": "diagnostic"},
+      {"id": "shutdown", "label": "Stop equipment?", "lane": "operations", "kind": "decision", "x": 1020, "documented": true, "decisionId": "shutdown"},
+      {"id": "repair", "label": "Inspect and repair", "lane": "technician", "kind": "action", "x": 1135, "documented": true},
+      {"id": "available", "label": "Safe and available", "lane": "asset", "kind": "outcome", "x": 1180, "documented": true},
+      {"id": "missing-data", "label": "Restore missing telemetry", "lane": "reliability", "kind": "process", "x": 315, "documented": false},
+      {"id": "parts-delay", "label": "Parts unavailable", "lane": "parts", "kind": "process", "x": 875, "documented": false},
+      {"id": "repeat-alert", "label": "Alert repeats after repair", "lane": "monitoring", "kind": "process", "x": 1080, "documented": false}
+    ],
+    "edges": [
+      {"id": "e1", "from": "alert", "to": "signal", "label": "detect", "kind": "normal", "documented": true},
+      {"id": "e2", "from": "signal", "to": "context", "label": "valid", "kind": "normal", "documented": true},
+      {"id": "e3", "from": "context", "to": "risk", "label": "history", "kind": "normal", "documented": true},
+      {"id": "e4", "from": "risk", "to": "priority", "label": "risk", "kind": "normal", "documented": true},
+      {"id": "e5", "from": "priority", "to": "work-order", "label": "allocate", "kind": "normal", "documented": true},
+      {"id": "e6", "from": "work-order", "to": "diagnostic", "label": "dispatch", "kind": "normal", "documented": true},
+      {"id": "e7", "from": "diagnostic", "to": "shutdown", "label": "evidence", "kind": "normal", "documented": true},
+      {"id": "e8", "from": "shutdown", "to": "repair", "label": "authorize", "kind": "normal", "documented": true},
+      {"id": "e9", "from": "repair", "to": "available", "label": "verify", "kind": "normal", "documented": true},
+      {"id": "x1", "from": "signal", "to": "available", "label": "duplicate or noise", "kind": "exception", "documented": false},
+      {"id": "x2", "from": "context", "to": "missing-data", "label": "incomplete", "kind": "exception", "documented": false},
+      {"id": "x3", "from": "missing-data", "to": "context", "label": "restored", "kind": "loop", "documented": false},
+      {"id": "x4", "from": "risk", "to": "available", "label": "monitor", "kind": "exception", "documented": false},
+      {"id": "x5", "from": "priority", "to": "parts-delay", "label": "blocked", "labelDx": -55, "labelDy": 8, "kind": "exception", "documented": false},
+      {"id": "x6", "from": "parts-delay", "to": "priority", "label": "reschedule", "labelDy": 18, "kind": "loop", "documented": false},
+      {"id": "x7", "from": "repair", "to": "repeat-alert", "label": "recurs", "kind": "exception", "documented": false},
+      {"id": "x8", "from": "repeat-alert", "to": "risk", "label": "reassess", "kind": "loop", "documented": false}
+    ],
+    "decisions": [
+      {
+        "id": "signal",
+        "label": "Is this signal valid?",
+        "owner": "Monitoring platform",
+        "frequency": "Every alert",
+        "wrongCost": "Wasted inspection capacity, or a real warning discarded",
+        "verdict": "rule",
+        "verdictLabel": "Use a rule",
+        "testAnswer": "No. Range checks, stale timestamps, duplicate windows, and sensor-health flags are known validation logic.",
+        "why": "The cheapest first step is deterministic validation before any learned pattern is trusted.",
+        "recommendation": "Apply sensor-health, freshness, range, and duplicate-event rules; route unresolved quality failures for instrumentation repair.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "risk",
+        "label": "Will this asset fail within 48 hours?",
+        "owner": "Reliability engineer",
+        "frequency": "Every validated alert",
+        "wrongCost": "An unnecessary interruption, or an unplanned production stop",
+        "verdict": "ai-prediction",
+        "verdictLabel": "AI · Prediction",
+        "testAnswer": "Yes. Confirmed outcomes reveal changing combinations of vibration, temperature, load, and prior repair history.",
+        "why": "The output is the calibrated probability of a future event over a defined time horizon.",
+        "recommendation": "Estimate 48-hour failure risk with uncertainty and evidence; never connect the score directly to equipment control.",
+        "aiRelevant": true,
+        "placement": "decision",
+        "design": {
+          "data": {
+            "summary": "Time-aligned telemetry joined to asset configuration, maintenance actions, and confirmed failure outcomes.",
+            "owner": "Reliability engineering and maintenance operations",
+            "readiness": "Synthetic readiness assumption: 18 months available; failure labels require review",
+            "fields": ["Vibration", "Temperature", "Load", "Alarm history", "Asset class", "Maintenance history", "Confirmed failures"],
+            "risk": "Work orders record what technicians did, not always the true failure mode; leakage from post-failure signals can inflate results."
+          },
+          "method": {
+            "pattern": "prediction",
+            "output": "Probability of confirmed failure within 48 hours",
+            "technique": "Calibrated supervised prediction over engineered time-window features"
+          },
+          "metric": {
+            "technical": "Calibration error and recall at the inspection-capacity threshold, segmented by asset class.",
+            "business": "Increase useful inspections and reduce the six monthly unplanned stops without increasing unnecessary shutdowns.",
+            "baseline": "1,800 alerts, 140 inspections, and 6 unplanned stops per month"
+          },
+          "human": {
+            "role": "Reliability engineer",
+            "checkpoint": "Review evidence, uncertainty, operating context, and recent maintenance before recommending action.",
+            "falsePositiveCost": "A healthy asset consumes scarce inspection time or is interrupted unnecessarily.",
+            "falseNegativeCost": "A failure is missed and causes safety exposure, downtime, or secondary damage."
+          },
+          "architecture": ["Telemetry quality service", "Time-window feature pipeline", "Calibrated prediction model", "Risk and evidence API", "Reliability review queue", "Outcome monitoring"]
+        }
+      },
+      {
+        "id": "priority",
+        "label": "Which asset should be inspected first?",
+        "owner": "Maintenance planner",
+        "frequency": "Each planning cycle",
+        "wrongCost": "A high-impact asset waits while capacity is spent elsewhere",
+        "verdict": "optimization",
+        "verdictLabel": "Optimization · Use a solver",
+        "testAnswer": "The inputs may include predictions, but the choice is an allocation problem with technicians, parts, access windows, and production impact.",
+        "why": "A stated objective and explicit constraints are more transparent than asking a model to imitate historical schedules.",
+        "recommendation": "Optimize the inspection queue using risk, consequence, capacity, access, skills, and parts constraints.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "work-order",
+        "label": "Should a work order be opened?",
+        "owner": "Maintenance planning system",
+        "frequency": "Every accepted inspection recommendation",
+        "wrongCost": "Duplicate work and queue noise, or an approved task never reaches a technician",
+        "verdict": "automation",
+        "verdictLabel": "Automate with rules",
+        "testAnswer": "No. Once required evidence, priority, and duplicate checks pass, the handoff is deterministic.",
+        "why": "This is controlled workflow automation, not a judgment that improves by learning from examples.",
+        "recommendation": "Create a work order only after required fields, duplicate, authorization, and scheduling checks pass.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "diagnostic",
+        "label": "What should the technician check next?",
+        "owner": "Field technician",
+        "frequency": "Every dispatched inspection",
+        "wrongCost": "Longer diagnosis, an unsafe instruction, or a missed root cause",
+        "verdict": "ai-generation",
+        "verdictLabel": "AI · Generation with a human",
+        "testAnswer": "Generation can assemble a context-specific diagnostic brief, but the technician must validate it against the asset and safety procedure.",
+        "why": "The output is a grounded work artifact, not the final equipment decision.",
+        "recommendation": "Draft evidence-linked checks from current signals, manuals, prior repairs, and approved procedures for technician review.",
+        "aiRelevant": true,
+        "placement": "process",
+        "design": {
+          "data": {
+            "summary": "Current alert evidence, asset manual, approved safety procedures, prior work orders, and known-failure guidance.",
+            "owner": "Maintenance engineering and EHS",
+            "readiness": "Synthetic readiness assumption: manuals are approved; work-order notes vary in quality",
+            "fields": ["Current signals", "Asset model", "Manual sections", "Safety procedure", "Prior repairs", "Known symptoms"],
+            "risk": "A fluent diagnostic sequence can omit lockout requirements or repeat an incorrect historical repair."
+          },
+          "method": {
+            "pattern": "generation",
+            "output": "Evidence-linked diagnostic brief and suggested check sequence",
+            "technique": "Retrieval-grounded generation with asset, procedure, and work-history tools"
+          },
+          "metric": {
+            "technical": "Grounded claim rate, required-safety-step coverage, and unsupported-instruction rate.",
+            "business": "Reduce first-diagnosis time and repeat visits without increasing safety deviations or unnecessary parts use.",
+            "baseline": "140 monthly inspections with technician review required for every brief"
+          },
+          "human": {
+            "role": "Field technician",
+            "checkpoint": "Confirm asset identity, lockout requirements, observed condition, and each diagnostic action before execution.",
+            "falsePositiveCost": "The technician performs an irrelevant or disruptive check.",
+            "falseNegativeCost": "The brief omits a critical cause or safety step and the asset returns to service incorrectly."
+          },
+          "architecture": ["Asset-context adapter", "Approved manual index", "Procedure policy service", "Grounded generation", "Claim and safety checks", "Technician review"]
+        }
+      },
+      {
+        "id": "shutdown",
+        "label": "Should operations stop the equipment?",
+        "owner": "Operations supervisor",
+        "frequency": "Only when evidence indicates consequential risk",
+        "wrongCost": "Production is interrupted unnecessarily, or unsafe equipment continues running",
+        "verdict": "human",
+        "verdictLabel": "Keep the human",
+        "testAnswer": "No model should own this consequential action. The decision combines evidence, safety procedure, production state, and accountable authority.",
+        "why": "Predictions and diagnostic evidence inform the decision, but they do not carry operational accountability.",
+        "recommendation": "Present evidence and escalation criteria; require an authorized supervisor to stop, derate, or continue operation.",
+        "aiRelevant": false,
+        "placement": "decision"
+      }
+    ],
+    "featuredDecisionId": "risk",
+    "source": "synthetic-workflow-assumption"
+  },
+  {
+    "id": "financial-kyc",
+    "title": "One Customer Identity (KYC) Review",
+    "subtitle": "From customer submission to accountable case disposition",
+    "industry": "Financial Services",
+    "learningObjective": "Separate document interpretation, explicit policy checks, screening triage, workflow automation, and accountable compliance judgment.",
+    "throughline": "AI can prepare and triage evidence; policy stays explicit and disposition stays human.",
+    "introduction": {
+      "title": "What a customer identity review is protecting",
+      "context": "Know Your Customer, or KYC, is the regulated process used to verify who a customer is, understand beneficial ownership, and identify evidence that requires additional review before an account is opened. The work combines variable documents with explicit policy, screening requirements, and decisions that can materially affect both the institution and the applicant.",
+      "workflow": "The workflow follows one onboarding packet through document extraction, identity and ownership normalization, completeness and consistency checks, approved screening, review routing, and human disposition. Low-confidence evidence, missing documents, conflicting records, and uncertain screening matches create the exception paths.",
+      "startsWhen": "An applicant submits identity, onboarding, and ownership evidence.",
+      "endsWhen": "An authorized compliance role records a clear, escalate, or decline disposition with supporting evidence."
+    },
+    "stages": [
+      {"id": "input", "label": "Inputs", "description": "Identity documents, forms, ownership, policy"},
+      {"id": "process", "label": "Process", "description": "Intake, extract, normalize, screen"},
+      {"id": "decision", "label": "Decision", "description": "Reliable? Complete? Consistent? Potential match?"},
+      {"id": "action", "label": "Action", "description": "Clear, request evidence, or escalate"},
+      {"id": "outcome", "label": "Outcome", "description": "Traceable analyst-owned disposition"}
+    ],
+    "baseline": [
+      {"value": "5,000", "label": "packets per month", "note": "Synthetic assumption"},
+      {"value": "24%", "label": "enter exception preparation", "note": "Synthetic assumption"},
+      {"value": "18 min", "label": "manual exception preparation", "note": "Synthetic assumption"},
+      {"value": "7%", "label": "resubmitted for missing evidence", "note": "Synthetic assumption"},
+      {"value": "360 hrs", "label": "monthly exception preparation", "note": "5,000 × 24% × 18 ÷ 60"}
+    ],
+    "lanes": [
+      {"id": "applicant", "label": "Applicant", "order": 0},
+      {"id": "intake", "label": "Onboarding portal", "order": 1},
+      {"id": "documents", "label": "Document intelligence", "order": 2},
+      {"id": "policy", "label": "Policy and screening", "order": 3},
+      {"id": "analyst", "label": "Customer identity analyst", "order": 4},
+      {"id": "compliance", "label": "Compliance officer", "order": 5}
+    ],
+    "nodes": [
+      {"id": "packet", "label": "Packet submitted", "lane": "applicant", "kind": "start", "x": 25, "documented": true},
+      {"id": "extract", "label": "Evidence extracted reliably?", "lane": "documents", "kind": "decision", "x": 145, "documented": true, "decisionId": "extract"},
+      {"id": "normalize", "label": "Normalize identity and ownership", "lane": "documents", "kind": "process", "x": 285, "documented": true},
+      {"id": "complete", "label": "Required evidence present?", "lane": "policy", "kind": "decision", "x": 425, "documented": true, "decisionId": "complete"},
+      {"id": "consistent", "label": "Records agree?", "lane": "policy", "kind": "decision", "x": 565, "documented": true, "decisionId": "consistent"},
+      {"id": "screen", "label": "Run approved screening", "lane": "policy", "kind": "process", "x": 700, "documented": true},
+      {"id": "match", "label": "Potential screening match?", "lane": "analyst", "kind": "decision", "x": 825, "documented": true, "decisionId": "match"},
+      {"id": "route", "label": "Route review packet?", "lane": "intake", "kind": "decision", "x": 945, "documented": true, "decisionId": "route"},
+      {"id": "disposition", "label": "Clear, escalate, or decline?", "lane": "compliance", "kind": "decision", "x": 1060, "documented": true, "decisionId": "disposition"},
+      {"id": "record", "label": "Disposition recorded", "lane": "intake", "kind": "outcome", "x": 1180, "documented": true},
+      {"id": "low-confidence", "label": "Review source document", "lane": "analyst", "kind": "process", "x": 295, "documented": false},
+      {"id": "missing", "label": "Request missing evidence", "lane": "applicant", "kind": "process", "x": 470, "documented": false},
+      {"id": "enhanced", "label": "Enhanced due diligence", "lane": "analyst", "kind": "process", "x": 965, "documented": false}
+    ],
+    "edges": [
+      {"id": "e1", "from": "packet", "to": "extract", "label": "ingest", "kind": "normal", "documented": true},
+      {"id": "e2", "from": "extract", "to": "normalize", "label": "confident", "kind": "normal", "documented": true},
+      {"id": "e3", "from": "normalize", "to": "complete", "label": "fields", "kind": "normal", "documented": true},
+      {"id": "e4", "from": "complete", "to": "consistent", "label": "complete", "kind": "normal", "documented": true},
+      {"id": "e5", "from": "consistent", "to": "screen", "label": "consistent", "kind": "normal", "documented": true},
+      {"id": "e6", "from": "screen", "to": "match", "label": "candidates", "kind": "normal", "documented": true},
+      {"id": "e7", "from": "match", "to": "route", "label": "triage", "kind": "normal", "documented": true},
+      {"id": "e8", "from": "route", "to": "disposition", "label": "assign", "kind": "normal", "documented": true},
+      {"id": "e9", "from": "disposition", "to": "record", "label": "decide", "kind": "normal", "documented": true},
+      {"id": "x1", "from": "extract", "to": "low-confidence", "label": "uncertain", "kind": "exception", "documented": false},
+      {"id": "x2", "from": "low-confidence", "to": "normalize", "label": "verified", "kind": "loop", "documented": false},
+      {"id": "x3", "from": "complete", "to": "missing", "label": "missing", "kind": "exception", "documented": false},
+      {"id": "x4", "from": "missing", "to": "packet", "label": "resubmit", "kind": "loop", "documented": false},
+      {"id": "x5", "from": "consistent", "to": "enhanced", "label": "conflict", "kind": "exception", "documented": false},
+      {"id": "x6", "from": "match", "to": "enhanced", "label": "uncertain match", "labelDy": 52, "kind": "exception", "documented": false},
+      {"id": "x7", "from": "route", "to": "enhanced", "label": "special review", "kind": "exception", "documented": false},
+      {"id": "x8", "from": "enhanced", "to": "disposition", "label": "evidence", "kind": "loop", "documented": false}
+    ],
+    "decisions": [
+      {
+        "id": "extract",
+        "label": "Can the required evidence be extracted reliably?",
+        "owner": "Document review lead",
+        "frequency": "Every submitted document",
+        "wrongCost": "Bad fields contaminate every later check, or a readable packet is delayed",
+        "verdict": "ai-classification",
+        "verdictLabel": "AI · Classification",
+        "testAnswer": "Yes. Document layouts, image quality, and field representations vary, and reviewed examples improve extraction confidence and document classification.",
+        "why": "The system must classify document and field evidence while exposing uncertainty and source location.",
+        "recommendation": "Extract field values with source citations and confidence; send low-confidence evidence to document review.",
+        "aiRelevant": true,
+        "placement": "decision",
+        "design": {
+          "data": {
+            "summary": "Representative onboarding documents paired with reviewed field values, document classes, and extraction outcomes.",
+            "owner": "KYC operations and records governance",
+            "readiness": "Synthetic readiness assumption: approved sample set exists; rare layouts need coverage review",
+            "fields": ["Document type", "Name", "Date of birth", "Identifier", "Address", "Ownership percentage", "Source location"],
+            "risk": "Historical reviewer corrections may be inconsistent, and aggregate accuracy can hide weak performance on rare documents."
+          },
+          "method": {
+            "pattern": "classification",
+            "output": "Document class, field values, source citations, and confidence",
+            "technique": "Layout-aware document extraction with field-level confidence and abstention"
+          },
+          "metric": {
+            "technical": "Field precision, field recall, packet classification accuracy, and grounded citation rate by document type.",
+            "business": "Reduce 360 monthly preparation hours while keeping exception rework and incorrect straight-through packets below baseline.",
+            "baseline": "5,000 packets with 24% entering 18 minutes of exception preparation"
+          },
+          "human": {
+            "role": "Document review lead",
+            "checkpoint": "Verify low-confidence values against the source image and record corrections without deciding customer disposition.",
+            "falsePositiveCost": "An incorrect field is treated as reliable and contaminates policy or screening checks.",
+            "falseNegativeCost": "Usable evidence is rejected and creates avoidable applicant and analyst work."
+          },
+          "architecture": ["Secure packet intake", "Document classifier", "Field extraction service", "Citation and confidence layer", "Low-confidence review queue", "Correction monitoring"]
+        }
+      },
+      {
+        "id": "complete",
+        "label": "Are all policy-required fields present?",
+        "owner": "Compliance policy owner",
+        "frequency": "Every normalized packet",
+        "wrongCost": "An incomplete case advances, or an applicant is asked for evidence that is not required",
+        "verdict": "rule",
+        "verdictLabel": "Use a rule",
+        "testAnswer": "No. Versioned policy defines required documents and fields for each product, entity type, and jurisdiction.",
+        "why": "Explicit policy checks are more transparent and auditable than learning requirements from historical analyst behavior.",
+        "recommendation": "Evaluate versioned completeness rules and identify every missing requirement with its policy source.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "consistent",
+        "label": "Do identity and ownership records agree?",
+        "owner": "KYC operations manager",
+        "frequency": "Every complete packet",
+        "wrongCost": "A material conflict is missed, or harmless formatting differences create rework",
+        "verdict": "rule",
+        "verdictLabel": "Use normalized rules",
+        "testAnswer": "Mostly no. Exact comparison, approved normalization, date tolerance, and ownership-total rules resolve the known cases; ambiguity should be escalated.",
+        "why": "Known consistency checks should remain deterministic and explainable at field level.",
+        "recommendation": "Normalize approved variants, apply explicit comparisons and tolerances, and escalate unresolved source conflicts.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "match",
+        "label": "Is this a plausible screening match?",
+        "owner": "KYC analyst",
+        "frequency": "Every screening candidate",
+        "wrongCost": "A real risk is missed, or a customer is delayed by a false match",
+        "verdict": "ai-classification",
+        "verdictLabel": "AI · Classification with review",
+        "testAnswer": "Yes. Reviewed outcomes improve ranking across names, aliases, dates, jurisdictions, and incomplete identifiers, but uncertainty must be visible.",
+        "why": "The output is a present-state match class, not a final compliance decision.",
+        "recommendation": "Rank candidate matches as likely, uncertain, or unlikely with field-level comparison evidence for analyst review.",
+        "aiRelevant": true,
+        "placement": "decision",
+        "design": {
+          "data": {
+            "summary": "Approved screening lists, normalized applicant identifiers, candidate pairs, and analyst-confirmed match outcomes.",
+            "owner": "Financial crime compliance",
+            "readiness": "Synthetic readiness assumption: list provenance is controlled and reviewed match outcomes are retained",
+            "fields": ["Names and aliases", "Date of birth", "Country", "Identifiers", "List source", "Candidate score", "Reviewed outcome"],
+            "risk": "Name and geography patterns can create unequal false-positive burdens; list freshness and identity resolution are critical."
+          },
+          "method": {
+            "pattern": "classification",
+            "output": "Likely match, uncertain match, or unlikely match with comparison evidence",
+            "technique": "High-recall candidate generation followed by calibrated pair classification"
+          },
+          "metric": {
+            "technical": "Recall of confirmed matches, false-positive rate, calibration, and subgroup review burden.",
+            "business": "Reduce avoidable screening review time without increasing missed confirmed matches or customer delay.",
+            "baseline": "All potential matches require analyst disposition under the defined review boundary"
+          },
+          "human": {
+            "role": "KYC analyst",
+            "checkpoint": "Compare source records, resolve uncertain identity evidence, and document the match rationale.",
+            "falsePositiveCost": "A customer experiences unnecessary delay, investigation, or adverse treatment.",
+            "falseNegativeCost": "A material screening match is missed and the institution accepts unmanaged risk."
+          },
+          "architecture": ["Approved list ingestion", "Identity normalization", "Candidate generator", "Calibrated match classifier", "Evidence comparison view", "Analyst outcome feedback"]
+        }
+      },
+      {
+        "id": "route",
+        "label": "Which approved review queue receives the packet?",
+        "owner": "Onboarding platform",
+        "frequency": "Every prepared packet",
+        "wrongCost": "A case waits in the wrong queue or bypasses required specialist review",
+        "verdict": "automation",
+        "verdictLabel": "Automate with rules",
+        "testAnswer": "No. Product, jurisdiction, issue type, risk flags, and required reviewer role define an auditable routing table.",
+        "why": "Once evidence and statuses are established, queue routing is controlled execution rather than learned judgment.",
+        "recommendation": "Route through versioned mappings and fail closed when no authorized destination exists.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "disposition",
+        "label": "Should this case be cleared, escalated, or declined?",
+        "owner": "Compliance officer",
+        "frequency": "Every case requiring disposition",
+        "wrongCost": "The institution accepts unmanaged risk, or a customer receives an unjustified adverse outcome",
+        "verdict": "human",
+        "verdictLabel": "Keep the human",
+        "testAnswer": "No model should own regulated case disposition. Evidence, policy, uncertainty, customer impact, and accountable authority must remain visible.",
+        "why": "AI and rules prepare the packet; an authorized officer owns the consequential conclusion and rationale.",
+        "recommendation": "Require human disposition with cited evidence, policy version, conflict history, and an auditable rationale.",
+        "aiRelevant": false,
+        "placement": "decision"
+      }
+    ],
+    "featuredDecisionId": "extract",
+    "source": "synthetic-workflow-assumption"
+  },
+  {
+    "id": "public-service-intake",
+    "title": "One Resident Service Request",
+    "subtitle": "From everyday language to the right accountable service",
+    "industry": "Public Sector",
+    "learningObjective": "Separate language interpretation, entitlement rules, capacity allocation, grounded communication, and accountable exception handling.",
+    "throughline": "Use AI for language ambiguity, rules for entitlement, and people for accountable exceptions.",
+    "introduction": {
+      "title": "Why a simple resident request can be difficult to route",
+      "context": "Residents describe needs in everyday language, while public services are organized by program, jurisdiction, eligibility, and provider capacity. They also carry safeguarding duties: responding quickly when a person may be at risk of harm. A wrong first route makes people repeat their story, delays support, and can hide an urgent situation that needs trained human attention.",
+      "workflow": "The workflow follows one request from natural-language intake through service classification, jurisdiction and eligibility checks, duplicate handling, provider assignment, resident communication, and exception review. Clarification, transfers, capacity limits, and urgent protection escalation form the main alternate paths.",
+      "startsWhen": "A resident submits a request through an available intake channel.",
+      "endsWhen": "The appropriate service receives a routed case with verified context, or an urgent exception is escalated and recorded."
+    },
+    "stages": [
+      {"id": "input", "label": "Inputs", "description": "Resident request, location, service catalog"},
+      {"id": "process", "label": "Process", "description": "Interpret, verify, match, route"},
+      {"id": "decision", "label": "Decision", "description": "Which need? Eligible? Which office? Exception?"},
+      {"id": "action", "label": "Action", "description": "Clarify, assign, escalate, or create case"},
+      {"id": "outcome", "label": "Outcome", "description": "Resident reaches the right service with context"}
+    ],
+    "baseline": [
+      {"value": "12,000", "label": "requests per month", "note": "Synthetic assumption"},
+      {"value": "19%", "label": "need clarification", "note": "Synthetic assumption"},
+      {"value": "14%", "label": "initially misrouted", "note": "Synthetic assumption"},
+      {"value": "8 min", "label": "manual first-pass triage", "note": "Synthetic assumption"},
+      {"value": "1,600 hrs", "label": "monthly first-pass triage", "note": "12,000 × 8 minutes ÷ 60"}
+    ],
+    "lanes": [
+      {"id": "resident", "label": "Resident", "order": 0},
+      {"id": "intake", "label": "Intake channel", "order": 1},
+      {"id": "matching", "label": "Language and service matching", "order": 2},
+      {"id": "rules", "label": "Eligibility and jurisdiction", "order": 3},
+      {"id": "caseworker", "label": "Caseworker", "order": 4},
+      {"id": "office", "label": "Service office or provider", "order": 5},
+      {"id": "safeguarding", "label": "Safeguarding team", "order": 6}
+    ],
+    "nodes": [
+      {"id": "request", "label": "Request submitted", "lane": "resident", "kind": "start", "x": 25, "documented": true},
+      {"id": "classify", "label": "Which service need?", "lane": "matching", "kind": "decision", "x": 145, "documented": true, "decisionId": "classify"},
+      {"id": "jurisdiction", "label": "Correct jurisdiction?", "lane": "rules", "kind": "decision", "x": 285, "documented": true, "decisionId": "jurisdiction"},
+      {"id": "eligibility", "label": "Meets stated criteria?", "lane": "rules", "kind": "decision", "x": 425, "documented": true, "decisionId": "eligibility"},
+      {"id": "duplicate", "label": "Open duplicate case?", "lane": "intake", "kind": "decision", "x": 565, "documented": true, "decisionId": "duplicate"},
+      {"id": "assign", "label": "Which office or provider?", "lane": "office", "kind": "decision", "x": 705, "documented": true, "decisionId": "assign"},
+      {"id": "explain", "label": "Prepare resident explanation", "lane": "matching", "kind": "process", "x": 845, "documented": true, "decisionId": "explain"},
+      {"id": "exception", "label": "Exception or safeguarding?", "lane": "caseworker", "kind": "decision", "x": 985, "documented": true, "decisionId": "exception"},
+      {"id": "create", "label": "Create routed case", "lane": "intake", "kind": "action", "x": 1110, "documented": true},
+      {"id": "service", "label": "Right service receives context", "lane": "office", "kind": "outcome", "x": 1180, "documented": true},
+      {"id": "clarify", "label": "Ask a focused question", "lane": "resident", "kind": "process", "x": 205, "documented": false},
+      {"id": "reroute", "label": "Transfer jurisdiction", "lane": "intake", "kind": "process", "x": 350, "documented": false},
+      {"id": "capacity", "label": "Provider at capacity", "lane": "office", "kind": "process", "x": 835, "documented": false},
+      {"id": "urgent", "label": "Urgent human escalation", "lane": "safeguarding", "kind": "action", "x": 1065, "documented": false}
+    ],
+    "edges": [
+      {"id": "e1", "from": "request", "to": "classify", "label": "describe", "kind": "normal", "documented": true},
+      {"id": "e2", "from": "classify", "to": "jurisdiction", "label": "candidate service", "kind": "normal", "documented": true},
+      {"id": "e3", "from": "jurisdiction", "to": "eligibility", "label": "in scope", "kind": "normal", "documented": true},
+      {"id": "e4", "from": "eligibility", "to": "duplicate", "label": "eligible path", "kind": "normal", "documented": true},
+      {"id": "e5", "from": "duplicate", "to": "assign", "label": "new case", "kind": "normal", "documented": true},
+      {"id": "e6", "from": "assign", "to": "explain", "label": "destination", "kind": "normal", "documented": true},
+      {"id": "e7", "from": "explain", "to": "exception", "label": "review", "kind": "normal", "documented": true},
+      {"id": "e8", "from": "exception", "to": "create", "label": "standard path", "kind": "normal", "documented": true},
+      {"id": "e9", "from": "create", "to": "service", "label": "submit", "kind": "normal", "documented": true},
+      {"id": "x1", "from": "classify", "to": "clarify", "label": "unclear", "kind": "exception", "documented": false},
+      {"id": "x2", "from": "clarify", "to": "classify", "label": "answer", "kind": "loop", "documented": false},
+      {"id": "x3", "from": "jurisdiction", "to": "reroute", "label": "out of scope", "kind": "exception", "documented": false},
+      {"id": "x4", "from": "reroute", "to": "jurisdiction", "label": "new authority", "kind": "loop", "documented": false},
+      {"id": "x5", "from": "eligibility", "to": "explain", "label": "alternative guidance", "kind": "exception", "documented": false},
+      {"id": "x6", "from": "duplicate", "to": "service", "label": "merge update", "kind": "exception", "documented": false},
+      {"id": "x7", "from": "assign", "to": "capacity", "label": "full", "labelDy": -22, "kind": "exception", "documented": false},
+      {"id": "x8", "from": "capacity", "to": "assign", "label": "rebalance", "labelDy": 54, "kind": "loop", "documented": false},
+      {"id": "x9", "from": "exception", "to": "urgent", "label": "safeguarding", "labelDx": 18, "labelDy": -18, "kind": "exception", "documented": false},
+      {"id": "x10", "from": "urgent", "to": "create", "label": "document", "kind": "loop", "documented": false}
+    ],
+    "decisions": [
+      {
+        "id": "classify",
+        "label": "Which service need is the resident describing?",
+        "owner": "Intake specialist",
+        "frequency": "Every request",
+        "wrongCost": "The resident repeats their story, loses time, or never reaches the right service",
+        "verdict": "ai-classification",
+        "verdictLabel": "AI · Classification",
+        "testAnswer": "Yes. Reviewed requests reveal varied language, multilingual phrasing, and overlapping descriptions that improve service-category matching.",
+        "why": "The output is a present-state service category with confidence, not an entitlement decision.",
+        "recommendation": "Rank approved service categories, cite the phrases that drove the match, and ask a focused question when confidence is low.",
+        "aiRelevant": true,
+        "placement": "decision",
+        "design": {
+          "data": {
+            "summary": "Permission-cleared request text paired with final service categories, clarification turns, language, channel, and routing outcomes.",
+            "owner": "Resident services and information governance",
+            "readiness": "Synthetic readiness assumption: reviewed routing history exists; historical misroutes must not become labels",
+            "fields": ["Request text", "Language", "Channel", "Location", "Final service", "Clarification", "Transfer outcome"],
+            "risk": "Past routing may encode unequal access or staff shortcuts; rare needs and languages can disappear in aggregate metrics."
+          },
+          "method": {
+            "pattern": "classification",
+            "output": "Ranked service categories, confidence, and a clarification question when needed",
+            "technique": "Multilingual text classification with calibrated abstention and approved service taxonomy"
+          },
+          "metric": {
+            "technical": "Macro precision and recall, calibration, abstention quality, and performance by language and service category.",
+            "business": "Improve first-route accuracy from the 14% misroute baseline and reduce repeat explanations without suppressing escalation.",
+            "baseline": "12,000 monthly requests; 19% need clarification and 14% are initially misrouted"
+          },
+          "human": {
+            "role": "Intake specialist",
+            "checkpoint": "Review uncertain or urgent requests, correct the category, and preserve the resident's original wording.",
+            "falsePositiveCost": "A plausible but wrong category sends the resident through another avoidable transfer.",
+            "falseNegativeCost": "The system fails to surface a relevant service or urgent need."
+          },
+          "architecture": ["Accessible intake", "Language detection", "Approved service taxonomy", "Calibrated classifier", "Clarification workflow", "Routing outcome monitoring"]
+        }
+      },
+      {
+        "id": "jurisdiction",
+        "label": "Which authority has jurisdiction?",
+        "owner": "Service catalog owner",
+        "frequency": "Every candidate service",
+        "wrongCost": "A request sits with an office that cannot act",
+        "verdict": "rule",
+        "verdictLabel": "Use a rule",
+        "testAnswer": "No. Service area, address, program ownership, and inter-agency agreements are published constraints.",
+        "why": "Jurisdiction should be explicit, versioned, and explainable rather than inferred from historical transfers.",
+        "recommendation": "Resolve jurisdiction through the governed service catalog and route unknown boundaries for catalog maintenance.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "eligibility",
+        "label": "Does the request meet the stated service criteria?",
+        "owner": "Program policy owner",
+        "frequency": "Every in-scope request",
+        "wrongCost": "An eligible resident is blocked, or an ineligible case consumes scarce capacity",
+        "verdict": "rule",
+        "verdictLabel": "Use a rule",
+        "testAnswer": "No. Stated eligibility conditions and required evidence belong in policy logic, not a model trained on past approvals.",
+        "why": "Rules preserve transparency, appealability, and the distinction between missing evidence and ineligibility.",
+        "recommendation": "Evaluate only approved criteria, show the reason and policy source, and never infer protected or missing facts.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "duplicate",
+        "label": "Should this request update an existing open case?",
+        "owner": "Intake platform",
+        "frequency": "Every eligible request",
+        "wrongCost": "Duplicate work is created, or unrelated residents are merged",
+        "verdict": "automation",
+        "verdictLabel": "Automate exact matches",
+        "testAnswer": "No for exact identifiers and case references. Ambiguous identity matches must be reviewed rather than guessed.",
+        "why": "Controlled duplicate handling is workflow execution once identity and open-case keys are established.",
+        "recommendation": "Merge only on approved exact keys; present ambiguous candidates to staff without automatic consolidation.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "assign",
+        "label": "Which office or provider should receive the case?",
+        "owner": "Service operations manager",
+        "frequency": "Every new routed case",
+        "wrongCost": "A resident waits while another provider has suitable capacity",
+        "verdict": "optimization",
+        "verdictLabel": "Optimization · Use a solver",
+        "testAnswer": "The choice balances capacity, location, accessibility, specialization, language, and appointment constraints.",
+        "why": "The assignment objective and constraints can be stated and audited directly.",
+        "recommendation": "Optimize among eligible providers and expose the constraint that drove each assignment or failure to assign.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "explain",
+        "label": "How should the next step be explained to the resident?",
+        "owner": "Intake specialist",
+        "frequency": "Every routed, clarified, or ineligible request",
+        "wrongCost": "The resident misunderstands the next step, misses evidence, or receives an unsupported promise",
+        "verdict": "ai-generation",
+        "verdictLabel": "AI · Generation with review",
+        "testAnswer": "Generation can turn grounded service facts and rule outcomes into accessible language, but staff must verify consequential guidance.",
+        "why": "The output is a communication artifact inside the workflow, not the eligibility or exception decision.",
+        "recommendation": "Draft a plain-language explanation from the request, cited catalog entry, rule result, and approved accessibility guidance.",
+        "aiRelevant": true,
+        "placement": "process",
+        "design": {
+          "data": {
+            "summary": "Original request, approved service descriptions, rule outcomes, required evidence, accessibility guidance, and supported languages.",
+            "owner": "Resident communications and program policy",
+            "readiness": "Synthetic readiness assumption: approved service content is versioned; translations require review",
+            "fields": ["Resident request", "Service facts", "Rule outcome", "Policy citation", "Next step", "Language", "Accessibility preference"],
+            "risk": "A fluent message can invent eligibility, deadlines, availability, or commitments that no source supports."
+          },
+          "method": {
+            "pattern": "generation",
+            "output": "Grounded next-step explanation or focused request for missing information",
+            "technique": "Retrieval-grounded generation constrained to service facts and deterministic rule results"
+          },
+          "metric": {
+            "technical": "Groundedness, unsupported-commitment rate, required-information coverage, and accessibility review pass rate.",
+            "business": "Reduce repeat contacts, clarification cycles, and abandoned requests while maintaining equitable comprehension.",
+            "baseline": "19% of requests currently need at least one clarification cycle"
+          },
+          "human": {
+            "role": "Intake specialist",
+            "checkpoint": "Verify service facts, rule result, tone, language, accessibility, and any requested evidence before sending.",
+            "falsePositiveCost": "The message promises service, eligibility, or timing that is not supported.",
+            "falseNegativeCost": "The message omits a required next step and forces another contact."
+          },
+          "architecture": ["Service catalog retrieval", "Rule-result adapter", "Language and accessibility policy", "Grounded generation", "Claim checks", "Staff approval"]
+        }
+      },
+      {
+        "id": "exception",
+        "label": "Does this request need an exception or safeguarding response?",
+        "owner": "Caseworker",
+        "frequency": "Every flagged or unusual request",
+        "wrongCost": "A vulnerable resident is missed, or a routine case is escalated intrusively",
+        "verdict": "human",
+        "verdictLabel": "Keep the human",
+        "testAnswer": "No model should own discretionary exception or safeguarding action. Context, consent, policy, and accountable judgment matter.",
+        "why": "AI may surface evidence, but a trained caseworker must interpret urgency and authorize exceptional handling.",
+        "recommendation": "Provide the original request, source facts, rule outcomes, and escalation guidance to an accountable caseworker.",
+        "aiRelevant": false,
+        "placement": "decision"
+      }
+    ],
+    "featuredDecisionId": "classify",
+    "source": "synthetic-workflow-assumption"
+  },
+  {
+    "id": "transportation-fleet-routing",
+    "title": "One Day of Fleet Dispatch",
+    "subtitle": "From promised jobs to safe routes under disruption",
+    "industry": "Transportation & Smart Infrastructure",
+    "learningObjective": "Separate travel prediction, route optimization, deterministic safety checks, controlled automation, customer communication, and dispatcher authority.",
+    "throughline": "Prediction estimates what may happen; optimization chooses under constraints; the dispatcher owns the risky override.",
+    "introduction": {
+      "title": "Why a fleet plan keeps changing after dispatch",
+      "context": "Daily fleet dispatch converts customer commitments into executable vehicle routes while balancing vehicle capacity, promised delivery windows, legal driver-hour limits, vehicle condition, traffic, and weather. Even a workable morning plan can become invalid when demand exceeds capacity, a vehicle breaks down, roads change, or a delivery promise becomes unlikely to hold.",
+      "workflow": "The workflow follows a day of jobs from input validation through lateness prediction, route optimization, plan approval, and execution. During disruptions it checks non-negotiable safety and legal limits, recalculates recovery options, requires a dispatcher to approve changes to service promises, and prepares evidence-based customer updates.",
+      "startsWhen": "Dispatch receives the day's jobs, customer promises, available vehicles, drivers, and operating conditions.",
+      "endsWhen": "Jobs are completed safely and any disruption, changed promise, or authorized tradeoff is communicated and recorded."
+    },
+    "stages": [
+      {"id": "input", "label": "Inputs", "description": "Jobs, fleet state, traffic, weather, promises"},
+      {"id": "process", "label": "Process", "description": "Validate, predict, optimize, dispatch"},
+      {"id": "decision", "label": "Decision", "description": "Late risk? Best route? Replan? Override?"},
+      {"id": "action", "label": "Action", "description": "Release, drive, reassign, or notify"},
+      {"id": "outcome", "label": "Outcome", "description": "Safe completion with visible service tradeoffs"}
+    ],
+    "baseline": [
+      {"value": "420", "label": "delivery jobs per day", "note": "Synthetic assumption"},
+      {"value": "68", "label": "available vehicles", "note": "Synthetic assumption"},
+      {"value": "14", "label": "daily route disruptions", "note": "Synthetic assumption"},
+      {"value": "8.5%", "label": "jobs completed late", "note": "Synthetic assumption"},
+      {"value": "5.1 hrs", "label": "daily manual replanning", "note": "14 × 22 minutes ÷ 60"}
+    ],
+    "lanes": [
+      {"id": "customer", "label": "Customers and jobs", "order": 0},
+      {"id": "dispatch", "label": "Dispatch platform", "order": 1},
+      {"id": "prediction", "label": "Travel prediction", "order": 2},
+      {"id": "optimizer", "label": "Route optimization", "order": 3},
+      {"id": "driver", "label": "Driver and vehicle", "order": 4},
+      {"id": "dispatcher", "label": "Fleet dispatcher", "order": 5},
+      {"id": "support", "label": "Customer support", "order": 6}
+    ],
+    "nodes": [
+      {"id": "jobs", "label": "Jobs and fleet state", "lane": "customer", "kind": "start", "x": 25, "documented": true},
+      {"id": "validate", "label": "Inputs valid?", "lane": "dispatch", "kind": "decision", "x": 145, "documented": true, "decisionId": "validate"},
+      {"id": "late-risk", "label": "Which jobs risk lateness?", "lane": "prediction", "kind": "decision", "x": 285, "documented": true, "decisionId": "late-risk"},
+      {"id": "plan", "label": "Best feasible routes?", "lane": "optimizer", "kind": "decision", "x": 425, "documented": true, "decisionId": "plan"},
+      {"id": "release", "label": "Release route plan?", "lane": "dispatch", "kind": "decision", "x": 565, "documented": true, "decisionId": "release"},
+      {"id": "drive", "label": "Execute route", "lane": "driver", "kind": "action", "x": 705, "documented": true},
+      {"id": "complete", "label": "Jobs completed safely", "lane": "customer", "kind": "outcome", "x": 1180, "documented": true},
+      {"id": "capacity", "label": "Demand exceeds capacity", "lane": "dispatcher", "kind": "process", "x": 485, "documented": false},
+      {"id": "breakdown", "label": "Breakdown or traffic event", "lane": "driver", "kind": "process", "x": 880, "documented": false},
+      {"id": "continue", "label": "Can route continue safely?", "lane": "dispatch", "kind": "decision", "x": 850, "documented": false, "decisionId": "continue"},
+      {"id": "replan", "label": "Best recovery plan?", "lane": "optimizer", "kind": "decision", "x": 955, "documented": false, "decisionId": "replan"},
+      {"id": "hours", "label": "Hours or safety conflict", "lane": "dispatch", "kind": "process", "x": 970, "documented": false},
+      {"id": "override", "label": "Authorize risky override?", "lane": "dispatcher", "kind": "decision", "x": 1080, "documented": false, "decisionId": "override"},
+      {"id": "message", "label": "Draft disruption update", "lane": "support", "kind": "process", "x": 1080, "documented": false, "decisionId": "message"}
+    ],
+    "edges": [
+      {"id": "e1", "from": "jobs", "to": "validate", "label": "schedule", "kind": "normal", "documented": true},
+      {"id": "e2", "from": "validate", "to": "late-risk", "label": "clean inputs", "kind": "normal", "documented": true},
+      {"id": "e3", "from": "late-risk", "to": "plan", "label": "travel estimates", "kind": "normal", "documented": true},
+      {"id": "e4", "from": "plan", "to": "release", "label": "feasible plan", "kind": "normal", "documented": true},
+      {"id": "e5", "from": "release", "to": "drive", "label": "dispatch", "kind": "normal", "documented": true},
+      {"id": "e6", "from": "drive", "to": "complete", "label": "on plan", "kind": "normal", "documented": true},
+      {"id": "x1", "from": "validate", "to": "jobs", "label": "repair data", "kind": "loop", "documented": false},
+      {"id": "x2", "from": "late-risk", "to": "message", "label": "promise at risk", "labelDx": -100, "labelDy": -10, "kind": "exception", "documented": false},
+      {"id": "x3", "from": "message", "to": "release", "label": "notify before dispatch", "kind": "loop", "documented": false},
+      {"id": "x4", "from": "plan", "to": "capacity", "label": "infeasible", "labelDy": -18, "kind": "exception", "documented": false},
+      {"id": "x5", "from": "capacity", "to": "plan", "label": "change promise or fleet", "labelDy": 22, "kind": "loop", "documented": false},
+      {"id": "x6", "from": "drive", "to": "breakdown", "label": "disruption", "labelDy": -22, "kind": "exception", "documented": false},
+      {"id": "x7", "from": "breakdown", "to": "continue", "label": "new state", "kind": "exception", "documented": false},
+      {"id": "x8", "from": "continue", "to": "replan", "label": "no", "kind": "exception", "documented": false},
+      {"id": "x9", "from": "continue", "to": "drive", "label": "safe", "kind": "loop", "documented": false},
+      {"id": "x10", "from": "replan", "to": "hours", "label": "constraint conflict", "labelDy": -24, "kind": "exception", "documented": false},
+      {"id": "x11", "from": "hours", "to": "replan", "label": "tighten constraints", "labelDy": 24, "kind": "loop", "documented": false},
+      {"id": "x12", "from": "replan", "to": "override", "label": "service tradeoff", "labelDx": 16, "labelDy": -18, "kind": "exception", "documented": false},
+      {"id": "x13", "from": "override", "to": "drive", "label": "authorize safe plan", "kind": "loop", "documented": false},
+      {"id": "x14", "from": "override", "to": "message", "label": "customer impact", "labelDx": -50, "labelDy": 20, "kind": "exception", "documented": false},
+      {"id": "x15", "from": "message", "to": "complete", "label": "record outcome", "kind": "loop", "documented": false}
+    ],
+    "decisions": [
+      {
+        "id": "validate",
+        "label": "Are jobs, locations, vehicles, and constraints valid?",
+        "owner": "Dispatch platform",
+        "frequency": "Every planning and replanning cycle",
+        "wrongCost": "The solver returns a route that cannot be executed",
+        "verdict": "rule",
+        "verdictLabel": "Use a rule",
+        "testAnswer": "No. Required fields, coordinate quality, vehicle status, hours limits, and service windows are explicit checks.",
+        "why": "Optimization and prediction should never receive inputs that already violate known constraints.",
+        "recommendation": "Fail closed on invalid or stale inputs and show the exact field or constraint that needs repair.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "late-risk",
+        "label": "Which jobs are likely to miss their service window?",
+        "owner": "Fleet operations analyst",
+        "frequency": "Before release and during disruption",
+        "wrongCost": "A preventable late promise, or costly buffer added to every route",
+        "verdict": "ai-prediction",
+        "verdictLabel": "AI · Prediction",
+        "testAnswer": "Yes. New outcomes reveal changing travel times across traffic, weather, location, season, stop sequence, and vehicle conditions.",
+        "why": "The output is a calibrated probability and expected amount of future lateness over a defined route horizon.",
+        "recommendation": "Predict travel time and late risk with uncertainty; pass those estimates into the route solver rather than asking the model to choose routes.",
+        "aiRelevant": true,
+        "placement": "decision",
+        "design": {
+          "data": {
+            "summary": "Planned and actual arrival events joined to routes, stops, traffic, weather, vehicle, driver-hours, and service-window context.",
+            "owner": "Fleet operations and dispatch analytics",
+            "readiness": "Synthetic readiness assumption: event timestamps exist; reason codes for dwell and failed stops need cleanup",
+            "fields": ["Planned arrival", "Actual arrival", "Route", "Stop sequence", "Traffic", "Weather", "Vehicle", "Dwell time"],
+            "risk": "Completed routes exclude cancelled and failed jobs unless outcomes are joined carefully; location and shift coverage can be uneven."
+          },
+          "method": {
+            "pattern": "prediction",
+            "output": "Expected arrival and probability of missing each service window",
+            "technique": "Calibrated travel-time prediction with route-context and disruption features"
+          },
+          "metric": {
+            "technical": "Arrival-time MAE, late-event recall, calibration, and performance on the worst 5% of misses.",
+            "business": "Reduce the 8.5% late-job baseline and avoidable replanning without inflating route cost or unsafe pressure on drivers.",
+            "baseline": "420 daily jobs with 8.5% late and 14 disruptions requiring attention"
+          },
+          "human": {
+            "role": "Fleet operations analyst",
+            "checkpoint": "Review drift, extreme misses, route segments, and operational changes before estimates affect service promises.",
+            "falsePositiveCost": "An overly pessimistic estimate creates unnecessary buffer, cost, or customer concern.",
+            "falseNegativeCost": "A confident late miss breaks a promise and leaves the dispatcher no recovery time."
+          },
+          "architecture": ["Fleet event stream", "Traffic and weather adapter", "Travel-time feature pipeline", "Calibrated prediction API", "Route solver input", "Drift and tail monitoring"]
+        }
+      },
+      {
+        "id": "plan",
+        "label": "What is the best feasible route plan?",
+        "owner": "Dispatch planner",
+        "frequency": "Every dispatch cycle",
+        "wrongCost": "Excess distance, missed windows, unserved jobs, or infeasible driver work",
+        "verdict": "optimization",
+        "verdictLabel": "Optimization · Use a solver",
+        "testAnswer": "No historical imitation is required when the objective and constraints can be written explicitly.",
+        "why": "This is a vehicle-routing allocation problem using predicted travel time as one input.",
+        "recommendation": "Optimize cost and service subject to capacity, hours, skills, windows, safety, and vehicle constraints; expose infeasibility.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "release",
+        "label": "Can this approved route plan be released?",
+        "owner": "Dispatch platform",
+        "frequency": "Every proposed plan",
+        "wrongCost": "Drivers receive conflicting or unauthorized work",
+        "verdict": "automation",
+        "verdictLabel": "Automate controlled release",
+        "testAnswer": "No. Release follows explicit validation, plan version, authorization, and driver acknowledgment rules.",
+        "why": "This is audited execution after decisions are complete, not another model judgment.",
+        "recommendation": "Publish only the latest approved feasible plan, record acknowledgments, and prevent stale-plan dispatch.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "continue",
+        "label": "Can the current route continue safely?",
+        "owner": "Dispatch platform",
+        "frequency": "Every material disruption",
+        "wrongCost": "An unsafe or legally invalid route continues, or a minor event triggers needless replanning",
+        "verdict": "rule",
+        "verdictLabel": "Use hard constraints",
+        "testAnswer": "No for vehicle safety, driver hours, road closure, and mandatory service constraints.",
+        "why": "Known legal and safety boundaries must be deterministic and fail closed.",
+        "recommendation": "Evaluate hard constraints first; continue only when they pass and send the changed state to replanning otherwise.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "replan",
+        "label": "What is the best feasible recovery plan?",
+        "owner": "Dispatcher",
+        "frequency": "About 14 disruptions per day",
+        "wrongCost": "The fleet recovers slowly, violates a constraint, or sacrifices the wrong commitments",
+        "verdict": "optimization",
+        "verdictLabel": "Optimization · Re-solve",
+        "testAnswer": "The new state changes constraints and objective tradeoffs; the solver should recompute rather than a model inventing an action.",
+        "why": "Recovery is the same constrained allocation problem with updated vehicles, jobs, times, and promises.",
+        "recommendation": "Re-solve from the current state, preserve hard constraints, and present tradeoff options when no plan meets every promise.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "message",
+        "label": "What should the affected customer be told?",
+        "owner": "Dispatcher or support agent",
+        "frequency": "Every disruption that changes a promise",
+        "wrongCost": "A false ETA or unsupported remedy damages trust and creates repeat contact",
+        "verdict": "ai-generation",
+        "verdictLabel": "AI · Generation with review",
+        "testAnswer": "Generation can turn grounded route facts and approved policy into a clear update, but it must not invent an ETA or remedy.",
+        "why": "The output is a communication artifact grounded in the approved recovery plan.",
+        "recommendation": "Draft from the latest plan version, event evidence, revised ETA, service policy, and approved remedy options; require review before sending.",
+        "aiRelevant": true,
+        "placement": "process",
+        "design": {
+          "data": {
+            "summary": "Latest approved route, observed disruption, revised ETA, customer promise, communication history, and service policy.",
+            "owner": "Dispatch operations and customer support",
+            "readiness": "Synthetic readiness assumption: route versions are controlled and approved communication policy is retrievable",
+            "fields": ["Job status", "Disruption event", "Approved route version", "Revised ETA", "Service promise", "Policy", "Prior message"],
+            "risk": "Stale route state can produce a polished but incorrect ETA or compensation promise."
+          },
+          "method": {
+            "pattern": "generation",
+            "output": "Grounded disruption update with revised expectation and approved next step",
+            "technique": "Retrieval-grounded generation constrained to the current route plan and service policy"
+          },
+          "metric": {
+            "technical": "Groundedness, stale-plan use, unsupported-promise rate, and required-fact coverage.",
+            "business": "Improve reviewer acceptance and reduce repeat contacts without increasing compensation errors or customer complaints.",
+            "baseline": "14 daily disruptions create manual replanning and communication work"
+          },
+          "human": {
+            "role": "Dispatcher or support agent",
+            "checkpoint": "Verify the current plan version, ETA, customer impact, policy, and remedy before sending.",
+            "falsePositiveCost": "The customer receives an unsupported promise, unnecessary remedy, or wrong ETA.",
+            "falseNegativeCost": "A material delay or required next step is omitted and the customer cannot respond."
+          },
+          "architecture": ["Route-state tool", "Event evidence", "Service policy retrieval", "Grounded generation", "Plan-version and claim checks", "Human approval"]
+        }
+      },
+      {
+        "id": "override",
+        "label": "Should a service tradeoff or operational override be authorized?",
+        "owner": "Fleet dispatcher",
+        "frequency": "Only when no plan satisfies every service goal",
+        "wrongCost": "Safety or legal limits are breached, or a recoverable service promise is abandoned",
+        "verdict": "human",
+        "verdictLabel": "Keep the human",
+        "testAnswer": "Hard safety constraints are never overridable; accountable staff must own any permitted service tradeoff among feasible options.",
+        "why": "The solver can expose options and consequences, but it does not carry authority for consequential operational choices.",
+        "recommendation": "Block hard-constraint violations and require dispatcher rationale for any permitted customer or cost tradeoff.",
+        "aiRelevant": false,
+        "placement": "decision"
+      }
+    ],
+    "featuredDecisionId": "late-risk",
+    "source": "synthetic-workflow-assumption"
+  }
+]

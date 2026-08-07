@@ -1,0 +1,27 @@
+[project]
+name = "applied-ai-studio-order-api"
+version = "0.1.0"
+description = "Executable Online Order Operations domain service"
+requires-python = ">=3.11"
+dependencies = [
+  "alembic>=1.16,<2",
+  "email-validator>=2.2,<3",
+  "fastapi>=0.116,<1",
+  "pydantic-settings>=2.10,<3",
+  "sqlalchemy>=2.0.40,<3",
+  "uvicorn[standard]>=0.35,<1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "httpx>=0.28,<1",
+  "pytest>=8.4,<10",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
