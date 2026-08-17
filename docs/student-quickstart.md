@@ -87,21 +87,27 @@ would. **Nothing is missing from the exercise.** When Copilot is switched on
 later, the same button writes an outline from your own problem description
 instead.
 
-Once your Student Pack is approved, come back and do step 4 below.
+Once your Student Pack is approved, Ask Studio starts working on its own — see
+section 4. There is nothing for you to install or configure.
 
-## 4. Optional: enable Ask Studio (Copilot)
+## 4. Ask Studio and GitHub Copilot
 
-Ask Studio — the chat feature — uses **your own** GitHub Copilot, which
-is free for verified students through the Student Developer Pack.
+**There is nothing to install and nothing to sign in to.** The Copilot software
+is installed for you during setup, and your codespace already knows who you are.
 
-In the codespace terminal:
+The only thing that decides whether Ask Studio works is whether your GitHub
+account has Copilot:
 
-```bash
-npm install -g @github/copilot
-copilot
-```
+- **You have Copilot** (Student Pack approved, or a paid plan) — Ask Studio
+  works straight away. No setup, no sign-in prompt.
+- **You do not have it yet** — Ask Studio says so in plain language. Everything
+  else in the app keeps working.
 
-Follow the sign-in prompts once, then restart the app with `npm run dev`.
+If your Student Pack is approved later, Ask Studio simply starts working the
+next time you open a codespace. There is no step to come back and do.
+
+> Your codespace signs in as **you**, not as your instructor. You are using your
+> own GitHub account, never somebody else's.
 
 ## 5. When you are done
 

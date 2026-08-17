@@ -79,10 +79,10 @@ cat <<'BANNER'
 
    The web address is private to you. Nobody else can open it.
 
-   Optional: the "Ask Studio" chat page needs GitHub Copilot, which
-   is free for students but takes a few days to be approved. Every
-   other page works right now without it. Setup instructions are in
-   docs/student-quickstart.md, section 4.
+   The "Ask Studio" chat page needs GitHub Copilot on your account.
+   There is nothing to install or sign in to - if you have Copilot it
+   just works, and if you do not, that page says so. Every other page
+   works either way. See docs/student-quickstart.md, section 4.
 ==================================================================
 
 BANNER
