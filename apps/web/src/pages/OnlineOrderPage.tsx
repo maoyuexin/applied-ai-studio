@@ -98,7 +98,7 @@ const algorithmCards: Array<{
 const nonAiRunEffects: Record<string, { branch: string; effect: string }> = {
   address_validation: {
     branch: "Continue to payment screening",
-    effect: "The address passed deterministic postal and service-area checks, so the order skipped correction and continued.",
+    effect: "The address matched the postal format and fell inside a delivery area, so the order carried on without needing correction.",
   },
   fulfillment_allocation: {
     branch: "Reserve inventory and dispatch from one warehouse",
@@ -195,7 +195,7 @@ function DecisionPanel({ decision, onExplore }: {
       {impact ? <>
         <div className="order-decision-signals">
           <span>Input signals and influence</span>
-          <small>In this deterministic simulation, contributions are percentage-point adjustments that sum to the displayed probability.</small>
+          <small>Each signal below adds or removes a few percentage points, and together they make up the score shown above. The numbers come from a teaching simulation, not a trained model.</small>
           <div>{impact.input_signals.map((signal) => (
             <div className={`signal-${signal.influence}`} key={signal.label}>
               {signal.influence === "raises" ? <TrendingUp size={14} aria-hidden="true" /> : signal.influence === "lowers" ? <TrendingDown size={14} aria-hidden="true" /> : <Minus size={14} aria-hidden="true" />}
@@ -573,7 +573,7 @@ export default function OnlineOrderPage() {
 
   return (
     <div className="page online-order-page">
-      <button className="page-back-button" type="button" onClick={() => navigate("/showcase?industry=retail")}><ArrowLeft size={15} aria-hidden="true" /> Back to Industry Cases</button>
+      <button className="page-back-button" type="button" onClick={() => navigate("/showcase?industry=retail")}><ArrowLeft size={15} aria-hidden="true" /> Back to Industry Workflows</button>
       <header className="online-order-header">
         <div><span className="eyebrow">Executable workflow · SQLite</span><h1>Online Order Operations</h1><p>One persisted order, viewed from the customer, merchant, and scenario perspectives.</p></div>
         <div className="online-order-live"><span /><div><strong>Local simulation</strong><small>Happy path · deterministic seed</small></div></div>

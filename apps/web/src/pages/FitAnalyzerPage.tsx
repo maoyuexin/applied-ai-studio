@@ -16,6 +16,7 @@ import {
   createAssessment,
   createWorkflowDraft,
   getIndustries,
+  type WorkflowDraftSource,
 } from "../api";
 import AiSolutionBlueprintPanel from "../components/AiSolutionBlueprintPanel";
 import { navigate } from "../router";
@@ -57,6 +58,7 @@ export default function FitAnalyzerPage() {
   const [industries, setIndustries] = useState<Array<{ id: string; label: string }>>([]);
   const [result, setResult] = useState<FitAssessmentResult | null>(null);
   const [workflowDraft, setWorkflowDraft] = useState<WorkflowDraft | null>(null);
+  const [draftSource, setDraftSource] = useState<WorkflowDraftSource | null>(null);
   const [selectedDraftDecisionId, setSelectedDraftDecisionId] = useState<string | null>(null);
   const [draftLoading, setDraftLoading] = useState(false);
   const [solutionBlueprint, setSolutionBlueprint] = useState<AiSolutionBlueprint | null>(null);
@@ -79,8 +81,10 @@ export default function FitAnalyzerPage() {
         assessmentId: assessment.id,
         selectedDecision,
       }));
-    } catch (reason) {
-      setBlueprintError(reason instanceof Error ? reason.message : "AI solution design failed.");
+    } catch {
+      setBlueprintError(
+        "The detailed design needs GitHub Copilot, and it is not connected to your account yet. Your score and the readiness notes above are already saved — nothing was lost. If you have applied for the Student Developer Pack, try again once it is approved.",
+      );
     } finally {
       setBlueprintLoading(false);
     }
@@ -98,8 +102,10 @@ export default function FitAnalyzerPage() {
       if (isAiSolutionEligible(assessment.totalScore)) {
         void generateSolutionBlueprint(assessment);
       }
-    } catch (reason) {
-      setError(reason instanceof Error ? reason.message : "Assessment failed.");
+    } catch {
+      setError(
+        "We could not score that just now. Check that every box above is filled in, then try again. If it keeps happening, make sure the app is still running in your terminal.",
+      );
     } finally {
       setLoading(false);
     }
@@ -121,16 +127,21 @@ export default function FitAnalyzerPage() {
     setDraftLoading(true);
     setError(null);
     try {
-      const draft = await createWorkflowDraft({
+      const { draft, source } = await createWorkflowDraft({
         industry: industries.find((item) => item.id === input.industry)?.label ?? input.industry,
         problem: input.problem,
         desiredOutcome: input.desiredOutcome,
       });
       setWorkflowDraft(draft);
+      setDraftSource(source);
       const firstCandidate = draft.decisions.find((decision) => decision.aiCandidate) ?? draft.decisions[0];
       if (firstCandidate) selectDraftDecision(firstCandidate);
-    } catch (reason) {
-      setError(reason instanceof Error ? reason.message : "Workflow drafting failed.");
+    } catch {
+      // Both the Copilot path and the starter-outline fallback failed, which almost always
+      // means the app itself is not running properly rather than anything the student did.
+      setError(
+        "We could not build an outline just now. Check that the app is still running in your terminal, then try again. If it keeps happening, close this codespace and open a new one.",
+      );
     } finally {
       setDraftLoading(false);
     }
@@ -198,7 +209,24 @@ export default function FitAnalyzerPage() {
           <div className="form-section-heading"><span>02</span><h2>Review candidate decisions</h2></div>
           {workflowDraft ? (
             <section className="workflow-draft-review" aria-label="Generated workflow draft">
-              <div className="draft-review-heading"><div><span>Copilot draft</span><strong>{workflowDraft.title}</strong></div><small>Review assumptions before scoring</small></div>
+              {draftSource === "starter" ? (
+                <div className="starter-draft-notice">
+                  <strong>Starter outline — written without AI</strong>
+                  <p>
+                    GitHub Copilot is not connected to your account yet, so we filled in a standard
+                    five-stage outline instead of writing one about your own problem.
+                  </p>
+                  <p>
+                    Everything below still works. Edit any stage, pick a decision, and score it.
+                  </p>
+                  <p>
+                    If you have applied for the Student Developer Pack, Copilot usually switches on
+                    within a few days. Come back then and this button will write an outline based on
+                    what you typed.
+                  </p>
+                </div>
+              ) : null}
+              <div className="draft-review-heading"><div><span>{draftSource === "starter" ? "Starter outline" : "Copilot draft"}</span><strong>{workflowDraft.title}</strong></div><small>Review assumptions before scoring</small></div>
               <div className="draft-stage-strip">
                 {workflowDraft.stages.map((stage, index) => (
                   <div key={stage.id} className={stage.id === "decision" ? "decision-stage" : ""}>
@@ -226,7 +254,7 @@ export default function FitAnalyzerPage() {
               {workflowDraft.assumptions.length ? <div className="draft-assumptions"><strong>Assumptions</strong><ul>{workflowDraft.assumptions.map((assumption) => <li key={assumption}>{assumption}</li>)}</ul></div> : null}
             </section>
           ) : (
-            <div className="draft-empty-state"><Workflow size={22} aria-hidden="true" /><p>Generate a draft to expose the five business stages and candidate decisions. You can still score a manually defined decision if Copilot is unavailable.</p></div>
+            <div className="draft-empty-state"><Workflow size={22} aria-hidden="true" /><p>Use the button above to lay your problem out as the five stages, with the decisions marked. You can also skip this and score a decision you name yourself.</p></div>
           )}
 
           <div className="form-section-heading"><span>03</span><h2>Readiness signals for the selected decision</h2></div>
@@ -291,9 +319,9 @@ export default function FitAnalyzerPage() {
                 <div className="solution-gate solution-gate-open">
                   <div>
                     <CheckCircle2 size={19} aria-hidden="true" />
-                    <span><strong>AI solution design unlocked</strong><small>Score {result.totalScore} meets the {AI_SOLUTION_SCORE_THRESHOLD}-point gate.</small></span>
+                    <span><strong>Ready for a detailed design</strong><small>You scored {result.totalScore} out of 100. Anything from {AI_SOLUTION_SCORE_THRESHOLD} is enough to design this in detail.</small></span>
                   </div>
-                  {blueprintLoading ? <div className="blueprint-loading"><Sparkles size={18} aria-hidden="true" /><span>Copilot is designing the second workflow, metrics, and human controls...</span></div> : null}
+                  {blueprintLoading ? <div className="blueprint-loading"><Sparkles size={18} aria-hidden="true" /><span>Working out the data, the method, the numbers that prove it worked, and where the person sits. This takes a few seconds.</span></div> : null}
                   {blueprintError ? (
                     <div className="blueprint-error">
                       <p>{blueprintError}</p>
@@ -305,8 +333,13 @@ export default function FitAnalyzerPage() {
                 <div className="solution-gate solution-gate-closed">
                   <TriangleAlert size={19} aria-hidden="true" />
                   <span>
-                    <strong>Strengthen readiness before solution design</strong>
-                    <small>Score {result.totalScore} is below the {AI_SOLUTION_SCORE_THRESHOLD}-point gate. No detailed AI solution or second workflow was generated.</small>
+                    <strong>Not ready for a detailed design yet</strong>
+                    <small>
+                      You scored {result.totalScore} out of 100, and a detailed design needs {AI_SOLUTION_SCORE_THRESHOLD}.
+                      This is a normal, useful result — not a failure and not something you broke. Look at the
+                      lowest rows above: they name what is missing. Deciding a problem is not ready for AI is a
+                      real finding, and you can write it up as one.
+                    </small>
                   </span>
                 </div>
               )}

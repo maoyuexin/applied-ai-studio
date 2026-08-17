@@ -57,12 +57,41 @@ export function createAssessment(input: FitAssessmentInput): Promise<FitAssessme
   });
 }
 
-export function createWorkflowDraft(input: WorkflowDraftInput): Promise<WorkflowDraft> {
-  return requestJson<WorkflowDraft>("/api/agent/workflow-drafts", {
+/** Where a workflow draft came from. "starter" means Copilot was unavailable. */
+export type WorkflowDraftSource = "copilot" | "starter";
+
+export interface WorkflowDraftResult {
+  draft: WorkflowDraft;
+  source: WorkflowDraftSource;
+}
+
+/**
+ * Ask Copilot to draft a workflow from the student's own problem statement, and fall back
+ * to a fixed starter outline if it cannot.
+ *
+ * Copilot is free for students but only once their Student Developer Pack is approved,
+ * which takes several days. Week one of the course is exactly when this feature is taught,
+ * so an unavailable Copilot has to degrade into something usable rather than an error.
+ *
+ * The caller is told which path was taken so the UI can say so plainly. Passing a canned
+ * outline off as a tailored one would contradict the assumption-labelling the course
+ * grades students on.
+ */
+export async function createWorkflowDraft(input: WorkflowDraftInput): Promise<WorkflowDraftResult> {
+  const body = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input),
-  });
+  } satisfies RequestInit;
+
+  try {
+    return { draft: await requestJson<WorkflowDraft>("/api/agent/workflow-drafts", body), source: "copilot" };
+  } catch {
+    // Deliberately swallowed: any Copilot failure - signed out, pending approval, quota,
+    // timeout - leads to the same place. If the fallback itself fails, that error is real
+    // and propagates to the caller.
+    return { draft: await requestJson<WorkflowDraft>("/api/catalog/workflow-drafts", body), source: "starter" };
+  }
 }
 
 export function createAiSolutionBlueprint(input: AiSolutionBlueprintRequest): Promise<AiSolutionBlueprint> {

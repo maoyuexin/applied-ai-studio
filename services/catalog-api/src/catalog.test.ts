@@ -36,6 +36,7 @@ describe("CatalogStore seed contracts", () => {
     expect(labs.map((item) => item.id)).toEqual([
       "manufacturing-maintenance-triage",
       "financial-kyc-review",
+      "healthcare-operations-handoff",
       "retail-online-order-decision-lab",
       "public-service-intake",
       "transportation-fleet-routing",

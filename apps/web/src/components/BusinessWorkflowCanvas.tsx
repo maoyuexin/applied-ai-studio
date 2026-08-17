@@ -4,6 +4,7 @@ import {
   Maximize2,
   Minimize2,
   RotateCcw,
+  Scan,
   ZoomIn,
   ZoomOut,
 } from "lucide-react";
@@ -28,13 +29,24 @@ interface NodeLayout {
 const laneHeight = 112;
 const minimumCanvasWidth = 1280;
 const normalWidth = 132;
-const normalHeight = 52;
+const normalHeight = 58;
 const decisionWidth = 108;
 const decisionHeight = 78;
+const nodeLineHeight = 15;
 const minimumZoom = 0.8;
 const maximumZoom = 1.8;
 const zoomStep = 0.2;
 const fitToPanelBreakpoint = 720;
+
+const compactVerdictLabels: Record<CourseDecision["verdict"], string> = {
+  rule: "Rule",
+  automation: "Automation",
+  "ai-classification": "AI · Classify",
+  "ai-prediction": "AI · Predict",
+  optimization: "Optimize",
+  "ai-generation": "AI · Generate",
+  human: "Human only",
+};
 
 function wrapLabel(label: string, maxCharacters = 18): string[] {
   const words = label.split(/\s+/);
@@ -89,15 +101,27 @@ export default function BusinessWorkflowCanvas({
 }) {
   const viewportRef = useRef<HTMLDivElement>(null);
   const [zoom, setZoom] = useState(1);
+  const [fitZoom, setFitZoom] = useState(1);
+  const [isFitMode, setIsFitMode] = useState(true);
   const [baseWidth, setBaseWidth] = useState(1050);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const effectiveZoom = isFitMode ? fitZoom : zoom;
 
   useEffect(() => {
     const element = viewportRef.current;
     if (!element) return;
-    const updateWidth = () => setBaseWidth(
-      element.clientWidth >= fitToPanelBreakpoint ? element.clientWidth : 1050,
-    );
+    const updateWidth = () => {
+      if (element.clientWidth === 0) return;
+      const nextBaseWidth = element.clientWidth >= fitToPanelBreakpoint
+        ? element.clientWidth
+        : 1050;
+      const nextFitZoom = Math.min(
+        1,
+        Math.floor((element.clientWidth / nextBaseWidth) * 100) / 100,
+      );
+      setBaseWidth(nextBaseWidth);
+      setFitZoom(nextFitZoom);
+    };
     updateWidth();
     const observer = new ResizeObserver(updateWidth);
     observer.observe(element);
@@ -119,7 +143,12 @@ export default function BusinessWorkflowCanvas({
   }, [isFullscreen]);
 
   const adjustZoom = (delta: number) => {
-    setZoom((current) => Math.min(maximumZoom, Math.max(minimumZoom, Number((current + delta).toFixed(1)))));
+    const minimumAvailableZoom = Math.min(minimumZoom, fitZoom);
+    setZoom(Math.min(
+      maximumZoom,
+      Math.max(minimumAvailableZoom, Number((effectiveZoom + delta).toFixed(2))),
+    ));
+    setIsFitMode(false);
   };
 
   const decisionById = useMemo(
@@ -164,17 +193,17 @@ export default function BusinessWorkflowCanvas({
         <button
           type="button"
           onClick={() => adjustZoom(-zoomStep)}
-          disabled={zoom <= minimumZoom}
+          disabled={effectiveZoom <= Math.min(minimumZoom, fitZoom)}
           title="Zoom out"
           aria-label="Zoom out workflow"
         >
           <ZoomOut size={16} />
         </button>
-        <output aria-live="polite" aria-label="Workflow zoom level">{Math.round(zoom * 100)}%</output>
+        <output aria-live="polite" aria-label="Workflow zoom level">{Math.round(effectiveZoom * 100)}%</output>
         <button
           type="button"
           onClick={() => adjustZoom(zoomStep)}
-          disabled={zoom >= maximumZoom}
+          disabled={effectiveZoom >= maximumZoom}
           title="Zoom in"
           aria-label="Zoom in workflow"
         >
@@ -183,8 +212,21 @@ export default function BusinessWorkflowCanvas({
         <span className="toolbar-divider" aria-hidden="true" />
         <button
           type="button"
-          onClick={() => setZoom(1)}
-          disabled={zoom === 1}
+          onClick={() => setIsFitMode(true)}
+          disabled={isFitMode}
+          title="Fit workflow"
+          aria-label="Fit workflow to viewport"
+          aria-pressed={isFitMode}
+        >
+          <Scan size={16} />
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setZoom(1);
+            setIsFitMode(false);
+          }}
+          disabled={!isFitMode && zoom === 1}
           title="Reset zoom"
           aria-label="Reset workflow zoom"
         >
@@ -201,7 +243,7 @@ export default function BusinessWorkflowCanvas({
         </button>
       </div>
       <div ref={viewportRef} className="business-flow-canvas" aria-label={`${courseCase.title} interactive business workflow`}>
-        <div className="business-flow-zoom-surface" style={{ width: `${baseWidth * zoom}px` }}>
+        <div className="business-flow-zoom-surface" style={{ width: `${baseWidth * effectiveZoom}px` }}>
           <svg
             className="business-flow-svg"
             viewBox={`0 0 ${canvasWidth} ${canvasHeight}`}
@@ -247,8 +289,8 @@ export default function BusinessWorkflowCanvas({
         <g className="svg-flow-nodes">
           {[...layouts.values()].map((layout) => {
             const { node, decision, x, y, width, height } = layout;
-            const lines = wrapLabel(node.label, node.kind === "decision" ? 16 : 19);
-            const firstLineY = height / 2 - ((lines.length - 1) * 6);
+            const lines = wrapLabel(node.label, node.kind === "decision" ? 13 : 16);
+            const firstLineY = height / 2 - ((lines.length - 1) * nodeLineHeight / 2);
             const selectable = Boolean(node.decisionId);
             const selectDecision = () => {
               if (node.decisionId) onSelectDecision(node.decisionId);
@@ -267,11 +309,11 @@ export default function BusinessWorkflowCanvas({
                   <rect className="svg-node-shape" width={width} height={height} rx={node.kind === "start" || node.kind === "outcome" ? height / 2 : 5} />
                 )}
                 <text className="svg-node-label" x={width / 2} y={firstLineY} textAnchor="middle">
-                  {lines.map((line, index) => <tspan key={line} x={width / 2} dy={index === 0 ? 0 : 12}>{line}</tspan>)}
+                  {lines.map((line, index) => <tspan key={line} x={width / 2} dy={index === 0 ? 0 : nodeLineHeight}>{line}</tspan>)}
                 </text>
                 {node.decisionId ? (
                   <text className="svg-node-verdict" x={width / 2} y={height + 12} textAnchor="middle">
-                    {phase === "map" ? "decision" : decision?.verdictLabel}
+                    {phase === "map" ? "decision" : decision ? compactVerdictLabels[decision.verdict] : null}
                   </text>
                 ) : null}
               </g>

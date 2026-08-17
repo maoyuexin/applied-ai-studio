@@ -30,7 +30,7 @@ export default function WorkflowPage() {
   }, [courseCaseId, useCaseId]);
 
   if (courseCaseId) return <CourseFlowPage courseCaseId={courseCaseId} />;
-  if (!useCaseId) return <div className="page"><div className="error-banner">Select a use case from Industry Cases.</div></div>;
+  if (!useCaseId) return <div className="page"><div className="error-banner">Select a workflow from Industry Workflows.</div></div>;
   if (error) return <div className="page"><div className="error-banner">{error}</div></div>;
   if (!useCase) return <div className="route-loading">Loading workflow...</div>;
 
@@ -38,7 +38,7 @@ export default function WorkflowPage() {
   return (
     <div className="page generic-workflow-page">
       <button className="page-back-button" type="button" onClick={() => navigate("/showcase")}>
-        <ArrowLeft size={15} aria-hidden="true" /> Back to Industry Cases
+        <ArrowLeft size={15} aria-hidden="true" /> Back to Industry Workflows
       </button>
       <header className="page-header">
         <div>

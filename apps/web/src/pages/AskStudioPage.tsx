@@ -67,9 +67,13 @@ export default function AskStudioPage() {
         },
         controller.signal,
       );
-    } catch (reason) {
+    } catch {
       if (!controller.signal.aborted) {
-        setError(reason instanceof Error ? reason.message : "The Copilot request failed.");
+        // Signed out, approval still pending, quota, timeout - a beginner cannot act on the
+        // difference, and every one of them is fixed the same way.
+        setError(
+          "Ask Studio needs GitHub Copilot, and it is not connected to your account yet. Everything else in the app works without it — the workflows, the AI Fit Analyzer, and the Online Order demo. Copilot is free for students once your Student Developer Pack is approved, which usually takes a few days. Setup steps are in docs/student-quickstart.md, section 3.",
+        );
       }
     } finally {
       setStreaming(false);

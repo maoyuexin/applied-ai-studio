@@ -1,8 +1,13 @@
 import cors from "cors";
 import express from "express";
-import { fitAssessmentInputSchema, fitAssessmentResultSchema } from "@applied-ai-studio/contracts";
+import {
+  fitAssessmentInputSchema,
+  fitAssessmentResultSchema,
+  workflowDraftInputSchema,
+} from "@applied-ai-studio/contracts";
 import { CatalogStore } from "./catalog.js";
 import { assessFit } from "./scoring.js";
+import { starterWorkflowDraft } from "./starterDraft.js";
 
 const port = Number(process.env.CATALOG_PORT ?? process.env.PORT ?? 4310);
 const host = process.env.HOST ?? "127.0.0.1";
@@ -60,6 +65,18 @@ app.post("/api/catalog/assessments", (request, response) => {
   const result = fitAssessmentResultSchema.parse(assessFit(parsed.data, catalog.list()));
   assessments.set(result.id, result);
   response.status(201).json(result);
+});
+
+// Copilot-free fallback for the AI Fit Analyzer. The browser calls the agent service
+// first and only lands here when Copilot is unavailable - most often in week one, while
+// a student's Student Developer Pack approval is still pending.
+app.post("/api/catalog/workflow-drafts", (request, response) => {
+  const parsed = workflowDraftInputSchema.safeParse(request.body);
+  if (!parsed.success) {
+    response.status(400).json({ error: "Invalid workflow draft input.", details: parsed.error.flatten() });
+    return;
+  }
+  response.status(201).json(starterWorkflowDraft(parsed.data));
 });
 
 app.get("/api/catalog/assessments/:id", (request, response) => {

@@ -213,7 +213,11 @@ Requirements:
     }
 
     if (!captured) {
-      throw new Error("Copilot did not return a structured workflow draft. Revise the problem statement and try again.");
+      // Surfaced to a student in the browser, so it says what to do rather than what failed
+      // internally. The browser also falls back to a starter outline when this throws.
+      throw new Error(
+        "Copilot could not turn that into a workflow. Try describing the problem in a few more sentences: what arrives, who handles it, and what decision gets made.",
+      );
     }
     return workflowDraftSchema.parse(captured);
   }
@@ -297,10 +301,14 @@ Requirements:
     }
 
     if (!captured) {
+      // The schema detail is useful to the instructor but meaningless to a student, so it is
+      // logged rather than shown. The student gets an action instead.
       if (validationFailure) {
-        throw new Error(`Copilot blueprint validation failed: ${validationFailure}`);
+        console.warn(`[agent-api] blueprint rejected by schema: ${validationFailure}`);
       }
-      throw new Error("Copilot did not return a structured AI solution blueprint. Try the design step again.");
+      throw new Error(
+        "Copilot could not finish the detailed design this time. Your score is saved. Select the decision again and retry — it usually works on a second attempt.",
+      );
     }
     return aiSolutionBlueprintSchema.parse(captured);
   }

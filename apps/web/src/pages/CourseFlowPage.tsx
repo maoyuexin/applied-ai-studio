@@ -167,7 +167,7 @@ export default function CourseFlowPage({ courseCaseId }: { courseCaseId: string 
   return (
     <div className="page course-flow-page">
       <button className="page-back-button" type="button" onClick={() => navigate(isRetailWorkflow ? "/showcase?industry=retail" : "/showcase")}>
-        <ArrowLeft size={15} aria-hidden="true" /> Back to Industry Cases
+        <ArrowLeft size={15} aria-hidden="true" /> Back to Industry Workflows
       </button>
       <header className="page-header course-header">
         <div>

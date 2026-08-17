@@ -8,7 +8,7 @@ import type { ReactNode } from "react";
 import { navigate } from "../router";
 
 const navigation: Array<{ to: string; label: string; icon: LucideIcon }> = [
-  { to: "/showcase", label: "Industry Cases", icon: Boxes },
+  { to: "/showcase", label: "Industry Workflows", icon: Boxes },
   { to: "/fit", label: "AI Fit Analyzer", icon: FlaskConical },
   { to: "/ask", label: "Ask Studio", icon: Bot },
 ];

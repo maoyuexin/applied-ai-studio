@@ -250,6 +250,72 @@ h1, h2, h3 { letter-spacing: 0; }
 .baseline-strip span { color: var(--text-secondary); font-size: 9px; }
 .baseline-strip small { margin-top: 3px; color: var(--text-muted); font-size: 7px; }
 
+.course-flow-page {
+  --workflow-body: 13px;
+  --workflow-support: 12px;
+  --workflow-label: 10px;
+  --workflow-caption: 11px;
+}
+.course-flow-page .page-back-button { min-height: 36px; font-size: var(--workflow-caption); }
+.course-flow-page .workflow-introduction-heading > span,
+.course-flow-page .workflow-introduction-detail span { font-size: var(--workflow-label); }
+.course-flow-page .workflow-introduction-summary > p { font-size: var(--workflow-body); }
+.course-flow-page .workflow-introduction-detail p { font-size: var(--workflow-support); line-height: 1.6; }
+.course-flow-page .lesson-stepper button { min-height: 82px; }
+.course-flow-page .lesson-stepper button > span { font-size: var(--workflow-label); }
+.course-flow-page .lesson-stepper button strong { font-size: 14px; }
+.course-flow-page .lesson-stepper button small { font-size: var(--workflow-caption); }
+.course-flow-page .five-stage-strip > div { min-height: 86px; }
+.course-flow-page .five-stage-strip > div > span { font-size: var(--workflow-label); }
+.course-flow-page .five-stage-strip strong { font-size: var(--workflow-body); }
+.course-flow-page .five-stage-strip small { font-size: var(--workflow-caption); line-height: 1.45; }
+.course-flow-page .workflow-panel-header span { font-size: var(--workflow-label); }
+.course-flow-page .workflow-panel-header strong { font-size: var(--workflow-body); }
+.course-flow-page .segmented-control button { min-height: 32px; font-size: var(--workflow-caption); }
+.course-flow-page .workflow-canvas-toolbar output { font-size: var(--workflow-label); }
+.course-flow-page .svg-flow-lane text { font-size: 13px; }
+.course-flow-page .svg-business-edge text { font-size: 13px; }
+.course-flow-page .svg-course-node .svg-node-label { font-size: 15px; }
+.course-flow-page .svg-course-node .svg-node-verdict { font-size: 10px; }
+.course-flow-page .workflow-legend,
+.course-flow-page .workflow-legend strong { font-size: var(--workflow-label); line-height: 1.45; }
+.course-flow-page .inspector-kicker,
+.course-flow-page .decision-facts dt,
+.course-flow-page .design-card dt,
+.course-flow-page .fit-test-question span,
+.course-flow-page .recommendation-block span,
+.course-flow-page .inspector-section h3,
+.course-flow-page .decision-verdict,
+.course-flow-page .design-card > div:first-child span,
+.course-flow-page .section-title-row span,
+.course-flow-page .section-title-row > small { font-size: var(--workflow-label); }
+.course-flow-page .decision-inspector > h2 { font-size: 20px; }
+.course-flow-page .inspector-lead { font-size: var(--workflow-body); }
+.course-flow-page .decision-facts dd,
+.course-flow-page .design-card dd,
+.course-flow-page .teaching-callout p,
+.course-flow-page .recommendation-block p,
+.course-flow-page .fit-test-question p,
+.course-flow-page .inspector-section p,
+.course-flow-page .no-build-panel p,
+.course-flow-page .design-card > p { font-size: var(--workflow-support); line-height: 1.55; }
+.course-flow-page .fit-test-question strong,
+.course-flow-page .design-card h3,
+.course-flow-page .design-card > strong { font-size: var(--workflow-body); }
+.course-flow-page .elimination-note,
+.course-flow-page .placement-note { font-size: var(--workflow-label); }
+.course-flow-page .design-card > small { font-size: var(--workflow-caption); }
+.course-flow-page .compact-tags span,
+.course-flow-page .architecture-chain div { font-size: var(--workflow-label); }
+.course-flow-page .section-title-row h2 { font-size: 16px; }
+.course-flow-page .decision-grid button { min-height: 72px; padding-block: 10px; }
+.course-flow-page .decision-grid button > span,
+.course-flow-page .decision-grid button small { font-size: var(--workflow-label); }
+.course-flow-page .decision-grid button strong { font-size: var(--workflow-support); line-height: 1.4; }
+.course-flow-page .baseline-strip div { min-height: 84px; }
+.course-flow-page .baseline-strip span { font-size: var(--workflow-caption); }
+.course-flow-page .baseline-strip small { font-size: var(--workflow-label); line-height: 1.4; }
+
 .catalog-toolbar { display: flex; gap: 12px; align-items: center; margin-bottom: 18px; }
 .search-field { min-width: 280px; height: 38px; padding: 0 11px; display: flex; align-items: center; gap: 8px; border: 1px solid var(--border); border-radius: 5px; background: var(--surface); color: var(--text-muted); }
 .search-field:focus-within { border-color: var(--teal); }
@@ -274,8 +340,10 @@ h1, h2, h3 { letter-spacing: 0; }
 .card-capabilities { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 12px; }
 .card-capabilities span { padding: 3px 5px; border: 1px solid var(--border); border-radius: 3px; color: var(--text-secondary); font-size: 8px; }
 .card-trust-row { width: 100%; margin-top: auto; padding-top: 13px; display: flex; gap: 9px; flex-wrap: wrap; color: var(--text-muted); font-family: var(--font-mono); font-size: 7px; text-transform: uppercase; }
-.case-card-actions { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--border); background: #14161c; }
-.case-card-actions button { min-height: 38px; padding: 0 9px; display: flex; align-items: center; justify-content: center; gap: 6px; border: 0; border-right: 1px solid var(--border); background: transparent; color: var(--text-secondary); font-size: 9px; }
+/* flex, not a fixed 1fr 1fr grid: cards with no runnable demo render a single
+   action and must still fill the card width. */
+.case-card-actions { display: flex; border-top: 1px solid var(--border); background: #14161c; }
+.case-card-actions button { flex: 1; min-height: 38px; padding: 0 9px; display: flex; align-items: center; justify-content: center; gap: 6px; border: 0; border-right: 1px solid var(--border); background: transparent; color: var(--text-secondary); font-size: 9px; }
 .case-card-actions button:last-child { border-right: 0; }
 .case-card-actions button:hover { background: var(--surface-raised); color: var(--orange); }
 .case-card-actions small { padding: 1px 3px; border: 1px solid var(--border); border-radius: 2px; color: var(--text-muted); font-family: var(--font-mono); font-size: 6px; text-transform: uppercase; }
@@ -372,6 +440,13 @@ input[type="range"] { height: 5px; padding: 0; border: 0; accent-color: var(--or
 .draft-decision-list .intervention-automation, .draft-decision-list .intervention-optimization { border-left-color: var(--amber); }
 .draft-decision-list .intervention-human { border-left-color: var(--red); }
 .draft-decision-list .intervention-investigate { border-left-color: var(--pink); }
+/* Deliberately teal/informational, never red. Falling back to the starter outline is a
+   normal state for a student waiting on Student Pack approval, not an error, and styling
+   it like a failure makes beginners think they broke something. */
+.starter-draft-notice { padding: 10px 12px; border-bottom: 1px solid var(--border); border-left: 2px solid var(--teal); background: rgba(126, 174, 184, 0.07); }
+.starter-draft-notice strong { display: block; color: var(--teal); font-family: var(--font-mono); font-size: 8px; text-transform: uppercase; letter-spacing: 0.04em; }
+.starter-draft-notice p { margin: 6px 0 0; color: var(--text-secondary); font-size: 10px; line-height: 1.55; }
+
 .draft-assumptions { padding: 9px 10px; border-top: 1px solid var(--border); background: rgba(240, 180, 41, 0.05); }
 .draft-assumptions strong { color: var(--amber); font-family: var(--font-mono); font-size: 7px; text-transform: uppercase; }
 .draft-assumptions ul { margin: 5px 0 0; padding-left: 16px; color: var(--text-muted); font-size: 7px; line-height: 1.45; }

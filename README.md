@@ -5,14 +5,19 @@ judging where AI fits, and inspecting how AI outputs influence operational
 decisions. It combines reusable industry workflows with an executable Online
 Order application backed by synthetic data.
 
+> **Students — start here.** You do not need to install anything. See
+> [docs/student-quickstart.md](docs/student-quickstart.md) to run this in your
+> browser with GitHub Codespaces.
+
 The repository contains no customer data, API keys, model credentials, or
 database files. GitHub Copilot features use the current user's authenticated
 Copilot CLI session; authentication material remains outside the project.
 
 ## Highlights
 
-- Five detailed industry workflows: Online Order, Maintenance Triage, Customer
-  Identity Review, Resident Service Intake, and Fleet Routing.
+- Six detailed industry workflows: Online Order, Maintenance Triage, Customer
+  Identity Review, Resident Service Intake, Fleet Routing, and
+  Referral-to-Appointment Coordination.
 - Map → Judge AI Fit → Design What Survives analysis method.
 - Deterministic AI-fit scoring with a gated solution blueprint.
 - Executable Online Order storefront, customer tracking, merchant operations,

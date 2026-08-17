@@ -108,37 +108,39 @@
   },
   {
     "id": "healthcare-operations-handoff",
-    "title": "Care Operations Handoff Assistant",
+    "title": "Referral-to-Appointment Coordination",
     "industry": "healthcare",
     "industryLabel": "Healthcare",
     "icon": "heart-pulse",
     "accent": "red",
-    "summary": "Summarize operational handoff information and outstanding administrative actions without providing diagnosis or treatment advice.",
-    "problem": "Operations staff spend time consolidating scheduling, referral, and authorization updates from multiple administrative systems.",
-    "outcomes": ["Clearer handoffs", "Fewer missed administrative actions", "Reduced coordination time"],
-    "capabilities": ["Grounded summarization", "Task extraction", "Workflow coordination"],
-    "patterns": ["Bounded assistant", "Source citations", "Clinical boundary"],
-    "workloadType": "knowledge-qna",
+    "summary": "Coordinate one referral from submitted documents through specialty routing, authorization, scheduling, patient communication, and accountable escalation.",
+    "problem": "Referral teams reconcile variable documents, routing requirements, authorization status, appointment capacity, and patient responses across multiple operational handoffs.",
+    "outcomes": ["Fewer incomplete referrals", "More accurate first routing", "Visible authorization and scheduling exceptions"],
+    "capabilities": ["Document intelligence", "Service classification", "Delay prediction"],
+    "patterns": ["Rules plus AI", "Capacity optimization", "Human urgency boundary"],
+    "workloadType": "workflow-automation",
     "dataReadiness": "medium",
     "riskLevel": "high",
-    "maturity": "showcase",
-    "architecture": ["Approved operational sources", "Role-based retrieval", "Summary service", "Staff review"],
+    "maturity": "prototype",
+    "architecture": ["Secure referral intake", "Document evidence service", "Routing and policy rules", "Scheduling workbench"],
     "workflow": {
       "nodes": [
-        {"id": "updates", "label": "Operational updates", "kind": "input"},
-        {"id": "retrieve", "label": "Retrieve approved records", "kind": "process"},
-        {"id": "summarize", "label": "Bounded summarization", "kind": "ai"},
-        {"id": "staff", "label": "Staff verification", "kind": "human"},
-        {"id": "handoff", "label": "Handoff brief", "kind": "output"}
+        {"id": "referral", "label": "Referral packet", "kind": "input"},
+        {"id": "evidence", "label": "Extract and verify evidence", "kind": "ai"},
+        {"id": "coordinate", "label": "Route, authorize, and schedule", "kind": "process"},
+        {"id": "review", "label": "Coordinator and clinical review", "kind": "human"},
+        {"id": "appointment", "label": "Accepted appointment or escalation", "kind": "output"}
       ],
       "edges": [
-        {"from": "updates", "to": "retrieve", "label": "authorize"},
-        {"from": "retrieve", "to": "summarize", "label": "ground"},
-        {"from": "summarize", "to": "staff", "label": "draft"},
-        {"from": "staff", "to": "handoff", "label": "verify"}
+        {"from": "referral", "to": "evidence", "label": "ingest"},
+        {"from": "evidence", "to": "coordinate", "label": "structured facts"},
+        {"from": "coordinate", "to": "review", "label": "exceptions and options"},
+        {"from": "review", "to": "appointment", "label": "authorize"}
       ]
     },
-    "demoPrompts": ["What must this assistant refuse to do?", "Where should source citations appear?"],
+    "demoPrompts": ["Which referral decisions should use rules instead of AI?", "Where must urgency remain a human decision?"],
+    "courseCaseId": "healthcare-referral-coordination",
+    "demoStatus": "planned",
     "source": "public-synthetic"
   },
   {

@@ -19,10 +19,11 @@ Industry cases provide reusable analysis patterns. The detailed retail workflow
 follows one order from Buy Now to the doorstep with six decisions and a synthetic
 operating baseline.
 
-The first workflow release retains five comprehensive scenarios: Online
-Order, Maintenance Triage, KYC Review, Resident Service Intake, and Fleet
-Routing. Each uses the same detailed lesson surface and must meet the structural
-and design rubric in [workflow-scenario-curation.md](workflow-scenario-curation.md).
+The first workflow release retains six comprehensive scenarios: Online
+Order, Maintenance Triage, KYC Review, Resident Service Intake, Fleet Routing,
+and Referral-to-Appointment Coordination. Each uses the same detailed lesson
+surface and must meet the structural and design rubric in
+[workflow-scenario-curation.md](workflow-scenario-curation.md).
 
 The MVP is locally hosted and uses the local operator's GitHub Copilot account.
 It is intended for local interaction on the same machine. It is not a multi-user
@@ -68,11 +69,11 @@ flowchart TB
 
 ### Web application
 
-- Presents Industry Cases, AI Fit Analyzer, and Ask Studio as primary navigation.
-- Keeps Industry Cases as a card-only catalog; detailed content lives on each card or its Workflow page.
+- Presents Industry Workflows, AI Fit Analyzer, and Ask Studio as primary navigation.
+- Keeps Industry Workflows as a card-only catalog; detailed content lives on each card or its Workflow page.
 - Opens Workflow and Demo pages from individual use-case cards rather than global navigation.
 - Renders every retained workflow as an interactive React SVG with documented and exception paths.
-- Reuses the Map, Judge AI Fit, and Design What Survives lesson across all retained cases.
+- Reuses the Map, Judge AI Fit, and Design What Survives analysis method across all retained cases.
 - Introduces each workflow with plain-language business context, process boundaries, and participants before presenting the diagram.
 - Does not contain provider credentials or call GitHub directly.
 - Renders workflow graphs from validated nodes and edges with Mermaid.
@@ -81,7 +82,7 @@ flowchart TB
 ### Catalog API
 
 - Owns the use-case catalog and deterministic fit algorithm.
-- Owns the five detailed workflow scenarios, their decision designs, and the larger deferred seed catalog.
+- Owns the six detailed workflow scenarios, their decision designs, and the larger deferred seed catalog.
 - Validates all inputs and outputs with shared Zod contracts.
 - Stores assessment runs in process memory for the MVP.
 - Is the only component allowed to read `data/seed`.

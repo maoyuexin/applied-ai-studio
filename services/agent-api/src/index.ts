@@ -71,7 +71,9 @@ app.post("/api/agent/chat", async (request, response) => {
   } catch (error) {
     emit({
       type: "error",
-      message: error instanceof Error ? error.message : "The Copilot request failed.",
+      message: error instanceof Error
+        ? error.message
+        : "Ask Studio could not reach GitHub Copilot. Everything else in the app still works without it.",
     });
   } finally {
     response.end();
@@ -87,8 +89,12 @@ app.post("/api/agent/workflow-drafts", async (request, response) => {
   try {
     response.json(await gateway.draftWorkflow(parsed.data));
   } catch (error) {
+    // The browser treats any failure here as its cue to serve the starter outline from the
+    // catalog service, so this message is a last resort rather than the normal path.
     response.status(502).json({
-      error: error instanceof Error ? error.message : "Copilot workflow drafting failed.",
+      error: error instanceof Error
+        ? error.message
+        : "Copilot could not draft a workflow. A standard starter outline will be used instead.",
     });
   }
 });

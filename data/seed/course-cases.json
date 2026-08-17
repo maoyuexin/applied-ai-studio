@@ -52,17 +52,17 @@
     "edges": [
       {"id": "e1", "from": "order", "to": "address", "label": "submit", "kind": "normal", "documented": true},
       {"id": "e2", "from": "address", "to": "payment", "label": "yes", "kind": "normal", "documented": true},
-      {"id": "e3", "from": "payment", "to": "allocate", "label": "clear", "kind": "normal", "documented": true},
+      {"id": "e3", "from": "payment", "to": "allocate", "label": "clear", "labelDx": 16, "kind": "normal", "documented": true},
       {"id": "e4", "from": "allocate", "to": "pick-pack", "label": "assigned", "kind": "normal", "documented": true},
       {"id": "e5", "from": "pick-pack", "to": "promise", "label": "packed", "kind": "normal", "documented": true},
       {"id": "e6", "from": "promise", "to": "ship", "label": "on track", "kind": "normal", "documented": true},
       {"id": "e7", "from": "ship", "to": "delivered", "label": "delivered", "kind": "normal", "documented": true},
-      {"id": "x1", "from": "payment", "to": "manual-review", "label": "flagged", "kind": "exception", "documented": false},
+      {"id": "x1", "from": "payment", "to": "manual-review", "label": "flagged", "labelDy": -16, "kind": "exception", "documented": false},
       {"id": "x2", "from": "manual-review", "to": "allocate", "label": "approve", "kind": "exception", "documented": false},
-      {"id": "x3", "from": "allocate", "to": "contact", "label": "item oversold", "kind": "exception", "documented": false},
+      {"id": "x3", "from": "allocate", "to": "contact", "label": "item oversold", "labelDx": -8, "kind": "exception", "documented": false},
       {"id": "x4", "from": "contact", "to": "pick-pack", "label": "split shipment", "kind": "loop", "documented": false},
-      {"id": "x5", "from": "promise", "to": "message", "label": "late risk", "kind": "exception", "documented": false},
-      {"id": "x6", "from": "ship", "to": "message", "label": "carrier exception", "kind": "exception", "documented": false},
+      {"id": "x5", "from": "promise", "to": "message", "label": "late risk", "labelDy": -24, "kind": "exception", "documented": false},
+      {"id": "x6", "from": "ship", "to": "message", "label": "carrier exception", "labelDx": 8, "kind": "exception", "documented": false},
       {"id": "x7", "from": "message", "to": "remedy", "label": "unresolved", "kind": "exception", "documented": false},
       {"id": "x8", "from": "remedy", "to": "delivered", "label": "resolved", "kind": "loop", "documented": false}
     ],
@@ -290,13 +290,13 @@
       {"id": "e2", "from": "signal", "to": "context", "label": "valid", "kind": "normal", "documented": true},
       {"id": "e3", "from": "context", "to": "risk", "label": "history", "kind": "normal", "documented": true},
       {"id": "e4", "from": "risk", "to": "priority", "label": "risk", "kind": "normal", "documented": true},
-      {"id": "e5", "from": "priority", "to": "work-order", "label": "allocate", "kind": "normal", "documented": true},
+      {"id": "e5", "from": "priority", "to": "work-order", "label": "allocate", "labelDy": -24, "kind": "normal", "documented": true},
       {"id": "e6", "from": "work-order", "to": "diagnostic", "label": "dispatch", "kind": "normal", "documented": true},
       {"id": "e7", "from": "diagnostic", "to": "shutdown", "label": "evidence", "kind": "normal", "documented": true},
       {"id": "e8", "from": "shutdown", "to": "repair", "label": "authorize", "kind": "normal", "documented": true},
       {"id": "e9", "from": "repair", "to": "available", "label": "verify", "kind": "normal", "documented": true},
       {"id": "x1", "from": "signal", "to": "available", "label": "duplicate or noise", "kind": "exception", "documented": false},
-      {"id": "x2", "from": "context", "to": "missing-data", "label": "incomplete", "kind": "exception", "documented": false},
+      {"id": "x2", "from": "context", "to": "missing-data", "label": "incomplete", "labelDy": -16, "kind": "exception", "documented": false},
       {"id": "x3", "from": "missing-data", "to": "context", "label": "restored", "kind": "loop", "documented": false},
       {"id": "x4", "from": "risk", "to": "available", "label": "monitor", "kind": "exception", "documented": false},
       {"id": "x5", "from": "priority", "to": "parts-delay", "label": "blocked", "labelDx": -55, "labelDy": 8, "kind": "exception", "documented": false},
@@ -501,9 +501,9 @@
       {"id": "e2", "from": "extract", "to": "normalize", "label": "confident", "kind": "normal", "documented": true},
       {"id": "e3", "from": "normalize", "to": "complete", "label": "fields", "kind": "normal", "documented": true},
       {"id": "e4", "from": "complete", "to": "consistent", "label": "complete", "kind": "normal", "documented": true},
-      {"id": "e5", "from": "consistent", "to": "screen", "label": "consistent", "kind": "normal", "documented": true},
-      {"id": "e6", "from": "screen", "to": "match", "label": "candidates", "kind": "normal", "documented": true},
-      {"id": "e7", "from": "match", "to": "route", "label": "triage", "kind": "normal", "documented": true},
+      {"id": "e5", "from": "consistent", "to": "screen", "label": "consistent", "labelDy": -24, "kind": "normal", "documented": true},
+      {"id": "e6", "from": "screen", "to": "match", "label": "candidates", "labelDy": -16, "kind": "normal", "documented": true},
+      {"id": "e7", "from": "match", "to": "route", "label": "triage", "labelDy": -16, "kind": "normal", "documented": true},
       {"id": "e8", "from": "route", "to": "disposition", "label": "assign", "kind": "normal", "documented": true},
       {"id": "e9", "from": "disposition", "to": "record", "label": "decide", "kind": "normal", "documented": true},
       {"id": "x1", "from": "extract", "to": "low-confidence", "label": "uncertain", "kind": "exception", "documented": false},
@@ -511,7 +511,7 @@
       {"id": "x3", "from": "complete", "to": "missing", "label": "missing", "kind": "exception", "documented": false},
       {"id": "x4", "from": "missing", "to": "packet", "label": "resubmit", "kind": "loop", "documented": false},
       {"id": "x5", "from": "consistent", "to": "enhanced", "label": "conflict", "kind": "exception", "documented": false},
-      {"id": "x6", "from": "match", "to": "enhanced", "label": "uncertain match", "labelDy": 52, "kind": "exception", "documented": false},
+      {"id": "x6", "from": "match", "to": "enhanced", "label": "uncertain match", "labelDy": 76, "kind": "exception", "documented": false},
       {"id": "x7", "from": "route", "to": "enhanced", "label": "special review", "kind": "exception", "documented": false},
       {"id": "x8", "from": "enhanced", "to": "disposition", "label": "evidence", "kind": "loop", "documented": false}
     ],
@@ -711,17 +711,17 @@
     ],
     "edges": [
       {"id": "e1", "from": "request", "to": "classify", "label": "describe", "kind": "normal", "documented": true},
-      {"id": "e2", "from": "classify", "to": "jurisdiction", "label": "candidate service", "kind": "normal", "documented": true},
-      {"id": "e3", "from": "jurisdiction", "to": "eligibility", "label": "in scope", "kind": "normal", "documented": true},
+      {"id": "e2", "from": "classify", "to": "jurisdiction", "label": "candidate service", "labelDy": -16, "kind": "normal", "documented": true},
+      {"id": "e3", "from": "jurisdiction", "to": "eligibility", "label": "in scope", "labelDy": -24, "kind": "normal", "documented": true},
       {"id": "e4", "from": "eligibility", "to": "duplicate", "label": "eligible path", "kind": "normal", "documented": true},
       {"id": "e5", "from": "duplicate", "to": "assign", "label": "new case", "kind": "normal", "documented": true},
       {"id": "e6", "from": "assign", "to": "explain", "label": "destination", "kind": "normal", "documented": true},
-      {"id": "e7", "from": "explain", "to": "exception", "label": "review", "kind": "normal", "documented": true},
+      {"id": "e7", "from": "explain", "to": "exception", "label": "review", "labelDy": -16, "kind": "normal", "documented": true},
       {"id": "e8", "from": "exception", "to": "create", "label": "standard path", "kind": "normal", "documented": true},
       {"id": "e9", "from": "create", "to": "service", "label": "submit", "kind": "normal", "documented": true},
-      {"id": "x1", "from": "classify", "to": "clarify", "label": "unclear", "kind": "exception", "documented": false},
+      {"id": "x1", "from": "classify", "to": "clarify", "label": "unclear", "labelDy": -16, "kind": "exception", "documented": false},
       {"id": "x2", "from": "clarify", "to": "classify", "label": "answer", "kind": "loop", "documented": false},
-      {"id": "x3", "from": "jurisdiction", "to": "reroute", "label": "out of scope", "kind": "exception", "documented": false},
+      {"id": "x3", "from": "jurisdiction", "to": "reroute", "label": "out of scope", "labelDy": -16, "kind": "exception", "documented": false},
       {"id": "x4", "from": "reroute", "to": "jurisdiction", "label": "new authority", "kind": "loop", "documented": false},
       {"id": "x5", "from": "eligibility", "to": "explain", "label": "alternative guidance", "kind": "exception", "documented": false},
       {"id": "x6", "from": "duplicate", "to": "service", "label": "merge update", "kind": "exception", "documented": false},
@@ -939,9 +939,9 @@
       {"id": "message", "label": "Draft disruption update", "lane": "support", "kind": "process", "x": 1080, "documented": false, "decisionId": "message"}
     ],
     "edges": [
-      {"id": "e1", "from": "jobs", "to": "validate", "label": "schedule", "kind": "normal", "documented": true},
+      {"id": "e1", "from": "jobs", "to": "validate", "label": "schedule", "labelDy": -16, "kind": "normal", "documented": true},
       {"id": "e2", "from": "validate", "to": "late-risk", "label": "clean inputs", "kind": "normal", "documented": true},
-      {"id": "e3", "from": "late-risk", "to": "plan", "label": "travel estimates", "kind": "normal", "documented": true},
+      {"id": "e3", "from": "late-risk", "to": "plan", "label": "travel estimates", "labelDy": -16, "kind": "normal", "documented": true},
       {"id": "e4", "from": "plan", "to": "release", "label": "feasible plan", "kind": "normal", "documented": true},
       {"id": "e5", "from": "release", "to": "drive", "label": "dispatch", "kind": "normal", "documented": true},
       {"id": "e6", "from": "drive", "to": "complete", "label": "on plan", "kind": "normal", "documented": true},
@@ -1128,6 +1128,314 @@
       }
     ],
     "featuredDecisionId": "late-risk",
+    "source": "synthetic-workflow-assumption"
+  },
+  {
+    "id": "healthcare-referral-coordination",
+    "title": "One Referral to an Accepted Appointment",
+    "subtitle": "From submitted evidence to coordinated specialty access",
+    "industry": "Healthcare",
+    "learningObjective": "Separate document interpretation, specialty classification, policy rules, capacity optimization, delay prediction, communication support, and accountable urgency escalation.",
+    "throughline": "Use AI to prepare and prioritize administrative work; never let it diagnose, determine treatment, or own clinical urgency.",
+    "introduction": {
+      "title": "Why one referral crosses so many operational boundaries",
+      "context": "A healthcare referral is the operational request that moves a patient from a referring provider toward another service or specialty. Before an appointment can be accepted, teams may need readable records, the correct service category, required evidence, authorization status, available capacity, and a reliable way to contact the patient. This scenario coordinates those administrative steps only; it does not diagnose, recommend treatment, or perform clinical triage.",
+      "workflow": "The workflow follows one synthetic referral from document intake through evidence extraction, specialty routing, human urgency review, deterministic requirement and authorization checks, appointment optimization, delay-risk prediction, grounded communication, and final acceptance. Exception paths cover unreadable or missing records, unmet service requirements, uncertain routing, pending authorization, limited capacity, and patient non-response.",
+      "startsWhen": "A referring provider submits a referral packet and requested service for a patient.",
+      "endsWhen": "The receiving team accepts a scheduled appointment, or a qualified human accepts an urgent escalation with an auditable handoff."
+    },
+    "stages": [
+      {"id": "input", "label": "Inputs", "description": "Referral, records, requested service, patient contact"},
+      {"id": "process", "label": "Process", "description": "Extract, route, verify, authorize, coordinate"},
+      {"id": "decision", "label": "Decision", "description": "Complete? Which service? Authorized? At risk?"},
+      {"id": "action", "label": "Action", "description": "Clarify, escalate, schedule, or communicate"},
+      {"id": "outcome", "label": "Outcome", "description": "Accepted appointment or qualified urgent handoff"}
+    ],
+    "baseline": [
+      {"value": "6,000", "label": "referrals per month", "note": "Synthetic assumption"},
+      {"value": "28%", "label": "need evidence clarification", "note": "Synthetic assumption"},
+      {"value": "17 min", "label": "first-pass preparation", "note": "Synthetic assumption"},
+      {"value": "12%", "label": "wait on authorization", "note": "Synthetic assumption"},
+      {"value": "476 hrs", "label": "monthly clarification effort", "note": "6,000 × 28% × 17 ÷ 60"}
+    ],
+    "lanes": [
+      {"id": "patient", "label": "Patient or caregiver", "order": 0},
+      {"id": "referrer", "label": "Referring provider", "order": 1},
+      {"id": "intake", "label": "Referral intake", "order": 2},
+      {"id": "documents", "label": "Document processing", "order": 3},
+      {"id": "authorization", "label": "Authorization operations", "order": 4},
+      {"id": "scheduling", "label": "Specialty scheduling", "order": 5},
+      {"id": "coordinator", "label": "Referral coordinator", "order": 6},
+      {"id": "receiving", "label": "Receiving care team", "order": 7}
+    ],
+    "nodes": [
+      {"id": "submitted", "label": "Referral submitted", "lane": "referrer", "kind": "start", "x": 25, "documented": true},
+      {"id": "evidence", "label": "Evidence readable?", "lane": "documents", "kind": "decision", "x": 140, "documented": true, "decisionId": "evidence"},
+      {"id": "specialty", "label": "Which service fits?", "lane": "intake", "kind": "decision", "x": 275, "documented": true, "decisionId": "specialty"},
+      {"id": "urgency", "label": "Urgent concern?", "lane": "coordinator", "kind": "decision", "x": 410, "documented": true, "decisionId": "urgency"},
+      {"id": "requirements", "label": "Requirements met?", "lane": "intake", "kind": "decision", "x": 545, "documented": true, "decisionId": "requirements"},
+      {"id": "authorized", "label": "Authorization ready?", "lane": "authorization", "kind": "decision", "x": 680, "documented": true, "decisionId": "authorization"},
+      {"id": "slot", "label": "Which slot and location?", "lane": "scheduling", "kind": "decision", "x": 815, "documented": true, "decisionId": "slot"},
+      {"id": "delay-risk", "label": "Will coordination stall?", "lane": "coordinator", "kind": "decision", "x": 925, "documented": true, "decisionId": "delay-risk"},
+      {"id": "message", "label": "Prepare next-step message", "lane": "coordinator", "kind": "process", "x": 1100, "documented": true, "decisionId": "message"},
+      {"id": "appointment", "label": "Appointment accepted", "lane": "patient", "kind": "action", "x": 1200, "documented": true},
+      {"id": "coordinated", "label": "Referral coordinated", "lane": "receiving", "kind": "outcome", "x": 1200, "documented": true},
+      {"id": "manual-document", "label": "Review source records", "lane": "coordinator", "kind": "process", "x": 235, "documented": false},
+      {"id": "missing-records", "label": "Request missing evidence", "lane": "referrer", "kind": "process", "x": 370, "documented": false},
+      {"id": "manual-routing", "label": "Confirm specialty manually", "lane": "coordinator", "kind": "process", "x": 530, "documented": false},
+      {"id": "requirements-gap", "label": "Supply required items", "lane": "referrer", "kind": "process", "x": 680, "documented": false},
+      {"id": "urgent-handoff", "label": "Qualified urgent handoff", "lane": "receiving", "kind": "action", "x": 600, "documented": false},
+      {"id": "auth-pending", "label": "Resolve authorization", "lane": "authorization", "kind": "process", "x": 825, "documented": false},
+      {"id": "capacity", "label": "Search alternate capacity", "lane": "scheduling", "kind": "process", "x": 950, "documented": false},
+      {"id": "unreachable", "label": "Patient not reached", "lane": "patient", "kind": "process", "x": 1045, "documented": false}
+    ],
+    "edges": [
+      {"id": "e1", "from": "submitted", "to": "evidence", "label": "ingest", "kind": "normal", "documented": true},
+      {"id": "e2", "from": "evidence", "to": "specialty", "label": "verified facts", "labelDy": -16, "kind": "normal", "documented": true},
+      {"id": "e3", "from": "specialty", "to": "urgency", "label": "candidate service", "labelDx": -8, "labelDy": -26, "kind": "normal", "documented": true},
+      {"id": "e4", "from": "urgency", "to": "requirements", "label": "routine coordination", "labelDy": -24, "kind": "normal", "documented": true},
+      {"id": "e5", "from": "requirements", "to": "authorized", "label": "complete", "kind": "normal", "documented": true},
+      {"id": "e6", "from": "authorized", "to": "slot", "label": "ready", "kind": "normal", "documented": true},
+      {"id": "e7", "from": "slot", "to": "delay-risk", "label": "proposed option", "labelDx": 16, "labelDy": -13, "kind": "normal", "documented": true},
+      {"id": "e8", "from": "delay-risk", "to": "message", "label": "next action", "kind": "normal", "documented": true},
+      {"id": "e9", "from": "message", "to": "appointment", "label": "patient accepts", "labelDy": -28, "kind": "normal", "documented": true},
+      {"id": "e10", "from": "appointment", "to": "coordinated", "label": "handoff", "kind": "normal", "documented": true},
+      {"id": "x1", "from": "evidence", "to": "manual-document", "label": "low confidence", "labelDy": -26, "kind": "exception", "documented": false},
+      {"id": "x2", "from": "manual-document", "to": "evidence", "label": "verified", "labelDy": 26, "kind": "loop", "documented": false},
+      {"id": "x3", "from": "evidence", "to": "missing-records", "label": "missing", "labelDx": -90, "labelDy": -22, "kind": "exception", "documented": false},
+      {"id": "x4", "from": "missing-records", "to": "submitted", "label": "resubmit", "kind": "loop", "documented": false},
+      {"id": "x5", "from": "specialty", "to": "manual-routing", "label": "uncertain", "labelDy": 28, "kind": "exception", "documented": false},
+      {"id": "x6", "from": "manual-routing", "to": "urgency", "label": "confirmed", "labelDx": -8, "labelDy": 60, "kind": "loop", "documented": false},
+      {"id": "x7", "from": "urgency", "to": "urgent-handoff", "label": "potential urgency", "labelDx": 70, "kind": "exception", "documented": false},
+      {"id": "x8", "from": "urgent-handoff", "to": "coordinated", "label": "accepted", "kind": "loop", "documented": false},
+      {"id": "x15", "from": "requirements", "to": "requirements-gap", "label": "incomplete", "kind": "exception", "documented": false},
+      {"id": "x16", "from": "requirements-gap", "to": "requirements", "label": "supplied", "labelDy": 24, "kind": "loop", "documented": false},
+      {"id": "x9", "from": "authorized", "to": "auth-pending", "label": "pending", "labelDy": -50, "kind": "exception", "documented": false},
+      {"id": "x10", "from": "auth-pending", "to": "authorized", "label": "resolved", "labelDy": 75, "kind": "loop", "documented": false},
+      {"id": "x11", "from": "slot", "to": "capacity", "label": "no capacity", "labelDy": -55, "kind": "exception", "documented": false},
+      {"id": "x12", "from": "capacity", "to": "slot", "label": "new options", "labelDx": 100, "labelDy": 55, "kind": "loop", "documented": false},
+      {"id": "x13", "from": "delay-risk", "to": "unreachable", "label": "high risk", "labelDy": -30, "kind": "exception", "documented": false},
+      {"id": "x14", "from": "unreachable", "to": "message", "label": "alternate channel", "labelDy": 30, "kind": "loop", "documented": false}
+    ],
+    "decisions": [
+      {
+        "id": "evidence",
+        "label": "Can the referral evidence be interpreted reliably?",
+        "owner": "Referral document reviewer",
+        "frequency": "Every submitted referral packet",
+        "wrongCost": "Incorrect facts contaminate routing and authorization, or a usable referral is delayed",
+        "verdict": "ai-classification",
+        "verdictLabel": "AI · Document classification",
+        "testAnswer": "Yes. Document type, layout, image quality, and reviewed field corrections improve interpretation across variable referral records.",
+        "why": "The system must classify document evidence, extract operational fields, cite their source, and abstain when confidence is low.",
+        "recommendation": "Extract referral facts with field-level citations and confidence; route low-confidence or missing evidence to human review.",
+        "aiRelevant": true,
+        "placement": "decision",
+        "design": {
+          "data": {
+            "summary": "Synthetic referral forms and attached records paired with reviewed document classes, field values, source regions, and correction outcomes.",
+            "owner": "Referral operations and information governance",
+            "readiness": "Synthetic assumption: representative packet layouts and reviewed corrections are available",
+            "fields": ["Requested service", "Referring provider", "Patient contact", "Authorization reference", "Attached record type", "Source citation"],
+            "risk": "Historical reviewer corrections can be inconsistent, and aggregate accuracy can hide weak performance on rare record types."
+          },
+          "method": {
+            "pattern": "classification",
+            "output": "Document class, operational fields, source citations, and confidence",
+            "technique": "Layout-aware document classification and extraction with field-level abstention"
+          },
+          "metric": {
+            "technical": "Document macro F1, field precision and recall, citation accuracy, and low-confidence coverage by record type.",
+            "business": "Reduce first-pass preparation and repeated evidence requests without increasing incorrectly completed referrals.",
+            "baseline": "28% of 6,000 synthetic monthly referrals need evidence clarification"
+          },
+          "human": {
+            "role": "Referral document reviewer",
+            "checkpoint": "Verify uncertain values against the source record and request missing evidence without interpreting clinical meaning.",
+            "falsePositiveCost": "An incorrect extracted fact is treated as reliable and affects later administrative checks.",
+            "falseNegativeCost": "Readable evidence is rejected and the patient or referring team repeats work."
+          },
+          "architecture": ["Secure referral intake", "Document classifier", "Field extraction", "Citation and confidence layer", "Reviewer work queue", "Correction monitoring"]
+        }
+      },
+      {
+        "id": "specialty",
+        "label": "Which specialty or service should receive the referral?",
+        "owner": "Referral intake coordinator",
+        "frequency": "Every evidence-ready referral",
+        "wrongCost": "The referral reaches the wrong service, is transferred repeatedly, or waits in the wrong queue",
+        "verdict": "ai-classification",
+        "verdictLabel": "AI · Service classification",
+        "testAnswer": "Yes. Reviewed routing outcomes reveal varied referring language and overlapping service descriptions that improve ranked service matching.",
+        "why": "The output is an administrative service category with confidence, not a diagnosis, treatment recommendation, or clinical priority.",
+        "recommendation": "Rank approved service categories, show the evidence behind the match, and require coordinator confirmation for low confidence.",
+        "aiRelevant": true,
+        "placement": "decision",
+        "design": {
+          "data": {
+            "summary": "Synthetic referral descriptions, requested services, approved service taxonomy, final confirmed destinations, and transfer outcomes.",
+            "owner": "Referral intake and service-line governance",
+            "readiness": "Synthetic assumption: service taxonomy is versioned and confirmed routing outcomes are retained",
+            "fields": ["Requested service", "Referral reason text", "Referring department", "Patient age band", "Approved service taxonomy", "Confirmed destination"],
+            "risk": "Past routing shortcuts can become labels, and rare services can disappear inside aggregate accuracy."
+          },
+          "method": {
+            "pattern": "classification",
+            "output": "Ranked service categories with confidence and cited referral evidence",
+            "technique": "Calibrated text and structured-feature classification over an approved service taxonomy"
+          },
+          "metric": {
+            "technical": "Macro precision and recall, top-two recall, calibration, and abstention quality by service category.",
+            "business": "Improve first-route accuracy and reduce avoidable transfers while preserving coordinator review for ambiguity.",
+            "baseline": "Synthetic baseline to be established from manually reviewed referral routes"
+          },
+          "human": {
+            "role": "Referral intake coordinator",
+            "checkpoint": "Confirm uncertain service matches and every route that could alter clinical review responsibility.",
+            "falsePositiveCost": "A plausible but wrong service accepts work it cannot complete.",
+            "falseNegativeCost": "A relevant service is omitted and coordination is delayed."
+          },
+          "architecture": ["Referral evidence API", "Approved service taxonomy", "Calibrated classifier", "Evidence comparison", "Coordinator confirmation", "Routing outcome feedback"]
+        }
+      },
+      {
+        "id": "urgency",
+        "label": "Does this referral need qualified urgent review?",
+        "owner": "Qualified referral coordinator or clinician",
+        "frequency": "Every referral after initial service matching",
+        "wrongCost": "An urgent concern follows routine scheduling, or a routine referral is escalated unnecessarily",
+        "verdict": "human",
+        "verdictLabel": "Human only · No automated triage",
+        "testAnswer": "No model in this scenario may determine clinical urgency. An approved rule may surface a stated flag, but a qualified human owns the interpretation and handoff.",
+        "why": "Urgency can affect clinical responsibility and patient safety; administrative AI must not infer diagnosis or priority.",
+        "recommendation": "Show the original referral evidence and approved escalation guidance to a qualified human; never generate an autonomous urgency score.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "requirements",
+        "label": "Are the explicit service requirements met?",
+        "owner": "Service-line policy owner",
+        "frequency": "Every routinely coordinated referral",
+        "wrongCost": "An incomplete referral advances, or unnecessary evidence is requested",
+        "verdict": "rule",
+        "verdictLabel": "Use a rule",
+        "testAnswer": "No. Required documents and operational prerequisites belong in versioned policy tables, not a model trained on historical acceptance.",
+        "why": "Explicit requirements must remain transparent, appealable, and distinguish missing evidence from an unsupported request.",
+        "recommendation": "Evaluate versioned service requirements and return each missing item with its policy source.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "authorization",
+        "label": "Is required authorization present and current?",
+        "owner": "Authorization operations",
+        "frequency": "Every referral whose policy path requires authorization",
+        "wrongCost": "A patient is scheduled without required approval, or an authorized referral waits unnecessarily",
+        "verdict": "rule",
+        "verdictLabel": "Use a rule and workflow",
+        "testAnswer": "No. Authorization requirement, status, effective period, and required reference fields are explicit administrative facts.",
+        "why": "The system should expose the source status and missing fields rather than infer authorization from historical scheduling behavior.",
+        "recommendation": "Check approved authorization sources and fail closed to a human work queue when status is missing, expired, or inconsistent.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "slot",
+        "label": "Which eligible location and appointment slot should be offered?",
+        "owner": "Specialty scheduling operations",
+        "frequency": "Every referral ready for scheduling",
+        "wrongCost": "A patient receives an infeasible option while suitable capacity remains unused",
+        "verdict": "optimization",
+        "verdictLabel": "Optimization · Use a solver",
+        "testAnswer": "The choice balances eligible service, capacity, location, accessibility, patient availability, and appointment constraints.",
+        "why": "The objective and hard constraints can be stated and audited directly; a solver should not imitate historical scheduling inequities.",
+        "recommendation": "Optimize among eligible slots, expose binding constraints, and return no solution when every option violates a hard requirement.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "delay-risk",
+        "label": "Is this referral likely to miss its coordination target?",
+        "owner": "Referral operations manager",
+        "frequency": "At intake and after each unresolved handoff",
+        "wrongCost": "A referral stalls without attention, or staff create unnecessary outreach for low-risk cases",
+        "verdict": "ai-prediction",
+        "verdictLabel": "AI · Delay prediction",
+        "testAnswer": "Yes. Mature outcomes can reveal changing combinations of missing evidence, authorization delay, capacity, prior outreach, and elapsed time.",
+        "why": "The output is the probability of an administrative outcome over a defined time horizon, not a prediction of health or treatment need.",
+        "recommendation": "Predict coordination delay with calibrated uncertainty and use it to prioritize staff attention, never clinical priority.",
+        "aiRelevant": true,
+        "placement": "decision",
+        "design": {
+          "data": {
+            "summary": "Synthetic referral events joined to evidence status, authorization status, capacity, outreach attempts, and confirmed scheduling outcomes.",
+            "owner": "Referral operations and analytics governance",
+            "readiness": "Synthetic assumption: event timestamps and final coordination outcomes are consistently captured",
+            "fields": ["Elapsed coordination time", "Missing evidence count", "Authorization state", "Available slot count", "Outreach attempts", "Final scheduled outcome"],
+            "risk": "Historical delays can reflect access inequities or service constraints rather than patient willingness."
+          },
+          "method": {
+            "pattern": "prediction",
+            "output": "Probability that the referral remains unscheduled beyond the administrative target window",
+            "technique": "Calibrated supervised prediction over point-in-time referral event features"
+          },
+          "metric": {
+            "technical": "Calibration, late-case recall at outreach capacity, precision-recall AUC, and performance by service and access channel.",
+            "business": "Increase useful coordinator lead time and completed referrals without creating excessive outreach or unequal intervention burden.",
+            "baseline": "Synthetic target window and intervention capacity must be validated before implementation"
+          },
+          "human": {
+            "role": "Referral coordinator",
+            "checkpoint": "Review operational causes and choose outreach or escalation; do not infer patient motivation or clinical urgency.",
+            "falsePositiveCost": "Staff create unnecessary contact and burden for a referral already progressing normally.",
+            "falseNegativeCost": "A preventable administrative delay remains invisible until the target window is missed."
+          },
+          "architecture": ["Referral event store", "Point-in-time feature service", "Calibrated delay predictor", "Coordinator priority queue", "Outreach outcome capture", "Drift and equity monitoring"]
+        }
+      },
+      {
+        "id": "message",
+        "label": "How should the next administrative step be explained?",
+        "owner": "Referral coordinator",
+        "frequency": "Every clarification, authorization update, or appointment offer",
+        "wrongCost": "The patient or referring team receives an unsupported instruction, wrong status, or missing next step",
+        "verdict": "ai-generation",
+        "verdictLabel": "AI · Grounded generation with review",
+        "testAnswer": "Generation can turn verified referral facts and approved policy into accessible communication, but staff must review every status and action.",
+        "why": "The output is an administrative message grounded in evidence; it must refuse diagnosis, treatment advice, and unsupported urgency language.",
+        "recommendation": "Draft from verified status, missing items, available options, approved templates, and contact preferences; require coordinator approval before sending.",
+        "aiRelevant": true,
+        "placement": "process",
+        "design": {
+          "data": {
+            "summary": "Verified referral status, approved requirements, authorization facts, appointment options, communication history, and accessibility preferences.",
+            "owner": "Referral operations, communications, and policy governance",
+            "readiness": "Synthetic assumption: status sources and approved message templates are versioned",
+            "fields": ["Verified status", "Missing evidence", "Authorization update", "Appointment options", "Preferred channel", "Approved message template"],
+            "risk": "A fluent message can invent status, promise availability, or drift into diagnosis or treatment guidance."
+          },
+          "method": {
+            "pattern": "generation",
+            "output": "Grounded administrative message with cited status and a clear next action",
+            "technique": "Retrieval-grounded generation constrained to verified referral facts and approved communication policy"
+          },
+          "metric": {
+            "technical": "Groundedness, unsupported-claim rate, required-action coverage, and prohibited clinical-content rate.",
+            "business": "Improve reviewer acceptance and reduce repeat contacts without increasing incorrect instructions or missed actions.",
+            "baseline": "Synthetic communication baseline to be established from reviewed referral messages"
+          },
+          "human": {
+            "role": "Referral coordinator",
+            "checkpoint": "Verify status, requested evidence, appointment option, accessibility, and absence of clinical advice before sending.",
+            "falsePositiveCost": "The message states an unsupported requirement, promise, or clinical implication.",
+            "falseNegativeCost": "The message omits a necessary next step and creates another coordination loop."
+          },
+          "architecture": ["Referral status adapter", "Policy and template retrieval", "Grounded generation", "Clinical-boundary filter", "Coordinator review", "Approved send action"]
+        }
+      }
+    ],
+    "featuredDecisionId": "specialty",
     "source": "synthetic-workflow-assumption"
   }
 ]

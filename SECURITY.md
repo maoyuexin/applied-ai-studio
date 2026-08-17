@@ -34,14 +34,16 @@ authorization, TLS, request limits, and a non-personal Copilot identity design.
 
 ## Known Dependency Advisories
 
-As of 2026-08-07, `npm audit` reports two moderate advisories in the Mermaid
-rendering dependency chain and no high or critical advisories. The advisory-fixed
-versions identified by npm (`mermaid` 11.16.1 and `dompurify` newer than 3.4.12)
-are not yet available from the configured package registry. npm's automated
-alternative is a breaking Mermaid downgrade that does not remove the DOMPurify
-advisory.
+As of 2026-08-17, `npm audit` reports **no advisories at any severity**.
 
-Current mitigations:
+The two moderate Mermaid advisories previously recorded here have been resolved:
+the fixed releases are now available from the registry and the lockfile has been
+updated to `mermaid` 11.16.1 and `dompurify` 3.4.13. The upgrade is non-breaking —
+the full test and build gate passes on it. A separate high-severity advisory in
+`nanoid` (GHSA-2v37-7h3g-55p8, reached transitively through Vite and PostCSS) was
+fixed in the same pass by moving to 3.3.18.
+
+The defence-in-depth measures below predate those upgrades and remain in force:
 
 - Mermaid runs with `securityLevel: "strict"`.
 - HTML labels are disabled.
@@ -50,5 +52,5 @@ Current mitigations:
 - Node IDs are restricted to alphanumeric and underscore characters.
 - Labels remove quote and angle-bracket characters and are length-limited.
 
-Upgrade Mermaid and DOMPurify as soon as non-breaking fixed releases are
-available, then rerun the complete browser and security test gate.
+Re-run `npm audit --audit-level=high` together with `npm run check` before every
+release, and update the date above with the result.

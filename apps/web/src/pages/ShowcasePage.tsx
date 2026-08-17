@@ -96,10 +96,15 @@ export default function ShowcasePage() {
                   <button type="button" onClick={() => navigate(workflowTarget)}>
                     <Workflow size={14} aria-hidden="true" /> Workflow
                   </button>
-                  <button type="button" onClick={() => navigate(demoTarget)}>
-                    <Play size={14} aria-hidden="true" /> Demo
-                    <small>{item.demoStatus === "available" ? "live" : "planned"}</small>
-                  </button>
+                  {/* Only Online Order has a runnable demo today. Showing a "Demo" button on
+                      the other five sent students to a roadmap placeholder, which reads as a
+                      broken link rather than a plan. Hide it until the demo actually exists. */}
+                  {item.demoStatus === "available" ? (
+                    <button type="button" onClick={() => navigate(demoTarget)}>
+                      <Play size={14} aria-hidden="true" /> Demo
+                      <small>live</small>
+                    </button>
+                  ) : null}
                 </div>
               </article>
             );
