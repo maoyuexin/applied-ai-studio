@@ -10,7 +10,7 @@
 
 set -euo pipefail
 
-REQUIRED_PY_MAJOR_MINOR="3.11"
+REQUIRED_PY_MAJOR_MINOR="3.11 or newer"
 
 # ---------------------------------------------------------------------------
 # Find a Python 3.11 interpreter.
@@ -21,11 +21,15 @@ REQUIRED_PY_MAJOR_MINOR="3.11"
 # abort this whole script (set -e), which also skipped the npm install below
 # and left the codespace looking broken for no obvious reason.
 # ---------------------------------------------------------------------------
+# Accept 3.11 OR NEWER, not exactly 3.11. services/order-api/pyproject.toml declares
+# requires-python = ">=3.11", so 3.12 and 3.13 are perfectly valid. Demanding an exact
+# match would reject a container that could run the app fine - a self-inflicted failure
+# on any image that ships a newer Python.
 find_python() {
   local candidate
-  for candidate in python3.11 python3 python; do
+  for candidate in python3.11 python3.12 python3.13 python3 python; do
     command -v "$candidate" >/dev/null 2>&1 || continue
-    if "$candidate" -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 11) else 1)" >/dev/null 2>&1; then
+    if "$candidate" -c "import sys; raise SystemExit(0 if sys.version_info[:2] >= (3, 11) else 1)" >/dev/null 2>&1; then
       command -v "$candidate"
       return 0
     fi

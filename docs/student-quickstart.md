@@ -9,16 +9,32 @@ GitHub Codespaces gives you your own private copy of this application, running
 in the cloud, that only you can see. It is free within GitHub's monthly
 allowance, which is far more than this course needs.
 
-## 1. One-time setup (about 5 minutes)
+## 1. One-time setup
 
-1. Create a free GitHub account at <https://github.com> if you do not have one.
-   You need one for this course anyway — your portfolio lives there.
-2. Recommended: apply for the free
-   [GitHub Student Developer Pack](https://education.github.com/pack) with your
-   HCC email. It upgrades your account and includes GitHub Copilot at no cost.
-   Approval can take a few days, so do this in week 1.
+### Required — a free GitHub account
+
+Create one at <https://github.com> if you do not have one already. You need it
+for this course anyway, because your portfolio lives there.
+
+That is the only thing you must have. You can start using the app straight away.
+
+### Optional — the GitHub Student Developer Pack
+
+The [Student Developer Pack](https://education.github.com/pack) is free for
+students and is the only way to get GitHub Copilot at no cost. Apply with your
+HCC email. Approval usually takes a few days.
+
+**It is optional, and you should not wait for it.** Without Copilot the app
+still works — only the Ask Studio chat page is unavailable, and the AI Fit
+Analyzer hands you a ready-made outline instead of writing one about your own
+problem. Apply in week 1 and carry on in the meantime.
 
 ## 2. Start the app (about 3 minutes the first time)
+
+**You do not need to fork or copy anything.** Go straight to the repository and
+open a codespace from it — GitHub allows this on any public repository, and it
+builds you a private copy that only you can see. You will never be asked to push
+anything back.
 
 1. Go to <https://github.com/maoyuexin/applied-ai-studio> and sign in, then
    click the green **Code** button near the top right.
@@ -26,6 +42,13 @@ allowance, which is far more than this course needs.
 3. Wait for the editor to open and for setup to finish — the terminal will say
    **"Applied AI Studio is ready."** The first time takes a few minutes;
    after that, reopening is fast.
+
+   > **This line is your checkpoint.** If you never see it, setup did not
+   > finish, and the next steps will fail. Do not keep going and do not simply
+   > close and reopen — a codespace that did not finish setting up will never
+   > repair itself, however many times you reconnect. Delete it and create a
+   > new one.
+
 4. In the terminal at the bottom, type:
 
    ```bash
@@ -39,21 +62,30 @@ allowance, which is far more than this course needs.
 That address is private to you. Your codespace is your own copy — nothing you
 do in it affects anyone else.
 
-## 3. What you will see in week 1 (this is normal)
+## 3. Using the app without Copilot (this is normal in week 1)
 
 In your first week your Student Developer Pack is probably still being approved,
 so GitHub Copilot is not connected yet. That is expected, and the app is built
 for it.
 
-- **Industry Workflows** — works fully.
-- **Online Order** demo — works fully.
-- **AI Fit Analyzer** — works. When you press *Generate five-stage workflow*
-  you will see a blue-green notice saying **"Starter outline — written without
-  AI"**, followed by a normal five-stage outline you can edit and score. That
-  notice is information, not an error. Nothing is broken and you did nothing
-  wrong.
-- **Ask Studio** — the only page that genuinely needs Copilot. It will tell you
-  so plainly.
+| Page | Without Copilot |
+| --- | --- |
+| Industry Workflows | Works fully. Six complete business workflows to explore. |
+| Online Order demo | Works fully. Place an order and step it through. |
+| AI Fit Analyzer | Works. See below for exactly what happens. |
+| Ask Studio | The only page that needs Copilot. It will say so plainly. |
+
+### What the AI Fit Analyzer does without Copilot
+
+Fill in the boxes and press **Generate five-stage workflow**. Instead of an
+error you get a blue-green note reading **"Starter outline — written without
+AI"**, followed by a complete five-stage outline with five decisions already
+marked.
+
+Edit any part of it, choose a decision, and score it exactly as you otherwise
+would. **Nothing is missing from the exercise.** When Copilot is switched on
+later, the same button writes an outline from your own problem description
+instead.
 
 Once your Student Pack is approved, come back and do step 4 below.
 
@@ -82,6 +114,7 @@ always create a fresh one from the repository.
 
 | Symptom | Fix |
 | --- | --- |
+| **`bash: npm: command not found`** (or `python`, or `node`) | Setup did not finish, so the tools were never installed. Reconnecting will not fix it. Delete the codespace and create a new one. |
 | Page shows nothing / connection refused | Make sure `npm run dev` is still running in the terminal; restart it if not. |
 | "Port 5173" notification never appeared | Ports tab → port 5173 → globe icon. |
 | "Starter outline — written without AI" appears | Nothing is wrong. Copilot is not connected yet. Keep going; the outline is editable and scorable. |

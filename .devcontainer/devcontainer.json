@@ -2,10 +2,12 @@
   "name": "Applied AI Studio",
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
 
+  // Every feature is a download from ghcr.io at create time, and each one is a way the
+  // build can fail. The GitHub CLI was here for convenience and nothing in this app uses
+  // it, so it is gone - two dependencies instead of three.
   "features": {
     "ghcr.io/devcontainers/features/node:1": { "version": "22" },
-    "ghcr.io/devcontainers/features/python:1": { "version": "3.11" },
-    "ghcr.io/devcontainers/features/github-cli:1": {}
+    "ghcr.io/devcontainers/features/python:1": { "version": "3.11" }
   },
 
   "postCreateCommand": "bash .devcontainer/post-create.sh",

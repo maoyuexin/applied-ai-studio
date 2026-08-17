@@ -18,6 +18,18 @@ dev = [
   "pytest>=8.4,<10",
 ]
 
+# Name the package explicitly instead of letting setuptools guess.
+#
+# This directory is a flat layout with several top-level folders that contain Python files
+# - app/, migrations/, and data/ once the database has been created. Modern setuptools
+# refuses to auto-discover in that situation and fails the install with "Multiple top-level
+# packages discovered in a flat-layout", which aborts the whole Codespaces bootstrap.
+#
+# Only app/ is the importable package. migrations/ is Alembic's script directory, loaded by
+# path through alembic.ini rather than imported, and data/ holds the local SQLite file.
+[tool.setuptools]
+packages = ["app"]
+
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
