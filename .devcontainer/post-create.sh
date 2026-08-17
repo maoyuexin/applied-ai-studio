@@ -78,7 +78,7 @@ cat <<'BANNER'
    Optional: the "Ask Studio" chat page needs GitHub Copilot, which
    is free for students but takes a few days to be approved. Every
    other page works right now without it. Setup instructions are in
-   docs/student-quickstart.md, section 3.
+   docs/student-quickstart.md, section 4.
 ==================================================================
 
 BANNER
