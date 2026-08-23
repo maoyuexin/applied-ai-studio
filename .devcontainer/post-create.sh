@@ -62,6 +62,11 @@ echo "==> Creating the Python environment"
 echo "==> Installing the Online Order service"
 npm run setup:orders
 
+# Installed here rather than on demand so nobody hits a missing package in the
+# middle of a class. Adds roughly 40 seconds to codespace creation.
+echo "==> Installing the fraud-detection notebook toolkit"
+npm run setup:notebook
+
 cat <<'BANNER'
 
 ==================================================================

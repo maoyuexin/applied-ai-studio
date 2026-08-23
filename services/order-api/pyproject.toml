@@ -17,6 +17,21 @@ dev = [
   "httpx>=0.28,<1",
   "pytest>=8.4,<10",
 ]
+# Everything notebooks/fraud-detection needs. Deliberately separate from the
+# runtime dependencies above: the Online Order service must not grow a
+# scikit-learn dependency just because a teaching notebook lives in the repo.
+notebook = [
+  "imbalanced-learn>=0.13,<1",
+  "ipykernel>=6.29,<7",
+  "ipywidgets>=8.1,<9",
+  "matplotlib>=3.9,<4",
+  "nbconvert>=7.16,<8",
+  "nbformat>=5.10,<6",
+  "pandas>=2.2,<3",
+  "plotly>=5.24,<7",
+  "pyarrow>=17,<22",
+  "scikit-learn>=1.5,<2",
+]
 
 # Name the package explicitly instead of letting setuptools guess.
 #
