@@ -1,4 +1,4 @@
-"""Build 01_fraud_build.ipynb. Run once; the notebook is the artefact from here on."""
+"""Build 01_fraud_build.ipynb -- five sections matching the Session 2 slide stages."""
 
 import nbformat as nbf
 
@@ -20,36 +20,39 @@ md(r"""
 
 **ITAI 2372 · Module 2 · From data to decision**
 
-Last week you decided that screening a payment was worth building. Tonight we build it —
-on real feature engineering, real model selection, and a real held-out test period.
+Last week you decided that screening a payment was worth building. Tonight we build it, in
+the five stages from the slides:
 
-Nothing here is a slide. Every number on this page was computed by the cell above it, and
-you can change any of them and re-run.
+| | Stage | What happens |
+|---|---|---|
+| **1** | **Data Ingestion** | Get the data, understand it, split it |
+| **2** | **Feature Engineering** | Turn records into signals a model can use |
+| **3** | **Model Training** | Fit several models and pick one |
+| **4** | **Model Validation** | Find out whether it is actually any good |
+| **5** | **Model Prediction** | Use it on transactions it has never seen |
 
-| | |
-|---|---|
-| **The case** | A card issuer wants to stop fraudulent transactions without blocking real customers |
-| **The data** | 955,000 synthetic card transactions across 26 months, 500 cardholders |
-| **The decision** | For each transaction: approve it, or send it to a human analyst |
-| **The constraint** | Analysts can review about **3% of transactions**. That is the budget. |
+### The case
+
+A card issuer wants to stop fraudulent transactions without blocking real customers.
+
+- **955,000 card transactions** over two years, 500 cardholders
+- **0.5% of them are fraud** — about 1 in 200
+- Analysts can review about **3% of transactions**. That is the budget.
 
 ### How to read this notebook
 
-Every chart is interactive — **hover to read a value**, drag to zoom, double-click to reset,
-and click a legend entry to hide a series.
+Every chart is interactive — **hover to read a value**, drag to zoom, double-click to reset.
 
 The code is deliberately short. Anything longer than a few lines lives in the `fraudlab`
-package next to this file, so each cell shows *one step* rather than a wall of plumbing.
-You are not expected to write any of it.
+folder next to this file, so each cell shows *one step*. **You are not expected to write
+any of it.**
 """)
 
-# ══════════════════════════════════════════════════════════ SETUP ═══════════
 code(r"""
 # ===============================================================
 # SETUP
 # ===============================================================
 # Purpose:  Import the helper package and print the configuration.
-# Output:   fraudlab modules in scope; the run's dates and budget on screen.
 # ===============================================================
 import warnings
 
@@ -62,28 +65,30 @@ from fraudlab import charts, config, data, features, handoff, metrics, models
 warnings.filterwarnings("ignore")
 pd.set_option("display.width", 200)
 pd.set_option("display.max_columns", 40)
-
-# Plotly renders natively in VS Code and Codespaces; set it explicitly so the
-# notebook does not depend on which editor happens to open it.
 pio.renderers.default = "notebook"
 
 print(config.describe())
 """)
 
-# ══════════════════════════════════════════════ 1 · THE DATA ════════════════
+# ═══════════════════════════════════════════ 1 · DATA INGESTION ═════════════
 md(r"""
 ---
-## 1 · The case, the data, and why it is not real
+# 1 · Data Ingestion
 
-Two tables, exactly as they would arrive from two different systems.
+Getting the data, understanding it, and splitting it. In a real project this is where most
+of the time goes.
+""")
+
+md(r"""
+## 1.1 Load the source tables
+
+Two tables, from two different systems. The card system knows about **cardholders**. The
+payment system knows about **transactions**.
 """)
 
 code(r"""
 # ===============================================================
-# 1.1  LOAD THE TWO SOURCE TABLES
-# ===============================================================
-# Purpose:  Read the raw tables. Nothing is joined or engineered yet.
-# Output:   customers, transactions
+# 1.1  LOAD
 # ===============================================================
 customers = data.load_customers()
 transactions = data.load_transactions()
@@ -98,276 +103,183 @@ print(f"fraud         : {int(transactions['is_fraud'].sum()):,} "
 
 code(r"""
 # ===============================================================
-# 1.2  WHAT A TRANSACTION ACTUALLY LOOKS LIKE
+# 1.2  WHAT A TRANSACTION LOOKS LIKE
 # ===============================================================
 transactions.head(5)
 """)
 
 code(r"""
 # ===============================================================
-# 1.3  AND WHAT WE KNOW ABOUT THE CARDHOLDER
+# 1.3  WHAT WE KNOW ABOUT THE CARDHOLDER
 # ===============================================================
 customers.head(3)
 """)
 
 md(r"""
-### Why this data is simulated — and what that tells you
+## 1.2 Join them
 
-This is generated by [Sparkov](https://github.com/namebrandon/Sparkov_Data_Generation),
-an open simulator, with a fixed random seed so it is identical every time anyone runs it.
-
-**No genuinely real, un-anonymised card fraud dataset is publicly available.** That is not
-a gap in our search; banks do not publish them. And the most-downloaded fraud dataset in
-the world shows you exactly why.
-
-It has 284,807 real transactions from a European card issuer, and **28 of its 30 columns
-are called `V1` through `V28`** — anonymous mathematical components. Its own documentation
-says: *"due to confidentiality issues, we cannot provide the original features."*
-
-You cannot engineer a feature on `V17`. You cannot explain a declined transaction to a
-regulator with it. You cannot ask a fraud analyst whether it makes sense.
-
-> **The lesson to carry into your first job:** the hardest part of an AI project is
-> usually not the model. It is getting data that is real, labelled, and explainable — and
-> quite often you cannot have all three.
-""")
-
-# ══════════════════════════════════════════════ 2 · EDA ═════════════════════
-md(r"""
----
-## 2 · Look at the data before you touch it
-
-Six views. Each one changes a decision we make later.
+A transaction on its own does not tell you much. Joined to the cardholder, you can start
+asking useful questions — *was this near their home? is this a lot of money for them?*
 """)
 
 code(r"""
 # ===============================================================
-# 2.1  CLASS BALANCE  --  the problem in one chart
+# 1.4  JOIN  --  one row per transaction, carrying who made it
 # ===============================================================
-# The same two numbers, drawn twice. The right-hand panel is what an
-# untransformed chart of this problem actually looks like.
+joined = data.join(transactions, customers)
+
+print(f"joined     : {len(joined):,} rows   {joined.shape[1]} columns")
+print(f"unmatched  : {int(joined['dob'].isna().sum()):,}")
+""")
+
+md(r"""
+> ### A note on the label
+>
+> We have a column called `is_fraud` and it is tempting to treat it as simple truth.
+>
+> In a real bank that column does not arrive with the transaction. It arrives when a
+> customer disputes a charge and the bank agrees — a **chargeback** — and that takes about
+> **two months**. So your training data always trails reality, and the transactions you
+> *blocked* never get a label at all, because you stopped them.
+>
+> **Before you ask anything else about a dataset, ask what the label means and when it
+> arrives.**
+""")
+
+md(r"""
+## 1.3 Exploratory Data Analysis (EDA)
+
+EDA means looking at the data before you model it. Six views, and each one changes a
+decision we make later.
+""")
+
+code(r"""
+# ===============================================================
+# 1.5  EDA  --  class balance
+# ===============================================================
+# The same two numbers, drawn twice. The right panel is what an untransformed
+# chart of this problem actually looks like.
 # ===============================================================
 charts.class_balance(transactions).show()
 """)
 
 code(r"""
 # ===============================================================
-# 2.2  HOW MUCH IS A TRANSACTION?
+# 1.6  EDA  --  how much is a transaction?
 # ===============================================================
 charts.amount_distribution(transactions).show()
 """)
 
 code(r"""
 # ===============================================================
-# 2.3  DOES AMOUNT SEPARATE FRAUD FROM LEGITIMATE?
+# 1.7  EDA  --  does amount separate fraud from legitimate?
 # ===============================================================
 charts.amount_by_class(transactions).show()
 """)
 
 code(r"""
 # ===============================================================
-# 2.4  WHEN DOES FRAUD HAPPEN?
+# 1.8  EDA  --  when does fraud happen?
 # ===============================================================
 charts.fraud_rate_by_hour(transactions).show()
 """)
 
 code(r"""
 # ===============================================================
-# 2.5  WHERE DOES FRAUD HAPPEN?
-# ===============================================================
-# Hover any bar: the fraud *rate* and the transaction *volume* rank differently,
-# and which one matters depends on whether you are protecting money or customers.
+# 1.9  EDA  --  where does fraud happen?
 # ===============================================================
 charts.rate_by_category(transactions, "category", "merchant category").show()
 """)
 
 code(r"""
 # ===============================================================
-# 2.6  IS THE PROBLEM STABLE OVER TIME?
+# 1.10  EDA  --  is the problem stable over time?
 # ===============================================================
-# Drag the slider under the chart. The fraud rate moves across the two years --
-# and we have not trained anything yet.
+# Drag the slider under the chart to move the window across the two years.
 # ===============================================================
 charts.weekly_volume_and_rate(data.weekly_volume(transactions)).show()
 """)
 
 md(r"""
-### What the exploration already decided for us
+### What EDA already decided for us
 
-| Observation | What it forces |
+| What we saw | What it forces |
 |---|---|
-| Fraud is **0.5%** of transactions | Accuracy will be a useless headline metric. We will need the confusion matrix. |
-| Amount is heavily right-skewed | We add a log-transformed version of it as a feature. |
-| Fraud amounts sit in a **different band**, not simply higher | Amount alone is signal, but a threshold rule on it will be crude. |
-| Fraud concentrates in the **small hours** | Hour of day becomes a feature. |
-| A few merchant categories carry most of it | Category becomes a feature. |
-| The fraud rate **moves over the two years** | The split must respect time. A random split would be a lie. |
+| Fraud is **0.5%** of transactions | Accuracy will be a useless headline number |
+| Amount is heavily right-skewed | Add a log-transformed version as a feature |
+| Fraud amounts sit in a **different band** | Amount is real signal |
+| Fraud concentrates in the **small hours** | Hour of day becomes a feature |
+| A few categories carry most of it | Category becomes a feature |
+| The fraud rate **moves over time** | Split the data by date, not at random |
 
 Nobody handed us that list. We looked.
 """)
 
-# ══════════════════════════════════════════════ 3 · JOIN + LABEL ════════════
+md(r"""
+## 1.4 Split the data by date
+
+The model learns from the **earlier** months and is scored on the **later** ones.
+
+This matters because fraud changes over time. Split randomly and the model could train on
+March and be tested on February — it would already have seen the answers, and the score
+would look far better than anything achievable in production.
+""")
+
+code(r"""
+# ===============================================================
+# 1.11  SPLIT BY DATE
+# ===============================================================
+parts_raw = data.split_by_time(joined)
+
+charts.split_timeline(parts_raw).show()
+data.split_summary(parts_raw)
+""")
+
+# ═══════════════════════════════════════ 2 · FEATURE ENGINEERING ════════════
 md(r"""
 ---
-## 3 · The join, and the question nobody asks
+# 2 · Feature Engineering
 
-Two systems, one table. Then the harder question: **what does the label actually mean?**
+A model cannot use "a transaction". It uses **numbers computed from** a transaction. Those
+numbers are called **features**, and choosing them is the craft.
+
+This is also where the fraud analyst — not the data scientist — does the real work.
 """)
 
 code(r"""
 # ===============================================================
-# 3.1  JOIN THE CARDHOLDER ONTO THE TRANSACTION
+# 2.1  BUILD THE FEATURES
 # ===============================================================
-# Purpose:  One row per transaction, carrying who made it.
-# Output:   joined
-# ===============================================================
-joined = data.join(transactions, customers)
-
-print(f"joined        : {len(joined):,} rows   {joined.shape[1]} columns")
-print(f"unmatched     : {int(joined['dob'].isna().sum()):,}")
-""")
-
-md(r"""
-### The label problem
-
-We have a column called `is_fraud`. It is tempting to treat it as the truth and move on.
-
-In a real bank, that column does not arrive with the transaction. It arrives when a
-customer disputes a charge and the bank agrees — a **chargeback** — and that takes about
-two months.
-
-Which means the most recent two months of transactions are real, and have **no trustworthy
-label at all**.
-""")
-
-code(r"""
-# ===============================================================
-# 3.2  HOW MUCH OF THE HISTORY IS ACTUALLY LABELLED TODAY?
-# ===============================================================
-maturity = data.label_maturity_summary(transactions)
-charts.label_maturity_chart(maturity).show()
-maturity
-""")
-
-md(r"""
-Two consequences, and neither is a technicality:
-
-1. **Your training data always trails reality by the label lag.** Today is
-   {AS_OF}. The most recent transaction we can honestly learn from happened around
-   {MATURE}. Everything after that is real business — and unusable for training.
-
-2. **The transactions you blocked never got a label at all.** They never became fraud or
-   not-fraud, because you stopped them. That is a permanent hole in the data, and no
-   amount of better engineering fills it.
-
-> Before you ask anything else about a dataset, ask **what the label actually means and
-> when it arrives**.
-""".replace("{AS_OF}", "**31 August 2026**").replace("{MATURE}", "**2 July 2026**"))
-
-# ══════════════════════════════════════════════ 4 · THE SPLIT ═══════════════
-md(r"""
----
-## 4 · The split — and proving the random one lies
-
-Almost every tutorial splits data randomly. For anything that moves through time — fraud,
-demand, prices, failures — that is not a stylistic choice. It is a measurement error.
-
-Here we do both and measure the difference.
-""")
-
-code(r"""
-# ===============================================================
-# 4.1  SPLIT BY DATE
-# ===============================================================
-# Purpose:  Train on the past, test on the future, quarantine the unlabelled frontier.
-# Output:   parts = {train, test, frontier}
+# Features are computed BEFORE splitting, because some of them need the card's
+# earlier history. Every one uses only information that exists at the moment the
+# customer presses Buy.
 # ===============================================================
 featured = features.build_features(joined)
 parts = data.split_by_time(featured)
 
-summary = data.split_summary(parts)
-charts.split_timeline(summary).show()
-summary
-""")
-
-code(r"""
-# ===============================================================
-# 4.2  BUILD THE MODEL MATRICES
-# ===============================================================
-# Purpose:  Turn the split frames into the exact (X, y) the models will see.
-# Output:   x_train, y_train, x_test, y_test, amounts_test
-# ===============================================================
 x_train, y_train = features.feature_matrix(parts["train"])
 x_test, y_test = features.feature_matrix(parts["test"])
 x_test = features.align_columns(x_test, x_train)
 amounts_test = parts["test"]["amt"].to_numpy()
 
-print(f"x_train  {x_train.shape}   frauds: {int(y_train.sum()):,}")
-print(f"x_test   {x_test.shape}   frauds: {int(y_test.sum()):,}")
-print(f"features: {', '.join(list(x_train.columns[:8]))} ... (+{x_train.shape[1] - 8} more)")
-""")
-
-code(r"""
-# ===============================================================
-# 4.3  THE SAME MODEL, SCORED TWO WAYS
-# ===============================================================
-# Purpose:  Measure what a random split is worth. Same model, same data,
-#           same review budget -- only the split rule changes.
-# Output:   random_result, time_result
-# ===============================================================
-forest = models.candidate_models()["Random forest"]["estimator"]
-
-labelled = featured[featured["label_matured"]]
-rnd_train, rnd_test = data.random_split(labelled)
-
-xr_train, yr_train = features.feature_matrix(rnd_train)
-xr_test, yr_test = features.feature_matrix(rnd_test)
-xr_test = features.align_columns(xr_test, xr_train)
-
-m_random = models.build_pipeline(forest, "class_weight").fit(xr_train.iloc[-250_000:], yr_train.iloc[-250_000:])
-m_time = models.build_pipeline(forest, "class_weight").fit(x_train.iloc[-250_000:], y_train.iloc[-250_000:])
-
-random_result = metrics.evaluate_at_budget(yr_test.to_numpy(), models.score_on(m_random, xr_test))
-time_result = metrics.evaluate_at_budget(y_test.to_numpy(), models.score_on(m_time, x_test))
-
-charts.split_comparison(random_result, time_result).show()
-print(f"Random split  ->  recall {random_result['recall']:.1%}   precision {random_result['precision']:.1%}")
-print(f"Time split    ->  recall {time_result['recall']:.1%}   precision {time_result['precision']:.1%}")
-print(f"\nInflation from splitting at random: {random_result['recall'] - time_result['recall']:+.1%} recall")
+print(f"columns before : {joined.shape[1]}")
+print(f"columns after  : {featured.shape[1]}")
+print(f"new features   : {', '.join(features.NUMERIC_FEATURES)}")
 """)
 
 md(r"""
-### Why the random split scores higher
+## 2.1 Three features, one at a time
 
-A random split lets the model train on March and be tested on February. It has already
-seen next month's fraud patterns. The score comes back beautiful, production comes back
-disappointing, and nobody can explain the gap.
-
-The difference you just measured **is the size of that lie**.
-
-> A reviewer who asks *"how did you split the data?"* has asked a genuinely expert
-> question, and it takes four seconds to answer.
-""")
-
-# ══════════════════════════════════════════════ 5 · FEATURES ════════════════
-md(r"""
----
-## 5 · Feature engineering
-
-A model cannot use "a transaction". It uses **numbers computed from** a transaction.
-Choosing those numbers is the craft, and it is where the fraud analyst — not the data
-scientist — does the work.
-
-Each feature below gets the same four beats: **the question**, the code, the picture,
+Each one gets the same treatment: **the question a fraud analyst would ask**, the picture,
 and the number.
 """)
 
 code(r"""
 # ===============================================================
-# 5.1  FEATURE  --  "Is this a lot of money FOR THIS PERSON?"
+# 2.2  FEATURE  --  "Is this a lot of money FOR THIS PERSON?"
 # ===============================================================
-# Not "is $840 large?" but "is $840 large for this cardholder?" -- a ratio against
-# their own trailing average, computed only from transactions that already happened.
+# Not "is $840 large?" but "is $840 large for this cardholder?" -- measured against
+# their own spending, using only transactions that already happened.
 # ===============================================================
 charts.numeric_by_class(featured, "amt_ratio_to_card_mean",
                         "Amount as a multiple of this card's own average").show()
@@ -377,7 +289,7 @@ print(features.describe_signal(x_train, y_train, "amt_ratio_to_card_mean"))
 
 code(r"""
 # ===============================================================
-# 5.2  FEATURE  --  "How fast is this card being used?"
+# 2.3  FEATURE  --  "How fast is this card being used?"
 # ===============================================================
 # One purchase is a purchase. Nine in ten minutes is somebody testing a stolen
 # card until it works -- or so every fraud analyst will tell you. Let us check.
@@ -390,7 +302,7 @@ print(features.describe_signal(x_train, y_train, "card_txn_count_24h"))
 
 code(r"""
 # ===============================================================
-# 5.3  FEATURE  --  "How far from home was this?"
+# 2.4  FEATURE  --  "How far from home was this?"
 # ===============================================================
 # The cardholder's home coordinates and the merchant's, converted to kilometres.
 # Neither column existed; the distance between them is a decision somebody made.
@@ -402,81 +314,60 @@ print(features.describe_signal(x_train, y_train, "distance_km"))
 """)
 
 md(r"""
-### Two of those three features look useless. Do not delete them yet.
+### Two of those three look useless. Do not delete them yet.
 
-The amount ratio carries very strong signal on its own. Velocity and distance carry almost
-none — barely better than flagging transactions at random.
+The amount ratio is strong. Velocity and distance are barely better than guessing — even
+though an experienced fraud analyst would have insisted both matter.
 
-That is an uncomfortable result, and it is worth sitting with, because **an experienced
-fraud analyst would have told you both of them matter.** There are three possible
-explanations and they lead to very different actions:
+There are three possible reasons, and they lead to different actions:
 
-| If... | Then... |
-|---|---|
-| The pattern is real but only **in combination** — a big amount *and* far from home | Keep the feature. A single-feature test cannot see interactions; the model can. |
-| The pattern is real in the world but **not in this data** | This is simulated data, and the simulator may simply not model card-testing bursts. Real data would. |
-| The expert is describing something that **stopped being true** | Worth knowing, and worth telling them. |
+1. The pattern only works **in combination** with something else. A single-feature test
+   cannot see that; the model can.
+2. The pattern is real in the world but **not in this data**.
+3. We built the feature badly — a 24-hour window when the real pattern is ten minutes.
 
-> **This is the single most useful habit in the section:** when the data disagrees with the
-> domain expert, that is the beginning of the conversation, not the end of it. What you must
-> not do is quietly drop the feature *or* quietly keep it without checking.
-
-The permutation importance in section 9 settles which of these features the model actually
-ended up leaning on.
+> **When the data disagrees with the expert, that is the start of a conversation, not the
+> end of one.** We come back to this in section 3.
 """)
 
 md(r"""
-### Who actually knows these things?
+## 2.2 Which features carry signal?
 
-The data scientist knows how to build a feature, avoid leakage, and read a validation
-curve. What they do **not** know is what fraud looks like at this company.
-
-An experienced fraud analyst will tell you that three declined cards followed by one that
-goes through is worth flagging. Nobody wrote that down. It is in their head, and it is
-worth more than the algorithm.
-
-**Feature engineering is the stage where unwritten expertise becomes a column in a table.**
-Most of you will never train a model. Many of you will be the person who decides what the
-model is allowed to look at, and that is the higher-leverage seat.
+Two standard tools, and they do not agree — which is the point.
 """)
 
 code(r"""
 # ===============================================================
-# 5.4  CORRELATION  --  the chart everyone draws
+# 2.5  CORRELATION  --  the chart everyone draws
 # ===============================================================
-# Its real job is spotting features that duplicate each other, NOT finding a
-# relationship with the target. See the note below the chart.
+# Its real job is spotting features that duplicate each other.
 # ===============================================================
 charts.correlation_heatmap(features.correlation_frame(featured), "Pearson").show()
 """)
 
 md(r"""
-> **Why the target is not on that heatmap.**
-> A Pearson correlation between a continuous feature and a **binary target that is true
-> 0.5% of the time** is close to meaningless — and a number like `0.21` next to `is_fraud`
-> gets over-read by everyone who sees it. Correlation is the right tool for spotting
-> *redundant features*. For "which feature actually tells us something about fraud?" the
-> right tool is **mutual information**, below — and it produces a different ranking.
+> **Why `is_fraud` is not on that heatmap.** Correlation works badly against a target that
+> is only true 0.5% of the time, and a number next to `is_fraud` would get over-read by
+> everyone who saw it. Correlation is for spotting **redundant features**. For *"which
+> feature tells us something about fraud?"* the right tool is **mutual information** —
+> roughly, how much knowing this column tells you about the answer.
 """)
 
 code(r"""
 # ===============================================================
-# 5.5  MUTUAL INFORMATION  --  the honest ranking
+# 2.6  MUTUAL INFORMATION  --  the honest ranking
 # ===============================================================
 mi = features.mutual_information_frame(x_train, y_train)
 charts.association_bars(mi, "Mutual information",
                         "How much each feature tells us about fraud",
-                        "Mutual information handles a rare binary target; correlation does not").show()
-mi.head(8)
+                        "Higher is better. This handles a rare target; correlation does not").show()
 """)
 
-# ══════════════════════════════════════════════ 6 · LEAKAGE ═════════════════
 md(r"""
----
-## 6 · Break it — data leakage
+## 2.3 The mistake that looks like success — data leakage
 
-This is the most expensive mistake in the workflow and it is invisible on every dashboard,
-because **it does not look like a bug. It looks like success.**
+This is the most expensive mistake in the whole workflow, and it is invisible on every
+dashboard.
 
 Somebody adds a column called `flagged_by_dispute_team`. It is right there in the
 warehouse, and it is obviously relevant.
@@ -484,10 +375,7 @@ warehouse, and it is obviously relevant.
 
 code(r"""
 # ===============================================================
-# 6.1  ADD THE LEAKED COLUMN AND RETRAIN
-# ===============================================================
-# Purpose:  Train with a feature that is only recorded AFTER the decision.
-# Output:   leaky_lab -- the validation score somebody would report
+# 2.7  ADD THE LEAKED COLUMN AND TRAIN
 # ===============================================================
 leak_train = features.add_leaky_feature(parts["train"])
 leak_test = features.add_leaky_feature(parts["test"])
@@ -500,23 +388,14 @@ tree = models.candidate_models()["Decision tree"]["estimator"]
 leaky_model = models.build_pipeline(tree, "class_weight").fit(
     xl_train.iloc[-250_000:], yl_train.iloc[-250_000:])
 
-leaky_lab = metrics.evaluate_at_budget(yl_test.to_numpy(), models.score_on(leaky_model, xl_test), amounts_test)
+leaky_lab = metrics.evaluate_at_budget(yl_test.to_numpy(), models.score_on(leaky_model, xl_test))
 print(f"Validation recall: {leaky_lab['recall']:.1%}   precision: {leaky_lab['precision']:.1%}")
 print("Ship it.")
 """)
 
 code(r"""
 # ===============================================================
-# 6.2  LOOK AT WHAT THE MODEL LEARNED TO ASK FIRST
-# ===============================================================
-from sklearn.tree import export_text
-
-print(export_text(leaky_model, feature_names=list(xl_train.columns), max_depth=1))
-""")
-
-code(r"""
-# ===============================================================
-# 6.3  NOW DEPLOY IT
+# 2.8  NOW DEPLOY IT
 # ===============================================================
 # At 2:14pm on a Tuesday, the instant the customer presses Buy, no transaction
 # has been disputed yet. The column is empty. Nothing else changes.
@@ -524,211 +403,83 @@ code(r"""
 production = xl_test.copy()
 production[features.LEAKY_FEATURE] = 0.0
 
-leaky_prod = metrics.evaluate_at_budget(yl_test.to_numpy(), models.score_on(leaky_model, production), amounts_test)
+leaky_prod = metrics.evaluate_at_budget(yl_test.to_numpy(), models.score_on(leaky_model, production))
 
-print(f"In validation : recall {leaky_lab['recall']:6.1%}   precision {leaky_lab['precision']:.1%}")
-print(f"In production : recall {leaky_prod['recall']:6.1%}   precision {leaky_prod['precision']:.1%}")
-print(f"\nThe promise missed reality by {leaky_lab['recall'] - leaky_prod['recall']:.1%} recall,")
-print(f"which is {int(leaky_lab['tp'] - leaky_prod['tp']):,} frauds a half-year that were "
-      f"never going to be caught.")
+print(f"In validation : recall {leaky_lab['recall']:6.1%}")
+print(f"In production : recall {leaky_prod['recall']:6.1%}")
+print(f"\nThe promise missed reality by {leaky_lab['recall'] - leaky_prod['recall']:.1%} recall.")
 """)
 
 md(r"""
 ### The two questions that catch leakage
 
 1. **Would this value exist at 2:14pm on Tuesday, the second the customer presses Buy?**
-   Account age — yes. Distance to merchant — yes. Dispute status — no, that is 60 days away.
+   Distance to merchant — yes. Dispute status — no, that is two months away.
 
 2. **Was it recorded *because of* the decision we are trying to predict?**
-   "Reviewed by an analyst" only exists because we flagged it. Feed that in and the model
-   has learned to predict our own review queue, not fraud.
+   "Reviewed by an analyst" only exists because we flagged it.
 
-Leakage does not announce itself. The validation score is excellent, everyone is pleased,
-and the problem surfaces weeks after deployment when the numbers quietly fail to
-reproduce. Somebody has to be the person in the review who asks the awkward question —
-and that person is usually not the modeller.
+Leakage does not look like a bug. **It looks like success** — the validation score is
+excellent, everyone is pleased, and the problem only surfaces weeks after launch.
 """)
 
-# ══════════════════════════════════════════════ 7 · FIRST MODEL ═════════════
+# ═══════════════════════════════════════════ 3 · MODEL TRAINING ═════════════
 md(r"""
 ---
-## 7 · A first model, and its confusion matrix
+# 3 · Model Training
 
-Back to the honest feature set. We train one model and look at the only four numbers that
-matter.
-""")
+Back to the honest feature set. Two decisions: **how to handle the 0.5% imbalance**, and
+**which model to use**.
 
-code(r"""
-# ===============================================================
-# 7.1  TRAIN
-# ===============================================================
-# Purpose:  Fit one model on the training window. This is the stage everybody
-#           imagines the whole job is. It takes about two seconds.
-# Output:   first_model, first_scores
-# ===============================================================
-import time
-
-started = time.time()
-first_model = models.build_pipeline(forest, "class_weight").fit(
-    x_train.iloc[-250_000:], y_train.iloc[-250_000:])
-elapsed = time.time() - started
-
-first_scores = models.score_on(first_model, x_test)
-print(f"Trained on {min(len(x_train), 250_000):,} transactions in {elapsed:.1f} seconds.")
-""")
-
-code(r"""
-# ===============================================================
-# 7.2  SCORE IT ON THE MONTHS IT HAS NEVER SEEN
-# ===============================================================
-# The threshold is set so that exactly 3% of transactions go to a human --
-# the review budget the business actually has.
-# ===============================================================
-first_result = metrics.evaluate_at_budget(y_test.to_numpy(), first_scores, amounts_test)
-charts.confusion_heatmap(first_result, "Held-out period: January to June 2026").show()
-metrics.confusion_frame(first_result)
-""")
-
-code(r"""
-# ===============================================================
-# 7.3  WORK OUT THE TWO NUMBERS BY HAND
-# ===============================================================
-tp, fp, fn = first_result["tp"], first_result["fp"], first_result["fn"]
-
-print(f"Precision = {tp:,} / ({tp:,} + {fp:,}) = {tp / (tp + fp):.1%}")
-print(f"   of everything we flagged, this much really was fraud\n")
-print(f"Recall    = {tp:,} / ({tp:,} + {fn:,}) = {tp / (tp + fn):.1%}")
-print(f"   of all the fraud that happened, this much was caught")
-""")
-
-code(r"""
-# ===============================================================
-# 7.4  SO IS IT ANY GOOD?  --  compare it to doing nothing
-# ===============================================================
-# One line of code that says every transaction is clean, and never flags anything.
-# ===============================================================
-nothing = metrics.never_fraud_baseline(y_test.to_numpy(), amounts_test)
-
-comparison = pd.DataFrame({
-    "Our model": [first_result["accuracy"], first_result["recall"], first_result["tp"],
-                  first_result["dollars_caught"]],
-    'A model that says "never fraud"': [nothing["accuracy"], nothing["recall"], nothing["tp"],
-                                        nothing["dollars_caught"]],
-}, index=["Accuracy", "Recall", "Frauds caught", "Fraud $ caught"])
-
-comparison.style.format({"Our model": "{:,.2f}", 'A model that says "never fraud"': "{:,.2f}"})
+We change **one thing at a time** — first the imbalance, then the model. Changing both at
+once gives you a table nobody can interpret.
 """)
 
 md(r"""
-### The do-nothing model scores higher on accuracy, and is worth nothing
+## 3.1 Handling the imbalance
 
-That is **class imbalance**, and it is the formal name for the trap. When the positive case
-is rare, accuracy measures the base rate, not the model.
+Only 1 transaction in 200 is fraud, so a model can score well while mostly ignoring fraud.
+There are several standard fixes, and they are not equally good.
 
-Fraud, defects, disease, churn, safety incidents — everywhere the interesting case is a
-small minority, accuracy is the metric that makes a useless system look excellent.
-
-> **If a vendor leads with an accuracy figure on a rare event, ask for precision and
-> recall. Every time.**
-
-This is also why every comparison from here on is made at the **same 3% review budget**
-rather than at a fixed cut-off. Six models put their scores in six different places on the
-0–1 scale; giving them all the same number of analyst-minutes to spend is what makes the
-comparison fair.
-""")
-
-# ══════════════════════════════════════════════ 8 · BALANCING ═══════════════
-md(r"""
----
-## 8 · Class balancing — five treatments, measured
-
-We are missing about one fraud in six. A standard response to a rare positive class is to
-rebalance the training data. There are several ways to do it, they are not equally good,
-and the famous one does not win.
-
-**One variable at a time:** same model family, same split, same budget. Only the balancing
-treatment changes.
+| Treatment | What it does |
+|---|---|
+| **None** | Leave the imbalance alone |
+| **Class weight** | Tell the model that missing a fraud costs more |
+| **Undersample** | Throw away most of the legitimate rows |
+| **Oversample** | Duplicate the fraud rows |
+| **SMOTE** | Create new, synthetic fraud rows between real ones |
 """)
 
 code(r"""
 # ===============================================================
-# 8.1  THE BAKE-OFF
+# 3.1  THE BALANCING BAKE-OFF
 # ===============================================================
-# None            -- leave the 0.5% imbalance alone
-# Class weight    -- tell the model a fraud costs more to miss
-# Undersample     -- throw away most legitimate rows
-# Oversample      -- duplicate the fraud rows
-# SMOTE           -- synthesise new fraud rows between real ones
+# Same model, same data, same review budget. Only the treatment changes.
 # ===============================================================
+forest = models.candidate_models()["Random forest"]["estimator"]
 bakeoff = models.run_balancing_bakeoff(forest, x_train, y_train, x_test, y_test, amounts_test)
+
 charts.balancing_chart(bakeoff).show()
-bakeoff[["Treatment", "TP", "FP", "FN", "Precision", "Recall", "Accuracy", "Fit (s)"]]
+bakeoff[["Treatment", "TP", "FP", "FN", "Precision", "Recall", "Fit (s)"]]
 """)
 
 md(r"""
-### The technique with the famous name did not win
+**The technique with the famous name did not win.** Read the table, not the reputation —
+the simplest treatment here beats SMOTE, and is far faster to fit.
 
-Read the table, not the reputation. On this problem the simplest treatments beat the
-sophisticated one, and one of them is roughly fifty times faster to fit.
+Worth carrying: *"we used SMOTE"* is not evidence that a model is good. Measuring is.
+""")
 
-That is worth carrying: **"we used SMOTE" is not evidence that a model is good.** Measuring
-is.
+md(r"""
+## 3.2 Choosing a model
+
+Four candidates, from simplest to most powerful. The balancing treatment is now **held
+constant** at the bake-off winner, so the only thing changing is the model itself.
 """)
 
 code(r"""
 # ===============================================================
-# 8.2  BREAK IT  --  resampling on the wrong side of the split
-# ===============================================================
-# SMOTE creates synthetic fraud rows by interpolating between real ones. Do that
-# BEFORE splitting, and synthetic copies of training rows land in the test set --
-# so the model is scored on data derived from data it trained on.
-#
-# Reported as average precision because resampling changes the class balance, so a
-# confusion matrix at a 3% budget would no longer be comparable between the two.
-# ===============================================================
-leaked = models.leaked_smote_score(forest, x_train, y_train)
-honest = models.honest_smote_score(forest, x_train, y_train, x_test, y_test)
-
-print(f"SMOTE applied before the split : average precision {leaked['average_precision']:.4f}   <-- looks perfect")
-print(f"SMOTE applied inside the folds : average precision {honest['average_precision']:.4f}   <-- real")
-""")
-
-md(r"""
-### The one-word difference
-
-```python
-from imblearn.pipeline import Pipeline   # applies the sampler to TRAINING FOLDS ONLY
-from sklearn.pipeline  import Pipeline   # does not
-```
-
-Resample before you split and you get a near-perfect score that means nothing. This is
-**the same leakage lesson from section 6, wearing a second costume** — and it is the most
-common real mistake in imbalanced learning.
-
-One more consequence, which matters for the next section: **resampling distorts the
-probabilities.** After oversampling, a score of 0.5 no longer means "one in two", because
-the model was trained on a world where fraud is common and the real one is 0.5%.
-""")
-
-# ══════════════════════════════════════════════ 9 · SWEEP ══════════════════
-md(r"""
----
-## 9 · The model sweep
-
-Six candidates. Two of them are not machine learning at all, and they are there on
-purpose: one is a written rule, and one does nothing whatsoever.
-
-The balancing treatment is now **held constant** at the bake-off winner, so the only thing
-changing is the model. A 6 × 5 grid of thirty combinations would not be interpretable —
-changing one variable at a time is how you get an answer you can defend.
-""")
-
-code(r"""
-# ===============================================================
-# 9.1  RUN THE SWEEP
-# ===============================================================
-# Purpose:  Six candidates, one treatment, all judged at the same 3% budget.
-# Output:   leaderboard, fitted
+# 3.2  THE SWEEP
 # ===============================================================
 best_treatment = bakeoff.iloc[0]["Treatment"]
 print(f"Holding the balancing treatment constant at: {best_treatment}\n")
@@ -736,237 +487,291 @@ print(f"Holding the balancing treatment constant at: {best_treatment}\n")
 leaderboard, fitted = models.run_model_sweep(
     x_train, y_train, x_test, y_test, amounts_test, treatment_name=best_treatment)
 
-leaderboard[["Model", "TP", "FP", "FN", "Precision", "Recall", "Accuracy",
-             "Review hrs", "Fit (s)", "Explainable"]]
+leaderboard[["Model", "TP", "FP", "FN", "Precision", "Recall", "Fit (s)", "Explainable"]]
 """)
 
 code(r"""
 # ===============================================================
-# 9.2  RECALL BESIDE ACCURACY
-# ===============================================================
-# The gap between the two charts is the entire lesson of section 7.
+# 3.3  THE LEADERBOARD
 # ===============================================================
 charts.leaderboard_chart(leaderboard).show()
 """)
 
 code(r"""
 # ===============================================================
-# 9.3  IS THE WINNER'S LEAD REAL, OR IS IT NOISE?
+# 3.4  WHAT IS THE WINNER ACTUALLY USING?
 # ===============================================================
-# TimeSeriesSplit, not KFold: every fold trains on the past and validates on the
-# future, which is the only arrangement that resembles production.
+# Measured by breaking each column in turn and watching the score fall.
 # ===============================================================
 winner_name = leaderboard.iloc[0]["Model"]
-winner_spec = models.candidate_models()[winner_name]
-cv = models.time_series_cv(
-    models.build_pipeline(winner_spec["estimator"], models.balancing_treatments()[best_treatment]),
-    x_train, y_train)
-
-print(f"{winner_name} across {len(cv)} time-ordered folds:")
-print(f"  recall {cv['Recall'].mean():.1%} +/- {cv['Recall'].std():.1%}")
-cv
-""")
-
-code(r"""
-# ===============================================================
-# 9.4  WHAT IS THE WINNER ACTUALLY USING?
-# ===============================================================
 selected_model = fitted[winner_name]["model"]
+
 importance = models.permutation_importance_frame(
     selected_model, x_test.sample(40_000, random_state=42),
     y_test.sample(40_000, random_state=42), top_n=12)
 
-charts.association_bars(importance, "Importance",
-                        f"What {winner_name} leans on",
-                        "Measured by breaking each column in turn and watching the score fall").show()
+charts.association_bars(importance, "Importance", f"What {winner_name} leans on",
+                        "The columns the model would miss most if you took them away").show()
 """)
 
 md(r"""
-### Closing the loop on section 5
+### Two things to take from this
 
-The importance chart above answers the question we left open. **Amount — in both its raw and
-logged form — and time of day are doing nearly all of the work.** Distance to merchant does
-not appear at all, and card velocity barely registers.
+**Choosing a model is not just picking the top row.** Four things matter, and only the
+first is on the leaderboard:
 
-So the two features the fraud analyst would have insisted on are, in *this* data, not
-carrying signal — alone or in combination. The right response is not to quietly delete them
-and move on. It is to go back and ask **which of the three explanations from section 5 is
-true**, because the answer changes what you do next:
+| | The question |
+|---|---|
+| **Performance** | How much fraud does it catch? |
+| **Explainability** | Can we tell a declined customer *why*? In lending this is a legal duty, not a preference |
+| **Speed** | Can it score inside a checkout? |
+| **Operability** | Who retrains it, and how often? |
 
-- if the simulator simply does not model card-testing bursts, real data would look different
-  and the feature should stay;
-- if the pattern genuinely stopped being true, the fraud team needs to know that;
-- and if we built the feature badly — a 24-hour window when the real pattern is ten
-  minutes — that is our bug, not the expert's.
-
-**A model that scores well is not the end of the analysis.** It is the point at which you
-have earned the right to ask better questions.
+**And it answers the question from section 2.** Amount and time of day are doing nearly all
+the work. Distance and velocity barely register — so in *this* data, the two features the
+analyst insisted on genuinely are not helping. That is worth taking back to them, not
+quietly deleting.
 """)
 
-md(r"""
-### The selection is argued, not automatic
-
-`leaderboard.iloc[0]` is not a decision, it is an abdication. Four axes, all of which the
-business cares about:
-
-| Axis | The question | What the table says |
-|---|---|---|
-| **Performance** | Is the gap real, or inside the fold-to-fold variation? | Compare the leader's margin to the cross-validation spread above |
-| **Explainability** | Can we tell a declined customer *why*? | The `Explainable` column. This is not a preference in lending — it is a legal duty |
-| **Cost** | Can it score inside a checkout? | `Fit (s)`, and how much work it hands the analysts |
-| **Operability** | Who retrains it, how often, and can they? | Not in the table. Ask anyway. |
-
-Two rows deserve a moment:
-
-- **The written amount rule** does far better than most people expect. If a rule gets you
-  most of the way, the honest recommendation may be to ship the rule and spend the budget
-  elsewhere. *"Not AI"* is a complete answer when you can show the number.
-- **`Never fraud`** has the best accuracy on the board and catches nothing at all.
-""")
-
-# ══════════════════════════════════════════════ 10 · THRESHOLD ══════════════
+# ═══════════════════════════════════════ 4 · MODEL VALIDATION ═══════════════
 md(r"""
 ---
-## 10 · The threshold is a business decision
+# 4 · Model Validation
 
-We have been spending a 3% review budget because someone said analysts can handle 3%. That
-number was a business constraint, not a mathematical result — and moving it changes
-everything.
+We have a model. Now: **is it any good?**
+
+The tool for this is the **confusion matrix** — four numbers that cover every possible
+outcome.
 """)
 
 code(r"""
 # ===============================================================
-# 10.1  SWEEP THE BUDGET
+# 4.1  THE CONFUSION MATRIX
 # ===============================================================
-# Purpose:  Walk the review budget from strict to generous and watch the trade.
-# Output:   sweep
+# Scored on the six months the model has never seen. The cut is set so that
+# exactly 3% of transactions go to a human -- the review budget the business has.
 # ===============================================================
 winner_scores = fitted[winner_name]["scores"]
+result = metrics.evaluate_at_budget(y_test.to_numpy(), winner_scores, amounts_test)
+
+charts.confusion_heatmap(result, "Held-out period: January to June 2026").show()
+""")
+
+md(r"""
+## 4.1 The two numbers that matter
+
+Both come straight out of those four boxes.
+
+- **Precision** — of everything we flagged, how much really was fraud?
+- **Recall** — of all the fraud that happened, how much did we catch?
+""")
+
+code(r"""
+# ===============================================================
+# 4.2  WORK THEM OUT BY HAND
+# ===============================================================
+tp, fp, fn = result["tp"], result["fp"], result["fn"]
+
+print(f"Precision = {tp:,} / ({tp:,} + {fp:,}) = {tp / (tp + fp):.1%}")
+print(f"Recall    = {tp:,} / ({tp:,} + {fn:,}) = {tp / (tp + fn):.1%}")
+""")
+
+code(r"""
+# ===============================================================
+# 4.3  SO IS IT GOOD?  --  compare it to doing nothing
+# ===============================================================
+# One line of code that says every transaction is clean and never flags anything.
+# ===============================================================
+nothing = metrics.never_fraud_baseline(y_test.to_numpy(), amounts_test)
+
+pd.DataFrame({
+    "Our model": [f"{result['accuracy']:.2%}", f"{result['recall']:.1%}", f"{result['tp']:,}"],
+    'A model that says "never fraud"': [f"{nothing['accuracy']:.2%}",
+                                        f"{nothing['recall']:.1%}", f"{nothing['tp']:,}"],
+}, index=["Accuracy", "Recall", "Frauds caught"])
+""")
+
+md(r"""
+### The do-nothing model scores higher on accuracy, and is worth nothing
+
+That is **class imbalance**, and it is why accuracy is the wrong headline number. When the
+thing you care about is rare, accuracy mostly measures how rare it is.
+
+Fraud, defects, disease, churn, safety incidents — everywhere the interesting case is a
+small minority, accuracy makes a useless system look excellent.
+
+> **If a vendor leads with an accuracy figure on a rare event, ask for precision and
+> recall. Every time.**
+""")
+
+md(r"""
+## 4.2 The threshold is a business decision
+
+We have been flagging 3% of transactions because that is what the analysts can handle. That
+number came from the business, not from the maths — and moving it changes everything.
+""")
+
+code(r"""
+# ===============================================================
+# 4.4  SWEEP THE REVIEW BUDGET
+# ===============================================================
 sweep = metrics.threshold_sweep(y_test.to_numpy(), winner_scores, amounts_test)
 charts.threshold_sweep_chart(sweep, config.REVIEW_BUDGET).show()
 """)
 
 code(r"""
 # ===============================================================
-# 10.2  WHAT EACH CHOICE COSTS
+# 4.5  WHAT EACH CHOICE COSTS
 # ===============================================================
 options = pd.DataFrame([
     metrics.evaluate_at_budget(y_test.to_numpy(), winner_scores, amounts_test, b)
     for b in (0.005, 0.01, 0.02, 0.03, 0.05, 0.10)
 ])[["review_rate", "flagged", "tp", "fp", "fn", "precision", "recall",
-    "review_hours", "dollars_caught", "dollars_missed"]]
+    "review_hours", "dollars_missed"]]
 
 options.columns = ["Review rate", "Flagged", "Caught", "False alarms", "Missed",
-                   "Precision", "Recall", "Analyst hours", "$ caught", "$ missed"]
+                   "Precision", "Recall", "Analyst hours", "$ missed"]
 options.style.format({
     "Review rate": "{:.1%}", "Precision": "{:.1%}", "Recall": "{:.1%}",
-    "Analyst hours": "{:,.0f}", "$ caught": "${:,.0f}", "$ missed": "${:,.0f}",
-    "Flagged": "{:,.0f}", "Caught": "{:,.0f}", "False alarms": "{:,.0f}", "Missed": "{:,.0f}",
+    "Analyst hours": "{:,.0f}", "$ missed": "${:,.0f}", "Flagged": "{:,.0f}",
+    "Caught": "{:,.0f}", "False alarms": "{:,.0f}", "Missed": "{:,.0f}",
 })
 """)
 
 md(r"""
-**Nothing in the mathematics says which row is right.**
+**Nothing in the maths says which row is right.**
 
-Moving the budget down catches more fraud and interrupts more real customers. Moving it up
-does the reverse. The answer depends on what a blocked customer costs against what a
-chargeback costs — and only the business can answer that.
+Flag more, and you catch more fraud but interrupt more real customers. Flag fewer, and the
+reverse. The answer depends on what a blocked customer costs against what a chargeback
+costs — and only the business can answer that.
 
-The data scientist builds the slider. The fraud lead decides where it sits.
+> The data scientist builds the slider. **The fraud lead decides where it sits.**
 """)
 
 code(r"""
 # ===============================================================
-# 10.3  THE STAGE THAT NEVER ENDS  --  performance week by week
+# 4.6  PERFORMANCE WEEK BY WEEK
 # ===============================================================
-# Fraud tactics move, deliberately, because there are people on the other side.
-# A model trained on last year decays, so precision and recall get re-measured.
+# Fraud tactics move on purpose, because there are people on the other side.
+# A model trained on last year decays, so this gets re-measured, forever.
 # ===============================================================
-final_result = metrics.evaluate_at_budget(y_test.to_numpy(), winner_scores, amounts_test)
-weekly = metrics.weekly_performance(parts["test"], winner_scores, final_result["threshold"])
+weekly = metrics.weekly_performance(parts["test"], winner_scores, result["threshold"])
 charts.weekly_performance_chart(weekly).show()
 
-print(f"Recall over the six held-out months: "
-      f"best week {weekly['recall'].max():.0%}, worst week {weekly['recall'].min():.0%}")
+print(f"Recall over the six months: best week {weekly['recall'].max():.0%}, "
+      f"worst week {weekly['recall'].min():.0%}")
 """)
 
-# ══════════════════════════════════════════════ 11 · EXPORT ═════════════════
+# ═══════════════════════════════════════ 5 · MODEL PREDICTION ═══════════════
 md(r"""
 ---
-## 11 · The handoff
+# 5 · Model Prediction
 
-A model is not delivered when it is accurate. It is delivered when somebody else can run
-it. Three files leave this notebook.
+The model is trained and validated. Now it does the job it was built for: **score
+transactions it has never seen, and hand a queue to a human.**
 """)
 
 code(r"""
 # ===============================================================
-# 11.1  EXPORT THE MODEL, ITS CARD, AND THE TEST STREAM
+# 5.1  SCORE THE MOST RECENT TRANSACTIONS
 # ===============================================================
-# Output:   artifacts/model.joblib, model_card.json, test_stream.parquet
+# These arrived after the test window. To the model they are brand new.
+# ===============================================================
+recent = features.build_features(data.join(data.recent_batch(transactions), customers))
+x_recent, _ = features.feature_matrix(recent)
+x_recent = features.align_columns(x_recent, x_train)
+
+recent_scores = models.score_on(selected_model, x_recent)
+recent["fraud_score"] = recent_scores
+
+print(f"Scored {len(recent):,} transactions from "
+      f"{recent['trans_date_trans_time'].min():%d %b %Y} to "
+      f"{recent['trans_date_trans_time'].max():%d %b %Y}")
+""")
+
+code(r"""
+# ===============================================================
+# 5.2  WHERE DID THE MODEL PUT THEM?
+# ===============================================================
+charts.score_distribution(recent_scores, result["threshold"]).show()
+""")
+
+code(r"""
+# ===============================================================
+# 5.3  THE REVIEW QUEUE  --  what an analyst opens in the morning
+# ===============================================================
+queue = (recent[recent["fraud_score"] >= result["threshold"]]
+         .sort_values("fraud_score", ascending=False)
+         .head(10)[["trans_date_trans_time", "fraud_score", "amt", "category",
+                    "merchant", "distance_km", "card_txn_count_24h"]])
+
+queue.style.format({"fraud_score": "{:.3f}", "amt": "${:,.2f}", "distance_km": "{:,.0f} km"})
+""")
+
+md(r"""
+Notice what the analyst gets: not a verdict, but a **ranked queue with the reasons
+attached**. They can see the amount, the category, how far from home it was, and how busy
+the card has been. That is what makes review possible rather than theatrical.
+""")
+
+md(r"""
+## 5.1 Handing the model over
+
+A model is not finished when it is accurate. It is finished when **somebody else can run
+it**. Three files leave this notebook.
+""")
+
+code(r"""
+# ===============================================================
+# 5.4  EXPORT THE MODEL, ITS CARD, AND A TEST BATCH
 # ===============================================================
 rationale = (
     f"{winner_name} with {best_treatment} balancing. Chosen at a "
-    f"{config.REVIEW_BUDGET:.0%} review budget on a time-ordered holdout "
+    f"{config.REVIEW_BUDGET:.0%} review budget on a held-out period "
     f"({config.TEST_START:%b %Y} to {config.TEST_END:%b %Y}). "
-    f"Recall {final_result['recall']:.1%}, precision {final_result['precision']:.1%}."
+    f"Recall {result['recall']:.1%}, precision {result['precision']:.1%}."
 )
 
 sizes = handoff.export(
     model=selected_model, model_name=winner_name, leaderboard=leaderboard,
-    bakeoff=bakeoff, balancing_treatment=best_treatment, result=final_result,
+    bakeoff=bakeoff, balancing_treatment=best_treatment, result=result,
     feature_columns=list(x_train.columns), test_frame=parts["test"],
     selection_rationale=rationale)
 
 for name, size in sizes.items():
     print(f"  {name:<24} {size}")
 """)
+
 code(r"""
 # ===============================================================
-# 11.2  VERIFY THE HANDOFF REPRODUCES
+# 5.5  CHECK THE HANDOFF REPRODUCES
 # ===============================================================
-# Reload the artefacts from disk and re-score. If the reloaded model does not
-# reproduce the numbers in its own card, the handoff is broken -- and it is far
-# better to find that out here than in front of a room.
+# Reload from disk and re-score. If the saved model does not reproduce the numbers
+# in its own card, the handoff is broken -- better to find out here.
 # ===============================================================
 check = handoff.verify()
 
-print(f"claimed    : recall {check['claimed']['recall']:.4f}   precision {check['claimed']['precision']:.4f}")
-print(f"reproduced : recall {check['reproduced']['recall']:.4f}   precision {check['reproduced']['precision']:.4f}")
-print(f"drift      : {check['drift']}")
+print(f"claimed    : recall {check['claimed']['recall']:.4f}")
+print(f"reproduced : recall {check['reproduced']['recall']:.4f}")
 assert all(abs(v) < 1e-6 for v in check["drift"].values()), "Artefacts do not reproduce"
 print("\nOK -- the model on disk is the model that was measured.")
 """)
 
+# ══════════════════════════════════════════════════════════ WRAP ════════════
 md(r"""
 ---
-## What was actually built tonight
+## The five stages, and who has to be in the room
 
-| Stage | What happened | Who has to be in the room |
+| Stage | What happened | Who is needed |
 |---|---|---|
-| **Data** | Two systems joined; the label interrogated before anything else | Data engineer **+ the fraud team** |
-| **Split** | Cut by date, and the random alternative measured rather than assumed | Data scientist |
-| **Features** | Ratios, velocity, distance — none of which existed in the source | Data scientist **+ fraud analysts** |
-| **Leakage** | Found by asking what exists at 2:14pm on a Tuesday | **Whoever asks the awkward question** |
-| **Balancing** | Five treatments measured; the famous one lost | Data scientist |
-| **Selection** | Six candidates at one budget, then argued on four axes | Data scientist **+ the business** |
-| **Threshold** | Handed to the people who own the cost of being wrong | **The fraud lead** |
-| **Monitoring** | Re-measured weekly, because fraud adapts on purpose | **Everyone** |
+| **1 · Data Ingestion** | Two systems joined, the label questioned, the split made by date | Data engineer **+ the fraud team** |
+| **2 · Feature Engineering** | Ratios, velocity, distance — none of which existed in the source | Data scientist **+ fraud analysts** |
+| **3 · Model Training** | Five balancing treatments, then four models, one change at a time | Data scientist |
+| **4 · Model Validation** | Confusion matrix, precision and recall, then the threshold | Data scientist **+ the business** |
+| **5 · Model Prediction** | A ranked queue, with reasons, that a person can act on | **The fraud team** |
 
-**Six of those eight rows need somebody who understands the business. One needs somebody
-who understands models.** Most of you will spend your career in the six.
-
-### Your work this week
-
-1. Change the review budget in cell 10.2 to a value you can defend, and write one
-   paragraph on **who pays for that choice** — the customers who get stopped, or the
-   customers who get defrauded.
-2. Take the AI decision you identified in your Module 1 process map and trace it through
-   these stages: where the data lives, what the label would be, what two features you would
-   compute, and what would count as success.
-
-If your honest conclusion is that the data does not exist yet, **write that down**. It is a
-finding, not a failure.
+**Four of those five stages need somebody who understands the business.** One needs
+somebody who understands models. Most of you will spend your career in the four.
 """)
 
 nb["cells"] = C

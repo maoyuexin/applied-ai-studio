@@ -1,8 +1,18 @@
 # How a fraud model actually gets built
 
 Teaching notebook for **ITAI 2372 · Module 2**. It walks one fraud-detection model from raw
-transactions to a deployable artefact, and every number in it is computed live rather than
-quoted from a slide.
+transactions to a live review queue, and every number in it is computed by the cell above
+it rather than quoted from a slide.
+
+The five sections match the five stages on the Session 2 slides:
+
+| | Stage | What happens |
+|---|---|---|
+| 1 | **Data Ingestion** | Load, join, EDA, split by date |
+| 2 | **Feature Engineering** | Build features, check signal, catch leakage |
+| 3 | **Model Training** | Balancing bake-off, then four models |
+| 4 | **Model Validation** | Confusion matrix, precision/recall, the threshold |
+| 5 | **Model Prediction** | Score unseen transactions, produce the queue, hand it over |
 
 ## Run it
 
@@ -64,10 +74,10 @@ cd - && python scripts/build_dataset.py /tmp/sparkov_out
 |---|---|---|
 | Train | 2024-07-01 → 2025-12-31 | fitting |
 | Test | 2026-01-01 → 2026-06-30 | the only honest score |
-| Frontier | 2026-07-01 → 2026-08-31 | **never scored** — labels have not matured |
+| Recent | 2026-07-01 → 2026-08-31 | section 5 — what the finished model scores |
 
-"Today" is 2026-08-31 and a chargeback confirms about 60 days after the transaction, so the
-frontier exists to make the label-lag problem concrete rather than theoretical.
+The split is made **by date, never at random**. Fraud changes over time, so a random split
+would let the model train on March and be tested on February.
 
 ## Two conventions worth knowing before you read the code
 

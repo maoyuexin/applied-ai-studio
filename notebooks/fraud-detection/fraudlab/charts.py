@@ -306,30 +306,39 @@ def weekly_volume_and_rate(weekly: pd.DataFrame) -> go.Figure:
     return fig
 
 
-def split_timeline(summary: pd.DataFrame) -> go.Figure:
-    """Train, test and the unlabelled frontier, drawn on a calendar."""
-    colors = {"train": config.COLOR_LEGIT, "test": config.COLOR_ACCENT, "frontier": config.COLOR_WARN}
+def split_timeline(parts: dict) -> go.Figure:
+    """Monthly volume, coloured by which side of the split it fell on.
+
+    Drawn as counts per month rather than as date ranges: it shows the order of
+    the split *and* how much data is on each side, in one picture.
+    """
+    colors = {"train": config.COLOR_LEGIT, "test": config.COLOR_ACCENT}
     fig = go.Figure()
-    for _, row in summary.iterrows():
+
+    for name, part in parts.items():
+        monthly = (
+            part.set_index("trans_date_trans_time")
+            .resample("MS")
+            .agg(transactions=("is_fraud", "size"), frauds=("is_fraud", "sum"))
+            .reset_index()
+        )
         fig.add_trace(
             go.Bar(
-                x=[row["To"] - row["From"]], y=[row["Split"]], base=[row["From"]],
-                orientation="h", marker_color=colors.get(row["Split"], config.COLOR_MUTED),
-                name=row["Split"],
-                hovertemplate=(
-                    f"<b>{row['Split']}</b><br>{row['From']:%Y-%m-%d} to {row['To']:%Y-%m-%d}"
-                    f"<br>{row['Transactions']:,} transactions"
-                    f"<br>{row['Frauds']:,} frauds ({row['Fraud rate']:.3%})<extra></extra>"
-                ),
+                x=monthly["trans_date_trans_time"], y=monthly["transactions"],
+                name=f"{name} ({len(part):,} transactions)",
+                marker_color=colors.get(name, config.COLOR_MUTED),
+                customdata=monthly["frauds"],
+                hovertemplate=("%{x|%b %Y}<br>%{y:,} transactions"
+                               "<br>%{customdata:,} frauds<extra>" + name + "</extra>"),
             )
         )
-    fig.add_vline(x=config.LABEL_MATURE_BEFORE, line_dash="dash", line_color=config.COLOR_FRAUD,
-                  annotation_text="labels mature to here", annotation_position="top left")
+
     fig.update_layout(
-        **{**_LAYOUT, "height": 300},
-        title=_title("The split is made by date, never at random",
-                     "Everything to the right of the dashed line is still waiting for its label"),
-        showlegend=False, xaxis=dict(title=""), yaxis=dict(title="", autorange="reversed"),
+        **{**_LAYOUT, "height": 380},
+        title=_title("The split is made by date",
+                     "The model learns from the blue months and is scored on the green ones"),
+        xaxis=dict(title=""), yaxis=dict(title="Transactions per month"),
+        legend=dict(x=0.01, y=0.99),
     )
     return fig
 
@@ -399,31 +408,32 @@ def confusion_heatmap(result: dict, title: str = "Confusion matrix") -> go.Figur
 
 
 def leaderboard_chart(leaderboard: pd.DataFrame) -> go.Figure:
-    """Recall next to accuracy. The gap between the two bars is the whole lesson."""
+    """Recall beside precision -- what you catch, and what it costs to catch it."""
     ordered = leaderboard.sort_values("Recall")
     fig = make_subplots(rows=1, cols=2, shared_yaxes=True,
-                        subplot_titles=["Recall at the review budget", "Accuracy"])
+                        subplot_titles=["Recall — of all fraud, how much we caught",
+                                        "Precision — of our flags, how many were real"])
     fig.add_trace(
         go.Bar(x=ordered["Recall"], y=ordered["Model"], orientation="h",
                marker_color=config.COLOR_ACCENT, text=ordered["Recall"].map("{:.1%}".format),
-               textposition="outside", showlegend=False,
+               textposition="outside", showlegend=False, cliponaxis=False,
                hovertemplate="<b>%{y}</b><br>Recall %{x:.2%}<extra></extra>"),
         row=1, col=1,
     )
     fig.add_trace(
-        go.Bar(x=ordered["Accuracy"], y=ordered["Model"], orientation="h",
-               marker_color=config.COLOR_WARN, text=ordered["Accuracy"].map("{:.2%}".format),
-               textposition="outside", showlegend=False,
-               hovertemplate="<b>%{y}</b><br>Accuracy %{x:.3%}<extra></extra>"),
+        go.Bar(x=ordered["Precision"], y=ordered["Model"], orientation="h",
+               marker_color=config.COLOR_WARN, text=ordered["Precision"].map("{:.1%}".format),
+               textposition="outside", showlegend=False, cliponaxis=False,
+               hovertemplate="<b>%{y}</b><br>Precision %{x:.2%}<extra></extra>"),
         row=1, col=2,
     )
     fig.update_layout(
         **{**_LAYOUT, "height": 430, "margin": dict(l=170, r=70, t=100, b=60)},
         title=_title("Every model, judged at the same 3% review budget",
-                     "'Never fraud' tops the accuracy chart with zero frauds caught"),
+                     "Same data, same treatment, same number of analyst-minutes to spend"),
     )
-    fig.update_xaxes(tickformat=".0%", range=[0, 1.15], row=1, col=1)
-    fig.update_xaxes(tickformat=".1%", range=[0.9, 1.02], row=1, col=2)
+    fig.update_xaxes(tickformat=".0%", range=[0, 1.1], row=1, col=1)
+    fig.update_xaxes(tickformat=".0%", range=[0, 0.3], row=1, col=2)
     return fig
 
 
@@ -508,6 +518,31 @@ def weekly_performance_chart(weekly: pd.DataFrame) -> go.Figure:
                      "A model is not finished when it is accurate. It is finished when somebody can watch it"),
         yaxis=dict(title="Rate", tickformat=".0%", range=[0, 1.05]),
         legend=dict(x=0.01, y=0.99),
+    )
+    return fig
+
+
+def score_distribution(scores, threshold: float) -> go.Figure:
+    """Where the model put today's transactions, and where the cut falls."""
+    scores = np.asarray(scores, dtype=float)
+    x, y = _binned(scores, bins=60, rng=(0.0, 1.0))
+    colors = [config.COLOR_FRAUD if centre >= threshold else config.COLOR_LEGIT for centre in x]
+
+    fig = go.Figure(
+        go.Bar(x=x, y=y, marker_color=colors,
+               hovertemplate="Score around %{x:.2f}<br>%{y:,} transactions<extra></extra>")
+    )
+    fig.add_vline(x=threshold, line_dash="dash", line_color="#444",
+                  annotation_text=f"review above {threshold:.3f}",
+                  annotation_position="top right")
+    flagged = int((scores >= threshold).sum())
+    fig.update_layout(
+        **{**_LAYOUT, "height": 380}, bargap=0.02,
+        title=_title("Where the model placed this batch",
+                     f"{flagged:,} of {len(scores):,} transactions land above the cut "
+                     f"and go to a human"),
+        xaxis=dict(title="Fraud score"), yaxis=dict(title="Transactions", type="log"),
+        showlegend=False,
     )
     return fig
 

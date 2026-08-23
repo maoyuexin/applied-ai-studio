@@ -42,9 +42,9 @@ TRAIN_END = pd.Timestamp("2025-12-31")
 TEST_START = pd.Timestamp("2026-01-01")
 TEST_END = pd.Timestamp("2026-06-30")
 
-# Real transactions whose labels have not matured. Never scored for metrics --
-# they exist to make the label-lag lesson concrete.
-FRONTIER_START = pd.Timestamp("2026-07-01")
+# Transactions that arrived after the test period. These are what the finished
+# model scores in section 5 -- the closest thing here to "today's work".
+PREDICT_START = pd.Timestamp("2026-07-01")
 
 N_CV_SPLITS = 4
 
@@ -73,12 +73,8 @@ def describe() -> str:
     """One-paragraph summary of the configuration, for the notebook header."""
     return (
         f"Dataset      : {DATASET_NAME} ({DATASET_CUSTOMERS} customers, seed {DATASET_SEED})\n"
-        f"Generator    : {DATASET_GENERATOR}\n"
         f"Today        : {AS_OF_DATE:%Y-%m-%d}\n"
-        f"Label lag    : {LABEL_LAG_DAYS} days -> labels trustworthy before "
-        f"{LABEL_MATURE_BEFORE:%Y-%m-%d}\n"
         f"Train window : {TRAIN_START:%Y-%m-%d} to {TRAIN_END:%Y-%m-%d}\n"
         f"Test window  : {TEST_START:%Y-%m-%d} to {TEST_END:%Y-%m-%d}\n"
-        f"Frontier     : {FRONTIER_START:%Y-%m-%d} onward (real, but not yet labelled)\n"
         f"Review budget: {REVIEW_BUDGET:.0%} of transactions"
     )

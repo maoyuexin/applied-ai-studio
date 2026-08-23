@@ -1,10 +1,4 @@
-"""Model candidates, the class-balancing bake-off, and the sweep.
-
-Two of the six candidates are not machine learning at all. That is deliberate:
-"never fraud" is what makes the accuracy trap visible, and a written amount rule
-is what makes "is this actually an AI problem?" an empirical question rather than
-an assumption.
-"""
+"""Model candidates, the class-balancing bake-off, and the sweep."""
 
 from __future__ import annotations
 
@@ -15,8 +9,6 @@ import pandas as pd
 from imblearn.over_sampling import RandomOverSampler, SMOTE
 from imblearn.pipeline import Pipeline as ImbPipeline
 from imblearn.under_sampling import RandomUnderSampler
-from sklearn.base import BaseEstimator, ClassifierMixin
-from sklearn.dummy import DummyClassifier
 from sklearn.ensemble import HistGradientBoostingClassifier, RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import TimeSeriesSplit
@@ -27,71 +19,32 @@ from sklearn.tree import DecisionTreeClassifier
 from . import config, metrics
 
 
-class AmountRule(BaseEstimator, ClassifierMixin):
-    """"Flag anything over $X." A written rule, not a learned model.
-
-    Included so the room can see what the rule actually scores before anyone
-    argues about whether the problem needs AI.
-    """
-
-    def __init__(self, amount_column: int = 0):
-        self.amount_column = amount_column
-
-    def fit(self, x, y=None):
-        col = np.asarray(x)[:, self.amount_column].astype(float)
-        self.scale_ = float(np.percentile(col, 99)) or 1.0
-        self.classes_ = np.array([0, 1])
-        return self
-
-    def predict_proba(self, x):
-        col = np.asarray(x)[:, self.amount_column].astype(float)
-        p = np.clip(col / self.scale_, 0, 1)
-        return np.column_stack([1 - p, p])
-
-    def predict(self, x):
-        return (self.predict_proba(x)[:, 1] >= 0.5).astype(int)
-
-
 def candidate_models() -> dict[str, dict]:
-    """The six candidates, with the honest note on what each costs to explain."""
+    """Four candidates, with the honest note on what each costs to explain."""
     rs = config.RANDOM_STATE
     return {
-        "Never fraud": {
-            "estimator": DummyClassifier(strategy="constant", constant=0),
-            "explainable": "Total",
-            "learns": False,
-        },
-        "Amount rule": {
-            "estimator": AmountRule(amount_column=0),
-            "explainable": "Total",
-            "learns": False,
-        },
         "Logistic regression": {
             "estimator": Pipeline(
                 [("scale", StandardScaler()),
                  ("clf", LogisticRegression(max_iter=2000, random_state=rs))]
             ),
             "explainable": "High",
-            "learns": True,
         },
         "Decision tree": {
             "estimator": DecisionTreeClassifier(max_depth=4, random_state=rs),
             "explainable": "High",
-            "learns": True,
         },
         "Random forest": {
             "estimator": RandomForestClassifier(
                 n_estimators=200, min_samples_leaf=2, n_jobs=-1, random_state=rs
             ),
             "explainable": "Medium",
-            "learns": True,
         },
         "Gradient boosting": {
             "estimator": HistGradientBoostingClassifier(
                 max_iter=250, learning_rate=0.1, random_state=rs
             ),
             "explainable": "Medium",
-            "learns": True,
         },
     }
 
@@ -263,15 +216,13 @@ def run_model_sweep(
     max_train_rows: int | None = 250_000,
     budget: float = config.REVIEW_BUDGET,
 ) -> tuple[pd.DataFrame, dict]:
-    """Six candidates, one balancing treatment held constant, all judged at the same budget."""
+    """Four candidates, one balancing treatment held constant, all judged at the same budget."""
     xt, yt = _subsample(x_train, y_train, max_train_rows, config.RANDOM_STATE)
     treatment = balancing_treatments()[treatment_name]
 
     rows, fitted = [], {}
     for name, spec in candidate_models().items():
-        # Balancing a rule or a constant is meaningless -- leave those alone.
-        applied = treatment if spec["learns"] else None
-        pipe = build_pipeline(spec["estimator"], applied)
+        pipe = build_pipeline(spec["estimator"], treatment)
 
         started = time.time()
         pipe.fit(xt, yt)
