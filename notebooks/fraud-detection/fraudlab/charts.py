@@ -56,6 +56,23 @@ def _title(text: str, subtitle: str | None = None) -> dict:
     return dict(text=full, x=0.5, xanchor="center")
 
 
+def _finding(text: str) -> str:
+    """Use one consistent, visible takeaway on every teaching chart."""
+    return f"<b>Finding:</b> {text}"
+
+
+def _plain_name(value: object) -> str:
+    """Translate dataset column names into labels suitable for first-time learners."""
+    name = str(value)
+    aliases = {
+        "amt": "transaction amount",
+        "log_amt": "log-transformed amount",
+        "shopping_net": "online shopping",
+        "shopping_pos": "in-store shopping",
+    }
+    return aliases.get(name, name.replace("_", " "))
+
+
 def class_balance(transactions: pd.DataFrame) -> go.Figure:
     """The imbalance, drawn twice.
 
@@ -75,7 +92,7 @@ def class_balance(transactions: pd.DataFrame) -> go.Figure:
     for col in (1, 2):
         fig.add_trace(
             go.Bar(
-                x=["Legitimate", "Fraud"], y=[legit, fraud],
+                x=["Normal", "Fraud"], y=[legit, fraud],
                 marker_color=[config.COLOR_LEGIT, config.COLOR_FRAUD],
                 text=[f"{legit:,}<br>{legit/total:.2%}", f"{fraud:,}<br>{fraud/total:.2%}"],
                 textposition="outside", cliponaxis=False,
@@ -90,21 +107,33 @@ def class_balance(transactions: pd.DataFrame) -> go.Figure:
         **{**_LAYOUT, "height": 440, "margin": dict(l=70, r=40, t=110, b=60)},
         title=_title(
             "Class balance",
-            f"{fraud:,} frauds in {total:,} transactions &nbsp;·&nbsp; {fraud/total:.3%}",
+            _finding(
+                f"Fraud is only {fraud/total:.3%} of the data -- about 1 in "
+                f"{round(total / fraud):,} transactions."
+            ),
         ),
         showlegend=False,
     )
     return fig
 
 
-def amount_distribution(transactions: pd.DataFrame) -> go.Figure:
-    """Raw amount beside log amount -- why the transform is not cosmetic."""
+def amount_distribution(
+    transactions: pd.DataFrame, clip_quantile: float = 0.995
+) -> go.Figure:
+    """Readable raw amounts beside all log amounts."""
+    amounts = transactions["amt"]
+    cutoff = float(amounts.quantile(clip_quantile))
+    p95 = float(amounts.quantile(0.95))
+    visible = amounts[amounts <= cutoff]
+    omitted = int((amounts > cutoff).sum())
+
     fig = make_subplots(
         rows=1, cols=2,
-        subplot_titles=["Transaction amount ($)", "log(1 + amount)"],
+        subplot_titles=[f"Transaction amount ($), up to ${cutoff:,.0f}",
+                        "log(1 + amount), all transactions"],
     )
-    raw_x, raw_y = _binned(transactions["amt"], bins=70)
-    log_x, log_y = _binned(np.log1p(transactions["amt"]), bins=70)
+    raw_x, raw_y = _binned(visible, bins=70, rng=(0, cutoff))
+    log_x, log_y = _binned(np.log1p(amounts), bins=70)
 
     fig.add_trace(
         go.Bar(x=raw_x, y=raw_y, marker_color=config.COLOR_LEGIT, name="amount",
@@ -119,23 +148,30 @@ def amount_distribution(transactions: pd.DataFrame) -> go.Figure:
     fig.update_layout(
         **_LAYOUT, bargap=0.02,
         title=_title("Amount is heavily right-skewed",
-                     "A handful of very large purchases stretch the axis and hide the shape"),
+                     _finding(
+                         f"95% are below ${p95:,.0f}; the raw view clips the top "
+                         f"{1 - clip_quantile:.1%}, while the log view keeps all rows."
+                     )),
         showlegend=False,
     )
+    fig.update_xaxes(tickprefix="$", separatethousands=True, row=1, col=1)
+    fig.update_yaxes(title_text="Transactions", row=1, col=1)
     return fig
 
 
 def amount_by_class(transactions: pd.DataFrame) -> go.Figure:
     """The first real signal: fraud sits in a different, tighter band."""
-    legit = np.log1p(transactions.loc[transactions["is_fraud"] == 0, "amt"])
-    fraud = np.log1p(transactions.loc[transactions["is_fraud"] == 1, "amt"])
+    legit_amounts = transactions.loc[transactions["is_fraud"] == 0, "amt"]
+    fraud_amounts = transactions.loc[transactions["is_fraud"] == 1, "amt"]
+    legit = np.log1p(legit_amounts)
+    fraud = np.log1p(fraud_amounts)
     span = (float(min(legit.min(), fraud.min())), float(max(legit.max(), fraud.max())))
 
     fig = make_subplots(
         rows=1, cols=2, column_widths=[0.62, 0.38],
         subplot_titles=["Distribution of log(amount) by class", "Same data, as a box plot"],
     )
-    for values, name, color in ((legit, "Legitimate", config.COLOR_LEGIT),
+    for values, name, color in ((legit, "Normal", config.COLOR_LEGIT),
                                 (fraud, "Fraud", config.COLOR_FRAUD)):
         x, y = _binned(values, bins=60, density=True, rng=span)
         fig.add_trace(
@@ -151,7 +187,10 @@ def amount_by_class(transactions: pd.DataFrame) -> go.Figure:
     fig.update_layout(
         **_LAYOUT, barmode="overlay", bargap=0.02,
         title=_title("Fraudulent amounts are not drawn from the same distribution",
-                     "Densities are normalised, because otherwise the 0.5% class is invisible"),
+                     _finding(
+                         f"The typical fraud is ${fraud_amounts.median():,.0f}, versus "
+                         f"${legit_amounts.median():,.0f} for a normal transaction."
+                     )),
     )
     return fig
 
@@ -165,6 +204,8 @@ def rate_by_category(transactions: pd.DataFrame, column: str, label: str) -> go.
         .sort_values("rate", ascending=True)
         .reset_index()
     )
+    highest = grouped.iloc[-1]
+    highest_name = _plain_name(highest[column])
     fig = go.Figure(
         go.Bar(
             x=grouped["rate"], y=grouped[column].astype(str), orientation="h",
@@ -180,7 +221,10 @@ def rate_by_category(transactions: pd.DataFrame, column: str, label: str) -> go.
     fig.update_layout(
         **{**_LAYOUT, "height": 480},
         title=_title(f"Fraud rate by {label}",
-                     "Sorted by rate. Hover for volume -- rate and volume disagree, and that matters"),
+                     _finding(
+                         f"{highest_name} has the highest rate at {highest['rate']:.2%}; "
+                         "hover to compare how many transactions it represents."
+                     )),
         xaxis=dict(title="Fraud rate", tickformat=".2%"),
         yaxis=dict(title=""),
     )
@@ -197,6 +241,7 @@ def fraud_rate_by_hour(transactions: pd.DataFrame) -> go.Figure:
         .reset_index()
     )
     overall = transactions["is_fraud"].mean()
+    peak = hourly.loc[hourly["rate"].idxmax()]
 
     fig = go.Figure(
         go.Bar(
@@ -211,7 +256,10 @@ def fraud_rate_by_hour(transactions: pd.DataFrame) -> go.Figure:
     fig.update_layout(
         **_LAYOUT,
         title=_title("Fraud rate by hour of day",
-                     "Red bars sit above the overall rate. This is domain knowledge arriving from the data"),
+                     _finding(
+                         f"Fraud peaks around {int(peak['hour']):02d}:00 at "
+                         f"{peak['rate']:.2%}, above the {overall:.2%} overall rate."
+                     )),
         xaxis=dict(title="Hour of day (local)", dtick=2),
         yaxis=dict(title="Fraud rate", tickformat=".2%"),
     )
@@ -219,14 +267,14 @@ def fraud_rate_by_hour(transactions: pd.DataFrame) -> go.Figure:
 
 
 def numeric_by_class(transactions: pd.DataFrame, column: str, label: str,
-                     clip_quantile: float = 0.99) -> go.Figure:
+                     clip_quantile: float = 0.99, finding: str | None = None) -> go.Figure:
     """The four-beat feature chart: distribution split by class, before and after."""
     cutoff = transactions[column].quantile(clip_quantile)
     df = transactions[transactions[column] <= cutoff]
     span = (float(df[column].min()), float(cutoff))
 
     fig = go.Figure()
-    for flag, name, color in ((0, "Legitimate", config.COLOR_LEGIT), (1, "Fraud", config.COLOR_FRAUD)):
+    for flag, name, color in ((0, "Normal", config.COLOR_LEGIT), (1, "Fraud", config.COLOR_FRAUD)):
         x, y = _binned(df.loc[df["is_fraud"] == flag, column], bins=50, density=True, rng=span)
         fig.add_trace(
             go.Bar(x=x, y=y, name=name, marker_color=color, opacity=0.65,
@@ -234,25 +282,37 @@ def numeric_by_class(transactions: pd.DataFrame, column: str, label: str,
         )
     fig.update_layout(
         **{**_LAYOUT, "height": 360}, barmode="overlay", bargap=0.02,
-        title=_title(label, f"Densities normalised · values above the {clip_quantile:.0%} percentile clipped for readability"),
+        title=_title(
+            label,
+            _finding(
+                (finding or "Compare how much the fraud and normal-transaction shapes overlap.")
+                + f" Top {1 - clip_quantile:.0%} clipped for readability."
+            ),
+        ),
         xaxis=dict(title=label), yaxis=dict(title="Density"),
     )
     return fig
 
 
 def correlation_heatmap(corr: pd.DataFrame, method: str = "Pearson") -> go.Figure:
-    """Feature-to-feature correlation. Its real job is spotting redundancy."""
+    """Correlation among numeric features, including the target when supplied."""
+    if "is_fraud" in corr:
+        target_links = corr["is_fraud"].drop("is_fraud").abs()
+        strongest = _plain_name(target_links.idxmax())
+        finding = f"{strongest} has the strongest linear link to fraud; most links are weak."
+    else:
+        finding = "Most feature pairs have weak linear relationships."
     fig = go.Figure(
         go.Heatmap(
-            z=corr.values, x=corr.columns, y=corr.index, zmid=0,
+            z=corr.values, x=corr.columns, y=corr.index, zmin=-1, zmid=0, zmax=1,
             colorscale="RdBu_r", colorbar=dict(title=method, thickness=14),
             hovertemplate="%{y} vs %{x}<br>r = %{z:.3f}<extra></extra>",
         )
     )
     fig.update_layout(
         **{**_LAYOUT, "height": 560, "margin": dict(l=170, r=60, t=90, b=150)},
-        title=_title(f"{method} correlation between features",
-                     "Look for redundant pairs, not for a relationship with the target"),
+        title=_title(f"{method} correlation: features and target",
+                     _finding(finding)),
         xaxis=dict(tickangle=-45),
     )
     return fig
@@ -261,6 +321,7 @@ def correlation_heatmap(corr: pd.DataFrame, method: str = "Pearson") -> go.Figur
 def association_bars(frame: pd.DataFrame, value_col: str, title: str, subtitle: str) -> go.Figure:
     """A ranked bar chart of feature-to-target association."""
     ordered = frame.sort_values(value_col, ascending=True)
+    top_feature = _plain_name(ordered.iloc[-1]["Feature"])
     fig = go.Figure(
         go.Bar(
             x=ordered[value_col], y=ordered["Feature"], orientation="h",
@@ -270,7 +331,8 @@ def association_bars(frame: pd.DataFrame, value_col: str, title: str, subtitle: 
     )
     fig.update_layout(
         **{**_LAYOUT, "height": 520, "margin": dict(l=210, r=70, t=90, b=60)},
-        title=_title(title, subtitle), xaxis=dict(title=value_col), yaxis=dict(title=""),
+        title=_title(title, _finding(f"{top_feature} matters most here. {subtitle}")),
+        xaxis=dict(title=value_col), yaxis=dict(title=""),
     )
     return fig
 
@@ -297,7 +359,10 @@ def weekly_volume_and_rate(weekly: pd.DataFrame) -> go.Figure:
     fig.update_layout(
         **{**_LAYOUT, "height": 460},
         title=_title("Weekly volume and fraud rate",
-                     "Drag the slider below. The rate moves, and we have not trained anything yet"),
+                     _finding(
+                         f"The weekly fraud rate moves from {weekly['fraud_rate'].min():.2%} "
+                         f"to {weekly['fraud_rate'].max():.2%}, so the pattern is not stable."
+                     )),
         xaxis=dict(rangeslider=dict(visible=True), title=""),
         legend=dict(x=0.01, y=0.99),
     )
@@ -336,7 +401,10 @@ def split_timeline(parts: dict) -> go.Figure:
     fig.update_layout(
         **{**_LAYOUT, "height": 380},
         title=_title("The split is made by date",
-                     "The model learns from the blue months and is scored on the green ones"),
+                     _finding(
+                         "Every training month comes before every test month, so future "
+                         "transactions cannot teach the model."
+                     )),
         xaxis=dict(title=""), yaxis=dict(title="Transactions per month"),
         legend=dict(x=0.01, y=0.99),
     )
@@ -358,7 +426,10 @@ def split_comparison(random_result: dict, time_result: dict) -> go.Figure:
     fig.update_layout(
         **{**_LAYOUT, "height": 400},
         title=_title("The same model, scored two ways",
-                     "The gap is the size of the lie a random split tells you"),
+                     _finding(
+                         "The random split looks better because it mixes future and past; "
+                         "the time split is the honest test."
+                     )),
         yaxis=dict(title="Score at the review budget", tickformat=".0%", range=[0, 1.15]),
         legend=dict(x=0.01, y=0.99),
     )
@@ -382,7 +453,7 @@ def confusion_heatmap(result: dict, title: str = "Confusion matrix") -> go.Figur
     fig = go.Figure(
         go.Heatmap(
             z=meaning, x=["Model flagged it", "Model cleared it"],
-            y=["Actually fraud", "Actually clean"],
+            y=["Actually fraud", "Actually normal"],
             text=text, texttemplate="%{text}", showscale=False,
             zmin=0, zmax=3,
             colorscale=[[0.0, "#C8E6C9"], [0.33, "#C8E6C9"],
@@ -397,9 +468,10 @@ def confusion_heatmap(result: dict, title: str = "Confusion matrix") -> go.Figur
         **{**_LAYOUT, "height": 420},
         title=_title(
             title,
-            f"Precision {result['precision']:.1%} &nbsp;·&nbsp; Recall {result['recall']:.1%} "
-            f"&nbsp;·&nbsp; Accuracy {result['accuracy']:.2%} "
-            f"&nbsp;·&nbsp; {result['flagged']:,} sent to review",
+            _finding(
+                f"It catches {result['recall']:.1%} of fraud, but only "
+                f"{result['precision']:.1%} of its flags are truly fraud."
+            ),
         ),
         xaxis=dict(side="top"),
         yaxis=dict(autorange="reversed"),
@@ -410,6 +482,7 @@ def confusion_heatmap(result: dict, title: str = "Confusion matrix") -> go.Figur
 def leaderboard_chart(leaderboard: pd.DataFrame) -> go.Figure:
     """Recall beside precision -- what you catch, and what it costs to catch it."""
     ordered = leaderboard.sort_values("Recall")
+    winner = leaderboard.sort_values("Recall", ascending=False).iloc[0]
     fig = make_subplots(rows=1, cols=2, shared_yaxes=True,
                         subplot_titles=["Recall — of all fraud, how much we caught",
                                         "Precision — of our flags, how many were real"])
@@ -430,7 +503,10 @@ def leaderboard_chart(leaderboard: pd.DataFrame) -> go.Figure:
     fig.update_layout(
         **{**_LAYOUT, "height": 430, "margin": dict(l=170, r=70, t=100, b=60)},
         title=_title("Every model, judged at the same 3% review budget",
-                     "Same data, same treatment, same number of analyst-minutes to spend"),
+                     _finding(
+                         f"{winner['Model']} catches the most fraud ({winner['Recall']:.1%}) "
+                         "at the same review workload."
+                     )),
     )
     fig.update_xaxes(tickformat=".0%", range=[0, 1.1], row=1, col=1)
     fig.update_xaxes(tickformat=".0%", range=[0, 0.3], row=1, col=2)
@@ -439,6 +515,7 @@ def leaderboard_chart(leaderboard: pd.DataFrame) -> go.Figure:
 
 def balancing_chart(bakeoff: pd.DataFrame) -> go.Figure:
     """Five treatments, same model family, judged on caught versus interrupted."""
+    winner = bakeoff.sort_values("Recall", ascending=False).iloc[0]
     fig = make_subplots(specs=[[{"secondary_y": True}]])
     fig.add_trace(
         go.Bar(x=bakeoff["Treatment"], y=bakeoff["Recall"], name="Recall",
@@ -455,7 +532,10 @@ def balancing_chart(bakeoff: pd.DataFrame) -> go.Figure:
     fig.update_layout(
         **{**_LAYOUT, "height": 430},
         title=_title("Class balancing bake-off",
-                     "Same model, same split, same budget -- only the balancing treatment changes"),
+                     _finding(
+                         f"{winner['Treatment']} catches the most fraud ({winner['Recall']:.1%}); "
+                         "the more complex methods do not automatically win."
+                     )),
         legend=dict(x=0.01, y=0.99),
     )
     fig.update_yaxes(title_text="Recall", tickformat=".0%", range=[0, 1.15], secondary_y=False)
@@ -492,8 +572,10 @@ def threshold_sweep_chart(sweep: pd.DataFrame, chosen: float | None = None) -> g
     fig.update_layout(
         **{**_LAYOUT, "height": 460},
         title=_title("The threshold is a business decision wearing technical clothing",
-                     "Nothing in the mathematics says where it belongs -- only the cost of a "
-                     "blocked customer against the cost of a chargeback"),
+                     _finding(
+                         "Reviewing more transactions catches more fraud, but also creates "
+                         "more work and customer interruptions."
+                     )),
         xaxis=dict(title="Share of transactions sent to a human", tickformat=".1%"),
         legend=dict(x=0.55, y=0.99),
     )
@@ -515,7 +597,10 @@ def weekly_performance_chart(weekly: pd.DataFrame) -> go.Figure:
     fig.update_layout(
         **{**_LAYOUT, "height": 400},
         title=_title("Performance week by week across the held-out period",
-                     "A model is not finished when it is accurate. It is finished when somebody can watch it"),
+                     _finding(
+                         f"Recall ranges from {weekly['recall'].min():.0%} to "
+                         f"{weekly['recall'].max():.0%}, so performance must be watched over time."
+                     )),
         yaxis=dict(title="Rate", tickformat=".0%", range=[0, 1.05]),
         legend=dict(x=0.01, y=0.99),
     )
@@ -539,9 +624,12 @@ def score_distribution(scores, threshold: float) -> go.Figure:
     fig.update_layout(
         **{**_LAYOUT, "height": 380}, bargap=0.02,
         title=_title("Where the model placed this batch",
-                     f"{flagged:,} of {len(scores):,} transactions land above the cut "
-                     f"and go to a human"),
-        xaxis=dict(title="Fraud score"), yaxis=dict(title="Transactions", type="log"),
+                     _finding(
+                         f"{flagged:,} of {len(scores):,} transactions ({flagged / len(scores):.1%}) "
+                         "cross the cutoff and go to a human."
+                     )),
+        xaxis=dict(title="Estimated fraud probability (used as a risk score)"),
+        yaxis=dict(title="Transactions", type="log"),
         showlegend=False,
     )
     return fig
@@ -560,7 +648,10 @@ def label_maturity_chart(summary: pd.DataFrame) -> go.Figure:
     fig.update_layout(
         **{**_LAYOUT, "height": 300, "margin": dict(l=330, r=90, t=90, b=60)},
         title=_title("What actually carries a trustworthy label today",
-                     f"A chargeback is confirmed about {config.LABEL_LAG_DAYS} days after the transaction"),
+                     _finding(
+                         f"Recent transactions cannot train the model yet because fraud labels "
+                         f"take about {config.LABEL_LAG_DAYS} days to arrive."
+                     )),
         xaxis=dict(title="Transactions"), yaxis=dict(title=""),
     )
     return fig

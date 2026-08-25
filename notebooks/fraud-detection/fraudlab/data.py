@@ -7,6 +7,73 @@ import pandas as pd
 from . import config
 
 
+SOURCE_COLUMN_CATALOG = {
+    "transactions": {
+        "trans_num": ("Unique transaction identifier", "Reference only; not a model input"),
+        "cc_num": ("Card account identifier", "Joins tables and builds card-history features"),
+        "trans_date_trans_time": ("Date and time of purchase", "Splits by date and builds time and age features"),
+        "unix_time": ("Purchase time stored as seconds", "Orders card history and builds activity features"),
+        "category": ("Type of merchant purchase", "Direct model input; expanded into category columns"),
+        "amt": ("Transaction amount in dollars", "Direct model input and source for amount features"),
+        "merchant": ("Merchant name", "Shown to the analyst; not a model input"),
+        "merch_lat": ("Merchant latitude", "Builds distance from the cardholder's home"),
+        "merch_long": ("Merchant longitude", "Builds distance from the cardholder's home"),
+        "is_fraud": ("Fraud answer: 1 fraud, 0 normal", "Target used to train and evaluate; never a model input"),
+        "label_available_date": ("Date the fraud answer becomes available", "Explains label delay; not a model input"),
+        "label_matured": ("Whether the fraud answer is ready", "Checks label readiness; not a model input"),
+    },
+    "customers": {
+        "cc_num": ("Card account identifier", "Joins tables and builds card-history features"),
+        "first": ("Cardholder first name", "Available but not used by this model"),
+        "last": ("Cardholder last name", "Available but not used by this model"),
+        "gender": ("Cardholder gender", "Available but not used by this model"),
+        "street": ("Home street", "Available but not used by this model"),
+        "city": ("Home city", "Available but not used by this model"),
+        "state": ("Home state", "Available but not used by this model"),
+        "zip": ("Home ZIP code", "Available but not used by this model"),
+        "lat": ("Home latitude", "Builds distance from home to merchant"),
+        "long": ("Home longitude", "Builds distance from home to merchant"),
+        "city_pop": ("Population of the home city", "Builds the log city-population feature"),
+        "job": ("Cardholder occupation", "Available but not used by this model"),
+        "dob": ("Date of birth", "Builds customer age"),
+    },
+}
+
+
+def _plain_dtype(series: pd.Series) -> str:
+    if isinstance(series.dtype, pd.CategoricalDtype):
+        return "category"
+    if pd.api.types.is_datetime64_any_dtype(series):
+        return "date/time"
+    if pd.api.types.is_bool_dtype(series):
+        return "true/false"
+    if pd.api.types.is_integer_dtype(series):
+        return "whole number"
+    if pd.api.types.is_float_dtype(series):
+        return "decimal number"
+    return "text or identifier"
+
+
+def profile_source_columns(frame: pd.DataFrame, table_name: str) -> pd.DataFrame:
+    """One row per source column: quality, meaning, and downstream use."""
+    catalog = SOURCE_COLUMN_CATALOG[table_name]
+    rows = []
+    for column in frame.columns:
+        meaning, usage = catalog.get(column, ("Not documented", "Review before use"))
+        missing = int(frame[column].isna().sum())
+        rows.append(
+            {
+                "Column": column,
+                "Plain meaning": meaning,
+                "Type": _plain_dtype(frame[column]),
+                "Missing": f"{missing:,} ({missing / len(frame):.1%})",
+                "Unique values": f"{frame[column].nunique(dropna=True):,}",
+                "How this notebook uses it": usage,
+            }
+        )
+    return pd.DataFrame(rows)
+
+
 def load_customers() -> pd.DataFrame:
     return pd.read_parquet(config.CUSTOMERS_PARQUET)
 

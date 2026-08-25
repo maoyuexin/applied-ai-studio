@@ -7,8 +7,8 @@ moment the customer presses Buy. A value recorded later -- a refund, a dispute,
 an analyst's review note -- predicts fraud beautifully in validation and is
 simply absent in production.
 
-**One definition.** This module is the only place a feature is defined. When the
-Flask scoring service is built it imports these same functions rather than
+**One definition.** This module is the only place a feature is defined. The
+FastAPI scoring service imports these same functions rather than
 reimplementing them, because a feature computed one way in a notebook and
 another way in a service is the most common reason a deployed model quietly
 stops matching its validation score.
@@ -40,6 +40,22 @@ NUMERIC_FEATURES = [
 ]
 
 CATEGORICAL_FEATURES = ["category"]
+
+MODEL_FEATURE_CATALOG = {
+    "amt": ("Direct numeric", "Transaction amount", "amt"),
+    "log_amt": ("Engineered", "Amount with large values compressed", "amt"),
+    "amt_ratio_to_card_mean": ("Engineered", "Amount compared with this card's earlier average", "amt + cc_num + unix_time"),
+    "card_txn_count_1h": ("Engineered", "Earlier transactions on this card in one hour", "cc_num + unix_time"),
+    "card_txn_count_24h": ("Engineered", "Earlier transactions on this card in 24 hours", "cc_num + unix_time"),
+    "minutes_since_prev_txn": ("Engineered", "Minutes since this card's previous purchase", "cc_num + unix_time"),
+    "distance_km": ("Engineered", "Distance from home to merchant", "lat + long + merch_lat + merch_long"),
+    "customer_age": ("Engineered", "Cardholder age when the purchase occurred", "dob + trans_date_trans_time"),
+    "log_city_pop": ("Engineered", "Home-city population with large values compressed", "city_pop"),
+    "hour": ("Engineered", "Local hour of purchase", "trans_date_trans_time"),
+    "is_night": ("Engineered", "Whether the purchase occurred late at night", "trans_date_trans_time"),
+    "is_weekend": ("Engineered", "Whether the purchase occurred on a weekend", "trans_date_trans_time"),
+    "category": ("Direct category", "Type of merchant; expanded into one yes/no column per category", "category"),
+}
 
 # The feature that ruins everything, kept deliberately so section 6 can show what
 # leakage looks like from the inside.
@@ -155,34 +171,32 @@ def align_columns(x: pd.DataFrame, reference: pd.DataFrame) -> pd.DataFrame:
     return x.reindex(columns=reference.columns, fill_value=0.0)
 
 
+def model_feature_catalog() -> pd.DataFrame:
+    """The conceptual model inputs and the source columns behind each one."""
+    names = list(NUMERIC_FEATURES) + list(CATEGORICAL_FEATURES)
+    return pd.DataFrame(
+        [
+            {
+                "Model input": name,
+                "Kind": MODEL_FEATURE_CATALOG[name][0],
+                "Plain meaning": MODEL_FEATURE_CATALOG[name][1],
+                "Built from source column(s)": MODEL_FEATURE_CATALOG[name][2],
+            }
+            for name in names
+        ]
+    )
+
+
 # ── Association analysis ────────────────────────────────────────────────────
 
-def correlation_frame(x: pd.DataFrame, method: str = "pearson") -> pd.DataFrame:
-    """Feature-to-feature correlation, on the numeric columns only.
-
-    Its useful job is spotting redundancy. Correlating a continuous feature
-    against a binary target with a 0.5% positive rate is close to meaningless,
-    which is why the target is deliberately not in this matrix.
-    """
-    return x[NUMERIC_FEATURES].corr(method=method)
-
-
-def mutual_information_frame(
-    x: pd.DataFrame, y: pd.Series, sample: int = 80_000, seed: int = 42
+def correlation_frame(
+    frame: pd.DataFrame, method: str = "pearson", include_target: bool = True
 ) -> pd.DataFrame:
-    """What correlation cannot do: measure association with a rare binary target."""
-    from sklearn.feature_selection import mutual_info_classif
-
-    if len(x) > sample:
-        idx = np.random.default_rng(seed).choice(len(x), sample, replace=False)
-        x, y = x.iloc[idx], y.iloc[idx]
-
-    scores = mutual_info_classif(x, y, random_state=seed, discrete_features=False)
-    return (
-        pd.DataFrame({"Feature": x.columns, "Mutual information": scores})
-        .sort_values("Mutual information", ascending=False)
-        .reset_index(drop=True)
-    )
+    """Correlation among numeric model features and, optionally, the binary target."""
+    columns = list(NUMERIC_FEATURES)
+    if include_target:
+        columns.append("is_fraud")
+    return frame[columns].corr(method=method)
 
 
 def single_feature_signal(

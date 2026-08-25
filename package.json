@@ -10,14 +10,19 @@
   ],
   "scripts": {
     "predev": "npm run build -w @applied-ai-studio/contracts",
-    "dev": "concurrently -n catalog,agent,orders,web -c yellow,cyan,magenta,green \"npm run dev -w @applied-ai-studio/catalog-api\" \"npm run dev -w @applied-ai-studio/agent-api\" \"npm run dev:orders\" \"npm run dev -w @applied-ai-studio/web\"",
+    "dev": "concurrently -n catalog,agent,orders,fraud,web -c yellow,cyan,magenta,red,green \"npm run dev -w @applied-ai-studio/catalog-api\" \"npm run dev -w @applied-ai-studio/agent-api\" \"npm run dev:orders\" \"npm run dev:fraud\" \"npm run dev -w @applied-ai-studio/web\"",
     "dev:orders": "node scripts/venv-python.mjs -m uvicorn app.main:app --app-dir services/order-api --host 127.0.0.1 --port 4330 --reload --reload-dir services/order-api/app --reload-dir services/order-api/migrations --timeout-graceful-shutdown 2",
+    "dev:fraud": "node scripts/venv-python.mjs -m uvicorn app.main:app --app-dir services/fraud-api --host 127.0.0.1 --port 4340 --reload --reload-dir services/fraud-api/app --timeout-graceful-shutdown 2",
     "setup:orders": "node scripts/venv-python.mjs -m pip install -e \"services/order-api[dev]\"",
+    "setup:fraud": "node scripts/venv-python.mjs -m pip install -e \"services/fraud-api[dev]\"",
     "setup:notebook": "node scripts/venv-python.mjs -m pip install -e \"services/order-api[notebook]\"",
-    "build": "npm run build -w @applied-ai-studio/contracts && npm run build -w @applied-ai-studio/catalog-api && npm run build -w @applied-ai-studio/agent-api && npm run build:orders && npm run build -w @applied-ai-studio/web",
+    "prepare:fraud": "node scripts/venv-python.mjs notebooks/fraud-detection/scripts/prepare_app_artifacts.py",
+    "build": "npm run build -w @applied-ai-studio/contracts && npm run build -w @applied-ai-studio/catalog-api && npm run build -w @applied-ai-studio/agent-api && npm run build:orders && npm run build:fraud && npm run build -w @applied-ai-studio/web",
     "build:orders": "node scripts/venv-python.mjs -m compileall -q services/order-api/app services/order-api/migrations",
-    "test": "npm run test -w @applied-ai-studio/catalog-api && npm run test:orders",
+    "build:fraud": "node scripts/venv-python.mjs -m compileall -q services/fraud-api/app",
+    "test": "npm run test -w @applied-ai-studio/catalog-api && npm run test:orders && npm run test:fraud",
     "test:orders": "node scripts/venv-python.mjs -m pytest services/order-api/tests -q",
+    "test:fraud": "node scripts/venv-python.mjs -m pytest services/fraud-api/tests -q",
     "check": "npm run test && npm run build"
   },
   "devDependencies": {

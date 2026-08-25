@@ -18,10 +18,10 @@ export default function ShowcasePage() {
       .catch((reason: Error) => setError(reason.message));
   }, []);
 
-  const courseLabs = items.filter((item) => item.courseCaseId);
-  const industries = [...new Map(courseLabs.map((item) => [item.industry, item.industryLabel])).entries()];
+  const showcaseItems = items.filter((item) => item.courseCaseId || item.demoStatus === "available");
+  const industries = [...new Map(showcaseItems.map((item) => [item.industry, item.industryLabel])).entries()];
   const normalized = query.trim().toLocaleLowerCase();
-  const filtered = courseLabs.filter((item) => {
+  const filtered = showcaseItems.filter((item) => {
     if (industry !== "all" && item.industry !== industry) return false;
     if (!normalized) return true;
     return [item.title, item.summary, item.industryLabel, ...item.capabilities, ...item.patterns]
@@ -44,10 +44,10 @@ export default function ShowcasePage() {
       </header>
 
       <section className="metric-strip" aria-label="Catalog summary">
-        <div><strong>{courseLabs.length}</strong><span>workflows</span></div>
+        <div><strong>{showcaseItems.length}</strong><span>workflows and labs</span></div>
         <div><strong>{industries.length}</strong><span>industries</span></div>
-        <div><strong>{new Set(courseLabs.flatMap((item) => item.capabilities)).size}</strong><span>AI capabilities</span></div>
-        <div><strong>{courseLabs.filter((item) => item.riskLevel === "high").length}</strong><span>high-review cases</span></div>
+        <div><strong>{new Set(showcaseItems.flatMap((item) => item.capabilities)).size}</strong><span>AI capabilities</span></div>
+        <div><strong>{showcaseItems.filter((item) => item.riskLevel === "high").length}</strong><span>high-review cases</span></div>
       </section>
 
       <div className="catalog-toolbar">
@@ -75,6 +75,8 @@ export default function ShowcasePage() {
               : `/workflow?case=${encodeURIComponent(item.id)}`;
             const demoTarget = item.id === "retail-online-order-decision-lab"
               ? "/online-order?view=customer"
+              : item.id === "financial-fraud-detection-lab"
+                ? "/fraud"
               : `/demo?case=${encodeURIComponent(item.id)}`;
             return (
               <article key={item.id} className={`use-case-card accent-${item.accent}`}>
@@ -93,12 +95,12 @@ export default function ShowcasePage() {
                   </div>
                 </div>
                 <div className="case-card-actions">
-                  <button type="button" onClick={() => navigate(workflowTarget)}>
-                    <Workflow size={14} aria-hidden="true" /> Workflow
-                  </button>
-                  {/* Only Online Order has a runnable demo today. Showing a "Demo" button on
-                      the other five sent students to a roadmap placeholder, which reads as a
-                      broken link rather than a plan. Hide it until the demo actually exists. */}
+                  {item.courseCaseId ? (
+                    <button type="button" onClick={() => navigate(workflowTarget)}>
+                      <Workflow size={14} aria-hidden="true" /> Workflow
+                    </button>
+                  ) : null}
+                    {/* Planned demos stay hidden so students never land on a roadmap placeholder. */}
                   {item.demoStatus === "available" ? (
                     <button type="button" onClick={() => navigate(demoTarget)}>
                       <Play size={14} aria-hidden="true" /> Demo

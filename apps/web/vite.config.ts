@@ -25,6 +25,7 @@ export default defineConfig({
     hmr: inCodespaces ? { clientPort: 443, protocol: "wss" } : undefined,
     port: Number(process.env.WEB_PORT ?? 5173),
     proxy: {
+      "/api/fraud": process.env["services__fraud__http__0"] ?? "http://127.0.0.1:4340",
       "/api/orders": {
         target: process.env["services__orders__http__0"] ?? "http://127.0.0.1:4330",
         configure: (proxy) => {

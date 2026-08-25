@@ -103,7 +103,7 @@ def confusion_frame(result: dict[str, float]) -> pd.DataFrame:
     return pd.DataFrame(
         {
             "Actually fraud": [result["tp"], result["fn"], result["tp"] + result["fn"]],
-            "Actually clean": [result["fp"], result["tn"], result["fp"] + result["tn"]],
+            "Actually normal": [result["fp"], result["tn"], result["fp"] + result["tn"]],
             "Row total": [
                 result["tp"] + result["fp"],
                 result["fn"] + result["tn"],
@@ -150,6 +150,61 @@ def evaluate_at_budget(
     flagged = flag_top_k(scores, int(round(budget * len(scores))))
     threshold = float(scores[flagged].min()) if flagged.any() else float("inf")
     return _summarise(y_true, flagged, amounts, threshold)
+
+
+def prediction_examples(
+    frame: pd.DataFrame, scores: np.ndarray, threshold: float
+) -> pd.DataFrame:
+    """Four transactions that make the score-to-decision rule visible."""
+    work = frame[
+        ["trans_date_trans_time", "amt", "category", "hour",
+         "amt_ratio_to_card_mean", "card_txn_count_24h"]
+    ].copy()
+    work["Model score"] = np.asarray(scores, dtype=float)
+
+    above = work[work["Model score"] >= threshold]
+    below = work[work["Model score"] < threshold]
+
+    def nearest(frame: pd.DataFrame, target: float) -> pd.DataFrame:
+        if frame.empty:
+            return frame
+        index = (frame["Model score"] - target).abs().idxmin()
+        return frame.loc[[index]]
+
+    selections = [
+        ("Highest risk", work.nlargest(1, "Model score")),
+        ("Above cutoff example", nearest(above, min(threshold + 0.10, 1.0))),
+        ("Below cutoff example", nearest(below, max(threshold - 0.10, 0.0))),
+        ("Lowest risk", work.nsmallest(1, "Model score")),
+    ]
+
+    rows = []
+    for example, selection in selections:
+        if selection.empty:
+            continue
+        row = selection.iloc[0]
+        score = float(row["Model score"])
+        flagged = score >= threshold
+        rows.append(
+            {
+                "Example": example,
+                "Transaction": row["trans_date_trans_time"],
+                "Amount": row["amt"],
+                "Category": row["category"],
+                "Observed context": (
+                    f"{int(row['hour']):02d}:00; "
+                    f"{row['amt_ratio_to_card_mean']:.1f}x card average; "
+                    f"{int(row['card_txn_count_24h'])} prior 24h txns"
+                ),
+                "Estimated fraud probability": score,
+                "Decision": "Send to review" if flagged else "Do not flag",
+                "Why this decision": (
+                    f"Score is {'at or above' if flagged else 'below'} "
+                    f"the {threshold:.1%} cutoff"
+                ),
+            }
+        )
+    return pd.DataFrame(rows)
 
 
 def weekly_performance(

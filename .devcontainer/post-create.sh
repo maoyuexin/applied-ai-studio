@@ -67,6 +67,12 @@ npm run setup:orders
 echo "==> Installing the fraud-detection notebook toolkit"
 npm run setup:notebook
 
+echo "==> Installing the Fraud Detection Lab service"
+npm run setup:fraud
+
+echo "==> Preparing the Fraud Detection Lab model"
+npm run prepare:fraud
+
 cat <<'BANNER'
 
 ==================================================================

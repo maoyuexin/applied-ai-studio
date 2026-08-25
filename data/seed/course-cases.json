@@ -234,6 +234,192 @@
     "source": "synthetic-workflow-assumption"
   },
   {
+    "id": "financial-fraud-detection",
+    "title": "One Card Transaction",
+    "subtitle": "From authorization request to accountable fraud outcome",
+    "industry": "Financial Services",
+    "learningObjective": "Map payment screening as an operating process, separate the learned classification from policy routing, and preserve human authority over fraud determination.",
+    "throughline": "The model prioritizes review; policy routes work; a human determines fraud.",
+    "introduction": {
+      "title": "What happens between a card purchase and a fraud outcome?",
+      "context": "A fraud score is only one signal inside a payment-screening process. A transaction must be validated, represented with point-in-time information, scored, tested against an operating cutoff, and sometimes investigated before anyone can determine whether fraud occurred.",
+      "workflow": "The workflow follows one card transaction through request validation, known-block checks, point-in-time feature preparation, random-forest classification, cutoff policy, authorization, analyst review, evidence collection, and outcome recording. Exception paths reveal the correction and investigation work hidden behind the normal authorization path.",
+      "startsWhen": "A cardholder submits a purchase and the payment gateway receives an authorization request.",
+      "endsWhen": "The transaction continues as normal or a fraud analyst records an evidence-supported case outcome."
+    },
+    "stages": [
+      {"id": "input", "label": "Inputs", "description": "Purchase, merchant, time, location, prior card activity"},
+      {"id": "process", "label": "Process", "description": "Validate, engineer features, score, investigate"},
+      {"id": "decision", "label": "Decision", "description": "Valid? Known block? Review? Fraud occurred?"},
+      {"id": "action", "label": "Action", "description": "Continue authorization, correct, queue, or intervene"},
+      {"id": "outcome", "label": "Outcome", "description": "Normal transaction or confirmed fraud outcome"}
+    ],
+    "baseline": [
+      {"value": "3%", "label": "held-out traffic reviewed", "note": "Current fixed review budget"},
+      {"value": "72.9%", "label": "ranking-score cutoff", "note": "Current held-out operating policy"},
+      {"value": "91.1%", "label": "known fraud caught", "note": "Recall on the held-out future period"},
+      {"value": "18.7%", "label": "reviewed alerts confirmed fraud", "note": "Precision in the held-out review queue"},
+      {"value": "25", "label": "transactions routed to review", "note": "Prepared held-out replay stream"}
+    ],
+    "lanes": [
+      {"id": "cardholder", "label": "Cardholder", "order": 0},
+      {"id": "gateway", "label": "Payment gateway", "order": 1},
+      {"id": "features", "label": "Feature service", "order": 2},
+      {"id": "model-policy", "label": "Model and policy service", "order": 3},
+      {"id": "fraud-ops", "label": "Fraud operations", "order": 4},
+      {"id": "monitoring", "label": "Outcome monitoring", "order": 5}
+    ],
+    "nodes": [
+      {"id": "transaction", "label": "Purchase submitted", "lane": "cardholder", "kind": "start", "x": 25, "documented": true},
+      {"id": "validate", "label": "Request structurally valid?", "lane": "gateway", "kind": "decision", "x": 145, "documented": true, "decisionId": "validation"},
+      {"id": "known-block", "label": "Known blocked instrument?", "lane": "gateway", "kind": "decision", "x": 285, "documented": true, "decisionId": "blocklist"},
+      {"id": "features", "label": "Build point-in-time features", "lane": "features", "kind": "process", "x": 425, "documented": true},
+      {"id": "classify", "label": "Fraud pattern suspected?", "lane": "model-policy", "kind": "decision", "x": 565, "documented": true, "decisionId": "classification"},
+      {"id": "cutoff", "label": "At or above review cutoff?", "lane": "model-policy", "kind": "decision", "x": 705, "documented": true, "decisionId": "cutoff"},
+      {"id": "authorize", "label": "Continue authorization", "lane": "gateway", "kind": "action", "x": 860, "documented": true},
+      {"id": "normal-outcome", "label": "Normal transaction path", "lane": "cardholder", "kind": "outcome", "x": 1160, "documented": true},
+      {"id": "correct-request", "label": "Correct request data", "lane": "cardholder", "kind": "process", "x": 285, "documented": false},
+      {"id": "review-queue", "label": "Prioritize analyst review", "lane": "fraud-ops", "kind": "process", "x": 855, "documented": false},
+      {"id": "evidence", "label": "Required evidence available?", "lane": "fraud-ops", "kind": "decision", "x": 970, "documented": false, "decisionId": "evidence"},
+      {"id": "collect-evidence", "label": "Collect missing evidence", "lane": "cardholder", "kind": "process", "x": 975, "documented": false},
+      {"id": "disposition", "label": "Did fraud occur?", "lane": "fraud-ops", "kind": "decision", "x": 1080, "documented": false, "decisionId": "disposition"},
+      {"id": "fraud-outcome", "label": "Confirmed outcome recorded", "lane": "monitoring", "kind": "outcome", "x": 1180, "documented": false}
+    ],
+    "edges": [
+      {"id": "e1", "from": "transaction", "to": "validate", "label": "submit", "kind": "normal", "documented": true},
+      {"id": "e2", "from": "validate", "to": "known-block", "label": "valid", "kind": "normal", "documented": true},
+      {"id": "e3", "from": "known-block", "to": "features", "label": "clear", "kind": "normal", "documented": true},
+      {"id": "e4", "from": "features", "to": "classify", "label": "features", "kind": "normal", "documented": true},
+      {"id": "e5", "from": "classify", "to": "cutoff", "label": "ranking score", "kind": "normal", "documented": true},
+      {"id": "e6", "from": "cutoff", "to": "authorize", "label": "below cutoff", "kind": "normal", "documented": true},
+      {"id": "e7", "from": "authorize", "to": "normal-outcome", "label": "continue", "kind": "normal", "documented": true},
+      {"id": "x1", "from": "validate", "to": "correct-request", "label": "invalid", "labelDy": -18, "kind": "exception", "documented": false},
+      {"id": "x2", "from": "correct-request", "to": "validate", "label": "resubmit", "kind": "loop", "documented": false},
+      {"id": "x3", "from": "known-block", "to": "review-queue", "label": "known match", "labelDy": 20, "kind": "exception", "documented": false},
+      {"id": "x4", "from": "cutoff", "to": "review-queue", "label": "at or above", "labelDy": -18, "kind": "exception", "documented": false},
+      {"id": "x5", "from": "review-queue", "to": "evidence", "label": "investigate", "kind": "exception", "documented": false},
+      {"id": "x6", "from": "evidence", "to": "collect-evidence", "label": "missing", "kind": "exception", "documented": false},
+      {"id": "x7", "from": "collect-evidence", "to": "evidence", "label": "restored", "kind": "loop", "documented": false},
+      {"id": "x8", "from": "evidence", "to": "disposition", "label": "complete", "kind": "exception", "documented": false},
+      {"id": "x9", "from": "disposition", "to": "authorize", "label": "normal", "labelDy": 28, "kind": "loop", "documented": false},
+      {"id": "x10", "from": "disposition", "to": "fraud-outcome", "label": "fraud confirmed", "kind": "exception", "documented": false}
+    ],
+    "decisions": [
+      {
+        "id": "validation",
+        "label": "Is the authorization request structurally valid?",
+        "owner": "Payment gateway",
+        "frequency": "Every authorization request",
+        "wrongCost": "A malformed request enters scoring, or a valid purchase is rejected before screening",
+        "verdict": "rule",
+        "verdictLabel": "Use a rule",
+        "testAnswer": "No. Required fields, formats, ranges, and timestamps are explicit interface requirements.",
+        "why": "The validity conditions are known in advance and should behave consistently without learning from outcomes.",
+        "recommendation": "Apply deterministic schema, range, timestamp, and required-field validation before feature engineering.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "blocklist",
+        "label": "Is the card, account, or merchant on a known block list?",
+        "owner": "Fraud policy service",
+        "frequency": "Every structurally valid request",
+        "wrongCost": "A known threat continues, or stale policy blocks a legitimate purchase",
+        "verdict": "rule",
+        "verdictLabel": "Use a rule",
+        "testAnswer": "No. An exact match against an approved, current list is deterministic policy logic.",
+        "why": "Known blocks should remain explicit, versioned, and auditable rather than hidden inside model behavior.",
+        "recommendation": "Use versioned exact-match rules with ownership, expiration, and an exception path for disputed entries.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "classification",
+        "label": "Does this transaction resemble known fraud patterns?",
+        "owner": "Fraud model service",
+        "frequency": "Every transaction that passes deterministic checks",
+        "wrongCost": "Fraud is missed, or a normal transaction consumes scarce analyst capacity",
+        "verdict": "ai-classification",
+        "verdictLabel": "AI · Classification",
+        "testAnswer": "Yes. Confirmed outcomes reveal changing combinations of amount, velocity, merchant, time, location, and customer context.",
+        "why": "The relationship between point-in-time transaction context and later fraud outcomes is learned from labeled examples rather than fully written as rules.",
+        "recommendation": "Produce an uncalibrated ranking score, then keep the review cutoff and final fraud determination outside the model.",
+        "aiRelevant": true,
+        "placement": "decision",
+        "design": {
+          "data": {
+            "summary": "Synthetic card transactions joined to merchant context, prior card activity, customer context, and confirmed historical outcomes.",
+            "owner": "Payment data platform and fraud operations",
+            "readiness": "Prepared point-in-time features with an earlier training window and later held-out test period",
+            "fields": ["Amount", "Merchant category", "Transaction time", "Card velocity", "Minutes since prior purchase", "Distance from home", "Customer age", "Home-city population", "Confirmed outcome"],
+            "risk": "Historical labels arrive after the decision and may reflect investigation coverage; feature generation must exclude future information."
+          },
+          "method": {
+            "pattern": "classification",
+            "output": "An uncalibrated ranking score used to prioritize review",
+            "technique": "Random forest with random undersampling, packaged as an MLflow pyfunc"
+          },
+          "metric": {
+            "technical": "91.1% recall and 18.7% precision at a fixed 3% review budget on the held-out future period.",
+            "business": "Catch most known fraud while limiting the queue to the analyst capacity represented by the 3% review budget.",
+            "baseline": "A 72.9% ranking-score cutoff routes 25 prepared held-out transactions to review"
+          },
+          "human": {
+            "role": "Fraud analyst",
+            "checkpoint": "Investigate evidence for prioritized transactions and record the final case outcome.",
+            "falsePositiveCost": "A normal transaction consumes analyst time and may delay or inconvenience the cardholder.",
+            "falseNegativeCost": "Fraud continues and can create financial loss, recovery work, and customer harm."
+          },
+          "architecture": ["Synthetic transaction stream", "Point-in-time feature builder", "MLflow random-forest model", "FastAPI scoring service", "Review-cutoff policy", "Analyst review queue", "Outcome and drift monitoring"]
+        }
+      },
+      {
+        "id": "cutoff",
+        "label": "Is the ranking score at or above the review cutoff?",
+        "owner": "Fraud policy service",
+        "frequency": "Every model-scored transaction",
+        "wrongCost": "The queue exceeds capacity, or high-ranked fraud is allowed to pass without review",
+        "verdict": "automation",
+        "verdictLabel": "Automate with policy",
+        "testAnswer": "No. Once the score and approved cutoff are available, the branch is a deterministic comparison.",
+        "why": "The model estimates rank; the 3% capacity constraint determines policy. Keeping them separate makes workload choices visible.",
+        "recommendation": "Version the cutoff, record which policy routed each transaction, and monitor queue volume and outcomes.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "evidence",
+        "label": "Is the required investigation evidence available?",
+        "owner": "Analyst workbench",
+        "frequency": "Every transaction routed to review",
+        "wrongCost": "An analyst decides from incomplete context, or a resolvable case waits unnecessarily",
+        "verdict": "automation",
+        "verdictLabel": "Automate evidence checks",
+        "testAnswer": "No. Required artifacts, access checks, freshness windows, and retrieval status can be stated explicitly.",
+        "why": "The system can assemble and verify the investigation packet without deciding what the evidence means.",
+        "recommendation": "Use deterministic completeness and freshness checks, then expose missing evidence rather than silently filling gaps.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "disposition",
+        "label": "Did fraud occur?",
+        "owner": "Fraud analyst",
+        "frequency": "Every completed review",
+        "wrongCost": "A legitimate customer is treated as fraudulent, or actual fraud remains unresolved",
+        "verdict": "human",
+        "verdictLabel": "Keep the human",
+        "testAnswer": "The ranking score is not proof. Final disposition depends on evidence, policy, customer context, and accountable judgment.",
+        "why": "This consequential decision creates the operational outcome and future training label; the reviewer must be able to challenge the model.",
+        "recommendation": "Present source evidence and model context, require an analyst disposition, and preserve appeal and correction paths.",
+        "aiRelevant": false,
+        "placement": "decision"
+      }
+    ],
+    "featuredDecisionId": "classification",
+    "source": "synthetic-workflow-assumption"
+  },
+  {
     "id": "manufacturing-maintenance",
     "title": "One Equipment Alert",
     "subtitle": "From noisy signal to safe return to service",

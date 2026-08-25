@@ -38,7 +38,7 @@ fraudlab/               the helper package, so cells stay short
   charts.py             every Plotly figure
   metrics.py            the confusion matrix and everything read off it
   models.py             candidates, balancing bake-off, sweep
-  handoff.py            the three artefacts a service consumes
+  handoff.py            the four artefacts a service consumes
 data/                   committed parquet — 42 MB, no download needed
 scripts/build_dataset.py  regenerates data/ from the Sparkov generator
 artifacts/              written by the notebook, gitignored
@@ -93,15 +93,25 @@ its validation score.
 
 ## Artefacts
 
-The last section writes three files to `artifacts/` (gitignored — rerun the notebook to
+The last section writes four artefacts to `artifacts/` (gitignored — rerun the notebook to
 recreate them):
 
 | File | What it is |
 |---|---|
 | `model.joblib` | the selected pipeline, exactly as it was scored |
+| `mlflow_model/` | the same pipeline as an MLflow pyfunc with an input signature |
 | `model_card.json` | what it is, how it was chosen, and what it measured |
 | `test_stream.parquet` | the held-out period, engineered, with labels |
 
-The final cell reloads all three and asserts they reproduce the numbers in the card. If
+The final cell reloads both model formats and asserts they reproduce the numbers in the card. If
 that assertion fails, the handoff is broken — which is far better to discover here than in
 front of a room.
+
+To prepare the same artifacts without changing the notebook file, then run the interactive
+FastAPI and React simulation:
+
+```bash
+npm run setup:fraud          # one time
+npm run prepare:fraud        # trains and verifies the model
+npm run dev                  # Fraud Detection Lab appears in Industry Workflows
+```
