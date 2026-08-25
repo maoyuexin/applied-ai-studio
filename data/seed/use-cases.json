@@ -107,6 +107,43 @@
     "source": "public-synthetic"
   },
   {
+    "id": "financial-fraud-detection-lab",
+    "title": "Card Transaction Fraud Detection",
+    "industry": "financial-services",
+    "industryLabel": "Financial Services",
+    "icon": "shield-alert",
+    "accent": "red",
+    "summary": "Score held-out card transactions with a deployed random forest, apply a fixed review cutoff, and compare model decisions with known outcomes.",
+    "problem": "Fraud teams must find most fraudulent purchases within a limited review budget without treating a model score as proof.",
+    "outcomes": ["Visible score-to-decision logic", "Reproducible MLflow model handoff", "Human-owned fraud determination"],
+    "capabilities": ["Tabular classification", "Threshold tuning", "Review prioritization"],
+    "patterns": ["MLflow model packaging", "Fixed review budget", "Human-in-the-loop"],
+    "workloadType": "decision-support",
+    "dataReadiness": "high",
+    "riskLevel": "high",
+    "maturity": "prototype",
+    "architecture": ["Synthetic transactions", "Shared feature engineering", "MLflow pyfunc", "FastAPI scoring", "Analyst review"],
+    "workflow": {
+      "nodes": [
+        {"id": "transaction", "label": "Card transaction", "kind": "input"},
+        {"id": "features", "label": "Causal features", "kind": "process"},
+        {"id": "score", "label": "Fraud score", "kind": "ai"},
+        {"id": "review", "label": "Analyst review", "kind": "human"},
+        {"id": "outcome", "label": "Case outcome", "kind": "output"}
+      ],
+      "edges": [
+        {"from": "transaction", "to": "features", "label": "prepare"},
+        {"from": "features", "to": "score", "label": "predict"},
+        {"from": "score", "to": "review", "label": "prioritize"},
+        {"from": "review", "to": "outcome", "label": "determine"}
+      ]
+    },
+    "demoPrompts": ["Why is the model score not proof of fraud?", "How does a 3% review budget determine the cutoff?"],
+    "courseCaseId": "financial-fraud-detection",
+    "demoStatus": "available",
+    "source": "public-synthetic"
+  },
+  {
     "id": "healthcare-operations-handoff",
     "title": "Referral-to-Appointment Coordination",
     "industry": "healthcare",

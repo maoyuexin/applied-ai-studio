@@ -13,12 +13,13 @@
   "postCreateCommand": "bash .devcontainer/post-create.sh",
   "waitFor": "postCreateCommand",
 
-  "forwardPorts": [5173],
+  "forwardPorts": [5173, 4310, 4320, 4330, 4340],
   "portsAttributes": {
     "5173": { "label": "Applied AI Studio", "onAutoForward": "openBrowserOnce" },
     "4310": { "label": "Catalog API", "onAutoForward": "silent" },
     "4320": { "label": "Copilot agent API", "onAutoForward": "silent" },
-    "4330": { "label": "Online Order API", "onAutoForward": "silent" }
+    "4330": { "label": "Online Order API", "onAutoForward": "silent" },
+    "4340": { "label": "Fraud Detection API", "onAutoForward": "silent" }
   },
 
   "customizations": {

@@ -5,6 +5,7 @@ import {
   HardHat,
   HeartPulse,
   Landmark,
+  ShieldAlert,
   ShoppingBag,
   Waves,
   type LucideIcon,
@@ -17,6 +18,7 @@ const iconMap: Record<string, LucideIcon> = {
   "hard-hat": HardHat,
   "heart-pulse": HeartPulse,
   landmark: Landmark,
+  "shield-alert": ShieldAlert,
   "shopping-bag": ShoppingBag,
   waves: Waves,
 };

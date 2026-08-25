@@ -62,6 +62,20 @@ anything back.
 That address is private to you. Your codespace is your own copy — nothing you
 do in it affects anyone else.
 
+### Keep a live demo from timing out
+
+GitHub stops a codespace after its idle timeout, which is 30 minutes by default.
+Simply leaving the app open in another browser tab may not count as activity:
+this single-page app can sit quietly without producing terminal output. For a
+live demo, set **GitHub Settings → Codespaces → Default idle timeout** to 90
+minutes before creating the codespace. GitHub applies that setting to new
+codespaces.
+
+If the app goes offline after sitting unused, return to the codespace and let it
+reconnect. Run `npm run dev` once only if the original command is no longer
+running. Always open port **5173**; do not use a second port offered by an older
+version of the project.
+
 ## 3. Using the app without Copilot (this is normal in week 1)
 
 In your first week your Student Developer Pack is probably still being approved,
@@ -123,6 +137,8 @@ always create a fresh one from the repository.
 | **`bash: npm: command not found`** (or `python`, or `node`) | Setup did not finish, so the tools were never installed. Reconnecting will not fix it. Delete the codespace and create a new one. |
 | Page shows nothing / connection refused | Make sure `npm run dev` is still running in the terminal; restart it if not. |
 | "Port 5173" notification never appeared | Ports tab → port 5173 → globe icon. |
+| App stopped after sitting open for about 30 minutes | The codespace reached its idle timeout. Reopen the codespace, then run `npm run dev` once if it is no longer running. For a live demo, set a 90-minute default timeout before creating the codespace. |
+| `npm run dev` says ports are already occupied | Do not start another copy. Open port 5173 if the existing app is healthy. Otherwise press Ctrl+C in the original dev terminal, wait for its prompt, and run `npm run dev` once. If that terminal is lost, run **Terminal: Kill All Terminals** from the command palette first. |
 | "Starter outline — written without AI" appears | Nothing is wrong. Copilot is not connected yet. Keep going; the outline is editable and scorable. |
 | Ask Studio says Copilot is unavailable | Your Student Pack is still pending, or you have not done step 4. Every other page works without it. |
 | **"You appear to be offline" / codespace will not connect** | Usually GitHub itself, not you. Check <https://www.githubstatus.com> first. If something there is red or orange, wait — there is nothing to fix on your side. |
