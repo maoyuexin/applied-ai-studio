@@ -20,7 +20,8 @@
     "build": "npm run build -w @applied-ai-studio/contracts && npm run build -w @applied-ai-studio/catalog-api && npm run build -w @applied-ai-studio/agent-api && npm run build:orders && npm run build:fraud && npm run build -w @applied-ai-studio/web",
     "build:orders": "node scripts/venv-python.mjs -m compileall -q services/order-api/app services/order-api/migrations",
     "build:fraud": "node scripts/venv-python.mjs -m compileall -q services/fraud-api/app",
-    "test": "npm run test -w @applied-ai-studio/catalog-api && npm run test:orders && npm run test:fraud",
+    "test": "npm run test:lifecycle && npm run test -w @applied-ai-studio/catalog-api && npm run test:orders && npm run test:fraud",
+    "test:lifecycle": "node --test scripts/start-dev-detached.test.mjs",
     "test:orders": "node scripts/venv-python.mjs -m pytest services/order-api/tests -q",
     "test:fraud": "node scripts/venv-python.mjs -m pytest services/fraud-api/tests -q",
     "check": "npm run test && npm run build"
