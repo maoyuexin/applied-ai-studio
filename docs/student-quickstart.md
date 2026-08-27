@@ -40,7 +40,7 @@ anything back.
    click the green **Code** button near the top right.
 2. Choose the **Codespaces** tab → **Create codespace on main**.
 3. Wait for the editor to open and for setup to finish — the terminal will say
-   **"Applied AI Studio is ready."** The first time takes a few minutes;
+   **"Applied AI Studio setup is ready."** The first time takes a few minutes;
    after that, reopening is fast.
 
    > **This line is your checkpoint.** If you never see it, setup did not
@@ -49,12 +49,8 @@ anything back.
    > repair itself, however many times you reconnect. Delete it and create a
    > new one.
 
-4. In the terminal at the bottom, type:
-
-   ```bash
-   npm run dev
-   ```
-
+4. Applied AI Studio starts automatically after setup and whenever the codespace
+   resumes. Do not type `npm run dev` in Codespaces.
 5. A notification appears saying the app is available on **port 5173** — click
    **Open in Browser**. (If you miss it: click the **Ports** tab next to the
    terminal, find port 5173, and click the globe icon.)
@@ -71,10 +67,10 @@ live demo, set **GitHub Settings → Codespaces → Default idle timeout** to 90
 minutes before creating the codespace. GitHub applies that setting to new
 codespaces.
 
-If the app goes offline after sitting unused, return to the codespace and let it
-reconnect. Run `npm run dev` once only if the original command is no longer
-running. Always open port **5173**; do not use a second port offered by an older
-version of the project.
+If the app goes offline after sitting unused, open the codespace itself from
+<https://github.com/codespaces> and let it reconnect. The forwarded application
+URL cannot wake a stopped codespace. Applied AI Studio restarts automatically;
+wait for port **5173**, then refresh the app.
 
 ## 3. Using the app without Copilot (this is normal in week 1)
 
@@ -135,10 +131,10 @@ always create a fresh one from the repository.
 | Symptom | Fix |
 | --- | --- |
 | **`bash: npm: command not found`** (or `python`, or `node`) | Setup did not finish, so the tools were never installed. Reconnecting will not fix it. Delete the codespace and create a new one. |
-| Page shows nothing / connection refused | Make sure `npm run dev` is still running in the terminal; restart it if not. |
+| Page cannot be found / connection refused | Open the codespace itself from <https://github.com/codespaces>; the forwarded app URL cannot wake a stopped codespace. After the editor reconnects, wait for port 5173 and refresh. |
 | "Port 5173" notification never appeared | Ports tab → port 5173 → globe icon. |
-| App stopped after sitting open for about 30 minutes | The codespace reached its idle timeout. Reopen the codespace, then run `npm run dev` once if it is no longer running. For a live demo, set a 90-minute default timeout before creating the codespace. |
-| `npm run dev` says ports are already occupied | Do not start another copy. Open port 5173 if the existing app is healthy. Otherwise press Ctrl+C in the original dev terminal, wait for its prompt, and run `npm run dev` once. If that terminal is lost, run **Terminal: Kill All Terminals** from the command palette first. |
+| App stopped after sitting open for about 30 minutes | The codespace reached its idle timeout. Reopen it from <https://github.com/codespaces>; the app restarts automatically. For a live demo, set a 90-minute default timeout before creating the codespace. |
+| `npm run dev` says ports are already occupied | The app already started automatically. Do not start another copy; open port 5173 from the Ports tab. If that app is unhealthy, stop and restart the codespace. |
 | "Starter outline — written without AI" appears | Nothing is wrong. Copilot is not connected yet. Keep going; the outline is editable and scorable. |
 | Ask Studio says Copilot is unavailable | Your Student Pack is still pending, or you have not done step 4. Every other page works without it. |
 | **"You appear to be offline" / codespace will not connect** | Usually GitHub itself, not you. Check <https://www.githubstatus.com> first. If something there is red or orange, wait — there is nothing to fix on your side. |

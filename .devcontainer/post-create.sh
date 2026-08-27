@@ -3,7 +3,7 @@
 #
 # This runs ONCE, automatically, when your codespace is first created.
 # You never run it by hand. It installs the two toolchains the app needs
-# (JavaScript and Python) so that "npm run dev" just works afterwards.
+# (JavaScript and Python); post-start.sh launches the app afterwards and on resume.
 #
 # If something here fails, the messages below are written for someone who has
 # never used a terminal. Read the last few lines - they say what to do next.
@@ -76,11 +76,10 @@ npm run prepare:fraud
 cat <<'BANNER'
 
 ==================================================================
- Applied AI Studio is ready.
+ Applied AI Studio setup is ready.
 
-   Start it by typing this in the terminal below:
-
-       npm run dev
+   The app starts automatically now and whenever this codespace
+   resumes. You do not need to type npm run dev in Codespaces.
 
    Then wait a few seconds. A box will pop up in the corner saying
    the app is running on port 5173 - click "Open in Browser".
