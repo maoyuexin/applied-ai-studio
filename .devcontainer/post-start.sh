@@ -24,8 +24,9 @@ node scripts/dev-preflight.mjs
 
 echo "==> Starting Applied AI Studio automatically"
 : >"${LOG_FILE}"
-nohup npm run dev >"${LOG_FILE}" 2>&1 </dev/null &
-app_pid=$!
+# Codespaces sends SIGHUP to the lifecycle process group when this script exits.
+# The Node helper creates a new session so the supervised stack survives it.
+app_pid="$(node scripts/start-dev-detached.mjs "${LOG_FILE}")"
 
 for _ in {1..60}; do
   if stack_is_healthy; then
