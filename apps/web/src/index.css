@@ -142,8 +142,13 @@ h1, h2, h3 { letter-spacing: 0; }
 .workflow-canvas-shell.is-fullscreen .workflow-canvas-toolbar { min-height: 48px; padding-inline: 14px; }
 .workflow-canvas-shell.is-fullscreen .business-flow-canvas { min-height: 0; height: 100%; display: grid; align-items: center; }
 .business-flow-canvas { min-height: 510px; overflow: auto; background: #12151b; }
-.business-flow-zoom-surface { min-width: 0; }
+.business-flow-canvas:focus-visible { outline: 2px solid var(--orange); outline-offset: -2px; }
+.business-flow-zoom-surface { position: relative; min-width: 0; }
 .business-flow-svg { display: block; width: 100%; height: auto; background: #12151b; }
+.workflow-node-controls { position: absolute; inset: 0; z-index: 1; }
+.workflow-node-controls button { position: absolute; padding: 0; border: 2px solid transparent; border-radius: 4px; background: transparent; pointer-events: auto; cursor: pointer; }
+.workflow-node-controls button:hover { border-color: rgba(255, 255, 255, 0.48); background: rgba(255, 255, 255, 0.04); }
+.workflow-node-controls button:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; background: rgba(232, 145, 60, 0.12); }
 .svg-flow-lane rect { fill: rgba(24, 26, 32, 0.48); stroke: rgba(46, 49, 64, 0.8); stroke-width: 1; }
 .svg-flow-lane text { fill: #858898; font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; }
 .svg-business-edge path { fill: none; stroke-width: 1.6; }
@@ -163,8 +168,6 @@ h1, h2, h3 { letter-spacing: 0; }
 .svg-course-node.kind-start .svg-node-shape, .svg-course-node.kind-outcome .svg-node-shape { stroke: var(--teal); }
 .svg-course-node.kind-action .svg-node-shape { stroke: var(--green); }
 .svg-course-node.has-decision { cursor: pointer; }
-.svg-course-node.has-decision:hover .svg-node-shape, .svg-course-node:focus .svg-node-shape { filter: brightness(1.16) drop-shadow(0 4px 7px rgba(0, 0, 0, 0.22)); stroke-width: 2.5; }
-.svg-course-node:focus { outline: none; }
 .svg-course-node.muted { opacity: 0.27; }
 .svg-course-node.verdict-rule .svg-node-shape { fill: #1d292d; stroke: var(--teal); }
 .svg-course-node.verdict-automation .svg-node-shape { fill: #2b251f; stroke: var(--orange-bright); }
@@ -1241,6 +1244,7 @@ input[type="range"] { height: 5px; padding: 0; border: 0; accent-color: var(--or
   .five-stage-strip > div:last-child { border-bottom: 0; }
   .five-stage-strip svg { right: 13px; transform: rotate(90deg); }
   .business-flow-canvas { min-height: 450px; }
+  .workflow-canvas-toolbar button { width: 44px; height: 44px; }
   .workflow-legend { align-items: flex-start; flex-wrap: wrap; }
   .workflow-legend strong { width: 100%; margin-left: 0; }
   .decision-grid { grid-template-columns: 1fr; }
@@ -1355,4 +1359,279 @@ input[type="range"] { height: 5px; padding: 0; border: 0; accent-color: var(--or
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; scroll-behavior: auto !important; transition: none !important; }
+}
+
+/* Pediatric chest X-ray prioritization */
+.pneumonia-page {
+  width: min(1660px, 100%);
+  --clinical-body: 13px;
+  --clinical-support: 12px;
+  --clinical-label: 10px;
+  --clinical-cyan: #8fc5cf;
+  --clinical-priority: #f0b429;
+  --clinical-standard: #6abf9b;
+}
+.pneumonia-page .page-back-button { min-height: 44px; }
+.pneumonia-header { min-height: 82px; margin-bottom: 15px; display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
+.pneumonia-header h1 { margin: 3px 0 6px; font-size: 29px; line-height: 1.2; }
+.pneumonia-header p { max-width: 870px; margin: 0; color: var(--text-secondary); font-size: 14px; line-height: 1.55; }
+.pneumonia-runtime-status { min-width: 260px; padding: 11px 13px; display: flex; align-items: center; gap: 10px; border: 1px solid var(--border); border-radius: 5px; background: var(--surface); }
+.pneumonia-runtime-status > span { width: 9px; height: 9px; flex: 0 0 auto; border-radius: 50%; background: var(--amber); box-shadow: 0 0 0 4px rgba(240, 180, 41, 0.1); }
+.pneumonia-runtime-status > span.ready { background: var(--green); box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.1); }
+.pneumonia-runtime-status strong, .pneumonia-runtime-status small { display: block; }
+.pneumonia-runtime-status strong { font-size: var(--clinical-body); }
+.pneumonia-runtime-status small { margin-top: 3px; color: var(--text-muted); font-family: var(--font-mono); font-size: var(--clinical-label); line-height: 1.4; }
+.pneumonia-safety-line { min-height: 49px; margin-bottom: 14px; padding: 9px 14px; display: grid; grid-template-columns: 20px auto minmax(0, 1fr); align-items: center; gap: 9px; border-top: 1px solid rgba(240, 180, 41, 0.45); border-bottom: 1px solid rgba(240, 180, 41, 0.45); background: rgba(240, 180, 41, 0.055); color: var(--clinical-priority); }
+.pneumonia-safety-line strong { font-size: var(--clinical-support); }
+.pneumonia-safety-line span { color: var(--text-secondary); font-size: var(--clinical-support); line-height: 1.45; }
+.pneumonia-metric-strip { display: grid; grid-template-columns: repeat(4, 1fr); margin-bottom: 15px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.pneumonia-metric-strip > div { min-width: 0; min-height: 82px; padding: 13px 17px; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid var(--border); }
+.pneumonia-metric-strip > div:last-child { border-right: 0; }
+.pneumonia-metric-strip strong { font-family: var(--font-mono); font-size: 21px; }
+.pneumonia-metric-strip span { margin-top: 3px; color: var(--text-secondary); font-size: var(--clinical-support); }
+.pneumonia-metric-strip small { margin-top: 3px; color: var(--text-muted); font-size: var(--clinical-label); }
+.pneumonia-workspace-switcher { min-height: 66px; margin-bottom: 16px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; background: var(--surface); }
+.pneumonia-workspace-switcher button { min-width: 0; min-height: 64px; padding: 10px 15px; display: flex; align-items: center; gap: 10px; border: 0; border-right: 1px solid var(--border); background: transparent; color: var(--text-muted); text-align: left; }
+.pneumonia-workspace-switcher button:last-child { border-right: 0; }
+.pneumonia-workspace-switcher button:hover, .pneumonia-workspace-switcher button.active { background: var(--surface-raised); color: var(--orange); }
+.pneumonia-workspace-switcher button.active { box-shadow: inset 0 -3px 0 var(--orange); }
+.pneumonia-workspace-switcher strong, .pneumonia-workspace-switcher small { display: block; }
+.pneumonia-workspace-switcher strong { color: var(--text); font-size: 14px; }
+.pneumonia-workspace-switcher small { margin-top: 3px; font-size: 11px; }
+
+.pneumonia-workbench { min-height: 780px; display: grid; grid-template-columns: minmax(220px, 0.32fr) minmax(450px, 0.92fr) minmax(400px, 0.72fr); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; background: var(--surface); }
+.pneumonia-workbench > * { min-width: 0; }
+.pneumonia-sample-browser, .pneumonia-image-panel { border-right: 1px solid var(--border); }
+.pneumonia-sample-browser > header, .pneumonia-image-panel > header, .pneumonia-result-panel > header { min-height: 74px; padding: 12px 14px; border-bottom: 1px solid var(--border); }
+.pneumonia-sample-browser > header { display: flex; flex-direction: column; justify-content: center; }
+.pneumonia-image-panel > header, .pneumonia-result-panel > header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.pneumonia-sample-browser > header span, .pneumonia-image-panel > header span, .pneumonia-result-panel > header span { color: var(--orange); font-family: var(--font-mono); font-size: var(--clinical-label); text-transform: uppercase; }
+.pneumonia-sample-browser > header strong, .pneumonia-image-panel > header strong, .pneumonia-result-panel > header strong { display: block; margin-top: 3px; font-size: var(--clinical-body); }
+.pneumonia-sample-browser > header small, .pneumonia-image-panel > header small, .pneumonia-result-panel > header small { display: block; margin-top: 3px; color: var(--text-muted); font-size: var(--clinical-label); }
+.pneumonia-result-panel > header > svg { color: var(--clinical-cyan); }
+.pneumonia-sample-list { max-height: 706px; overflow-y: auto; }
+.pneumonia-sample-list button { width: 100%; min-height: 84px; padding: 9px 11px; display: grid; grid-template-columns: 58px minmax(0, 1fr); align-items: center; gap: 10px; border: 0; border-bottom: 1px solid var(--border); background: transparent; color: var(--text-muted); text-align: left; }
+.pneumonia-sample-list button:hover, .pneumonia-sample-list button.active { background: var(--surface-raised); box-shadow: inset 3px 0 0 var(--orange); }
+.pneumonia-sample-list img { width: 58px; aspect-ratio: 1; display: block; object-fit: cover; border: 1px solid var(--border-strong); background: #08090c; }
+.pneumonia-sample-list div { min-width: 0; }
+.pneumonia-sample-list span { color: var(--clinical-cyan); font-family: var(--font-mono); font-size: var(--clinical-label); text-transform: uppercase; }
+.pneumonia-sample-list strong { display: block; margin-top: 4px; overflow-wrap: anywhere; color: var(--text); font-size: 11px; line-height: 1.35; }
+.pneumonia-sample-list small { display: block; margin-top: 4px; color: var(--text-muted); font-size: var(--clinical-label); }
+
+.pneumonia-image-panel, .pneumonia-result-panel { display: flex; flex-direction: column; }
+.pneumonia-image-toggle { display: flex; padding: 3px; border: 1px solid var(--border); border-radius: 4px; background: #101218; }
+.pneumonia-image-toggle button { min-height: 44px; padding: 0 10px; display: inline-flex; align-items: center; gap: 6px; border: 0; border-radius: 3px; background: transparent; color: var(--text-muted); font-size: var(--clinical-label); }
+.pneumonia-image-toggle button.active { background: var(--surface-raised); color: var(--clinical-cyan); }
+.pneumonia-image-stage { min-height: 392px; margin: 0; padding: 18px; position: relative; display: grid; place-items: center; border-bottom: 1px solid var(--border); background: radial-gradient(circle at 50% 42%, #1b2028 0, #0d0f13 68%); overflow: hidden; }
+.pneumonia-image-stage img { width: min(350px, 100%); aspect-ratio: 1; display: block; object-fit: contain; border: 1px solid #3f4654; background: #050608; box-shadow: 0 18px 38px rgba(0, 0, 0, 0.32); }
+.pneumonia-image-stage figcaption { position: absolute; right: 13px; bottom: 11px; left: 13px; padding: 8px 10px; display: flex; justify-content: space-between; gap: 12px; border: 1px solid rgba(63, 70, 84, 0.78); background: rgba(13, 15, 19, 0.88); backdrop-filter: blur(8px); }
+.pneumonia-image-stage figcaption span { color: var(--text-muted); font-size: var(--clinical-label); }
+.pneumonia-image-stage figcaption strong { font-family: var(--font-mono); font-size: var(--clinical-label); }
+.pneumonia-image-loading { color: var(--text-muted); font-size: var(--clinical-support); }
+.pneumonia-provenance-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-bottom: 1px solid var(--border); }
+.pneumonia-provenance-row > div { min-width: 0; min-height: 72px; padding: 10px 12px; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid var(--border); }
+.pneumonia-provenance-row > div:last-child { border-right: 0; }
+.pneumonia-provenance-row span { color: var(--text-muted); font-family: var(--font-mono); font-size: var(--clinical-label); text-transform: uppercase; }
+.pneumonia-provenance-row strong { margin-top: 4px; overflow-wrap: anywhere; font-size: var(--clinical-support); }
+.pneumonia-provenance-row small { margin-top: 3px; color: var(--text-muted); font-size: 9px; line-height: 1.35; }
+.pneumonia-transform-controls { padding: 15px 16px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; border-bottom: 1px solid var(--border); }
+.pneumonia-transform-controls label { min-width: 0; }
+.pneumonia-transform-controls label > span { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.pneumonia-transform-controls b { color: var(--text-secondary); font-size: var(--clinical-support); font-weight: 600; }
+.pneumonia-transform-controls output { color: var(--orange); font-family: var(--font-mono); font-size: var(--clinical-support); }
+.pneumonia-transform-controls input { margin: 13px 0 8px; accent-color: var(--orange); }
+.pneumonia-transform-controls small { display: block; color: var(--text-muted); font-size: 9px; line-height: 1.4; }
+.pneumonia-image-actions { margin-top: auto; min-height: 76px; padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+.pneumonia-image-actions > div { display: flex; gap: 8px; }
+.pneumonia-image-actions button { min-height: 44px; margin-top: 0; }
+.pneumonia-image-actions p { max-width: 250px; margin: 0; color: var(--text-muted); font-size: var(--clinical-label); line-height: 1.45; text-align: right; }
+
+.pneumonia-route-summary { min-height: 120px; padding: 15px 17px; display: grid; grid-template-columns: 29px minmax(0, 1fr) auto; align-items: center; gap: 14px; border-bottom: 1px solid var(--border); color: var(--clinical-standard); }
+.pneumonia-route-summary.priority_review { color: var(--clinical-priority); }
+.pneumonia-route-summary.quality_hold { color: var(--red); }
+.pneumonia-route-summary > div { min-width: 0; }
+.pneumonia-route-summary > div:last-child { text-align: right; }
+.pneumonia-route-summary span, .pneumonia-route-summary strong, .pneumonia-route-summary small { display: block; }
+.pneumonia-route-summary span { color: var(--text-muted); font-family: var(--font-mono); font-size: var(--clinical-label); text-transform: uppercase; }
+.pneumonia-route-summary strong { margin-top: 5px; overflow-wrap: anywhere; color: currentColor; font-size: 19px; line-height: 1.25; }
+.pneumonia-route-summary > div:last-child strong { font-family: var(--font-mono); font-size: 23px; }
+.pneumonia-route-summary small { margin-top: 4px; color: var(--text-secondary); font-size: var(--clinical-label); line-height: 1.4; }
+.pneumonia-quality-band { min-height: 67px; padding: 11px 15px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border); color: var(--clinical-standard); background: rgba(106, 191, 155, 0.045); }
+.pneumonia-quality-band.insufficient { color: var(--red); background: rgba(228, 90, 88, 0.05); }
+.pneumonia-quality-band span, .pneumonia-quality-band strong, .pneumonia-quality-band small { display: block; }
+.pneumonia-quality-band span { color: var(--text-muted); font-family: var(--font-mono); font-size: var(--clinical-label); text-transform: uppercase; }
+.pneumonia-quality-band strong { margin-top: 3px; font-size: var(--clinical-support); }
+.pneumonia-quality-band small { margin-top: 2px; color: var(--text-muted); font-size: 9px; }
+.pneumonia-score-axis { padding: 26px 17px 13px; border-bottom: 1px solid var(--border); }
+.pneumonia-score-track { height: 7px; position: relative; border-radius: 2px; background: linear-gradient(90deg, rgba(106, 191, 155, 0.6), rgba(240, 180, 41, 0.78)); }
+.pneumonia-cutoff-marker, .pneumonia-score-marker { position: absolute; top: 50%; width: 2px; height: 19px; transform: translate(-1px, -50%); background: var(--text); }
+.pneumonia-score-marker { width: 10px; height: 10px; transform: translate(-5px, -50%); border: 2px solid var(--text); border-radius: 50%; background: #111318; }
+.pneumonia-cutoff-marker b, .pneumonia-score-marker b { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); color: var(--text-muted); font-family: var(--font-mono); font-size: 7px; font-weight: 500; white-space: nowrap; }
+.pneumonia-score-marker b { top: 14px; bottom: auto; color: var(--text); }
+.pneumonia-score-axis > div:last-child { margin-top: 15px; display: flex; justify-content: space-between; color: var(--text-muted); font-size: 8px; }
+.pneumonia-quality-reasons { padding: 13px 16px; border-bottom: 1px solid var(--border); }
+.pneumonia-quality-reasons p { margin: 0 0 5px; color: var(--text-secondary); font-size: var(--clinical-label); line-height: 1.45; }
+.pneumonia-quality-reasons strong { color: var(--red); font-size: var(--clinical-label); }
+.pneumonia-decision-chain { padding: 14px; display: grid; grid-template-columns: minmax(0, 1fr) 16px minmax(0, 1fr) 16px minmax(0, 1fr); align-items: center; gap: 6px; border-bottom: 1px solid var(--border); }
+.pneumonia-decision-chain > div { min-width: 0; display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 3px 6px; color: var(--clinical-cyan); }
+.pneumonia-decision-chain > div > svg { grid-row: 1 / 3; }
+.pneumonia-decision-chain > svg { color: var(--text-muted); }
+.pneumonia-decision-chain span { color: var(--text-muted); font-size: 8px; }
+.pneumonia-decision-chain strong { overflow-wrap: anywhere; color: var(--text-secondary); font-size: 9px; line-height: 1.35; text-transform: capitalize; }
+.pneumonia-label-band { min-height: 70px; padding: 11px 15px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border); color: var(--clinical-cyan); }
+.pneumonia-label-band span, .pneumonia-label-band strong, .pneumonia-label-band small { display: block; }
+.pneumonia-label-band span { color: var(--text-muted); font-family: var(--font-mono); font-size: var(--clinical-label); text-transform: uppercase; }
+.pneumonia-label-band strong { margin-top: 3px; font-size: var(--clinical-support); }
+.pneumonia-label-band small { margin-top: 2px; color: var(--text-muted); font-size: 9px; line-height: 1.4; }
+.pneumonia-influence-note { padding: 12px 15px; display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 9px; border-bottom: 1px solid var(--border); color: var(--clinical-cyan); }
+.pneumonia-influence-note p { margin: 0; color: var(--text-secondary); font-size: var(--clinical-label); line-height: 1.5; }
+.pneumonia-human-boundary { margin-top: auto; padding: 14px 15px; display: grid; grid-template-columns: 21px minmax(0, 1fr); gap: 9px; background: rgba(232, 145, 60, 0.06); color: var(--orange); }
+.pneumonia-human-boundary span { color: var(--orange); font-family: var(--font-mono); font-size: var(--clinical-label); text-transform: uppercase; }
+.pneumonia-human-boundary p { margin: 4px 0 0; color: var(--text-secondary); font-size: var(--clinical-label); line-height: 1.55; }
+.pneumonia-result-empty { min-height: 510px; display: grid; place-content: center; justify-items: center; color: var(--text-muted); text-align: center; }
+.pneumonia-result-empty strong { margin-top: 10px; color: var(--text-secondary); font-size: var(--clinical-body); }
+.pneumonia-result-empty p { max-width: 290px; margin: 6px 0 0; font-size: var(--clinical-label); line-height: 1.5; }
+
+.pneumonia-queue-workspace, .pneumonia-model-workspace { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; background: var(--surface); }
+.pneumonia-section-heading { min-height: 108px; padding: 18px 20px; display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; border-bottom: 1px solid var(--border); }
+.pneumonia-section-heading span, .pneumonia-confusion-section > header span, .pneumonia-robustness-section > header span, .pneumonia-model-boundaries > div > span, .pneumonia-error-review > header span { color: var(--orange); font-family: var(--font-mono); font-size: var(--clinical-label); text-transform: uppercase; }
+.pneumonia-section-heading h2 { margin: 5px 0; font-size: 20px; }
+.pneumonia-section-heading p { max-width: 800px; margin: 0; color: var(--text-secondary); font-size: var(--clinical-support); line-height: 1.55; }
+.pneumonia-section-heading > strong { min-width: max-content; padding: 8px 10px; display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--border); border-radius: 4px; color: var(--clinical-cyan); font-family: var(--font-mono); font-size: var(--clinical-label); }
+.pneumonia-queue-summary, .pneumonia-model-facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-bottom: 1px solid var(--border); }
+.pneumonia-queue-summary > div { min-width: 0; min-height: 92px; padding: 14px 18px; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid var(--border); }
+.pneumonia-queue-summary > div:last-child { border-right: 0; }
+.pneumonia-queue-summary span { color: var(--text-muted); font-size: var(--clinical-label); }
+.pneumonia-queue-summary strong { margin-top: 4px; font-family: var(--font-mono); font-size: 20px; }
+.pneumonia-queue-summary small { margin-top: 4px; color: var(--text-secondary); font-size: var(--clinical-label); line-height: 1.4; }
+.pneumonia-retrospective-note { padding: 12px 18px; display: flex; align-items: flex-start; gap: 9px; border-bottom: 1px solid var(--border); background: rgba(126, 174, 184, 0.055); color: var(--clinical-cyan); }
+.pneumonia-retrospective-note p { margin: 0; color: var(--text-secondary); font-size: var(--clinical-label); line-height: 1.5; }
+.pneumonia-queue-table-wrap { overflow-x: auto; }
+.pneumonia-queue-table { width: 100%; min-width: 1040px; border-collapse: collapse; }
+.pneumonia-queue-table th { height: 42px; padding: 0 14px; border-bottom: 1px solid var(--border); color: var(--text-muted); font-family: var(--font-mono); font-size: 9px; font-weight: 500; text-align: left; text-transform: uppercase; }
+.pneumonia-queue-table td { height: 65px; padding: 9px 14px; border-bottom: 1px solid var(--border); color: var(--text-secondary); font-size: 11px; }
+.pneumonia-queue-table tbody tr:hover { background: var(--surface-raised); }
+.pneumonia-queue-table td:first-child strong, .pneumonia-queue-table td:first-child span { display: block; }
+.pneumonia-queue-table td:first-child strong { color: var(--text); font-family: var(--font-mono); font-size: 10px; }
+.pneumonia-queue-table td:first-child span { margin-top: 3px; color: var(--text-muted); font-size: 8px; }
+.pneumonia-table-score { min-width: 100px; }
+.pneumonia-table-score strong { color: var(--clinical-priority); font-family: var(--font-mono); font-size: 10px; }
+.pneumonia-table-score i { width: 82px; height: 4px; margin-top: 5px; display: block; overflow: hidden; background: var(--surface-raised); }
+.pneumonia-table-score i b { height: 100%; display: block; background: var(--clinical-priority); }
+.pneumonia-route-pill { padding: 4px 6px; border: 1px solid currentColor; border-radius: 3px; font-family: var(--font-mono); font-size: 8px; white-space: nowrap; }
+.pneumonia-route-pill.priority_review { color: var(--clinical-priority); }
+.pneumonia-route-pill.standard_review { color: var(--clinical-standard); }
+.pneumonia-error-review { border-top: 1px solid var(--border); }
+.pneumonia-error-review > header { padding: 16px 19px; display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; border-bottom: 1px solid var(--border); }
+.pneumonia-error-review h3 { margin: 4px 0 0; font-size: 16px; }
+.pneumonia-error-review > header p { max-width: 420px; margin: 0; color: var(--text-muted); font-size: var(--clinical-label); line-height: 1.45; }
+.pneumonia-error-review > div { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.pneumonia-error-review article { min-width: 0; min-height: 91px; padding: 13px 15px; display: grid; grid-template-columns: 21px minmax(0, 1fr); gap: 9px; align-items: center; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); color: var(--clinical-priority); }
+.pneumonia-error-review article:nth-child(3n) { border-right: 0; }
+.pneumonia-error-review article.false_negative { color: var(--red); }
+.pneumonia-error-review article span, .pneumonia-error-review article strong, .pneumonia-error-review article small { display: block; }
+.pneumonia-error-review article span { color: var(--text-muted); font-family: var(--font-mono); font-size: var(--clinical-label); }
+.pneumonia-error-review article strong { margin-top: 3px; color: var(--text); font-size: var(--clinical-support); line-height: 1.35; }
+.pneumonia-error-review article small { margin-top: 4px; color: var(--text-muted); font-size: 9px; }
+
+.pneumonia-model-facts > div { min-width: 0; min-height: 112px; padding: 15px; display: grid; grid-template-columns: 22px minmax(0, 1fr); align-content: center; gap: 3px 8px; border-right: 1px solid var(--border); color: var(--clinical-cyan); }
+.pneumonia-model-facts > div:last-child { border-right: 0; }
+.pneumonia-model-facts svg { grid-row: 1 / 4; }
+.pneumonia-model-facts span { color: var(--text-muted); font-family: var(--font-mono); font-size: var(--clinical-label); text-transform: uppercase; }
+.pneumonia-model-facts strong { overflow-wrap: anywhere; color: var(--text); font-size: var(--clinical-support); line-height: 1.4; }
+.pneumonia-model-facts small { color: var(--text-muted); font-size: var(--clinical-label); line-height: 1.4; }
+.pneumonia-confusion-section, .pneumonia-robustness-section { border-bottom: 1px solid var(--border); }
+.pneumonia-confusion-section > header, .pneumonia-robustness-section > header { padding: 17px 19px; border-bottom: 1px solid var(--border); }
+.pneumonia-confusion-section h3, .pneumonia-robustness-section h3 { margin: 5px 0 0; font-size: 17px; }
+.pneumonia-confusion-layout { display: grid; grid-template-columns: minmax(460px, 1.2fr) minmax(320px, 0.8fr); }
+.pneumonia-confusion-table { width: 100%; border-collapse: collapse; }
+.pneumonia-confusion-table th, .pneumonia-confusion-table td { padding: 12px 15px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); text-align: left; }
+.pneumonia-confusion-table thead th { color: var(--text-muted); font-family: var(--font-mono); font-size: 9px; font-weight: 500; text-transform: uppercase; }
+.pneumonia-confusion-table tbody th { color: var(--text-secondary); font-size: var(--clinical-support); }
+.pneumonia-confusion-table td { min-width: 150px; }
+.pneumonia-confusion-table td strong { display: block; font-family: var(--font-mono); font-size: 22px; }
+.pneumonia-confusion-table td span { display: block; margin-top: 3px; color: var(--text-muted); font-size: var(--clinical-label); }
+.pneumonia-confusion-table tr:last-child > * { border-bottom: 0; }
+.pneumonia-evaluation-metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.pneumonia-evaluation-metrics div { min-height: 90px; padding: 14px 16px; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.pneumonia-evaluation-metrics div:nth-child(2n) { border-right: 0; }
+.pneumonia-evaluation-metrics div:nth-last-child(-n+2) { border-bottom: 0; }
+.pneumonia-evaluation-metrics span { color: var(--text-muted); font-size: var(--clinical-label); }
+.pneumonia-evaluation-metrics strong { margin-top: 5px; color: var(--clinical-cyan); font-family: var(--font-mono); font-size: 19px; }
+.pneumonia-robustness-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.pneumonia-robustness-grid > div { min-width: 0; min-height: 120px; padding: 15px 17px; border-right: 1px solid var(--border); }
+.pneumonia-robustness-grid > div:last-child { border-right: 0; }
+.pneumonia-robustness-grid strong, .pneumonia-robustness-grid span, .pneumonia-robustness-grid small { display: block; }
+.pneumonia-robustness-grid strong { font-size: var(--clinical-support); }
+.pneumonia-robustness-grid span { margin-top: 8px; color: var(--text-secondary); font-size: var(--clinical-label); }
+.pneumonia-robustness-grid span b { color: var(--clinical-cyan); font-family: var(--font-mono); }
+.pneumonia-robustness-grid i { height: 6px; margin-top: 7px; display: block; overflow: hidden; background: var(--surface-raised); }
+.pneumonia-robustness-grid i b { height: 100%; display: block; background: var(--clinical-cyan); }
+.pneumonia-robustness-grid small { margin-top: 7px; color: var(--text-muted); font-size: 9px; line-height: 1.4; }
+.pneumonia-model-boundaries { display: grid; grid-template-columns: 1.05fr 1fr 1fr; border-bottom: 1px solid var(--border); }
+.pneumonia-model-boundaries > div { min-width: 0; padding: 18px 19px; border-right: 1px solid var(--border); }
+.pneumonia-model-boundaries > div:last-child { border-right: 0; }
+.pneumonia-model-boundaries h3 { margin: 7px 0; font-size: 15px; line-height: 1.45; }
+.pneumonia-model-boundaries p, .pneumonia-model-boundaries li { color: var(--text-secondary); font-size: var(--clinical-label); line-height: 1.55; }
+.pneumonia-model-boundaries ul { margin: 8px 0 0; padding-left: 18px; }
+.pneumonia-model-boundaries li + li { margin-top: 5px; }
+.pneumonia-model-boundaries code { display: block; margin-top: 12px; overflow-wrap: anywhere; color: var(--clinical-cyan); font-size: 9px; }
+.pneumonia-authority-chain { padding: 16px 19px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr) 17px) minmax(0, 1fr); align-items: center; gap: 7px; background: #14161c; }
+.pneumonia-authority-chain > div { min-width: 0; display: grid; grid-template-columns: 19px minmax(0, 1fr); gap: 3px 7px; color: var(--clinical-cyan); }
+.pneumonia-authority-chain > div > svg { grid-row: 1 / 3; }
+.pneumonia-authority-chain > svg { color: var(--text-muted); }
+.pneumonia-authority-chain span { color: var(--text-muted); font-size: var(--clinical-label); }
+.pneumonia-authority-chain strong { overflow-wrap: anywhere; color: var(--text); font-size: var(--clinical-support); }
+
+@media (max-width: 1180px) {
+  .pneumonia-workbench { grid-template-columns: minmax(210px, 0.34fr) minmax(0, 1fr); }
+  .pneumonia-image-panel { border-right: 0; }
+  .pneumonia-result-panel { grid-column: 1 / -1; border-top: 1px solid var(--border); }
+  .pneumonia-result-empty { min-height: 280px; }
+  .pneumonia-model-facts, .pneumonia-robustness-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pneumonia-model-facts > div:nth-child(2), .pneumonia-robustness-grid > div:nth-child(2) { border-right: 0; }
+  .pneumonia-model-facts > div:nth-child(-n+2), .pneumonia-robustness-grid > div:nth-child(-n+2) { border-bottom: 1px solid var(--border); }
+  .pneumonia-confusion-layout { grid-template-columns: minmax(0, 1fr); }
+  .pneumonia-confusion-table th:last-child, .pneumonia-confusion-table td:last-child { border-right: 0; }
+  .pneumonia-evaluation-metrics { border-top: 1px solid var(--border); }
+}
+
+@media (max-width: 760px) {
+  .pneumonia-header, .pneumonia-section-heading, .pneumonia-error-review > header { flex-direction: column; }
+  .pneumonia-header h1 { font-size: 23px; }
+  .pneumonia-runtime-status { width: 100%; min-width: 0; }
+  .pneumonia-safety-line { grid-template-columns: 20px minmax(0, 1fr); }
+  .pneumonia-safety-line span { grid-column: 1 / -1; }
+  .pneumonia-metric-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pneumonia-metric-strip > div:nth-child(2) { border-right: 0; }
+  .pneumonia-metric-strip > div:nth-child(-n+2) { border-bottom: 1px solid var(--border); }
+  .pneumonia-workspace-switcher button { min-height: 64px; padding: 8px; justify-content: center; }
+  .pneumonia-workspace-switcher button > svg { display: none; }
+  .pneumonia-workspace-switcher small { display: none; }
+  .pneumonia-workbench { grid-template-columns: minmax(0, 1fr); }
+  .pneumonia-sample-browser, .pneumonia-image-panel { border-right: 0; border-bottom: 1px solid var(--border); }
+  .pneumonia-sample-list { max-height: 320px; }
+  .pneumonia-result-panel { grid-column: auto; border-top: 0; }
+  .pneumonia-image-panel > header { align-items: flex-start; flex-direction: column; }
+  .pneumonia-image-toggle { width: 100%; }
+  .pneumonia-image-toggle button { flex: 1; justify-content: center; }
+  .pneumonia-image-stage { min-height: 340px; padding: 14px; }
+  .pneumonia-provenance-row, .pneumonia-transform-controls { grid-template-columns: minmax(0, 1fr); }
+  .pneumonia-provenance-row > div { border-right: 0; border-bottom: 1px solid var(--border); }
+  .pneumonia-provenance-row > div:last-child { border-bottom: 0; }
+  .pneumonia-image-actions { align-items: stretch; flex-direction: column; }
+  .pneumonia-image-actions > div { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pneumonia-image-actions p { max-width: none; text-align: left; }
+  .pneumonia-route-summary { grid-template-columns: 29px minmax(0, 1fr); }
+  .pneumonia-route-summary > div:last-child { grid-column: 2; text-align: left; }
+  .pneumonia-decision-chain, .pneumonia-authority-chain { grid-template-columns: minmax(0, 1fr); }
+  .pneumonia-decision-chain > svg, .pneumonia-authority-chain > svg { margin-left: 7px; transform: rotate(90deg); }
+  .pneumonia-queue-summary, .pneumonia-model-facts, .pneumonia-robustness-grid, .pneumonia-model-boundaries { grid-template-columns: minmax(0, 1fr); }
+  .pneumonia-queue-summary > div, .pneumonia-model-facts > div, .pneumonia-robustness-grid > div, .pneumonia-model-boundaries > div { border-right: 0; border-bottom: 1px solid var(--border); }
+  .pneumonia-queue-summary > div:last-child, .pneumonia-model-facts > div:last-child, .pneumonia-robustness-grid > div:last-child, .pneumonia-model-boundaries > div:last-child { border-bottom: 0; }
+  .pneumonia-error-review > div { grid-template-columns: minmax(0, 1fr); }
+  .pneumonia-error-review article { border-right: 0; }
+  .pneumonia-confusion-section, .pneumonia-robustness-section { overflow-x: auto; }
+  .pneumonia-confusion-table { min-width: 560px; }
+  .pneumonia-evaluation-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }

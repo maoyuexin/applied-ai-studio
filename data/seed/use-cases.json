@@ -144,6 +144,110 @@
     "source": "public-synthetic"
   },
   {
+    "id": "healthcare-pneumonia-prioritization-lab",
+    "title": "Pediatric Chest X-ray Prioritization",
+    "industry": "healthcare",
+    "industryLabel": "Healthcare",
+    "icon": "heart-pulse",
+    "accent": "teal",
+    "summary": "Score packaged pediatric chest X-rays, apply a validation-selected review policy, and preserve radiologist and clinician authority.",
+    "problem": "Imaging queues need a reproducible way to test whether an image model could prioritize review without presenting its score as diagnosis or clearance.",
+    "outcomes": [
+      "Visible quality-to-queue routing",
+      "Reproducible notebook model handoff",
+      "Qualified interpretation retained"
+    ],
+    "capabilities": [
+      "Image classification",
+      "Threshold policy",
+      "Review prioritization"
+    ],
+    "patterns": [
+      "Technical quality gate",
+      "Artifact-backed scoring",
+      "Human authority"
+    ],
+    "workloadType": "vision-analysis",
+    "dataReadiness": "high",
+    "riskLevel": "high",
+    "maturity": "prototype",
+    "architecture": [
+      "PneumoniaMNIST archive",
+      "Compact PyTorch CNN",
+      "Validation-selected policy",
+      "FastAPI service",
+      "Review workbench"
+    ],
+    "workflow": {
+      "nodes": [
+        {
+          "id": "image",
+          "label": "Packaged chest X-ray",
+          "kind": "input"
+        },
+        {
+          "id": "quality",
+          "label": "Technical quality gate",
+          "kind": "process"
+        },
+        {
+          "id": "score",
+          "label": "Image model score",
+          "kind": "ai"
+        },
+        {
+          "id": "queue",
+          "label": "Priority or standard review",
+          "kind": "system"
+        },
+        {
+          "id": "radiologist",
+          "label": "Radiologist interpretation",
+          "kind": "human"
+        },
+        {
+          "id": "clinician",
+          "label": "Clinical decision",
+          "kind": "output"
+        }
+      ],
+      "edges": [
+        {
+          "from": "image",
+          "to": "quality",
+          "label": "check"
+        },
+        {
+          "from": "quality",
+          "to": "score",
+          "label": "sufficient"
+        },
+        {
+          "from": "score",
+          "to": "queue",
+          "label": "apply policy"
+        },
+        {
+          "from": "queue",
+          "to": "radiologist",
+          "label": "route"
+        },
+        {
+          "from": "radiologist",
+          "to": "clinician",
+          "label": "interpretation"
+        }
+      ]
+    },
+    "demoPrompts": [
+      "Why is standard review not clearance?",
+      "Why must the threshold be selected before touching the test split?"
+    ],
+    "courseCaseId": "healthcare-pediatric-xray-prioritization",
+    "demoStatus": "available",
+    "source": "public-benchmark"
+  },
+  {
     "id": "healthcare-operations-handoff",
     "title": "Referral-to-Appointment Coordination",
     "industry": "healthcare",

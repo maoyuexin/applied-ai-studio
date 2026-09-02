@@ -73,6 +73,12 @@ npm run setup:fraud
 echo "==> Preparing the Fraud Detection Lab model"
 npm run prepare:fraud
 
+echo "==> Installing the Chest X-ray Prioritization service"
+npm run setup:pneumonia
+
+echo "==> Preparing the Chest X-ray Prioritization model"
+npm run prepare:pneumonia
+
 cat <<'BANNER'
 
 ==================================================================

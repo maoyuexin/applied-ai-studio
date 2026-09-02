@@ -11,7 +11,7 @@ import { z } from "zod";
 const useCaseListSchema = z.object({
   items: z.array(useCaseSchema),
   total: z.number(),
-  source: z.literal("public-synthetic"),
+  source: z.literal("public-teaching"),
 });
 
 export class CatalogClient {
