@@ -51,6 +51,7 @@ const comparisonLabels: Record<PneumoniaComparison, string> = {
 };
 
 const percent = (value: number, digits = 1): string => `${(value * 100).toFixed(digits)}%`;
+const rankingScore = (value: number, digits = 3): string => value.toFixed(digits);
 const number = (value: number): string => new Intl.NumberFormat("en-US").format(value);
 const routeTitle = (route: PneumoniaScore["route"]): string => {
   if (route === "priority_review") return "Priority review";
@@ -279,7 +280,7 @@ export default function PneumoniaPage() {
                 <div className={`pneumonia-route-summary ${score.route}`}>
                   {score.route === "quality_hold" ? <AlertTriangle size={28} aria-hidden="true" /> : score.route === "priority_review" ? <ShieldAlert size={28} aria-hidden="true" /> : <CheckCircle2 size={28} aria-hidden="true" />}
                   <div><span>Workflow route</span><strong>{routeTitle(score.route)}</strong><small>{score.route_label}</small></div>
-                  <div><span>Model score</span><strong>{score.model_score === null ? "Held" : percent(score.model_score)}</strong><small>Cutoff {score.threshold.toFixed(3)}</small></div>
+                  <div><span>Model ranking score</span><strong>{score.model_score === null ? "Held" : rankingScore(score.model_score, 7)}</strong><small>Cutoff {rankingScore(score.threshold)}</small></div>
                 </div>
 
                 <div className={`pneumonia-quality-band ${score.quality.status}`}>
@@ -288,7 +289,7 @@ export default function PneumoniaPage() {
                 </div>
 
                 {score.model_score !== null ? (
-                  <div className="pneumonia-score-axis" aria-label={`Model score ${percent(score.model_score)}; policy cutoff ${percent(score.threshold)}`}>
+                  <div className="pneumonia-score-axis" aria-label={`Model ranking score ${rankingScore(score.model_score, 7)}; policy cutoff ${rankingScore(score.threshold)}`}>
                     <div className="pneumonia-score-track">
                       <span className="pneumonia-cutoff-marker" style={{ left: `${score.threshold * 100}%` }}><b>Cutoff</b></span>
                       <span className="pneumonia-score-marker" style={{ left: `${Math.min(score.model_score, 0.995) * 100}%` }}><b>Score</b></span>
@@ -305,7 +306,7 @@ export default function PneumoniaPage() {
                 <div className="pneumonia-decision-chain">
                   <div><Activity size={16} aria-hidden="true" /><span>Quality gate</span><strong>{score.quality.status}</strong></div>
                   <ArrowRight size={16} aria-hidden="true" />
-                  <div><BrainCircuit size={16} aria-hidden="true" /><span>Model estimate</span><strong>{score.model_score === null ? "Not used" : score.model_score.toFixed(3)}</strong></div>
+                  <div><BrainCircuit size={16} aria-hidden="true" /><span>Ranking score</span><strong>{score.model_score === null ? "Not used" : rankingScore(score.model_score, 7)}</strong></div>
                   <ArrowRight size={16} aria-hidden="true" />
                   <div><ClipboardList size={16} aria-hidden="true" /><span>Queue action</span><strong>{routeTitle(score.route)}</strong></div>
                 </div>
@@ -338,7 +339,7 @@ export default function PneumoniaPage() {
       {workspace === "queue" && model && queue ? (
         <section className="pneumonia-queue-workspace">
           <header className="pneumonia-section-heading">
-            <div><span>Retrospective operating view</span><h2>One score becomes two review queues</h2><p>The cutoff was selected on validation data. Labels are visible here only to teach errors on held-out historical examples.</p></div>
+            <div><span>Retrospective operating view</span><h2>One score becomes two review queues</h2><p>The cutoff was selected on validation data. These are ranking scores, not probabilities. Seven decimals keep the highest-scoring studies in their true order instead of rounding them all to 100%.</p></div>
             <strong><ClipboardList size={15} aria-hidden="true" /> {queue.summary.heldout_studies} test studies</strong>
           </header>
           <div className="pneumonia-queue-summary">
@@ -351,11 +352,11 @@ export default function PneumoniaPage() {
           <div className="pneumonia-queue-table-wrap">
             <table className="pneumonia-queue-table">
               <caption className="sr-only">Highest-scoring studies routed to priority review</caption>
-              <thead><tr><th>Study</th><th>Model score</th><th>Policy cutoff</th><th>Queue route</th><th>Dataset label</th><th>Retrospective comparison</th></tr></thead>
-              <tbody>{queue.items.map((item) => (
+              <thead><tr><th>Study</th><th>Ranking score</th><th>Policy cutoff</th><th>Queue route</th><th>Dataset label</th><th>Retrospective comparison</th></tr></thead>
+              <tbody>{queue.items.map((item, index) => (
                 <tr key={item.sample_id}>
                   <td><strong>{item.sample_id}</strong><span>Packaged test image</span></td>
-                  <td><div className="pneumonia-table-score"><strong>{percent(item.model_score)}</strong><i><b style={{ width: percent(item.model_score) }} /></i></div></td>
+                  <td><div className="pneumonia-table-score"><strong>{rankingScore(item.model_score, 7)}</strong><small>Rank {index + 1}</small></div></td>
                   <td>{item.model_score >= queue.summary.threshold ? ">= " : "< "}{queue.summary.threshold.toFixed(3)}</td>
                   <td><span className={`pneumonia-route-pill ${item.route}`}>{item.route_label}</span></td>
                   <td>{item.dataset_label}</td>
