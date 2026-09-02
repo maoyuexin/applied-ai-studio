@@ -1,0 +1,89 @@
+{
+  "model_name": "Compact pediatric chest X-ray prioritization CNN",
+  "model_version": "2026-09-02T16:46:28+00:00",
+  "created_utc": "2026-09-02T16:46:28+00:00",
+  "framework": "PyTorch 2.13.0",
+  "packaging": "PyTorch state dictionary with shared architecture code",
+  "architecture": "Four convolution blocks with global average pooling",
+  "trainable_parameters": 79009,
+  "input": {
+    "shape": [
+      1,
+      128,
+      128
+    ],
+    "type": "grayscale image scaled to [0, 1]",
+    "training_pixel_mean": 0.5716656446456909,
+    "training_pixel_std": 0.1761736422777176
+  },
+  "dataset": {
+    "name": "PneumoniaMNIST 128",
+    "version": "v2",
+    "source": "MedMNIST+ / Kermany et al. pediatric chest X-rays",
+    "license": "CC BY 4.0",
+    "archive_md5": "05b46931834c231683c68f40c47b2971",
+    "population": "Pediatric chest X-rays from the source study",
+    "split_counts": {
+      "train": 4708,
+      "validation": 524,
+      "test": 624
+    },
+    "class_counts": {
+      "Normal": 1583,
+      "Pneumonia-labeled": 4273
+    },
+    "source_split_note": "The source study reports patient-separated training and test sets."
+  },
+  "intended_use": "Educational demonstration of ranking packaged, held-out images for earlier review.",
+  "measured_on_untouched_test": {
+    "threshold": 0.748041033744812,
+    "tp": 364,
+    "fp": 33,
+    "fn": 26,
+    "tn": 201,
+    "sensitivity": 0.9333333333333333,
+    "specificity": 0.8589743589743589,
+    "precision": 0.9168765743073047,
+    "accuracy": 0.905448717948718,
+    "balanced_accuracy": 0.8961538461538461,
+    "review_rate": 0.6362179487179487,
+    "roc_auc": 0.9602783256629411,
+    "average_precision": 0.9731619918783326
+  },
+  "operating_policy": {
+    "name": "Validation sensitivity objective",
+    "selected_on": "validation split",
+    "target_sensitivity": 0.9,
+    "threshold": 0.748041033744812,
+    "quality_gate": {
+      "min_focus_score": 0.5,
+      "min_mean_intensity": 0.2,
+      "max_mean_intensity": 0.9,
+      "failure_action": "quality_hold"
+    },
+    "routes": {
+      "quality_hold": "Recapture or qualified manual handling",
+      "priority_review": "Earlier radiologist review",
+      "standard_review": "Standard radiologist review"
+    },
+    "boundary": "Every study still requires qualified interpretation."
+  },
+  "limitations": [
+    "Limited pediatric source population and clinical setting.",
+    "The model sees pixels, not symptoms, vital signs, laboratory results, or history.",
+    "Center-cropped and resized benchmark images do not reproduce a hospital imaging pipeline.",
+    "Performance has not been externally or prospectively validated.",
+    "Influence overlays describe model attention and do not prove medical reasoning."
+  ],
+  "excluded_uses": [
+    "Diagnosis, clearance, treatment selection, or treatment recommendation",
+    "Use with real patient images",
+    "Use outside this packaged educational dataset"
+  ],
+  "environment": {
+    "python": "3.11.16",
+    "numpy": "2.4.6",
+    "pandas": "2.3.3",
+    "scikit_learn": "1.9.0"
+  }
+}

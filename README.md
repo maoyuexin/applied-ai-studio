@@ -97,7 +97,6 @@ npm run setup:notebook
 npm run setup:fraud
 npm run prepare:fraud
 npm run setup:pneumonia
-npm run prepare:pneumonia
 ```
 
 Windows PowerShell:
@@ -109,7 +108,6 @@ npm run setup:notebook
 npm run setup:fraud
 npm run prepare:fraud
 npm run setup:pneumonia
-npm run prepare:pneumonia
 ```
 
 The npm scripts locate `.venv/bin/python` on macOS/Linux and

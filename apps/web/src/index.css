@@ -1516,8 +1516,7 @@ input[type="range"] { height: 5px; padding: 0; border: 0; accent-color: var(--or
 .pneumonia-queue-table td:first-child span { margin-top: 3px; color: var(--text-muted); font-size: 8px; }
 .pneumonia-table-score { min-width: 100px; }
 .pneumonia-table-score strong { color: var(--clinical-priority); font-family: var(--font-mono); font-size: 10px; }
-.pneumonia-table-score i { width: 82px; height: 4px; margin-top: 5px; display: block; overflow: hidden; background: var(--surface-raised); }
-.pneumonia-table-score i b { height: 100%; display: block; background: var(--clinical-priority); }
+.pneumonia-table-score small { display: block; margin-top: 4px; color: var(--text-muted); font-family: var(--font-mono); font-size: 8px; }
 .pneumonia-route-pill { padding: 4px 6px; border: 1px solid currentColor; border-radius: 3px; font-family: var(--font-mono); font-size: 8px; white-space: nowrap; }
 .pneumonia-route-pill.priority_review { color: var(--clinical-priority); }
 .pneumonia-route-pill.standard_review { color: var(--clinical-standard); }
