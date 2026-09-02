@@ -5,7 +5,7 @@ describe("CatalogStore seed contracts", () => {
   it("loads the syllabus-aligned showcase catalog", async () => {
     const catalog = await CatalogStore.load();
 
-    expect(catalog.list()).toHaveLength(14);
+    expect(catalog.list()).toHaveLength(15);
     expect(catalog.industries()).toHaveLength(12);
     expect(catalog.list({ industry: "retail" }).map((item) => item.id)).toEqual([
       "retail-online-order-decision-lab",
@@ -15,6 +15,12 @@ describe("CatalogStore seed contracts", () => {
     expect(fraudLab?.title).toBe("Card Transaction Fraud Detection");
     expect(fraudLab?.demoStatus).toBe("available");
     expect(fraudLab?.courseCaseId).toBe("financial-fraud-detection");
+    const pneumoniaLab = catalog.list().find(
+      (item) => item.id === "healthcare-pneumonia-prioritization-lab",
+    );
+    expect(pneumoniaLab?.demoStatus).toBe("available");
+    expect(pneumoniaLab?.courseCaseId).toBe("healthcare-pediatric-xray-prioritization");
+    expect(pneumoniaLab?.source).toBe("public-benchmark");
   });
 
   it("loads the detailed retail workflow", async () => {
@@ -48,6 +54,24 @@ describe("CatalogStore seed contracts", () => {
     expect(courseCase?.featuredDecisionId).toBe("classification");
   });
 
+  it("loads the detailed pediatric chest X-ray workflow", async () => {
+    const catalog = await CatalogStore.load();
+    const courseCase = catalog.getCourseCase("healthcare-pediatric-xray-prioritization");
+
+    expect(courseCase?.stages.map((stage) => stage.id)).toEqual([
+      "input",
+      "process",
+      "decision",
+      "action",
+      "outcome",
+    ]);
+    expect(courseCase?.lanes).toHaveLength(6);
+    expect(courseCase?.nodes).toHaveLength(14);
+    expect(courseCase?.edges).toHaveLength(16);
+    expect(courseCase?.decisions).toHaveLength(7);
+    expect(courseCase?.featuredDecisionId).toBe("classification");
+  });
+
   it("links every retained workflow to a comprehensive scenario", async () => {
     const catalog = await CatalogStore.load();
     const labs = catalog.list().filter((item) => item.courseCaseId);
@@ -56,6 +80,7 @@ describe("CatalogStore seed contracts", () => {
       "manufacturing-maintenance-triage",
       "financial-kyc-review",
       "financial-fraud-detection-lab",
+      "healthcare-pneumonia-prioritization-lab",
       "healthcare-operations-handoff",
       "retail-online-order-decision-lab",
       "public-service-intake",

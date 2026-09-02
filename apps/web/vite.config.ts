@@ -26,6 +26,7 @@ export default defineConfig({
     port: Number(process.env.WEB_PORT ?? 5173),
     strictPort: true,
     proxy: {
+      "/api/pneumonia": process.env["services__pneumonia__http__0"] ?? "http://127.0.0.1:4350",
       "/api/fraud": process.env["services__fraud__http__0"] ?? "http://127.0.0.1:4340",
       "/api/orders": {
         target: process.env["services__orders__http__0"] ?? "http://127.0.0.1:4330",

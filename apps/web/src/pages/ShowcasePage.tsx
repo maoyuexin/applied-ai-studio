@@ -39,7 +39,7 @@ export default function ShowcasePage() {
         </div>
         <div className="source-badge">
           <Database size={16} aria-hidden="true" />
-          Synthetic scenarios
+          Public teaching scenarios
         </div>
       </header>
 
@@ -77,6 +77,8 @@ export default function ShowcasePage() {
               ? "/online-order?view=customer"
               : item.id === "financial-fraud-detection-lab"
                 ? "/fraud"
+              : item.id === "healthcare-pneumonia-prioritization-lab"
+                ? "/pneumonia"
               : `/demo?case=${encodeURIComponent(item.id)}`;
             return (
               <article key={item.id} className={`use-case-card accent-${item.accent}`}>

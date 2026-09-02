@@ -1623,5 +1623,505 @@
     ],
     "featuredDecisionId": "specialty",
     "source": "synthetic-workflow-assumption"
+  },
+  {
+    "id": "healthcare-pediatric-xray-prioritization",
+    "title": "One Pediatric Chest X-ray",
+    "subtitle": "From imaging order to accountable clinical action",
+    "industry": "Healthcare",
+    "learningObjective": "Map image acquisition and review, separate technical quality, learned classification, policy routing, radiologist interpretation, and clinician authority.",
+    "throughline": "The model may change review order; it does not interpret the image, diagnose a patient, or choose treatment.",
+    "introduction": {
+      "title": "What happens between an imaging order and a clinical action?",
+      "context": "A chest X-ray model is only one bounded component inside a larger care workflow. Before a score can influence review order, the request and image must be usable. After routing, a radiologist still interprets the study and a clinician combines that report with symptoms, history, examination, and other evidence.",
+      "workflow": "The workflow follows one pediatric chest X-ray through order and identity checks, image acquisition, technical-quality review, CNN scoring, cutoff-based queue routing, radiologist interpretation, required-result communication, clinician decision-making, and outcome monitoring. Exception paths expose identity correction, image recapture, and priority routing.",
+      "startsWhen": "A clinician places a chest X-ray order and the imaging service receives the request.",
+      "endsWhen": "A radiologist report reaches the care team and a clinician owns the documented next action."
+    },
+    "stages": [
+      {
+        "id": "input",
+        "label": "Inputs",
+        "description": "Order, identity, acquired image, limited context"
+      },
+      {
+        "id": "process",
+        "label": "Process",
+        "description": "Verify, acquire, quality-check, score, interpret"
+      },
+      {
+        "id": "decision",
+        "label": "Decision",
+        "description": "Usable image? Which queue? What finding and action?"
+      },
+      {
+        "id": "action",
+        "label": "Action",
+        "description": "Recapture, route, report, communicate, or treat"
+      },
+      {
+        "id": "outcome",
+        "label": "Outcome",
+        "description": "Qualified interpretation and accountable clinical action"
+      }
+    ],
+    "baseline": [
+      {
+        "value": "120",
+        "label": "studies per shift",
+        "note": "Synthetic workflow assumption"
+      },
+      {
+        "value": "6%",
+        "label": "need recapture or quality review",
+        "note": "Synthetic workflow assumption"
+      },
+      {
+        "value": "30 min",
+        "label": "priority-review target",
+        "note": "Synthetic workflow assumption"
+      },
+      {
+        "value": "120 min",
+        "label": "standard-review target",
+        "note": "Synthetic workflow assumption"
+      },
+      {
+        "value": "100%",
+        "label": "require radiologist interpretation",
+        "note": "Non-negotiable workflow boundary"
+      }
+    ],
+    "lanes": [
+      {
+        "id": "ordering",
+        "label": "Ordering clinician",
+        "order": 0
+      },
+      {
+        "id": "imaging",
+        "label": "Imaging technologist",
+        "order": 1
+      },
+      {
+        "id": "model-policy",
+        "label": "Model and queue service",
+        "order": 2
+      },
+      {
+        "id": "radiologist",
+        "label": "Radiologist",
+        "order": 3
+      },
+      {
+        "id": "care-team",
+        "label": "Clinical care team",
+        "order": 4
+      },
+      {
+        "id": "monitoring",
+        "label": "Quality and safety monitoring",
+        "order": 5
+      }
+    ],
+    "nodes": [
+      {
+        "id": "order",
+        "label": "Chest X-ray ordered",
+        "lane": "ordering",
+        "kind": "start",
+        "x": 25,
+        "documented": true
+      },
+      {
+        "id": "validate",
+        "label": "Correct patient and order?",
+        "lane": "imaging",
+        "kind": "decision",
+        "x": 145,
+        "documented": true,
+        "decisionId": "validation"
+      },
+      {
+        "id": "acquire",
+        "label": "Acquire chest X-ray",
+        "lane": "imaging",
+        "kind": "process",
+        "x": 280,
+        "documented": true
+      },
+      {
+        "id": "quality",
+        "label": "Image technically usable?",
+        "lane": "imaging",
+        "kind": "decision",
+        "x": 415,
+        "documented": true,
+        "decisionId": "quality"
+      },
+      {
+        "id": "classify",
+        "label": "Pneumonia pattern score",
+        "lane": "model-policy",
+        "kind": "decision",
+        "x": 550,
+        "documented": true,
+        "decisionId": "classification"
+      },
+      {
+        "id": "cutoff",
+        "label": "At or above review cutoff?",
+        "lane": "model-policy",
+        "kind": "decision",
+        "x": 685,
+        "documented": true,
+        "decisionId": "cutoff"
+      },
+      {
+        "id": "standard",
+        "label": "Standard review queue",
+        "lane": "model-policy",
+        "kind": "action",
+        "x": 820,
+        "documented": true
+      },
+      {
+        "id": "priority",
+        "label": "Priority review queue",
+        "lane": "radiologist",
+        "kind": "action",
+        "x": 820,
+        "documented": false
+      },
+      {
+        "id": "interpret",
+        "label": "What does the image show?",
+        "lane": "radiologist",
+        "kind": "decision",
+        "x": 950,
+        "documented": true,
+        "decisionId": "interpretation"
+      },
+      {
+        "id": "communicate",
+        "label": "Urgent communication required?",
+        "lane": "radiologist",
+        "kind": "decision",
+        "x": 1060,
+        "documented": true,
+        "decisionId": "communication"
+      },
+      {
+        "id": "care-action",
+        "label": "What clinical action follows?",
+        "lane": "care-team",
+        "kind": "decision",
+        "x": 1160,
+        "documented": true,
+        "decisionId": "care-action"
+      },
+      {
+        "id": "record",
+        "label": "Action and outcome recorded",
+        "lane": "monitoring",
+        "kind": "outcome",
+        "x": 1180,
+        "documented": true
+      },
+      {
+        "id": "correct-order",
+        "label": "Correct identity or order",
+        "lane": "ordering",
+        "kind": "process",
+        "x": 280,
+        "documented": false
+      },
+      {
+        "id": "recapture",
+        "label": "Recapture or manual quality review",
+        "lane": "imaging",
+        "kind": "action",
+        "x": 550,
+        "documented": false
+      }
+    ],
+    "edges": [
+      {
+        "id": "e1",
+        "from": "order",
+        "to": "validate",
+        "label": "request",
+        "kind": "normal",
+        "documented": true
+      },
+      {
+        "id": "e2",
+        "from": "validate",
+        "to": "acquire",
+        "label": "matched",
+        "kind": "normal",
+        "documented": true
+      },
+      {
+        "id": "e3",
+        "from": "acquire",
+        "to": "quality",
+        "label": "image",
+        "kind": "normal",
+        "documented": true
+      },
+      {
+        "id": "e4",
+        "from": "quality",
+        "to": "classify",
+        "label": "usable",
+        "kind": "normal",
+        "documented": true
+      },
+      {
+        "id": "e5",
+        "from": "classify",
+        "to": "cutoff",
+        "label": "ranking score",
+        "kind": "normal",
+        "documented": true
+      },
+      {
+        "id": "e6",
+        "from": "cutoff",
+        "to": "standard",
+        "label": "below cutoff",
+        "kind": "normal",
+        "documented": true
+      },
+      {
+        "id": "e7",
+        "from": "standard",
+        "to": "interpret",
+        "label": "worklist",
+        "kind": "normal",
+        "documented": true
+      },
+      {
+        "id": "e8",
+        "from": "interpret",
+        "to": "communicate",
+        "label": "report",
+        "kind": "normal",
+        "documented": true
+      },
+      {
+        "id": "e9",
+        "from": "communicate",
+        "to": "care-action",
+        "label": "report or direct handoff",
+        "labelDy": -18,
+        "kind": "normal",
+        "documented": true
+      },
+      {
+        "id": "e10",
+        "from": "care-action",
+        "to": "record",
+        "label": "document",
+        "kind": "normal",
+        "documented": true
+      },
+      {
+        "id": "x1",
+        "from": "validate",
+        "to": "correct-order",
+        "label": "mismatch",
+        "labelDy": -22,
+        "kind": "exception",
+        "documented": false
+      },
+      {
+        "id": "x2",
+        "from": "correct-order",
+        "to": "validate",
+        "label": "corrected",
+        "labelDy": 28,
+        "kind": "loop",
+        "documented": false
+      },
+      {
+        "id": "x3",
+        "from": "quality",
+        "to": "recapture",
+        "label": "fail or uncertain",
+        "labelDy": -22,
+        "kind": "exception",
+        "documented": false
+      },
+      {
+        "id": "x4",
+        "from": "recapture",
+        "to": "quality",
+        "label": "new image",
+        "labelDy": 28,
+        "kind": "loop",
+        "documented": false
+      },
+      {
+        "id": "x5",
+        "from": "cutoff",
+        "to": "priority",
+        "label": "at or above",
+        "labelDy": -20,
+        "kind": "exception",
+        "documented": false
+      },
+      {
+        "id": "x6",
+        "from": "priority",
+        "to": "interpret",
+        "label": "earlier review",
+        "kind": "exception",
+        "documented": false
+      }
+    ],
+    "decisions": [
+      {
+        "id": "validation",
+        "label": "Do the patient, order, and examination identifiers match?",
+        "owner": "Imaging technologist and imaging system",
+        "frequency": "Every ordered examination",
+        "wrongCost": "The wrong patient or examination could enter the workflow, or a valid request could be delayed",
+        "verdict": "rule",
+        "verdictLabel": "Use rules and identity checks",
+        "testAnswer": "No. Required identifiers, order status, examination type, and matching rules are explicit safety controls.",
+        "why": "Identity and order validation must be deterministic, auditable, and corrected at the source rather than inferred from pixels.",
+        "recommendation": "Use required-field, identifier-match, order-status, and examination-protocol checks before acquisition and scoring.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "quality",
+        "label": "Is the acquired image technically usable for the ordinary model path?",
+        "owner": "Imaging technologist with technical quality controls",
+        "frequency": "Every acquired image",
+        "wrongCost": "An unusable image receives a confident-looking score, or an acceptable image is recaptured unnecessarily",
+        "verdict": "automation",
+        "verdictLabel": "Automate bounds; preserve human review",
+        "testAnswer": "Simple exposure and focus bounds can be stated directly, while a technologist must resolve uncertainty and clinical acquisition issues.",
+        "why": "The quality gate controls whether scoring may run. It does not classify disease and should not silently repair or reinterpret a failed image.",
+        "recommendation": "Apply versioned technical checks, stop scoring when they fail, and route to recapture or qualified manual quality review.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "classification",
+        "label": "How strongly does this image resemble pneumonia-labeled training examples?",
+        "owner": "Image model service",
+        "frequency": "Every technically usable image inside the intended input boundary",
+        "wrongCost": "A pneumonia-labeled study remains later in the queue, or a normal-labeled study consumes scarce priority capacity",
+        "verdict": "ai-classification",
+        "verdictLabel": "AI · Image classification",
+        "testAnswer": "Yes. A CNN learns recurring spatial patterns from labeled images rather than applying one hand-written brightness or texture rule.",
+        "why": "The model produces a ranking score associated with the benchmark label. It does not interpret the image, estimate patient risk, or output a diagnosis.",
+        "recommendation": "Produce a bounded ranking score, then keep technical-quality checks, queue policy, interpretation, diagnosis, and treatment outside the model.",
+        "aiRelevant": true,
+        "placement": "decision",
+        "design": {
+          "data": {
+            "summary": "Checksum-verified PneumoniaMNIST pediatric chest X-rays with source-defined train, validation, and held-out test splits.",
+            "owner": "Benchmark publisher and classroom artifact steward",
+            "readiness": "Prepared public benchmark for education; not representative evidence for clinical deployment",
+            "fields": [
+              "128 x 128 grayscale pixels",
+              "Normal or pneumonia source label",
+              "Source-defined split",
+              "Technical-quality measures"
+            ],
+            "risk": "The benchmark is narrow, downsampled, and lacks symptoms, history, site diversity, acquisition metadata, localization labels, and prospective outcomes."
+          },
+          "method": {
+            "pattern": "classification",
+            "output": "An uncalibrated ranking score used only for priority or standard review routing",
+            "technique": "Compact four-block PyTorch CNN with a validation-selected operating cutoff"
+          },
+          "metric": {
+            "technical": "On 624 held-out benchmark images: 93.3% sensitivity and 85.9% specificity at the validation-selected 0.748 cutoff.",
+            "business": "Before any real use, measure time to qualified interpretation, priority workload, recapture burden, and subgroup or site performance.",
+            "baseline": "The teaching replay routes 397 of 624 held-out studies to priority review; this is not a clinical operating target."
+          },
+          "human": {
+            "role": "Radiologist, followed by the treating clinician",
+            "checkpoint": "Interpret every study independently of the model score and combine the report with the complete patient context before clinical action.",
+            "falsePositiveCost": "A normal-labeled study consumes priority capacity and may delay other work.",
+            "falseNegativeCost": "A pneumonia-labeled study remains in standard review and may wait longer for interpretation."
+          },
+          "architecture": [
+            "Verified image source",
+            "Technical quality gate",
+            "Shared CNN preprocessing and model",
+            "Versioned cutoff policy",
+            "Priority and standard worklists",
+            "Radiologist interpretation",
+            "Clinician action",
+            "Performance and safety monitoring"
+          ]
+        }
+      },
+      {
+        "id": "cutoff",
+        "label": "Is the model score at or above the approved review cutoff?",
+        "owner": "Imaging queue policy service",
+        "frequency": "Every image that receives a model score",
+        "wrongCost": "The priority queue exceeds capacity, or more pneumonia-labeled studies remain in standard review",
+        "verdict": "automation",
+        "verdictLabel": "Automate with explicit policy",
+        "testAnswer": "No. Once the score and approved cutoff are available, the branch is a deterministic comparison rather than another learned prediction.",
+        "why": "Keeping the cutoff outside the model makes the sensitivity and workload tradeoff visible, versioned, and change-controlled.",
+        "recommendation": "Select the cutoff on validation data, freeze it before test evaluation, record the policy version, and monitor both queues.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "interpretation",
+        "label": "What does the chest X-ray show?",
+        "owner": "Radiologist",
+        "frequency": "Every study in priority and standard review",
+        "wrongCost": "A finding is missed, overstated, or interpreted without necessary context",
+        "verdict": "human",
+        "verdictLabel": "Qualified human interpretation",
+        "testAnswer": "The model score is not an image interpretation. A radiologist evaluates image findings, limitations, comparisons, and available context.",
+        "why": "PneumoniaMNIST supplies whole-image labels, not validated lesion locations, clinical reasoning, diagnoses, or treatment decisions.",
+        "recommendation": "Require qualified interpretation for every image and allow the radiologist to ignore, challenge, and report limitations of model output.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "communication",
+        "label": "Does the interpreted finding require an urgent qualified handoff?",
+        "owner": "Radiologist under approved communication policy",
+        "frequency": "Every completed interpretation",
+        "wrongCost": "A time-sensitive finding is not communicated promptly, or routine work creates unnecessary escalation",
+        "verdict": "human",
+        "verdictLabel": "Human decision with policy",
+        "testAnswer": "Communication requirements may include explicit policy, but a qualified professional must connect the interpreted finding to the required handoff.",
+        "why": "The model's queue route cannot determine clinical urgency or replace closed-loop communication of an interpreted result.",
+        "recommendation": "Use approved escalation rules and documented receipt while keeping urgency interpretation and handoff ownership with qualified staff.",
+        "aiRelevant": false,
+        "placement": "decision"
+      },
+      {
+        "id": "care-action",
+        "label": "What clinical action, if any, should follow the radiologist report?",
+        "owner": "Treating clinician",
+        "frequency": "Every report returned to the care team",
+        "wrongCost": "Care is delayed, unnecessary, or based on an image without the rest of the patient context",
+        "verdict": "human",
+        "verdictLabel": "Clinician authority",
+        "testAnswer": "The decision combines the report with symptoms, history, examination, tests, patient preferences, and treatment guidance unavailable to the model.",
+        "why": "Neither the CNN score nor the radiograph alone defines a diagnosis or treatment plan.",
+        "recommendation": "Present the signed report and relevant context to the treating clinician; never convert the queue route into diagnosis or treatment.",
+        "aiRelevant": false,
+        "placement": "decision"
+      }
+    ],
+    "featuredDecisionId": "classification",
+    "source": "synthetic-workflow-assumption"
   }
 ]

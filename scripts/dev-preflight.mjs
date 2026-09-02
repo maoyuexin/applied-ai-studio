@@ -6,6 +6,7 @@ const services = [
   { name: "agent API", port: 4320 },
   { name: "order API", port: 4330 },
   { name: "fraud API", port: 4340 },
+  { name: "pneumonia API", port: 4350 },
 ];
 
 function isListening(port) {

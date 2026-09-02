@@ -35,7 +35,7 @@ app.get("/api/catalog/use-cases", (request, response) => {
   const industry = typeof request.query.industry === "string" ? request.query.industry : undefined;
   const search = typeof request.query.search === "string" ? request.query.search : undefined;
   const items = catalog.list({ industry, search }).slice(0, 20);
-  response.json({ items, total: items.length, source: "public-synthetic" });
+  response.json({ items, total: items.length, source: "public-teaching" });
 });
 
 app.get("/api/catalog/use-cases/:id", (request, response) => {

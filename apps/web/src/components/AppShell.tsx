@@ -56,7 +56,7 @@ export default function AppShell({ pathname, children }: { pathname: string; chi
             <Bot size={14} aria-hidden="true" />
             GitHub Copilot SDK
           </div>
-          <small>Public synthetic data only</small>
+          <small>Public teaching data only</small>
         </div>
       </aside>
       <main className="main-surface">
