@@ -48,13 +48,16 @@ node scripts/venv-python.mjs notebooks/pneumonia-screening/scripts/prepare_app_a
 01_pneumonia_build.ipynb   Executed teaching notebook
 pneumonialab/              Shared data, model, metrics, charts, and handoff logic
 data/                      Checksum-verified PneumoniaMNIST 128 archive
-artifacts/                 Reproducible model and app contract; generated locally
+artifacts/                 Validated model and app contract used by the service
 backup/                    Standalone offline HTML
 scripts/                   Notebook, artifact, and backup builders
 ```
 
 The final notebook cells export `model.pt`, `model_card.json`, `operating_policy.json`,
 `evaluation.json`, and `sample_manifest.parquet`. The app service loads those exact files.
+The validated bundle is versioned so Codespaces uses the same `0.748` cutoff and predictions
+shown in the executed notebook. Run `npm run prepare:pneumonia` only when intentionally
+rebuilding and revalidating that bundle.
 
 ## Data provenance
 

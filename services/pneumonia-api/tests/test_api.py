@@ -21,7 +21,11 @@ def test_model_samples_and_bounded_score_contract() -> None:
             }
             assert model.status_code == 200
             assert model.json()["trainable_parameters"] == 79_009
+            assert model.json()["threshold"] == 0.748041033744812
+            assert model.json()["metrics"]["true_negatives"] == 201
+            assert model.json()["metrics"]["false_positives"] == 33
             assert model.json()["metrics"]["false_negatives"] == 26
+            assert model.json()["metrics"]["true_positives"] == 364
             assert "not a diagnosis" in model.json()["score_note"]
             assert samples.status_code == 200
             assert len(samples.json()) == 8
@@ -71,6 +75,8 @@ def test_queue_errors_and_request_schema() -> None:
             payload = queue.json()
             scores = [item["model_score"] for item in payload["items"]]
             assert scores == sorted(scores, reverse=True)
+            assert len(set(scores)) == len(scores)
+            assert all(score < 1 for score in scores)
             assert all(score >= payload["summary"]["threshold"] for score in scores)
             assert payload["summary"]["priority_review"] == 397
             assert payload["summary"]["standard_review"] == 227

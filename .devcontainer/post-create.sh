@@ -76,8 +76,16 @@ npm run prepare:fraud
 echo "==> Installing the Chest X-ray Prioritization service"
 npm run setup:pneumonia
 
-echo "==> Preparing the Chest X-ray Prioritization model"
-npm run prepare:pneumonia
+if [[ -s notebooks/pneumonia-screening/artifacts/model.pt \
+   && -s notebooks/pneumonia-screening/artifacts/model_card.json \
+   && -s notebooks/pneumonia-screening/artifacts/operating_policy.json \
+   && -s notebooks/pneumonia-screening/artifacts/evaluation.json \
+   && -s notebooks/pneumonia-screening/artifacts/sample_manifest.parquet ]]; then
+  echo "==> Using the validated Chest X-ray artifacts included with the course"
+else
+  echo "==> Rebuilding missing Chest X-ray artifacts"
+  npm run prepare:pneumonia
+fi
 
 cat <<'BANNER'
 

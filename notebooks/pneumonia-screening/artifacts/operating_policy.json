@@ -1,0 +1,18 @@
+{
+  "name": "Validation sensitivity objective",
+  "selected_on": "validation split",
+  "target_sensitivity": 0.9,
+  "threshold": 0.748041033744812,
+  "quality_gate": {
+    "min_focus_score": 0.5,
+    "min_mean_intensity": 0.2,
+    "max_mean_intensity": 0.9,
+    "failure_action": "quality_hold"
+  },
+  "routes": {
+    "quality_hold": "Recapture or qualified manual handling",
+    "priority_review": "Earlier radiologist review",
+    "standard_review": "Standard radiologist review"
+  },
+  "boundary": "Every study still requires qualified interpretation."
+}
