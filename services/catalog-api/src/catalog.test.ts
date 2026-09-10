@@ -5,7 +5,7 @@ describe("CatalogStore seed contracts", () => {
   it("loads the syllabus-aligned showcase catalog", async () => {
     const catalog = await CatalogStore.load();
 
-    expect(catalog.list()).toHaveLength(15);
+    expect(catalog.list()).toHaveLength(17);
     expect(catalog.industries()).toHaveLength(12);
     expect(catalog.list({ industry: "retail" }).map((item) => item.id)).toEqual([
       "retail-online-order-decision-lab",
@@ -72,6 +72,19 @@ describe("CatalogStore seed contracts", () => {
     expect(courseCase?.featuredDecisionId).toBe("classification");
   });
 
+  it.each(["financial-credit-risk", "financial-complaint-routing"])(
+    "exposes the %s workflow and demo",
+    async (caseId) => {
+      const catalog = await CatalogStore.load();
+      const card = catalog.list().find((item) => item.id === `${caseId}-lab`);
+      expect(card?.demoStatus).toBe("available");
+      expect(card?.courseCaseId).toBe(caseId);
+      expect(catalog.getCourseCase(caseId)?.stages.map((stage) => stage.id)).toEqual([
+        "input", "process", "decision", "action", "outcome",
+      ]);
+    },
+  );
+
   it("links every retained workflow to a comprehensive scenario", async () => {
     const catalog = await CatalogStore.load();
     const labs = catalog.list().filter((item) => item.courseCaseId);
@@ -85,6 +98,8 @@ describe("CatalogStore seed contracts", () => {
       "retail-online-order-decision-lab",
       "public-service-intake",
       "transportation-fleet-routing",
+      "financial-credit-risk-lab",
+      "financial-complaint-routing-lab",
     ]);
 
     for (const lab of labs) {

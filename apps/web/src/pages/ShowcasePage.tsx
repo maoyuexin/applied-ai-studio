@@ -79,6 +79,10 @@ export default function ShowcasePage() {
                 ? "/fraud"
               : item.id === "healthcare-pneumonia-prioritization-lab"
                 ? "/pneumonia"
+              : item.id === "financial-credit-risk-lab"
+                ? "/credit"
+              : item.id === "financial-complaint-routing-lab"
+                ? "/complaints"
               : `/demo?case=${encodeURIComponent(item.id)}`;
             return (
               <article key={item.id} className={`use-case-card accent-${item.accent}`}>

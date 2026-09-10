@@ -3,6 +3,8 @@ import AppShell from "./components/AppShell";
 import { navigate, useLocationSnapshot } from "./router";
 
 const AskStudioPage = lazy(() => import("./pages/AskStudioPage"));
+const CreditPage = lazy(() => import("./pages/CreditPage"));
+const ComplaintsPage = lazy(() => import("./pages/ComplaintsPage"));
 const DemoPlaceholderPage = lazy(() => import("./pages/DemoPlaceholderPage"));
 const FitAnalyzerPage = lazy(() => import("./pages/FitAnalyzerPage"));
 const FraudPage = lazy(() => import("./pages/FraudPage"));
@@ -20,7 +22,7 @@ const load = (page: React.ReactNode) => (
 export default function App() {
   const location = useLocationSnapshot();
   const pathname = location.split("?", 1)[0];
-  const validPath = ["/workflow", "/demo", "/showcase", "/fit", "/ask", "/online-order", "/fraud", "/pneumonia"].includes(pathname);
+  const validPath = ["/workflow", "/demo", "/showcase", "/fit", "/ask", "/online-order", "/fraud", "/pneumonia", "/credit", "/complaints"].includes(pathname);
 
   useEffect(() => {
     if (!validPath) navigate("/showcase", { replace: true });
@@ -30,6 +32,10 @@ export default function App() {
     ? <WorkflowPage />
     : pathname === "/pneumonia"
       ? <PneumoniaPage />
+    : pathname === "/credit"
+      ? <CreditPage />
+    : pathname === "/complaints"
+      ? <ComplaintsPage />
     : pathname === "/fraud"
       ? <FraudPage />
     : pathname === "/online-order"
@@ -41,7 +47,7 @@ export default function App() {
       : pathname === "/ask"
         ? <AskStudioPage />
         : <ShowcasePage />;
-  const navigationPath = pathname === "/workflow" || pathname === "/demo" || pathname === "/online-order" || pathname === "/fraud" || pathname === "/pneumonia" ? "/showcase" : pathname;
+  const navigationPath = pathname === "/workflow" || pathname === "/demo" || pathname === "/online-order" || pathname === "/fraud" || pathname === "/pneumonia" || pathname === "/credit" || pathname === "/complaints" ? "/showcase" : pathname;
 
   return (
     <AppShell pathname={validPath ? navigationPath : "/showcase"}>

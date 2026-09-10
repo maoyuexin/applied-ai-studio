@@ -1,0 +1,28 @@
+{
+  "name": "Confidence-threshold routing policy",
+  "rule": "auto-route to the predicted team when the highest team probability >= 0.55; otherwise send the complaint to the human triage queue",
+  "confidence_threshold": 0.55,
+  "confidence_definition": "the largest of the eight team probabilities the model returns for one complaint",
+  "selected_on": "validation split only; the test split was scored once after this policy was frozen",
+  "routes": {
+    "auto_route": {
+      "when": "confidence >= 0.55",
+      "action": "the complaint is placed in the predicted team's queue and the specialist who owns that product answers it",
+      "measured_on_test": {
+        "coverage": 0.7829,
+        "accuracy_among_auto_routed": 0.8967
+      }
+    },
+    "human_triage": {
+      "when": "confidence < 0.55",
+      "action": "the complaint goes to the human triage queue, where a clerk reads it and assigns the team by hand",
+      "measured_on_test": {
+        "share": 0.2171,
+        "complaints": 1895
+      }
+    }
+  },
+  "fallback": "A complaint with an empty narrative is never scored. It goes straight to the human triage queue and is logged, because the model has nothing to read.",
+  "boundary": "the model routes; it never judges whether a complaint is valid",
+  "boundary_detail": "Routing decides which team reads the complaint first. It does not decide whether the complaint has merit, what the company must do, or how the consumer is treated. A misrouted complaint costs days on a regulatory clock; it never resolves a case by itself."
+}

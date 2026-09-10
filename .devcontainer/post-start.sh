@@ -11,7 +11,9 @@ stack_is_healthy() {
     && curl --silent --max-time 2 http://127.0.0.1:4320/ >/dev/null \
     && curl --fail --silent --max-time 2 http://127.0.0.1:4330/health >/dev/null \
     && curl --fail --silent --max-time 2 http://127.0.0.1:4340/health >/dev/null \
-    && curl --fail --silent --max-time 2 http://127.0.0.1:4350/health >/dev/null
+    && curl --fail --silent --max-time 2 http://127.0.0.1:4350/health >/dev/null \
+    && curl --fail --silent --max-time 2 http://127.0.0.1:4360/health >/dev/null \
+    && curl --fail --silent --max-time 2 http://127.0.0.1:4370/health >/dev/null
 }
 
 if stack_is_healthy; then

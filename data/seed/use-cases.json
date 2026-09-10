@@ -8,30 +8,86 @@
     "accent": "orange",
     "summary": "Decompose seismic imagery, extract structured observations, and prepare an evidence-linked interpretation for expert review.",
     "problem": "Geoscientists spend substantial time locating chart regions, transcribing metadata, and reconciling visual findings before interpretation can begin.",
-    "outcomes": ["Faster first-pass review", "Traceable extracted evidence", "Human-approved interpretation"],
-    "capabilities": ["Computer vision", "Document extraction", "Grounded summarization"],
-    "patterns": ["Multi-stage analysis", "Human-in-the-loop", "Evidence provenance"],
+    "outcomes": [
+      "Faster first-pass review",
+      "Traceable extracted evidence",
+      "Human-approved interpretation"
+    ],
+    "capabilities": [
+      "Computer vision",
+      "Document extraction",
+      "Grounded summarization"
+    ],
+    "patterns": [
+      "Multi-stage analysis",
+      "Human-in-the-loop",
+      "Evidence provenance"
+    ],
     "workloadType": "vision-analysis",
     "dataReadiness": "medium",
     "riskLevel": "high",
     "maturity": "prototype",
-    "architecture": ["Image preprocessing", "Vision analysis", "Structured extraction", "Expert validation"],
+    "architecture": [
+      "Image preprocessing",
+      "Vision analysis",
+      "Structured extraction",
+      "Expert validation"
+    ],
     "workflow": {
       "nodes": [
-        {"id": "image", "label": "Seismic image", "kind": "input"},
-        {"id": "decompose", "label": "Region decomposition", "kind": "process"},
-        {"id": "vision", "label": "Vision analysis", "kind": "ai"},
-        {"id": "review", "label": "Geoscientist review", "kind": "human"},
-        {"id": "report", "label": "Evidence report", "kind": "output"}
+        {
+          "id": "image",
+          "label": "Seismic image",
+          "kind": "input"
+        },
+        {
+          "id": "decompose",
+          "label": "Region decomposition",
+          "kind": "process"
+        },
+        {
+          "id": "vision",
+          "label": "Vision analysis",
+          "kind": "ai"
+        },
+        {
+          "id": "review",
+          "label": "Geoscientist review",
+          "kind": "human"
+        },
+        {
+          "id": "report",
+          "label": "Evidence report",
+          "kind": "output"
+        }
       ],
       "edges": [
-        {"from": "image", "to": "decompose", "label": "prepare"},
-        {"from": "decompose", "to": "vision", "label": "regions"},
-        {"from": "vision", "to": "review", "label": "findings"},
-        {"from": "review", "to": "report", "label": "approve"}
+        {
+          "from": "image",
+          "to": "decompose",
+          "label": "prepare"
+        },
+        {
+          "from": "decompose",
+          "to": "vision",
+          "label": "regions"
+        },
+        {
+          "from": "vision",
+          "to": "review",
+          "label": "findings"
+        },
+        {
+          "from": "review",
+          "to": "report",
+          "label": "approve"
+        }
       ]
     },
-    "demoPrompts": ["Where should human review remain mandatory?", "Explain the evidence chain in this workflow."],
+    "demoPrompts": [
+      "Where should human review remain mandatory?",
+      "Explain the evidence chain in this workflow."
+    ],
     "source": "public-synthetic"
   },
   {
@@ -43,30 +99,86 @@
     "accent": "amber",
     "summary": "Combine machine alerts, maintenance history, and technician notes to prioritize inspections and suggest the next diagnostic step.",
     "problem": "Maintenance teams receive fragmented alerts and free-text notes, making it difficult to distinguish urgent failures from routine noise.",
-    "outcomes": ["Shorter triage time", "Consistent priority rationale", "Better technician handoff"],
-    "capabilities": ["Signal summarization", "Knowledge retrieval", "Decision support"],
-    "patterns": ["Tool-using copilot", "RAG", "Approval before work order"],
+    "outcomes": [
+      "Shorter triage time",
+      "Consistent priority rationale",
+      "Better technician handoff"
+    ],
+    "capabilities": [
+      "Signal summarization",
+      "Knowledge retrieval",
+      "Decision support"
+    ],
+    "patterns": [
+      "Tool-using copilot",
+      "RAG",
+      "Approval before work order"
+    ],
     "workloadType": "decision-support",
     "dataReadiness": "high",
     "riskLevel": "medium",
     "maturity": "production-pattern",
-    "architecture": ["Telemetry adapter", "Maintenance knowledge index", "Triage policy", "Work-order integration"],
+    "architecture": [
+      "Telemetry adapter",
+      "Maintenance knowledge index",
+      "Triage policy",
+      "Work-order integration"
+    ],
     "workflow": {
       "nodes": [
-        {"id": "alerts", "label": "Machine alerts", "kind": "input"},
-        {"id": "context", "label": "Retrieve asset context", "kind": "process"},
-        {"id": "triage", "label": "AI triage", "kind": "ai"},
-        {"id": "technician", "label": "Technician decision", "kind": "human"},
-        {"id": "workorder", "label": "Work order", "kind": "system"}
+        {
+          "id": "alerts",
+          "label": "Machine alerts",
+          "kind": "input"
+        },
+        {
+          "id": "context",
+          "label": "Retrieve asset context",
+          "kind": "process"
+        },
+        {
+          "id": "triage",
+          "label": "AI triage",
+          "kind": "ai"
+        },
+        {
+          "id": "technician",
+          "label": "Technician decision",
+          "kind": "human"
+        },
+        {
+          "id": "workorder",
+          "label": "Work order",
+          "kind": "system"
+        }
       ],
       "edges": [
-        {"from": "alerts", "to": "context", "label": "asset ID"},
-        {"from": "context", "to": "triage", "label": "history"},
-        {"from": "triage", "to": "technician", "label": "recommend"},
-        {"from": "technician", "to": "workorder", "label": "approve"}
+        {
+          "from": "alerts",
+          "to": "context",
+          "label": "asset ID"
+        },
+        {
+          "from": "context",
+          "to": "triage",
+          "label": "history"
+        },
+        {
+          "from": "triage",
+          "to": "technician",
+          "label": "recommend"
+        },
+        {
+          "from": "technician",
+          "to": "workorder",
+          "label": "approve"
+        }
       ]
     },
-    "demoPrompts": ["Why is this decision support rather than autonomous maintenance?", "What data quality checks are needed?"],
+    "demoPrompts": [
+      "Why is this decision support rather than autonomous maintenance?",
+      "What data quality checks are needed?"
+    ],
     "courseCaseId": "manufacturing-maintenance",
     "source": "public-synthetic"
   },
@@ -79,30 +191,86 @@
     "accent": "teal",
     "summary": "Extract onboarding evidence, flag missing or inconsistent fields, and prepare a review packet for a compliance analyst.",
     "problem": "Analysts manually reconcile identity documents, forms, and policy requirements across high-volume onboarding queues.",
-    "outcomes": ["Reduced preparation time", "Consistent exception detection", "Auditable analyst review"],
-    "capabilities": ["Document extraction", "Policy retrieval", "Exception detection"],
-    "patterns": ["Dual-pass extraction", "Rules plus LLM", "Human approval"],
+    "outcomes": [
+      "Reduced preparation time",
+      "Consistent exception detection",
+      "Auditable analyst review"
+    ],
+    "capabilities": [
+      "Document extraction",
+      "Policy retrieval",
+      "Exception detection"
+    ],
+    "patterns": [
+      "Dual-pass extraction",
+      "Rules plus LLM",
+      "Human approval"
+    ],
     "workloadType": "document-processing",
     "dataReadiness": "medium",
     "riskLevel": "high",
     "maturity": "production-pattern",
-    "architecture": ["Secure intake", "Document extraction", "Policy rules", "Analyst workbench"],
+    "architecture": [
+      "Secure intake",
+      "Document extraction",
+      "Policy rules",
+      "Analyst workbench"
+    ],
     "workflow": {
       "nodes": [
-        {"id": "packet", "label": "KYC packet", "kind": "input"},
-        {"id": "extract", "label": "Extract fields", "kind": "process"},
-        {"id": "check", "label": "Policy and consistency checks", "kind": "ai"},
-        {"id": "analyst", "label": "Compliance review", "kind": "human"},
-        {"id": "case", "label": "Case disposition", "kind": "system"}
+        {
+          "id": "packet",
+          "label": "KYC packet",
+          "kind": "input"
+        },
+        {
+          "id": "extract",
+          "label": "Extract fields",
+          "kind": "process"
+        },
+        {
+          "id": "check",
+          "label": "Policy and consistency checks",
+          "kind": "ai"
+        },
+        {
+          "id": "analyst",
+          "label": "Compliance review",
+          "kind": "human"
+        },
+        {
+          "id": "case",
+          "label": "Case disposition",
+          "kind": "system"
+        }
       ],
       "edges": [
-        {"from": "packet", "to": "extract", "label": "ingest"},
-        {"from": "extract", "to": "check", "label": "structured data"},
-        {"from": "check", "to": "analyst", "label": "exceptions"},
-        {"from": "analyst", "to": "case", "label": "decide"}
+        {
+          "from": "packet",
+          "to": "extract",
+          "label": "ingest"
+        },
+        {
+          "from": "extract",
+          "to": "check",
+          "label": "structured data"
+        },
+        {
+          "from": "check",
+          "to": "analyst",
+          "label": "exceptions"
+        },
+        {
+          "from": "analyst",
+          "to": "case",
+          "label": "decide"
+        }
       ]
     },
-    "demoPrompts": ["Which steps require deterministic rules?", "How should the system expose uncertainty?"],
+    "demoPrompts": [
+      "Which steps require deterministic rules?",
+      "How should the system expose uncertainty?"
+    ],
     "courseCaseId": "financial-kyc",
     "source": "public-synthetic"
   },
@@ -115,30 +283,87 @@
     "accent": "red",
     "summary": "Score held-out card transactions with a deployed random forest, apply a fixed review cutoff, and compare model decisions with known outcomes.",
     "problem": "Fraud teams must find most fraudulent purchases within a limited review budget without treating a model score as proof.",
-    "outcomes": ["Visible score-to-decision logic", "Reproducible MLflow model handoff", "Human-owned fraud determination"],
-    "capabilities": ["Tabular classification", "Threshold tuning", "Review prioritization"],
-    "patterns": ["MLflow model packaging", "Fixed review budget", "Human-in-the-loop"],
+    "outcomes": [
+      "Visible score-to-decision logic",
+      "Reproducible MLflow model handoff",
+      "Human-owned fraud determination"
+    ],
+    "capabilities": [
+      "Tabular classification",
+      "Threshold tuning",
+      "Review prioritization"
+    ],
+    "patterns": [
+      "MLflow model packaging",
+      "Fixed review budget",
+      "Human-in-the-loop"
+    ],
     "workloadType": "decision-support",
     "dataReadiness": "high",
     "riskLevel": "high",
     "maturity": "prototype",
-    "architecture": ["Synthetic transactions", "Shared feature engineering", "MLflow pyfunc", "FastAPI scoring", "Analyst review"],
+    "architecture": [
+      "Synthetic transactions",
+      "Shared feature engineering",
+      "MLflow pyfunc",
+      "FastAPI scoring",
+      "Analyst review"
+    ],
     "workflow": {
       "nodes": [
-        {"id": "transaction", "label": "Card transaction", "kind": "input"},
-        {"id": "features", "label": "Causal features", "kind": "process"},
-        {"id": "score", "label": "Fraud score", "kind": "ai"},
-        {"id": "review", "label": "Analyst review", "kind": "human"},
-        {"id": "outcome", "label": "Case outcome", "kind": "output"}
+        {
+          "id": "transaction",
+          "label": "Card transaction",
+          "kind": "input"
+        },
+        {
+          "id": "features",
+          "label": "Causal features",
+          "kind": "process"
+        },
+        {
+          "id": "score",
+          "label": "Fraud score",
+          "kind": "ai"
+        },
+        {
+          "id": "review",
+          "label": "Analyst review",
+          "kind": "human"
+        },
+        {
+          "id": "outcome",
+          "label": "Case outcome",
+          "kind": "output"
+        }
       ],
       "edges": [
-        {"from": "transaction", "to": "features", "label": "prepare"},
-        {"from": "features", "to": "score", "label": "predict"},
-        {"from": "score", "to": "review", "label": "prioritize"},
-        {"from": "review", "to": "outcome", "label": "determine"}
+        {
+          "from": "transaction",
+          "to": "features",
+          "label": "prepare"
+        },
+        {
+          "from": "features",
+          "to": "score",
+          "label": "predict"
+        },
+        {
+          "from": "score",
+          "to": "review",
+          "label": "prioritize"
+        },
+        {
+          "from": "review",
+          "to": "outcome",
+          "label": "determine"
+        }
       ]
     },
-    "demoPrompts": ["Why is the model score not proof of fraud?", "How does a 3% review budget determine the cutoff?"],
+    "demoPrompts": [
+      "Why is the model score not proof of fraud?",
+      "How does a 3% review budget determine the cutoff?"
+    ],
     "courseCaseId": "financial-fraud-detection",
     "demoStatus": "available",
     "source": "public-synthetic"
@@ -256,30 +481,86 @@
     "accent": "red",
     "summary": "Coordinate one referral from submitted documents through specialty routing, authorization, scheduling, patient communication, and accountable escalation.",
     "problem": "Referral teams reconcile variable documents, routing requirements, authorization status, appointment capacity, and patient responses across multiple operational handoffs.",
-    "outcomes": ["Fewer incomplete referrals", "More accurate first routing", "Visible authorization and scheduling exceptions"],
-    "capabilities": ["Document intelligence", "Service classification", "Delay prediction"],
-    "patterns": ["Rules plus AI", "Capacity optimization", "Human urgency boundary"],
+    "outcomes": [
+      "Fewer incomplete referrals",
+      "More accurate first routing",
+      "Visible authorization and scheduling exceptions"
+    ],
+    "capabilities": [
+      "Document intelligence",
+      "Service classification",
+      "Delay prediction"
+    ],
+    "patterns": [
+      "Rules plus AI",
+      "Capacity optimization",
+      "Human urgency boundary"
+    ],
     "workloadType": "workflow-automation",
     "dataReadiness": "medium",
     "riskLevel": "high",
     "maturity": "prototype",
-    "architecture": ["Secure referral intake", "Document evidence service", "Routing and policy rules", "Scheduling workbench"],
+    "architecture": [
+      "Secure referral intake",
+      "Document evidence service",
+      "Routing and policy rules",
+      "Scheduling workbench"
+    ],
     "workflow": {
       "nodes": [
-        {"id": "referral", "label": "Referral packet", "kind": "input"},
-        {"id": "evidence", "label": "Extract and verify evidence", "kind": "ai"},
-        {"id": "coordinate", "label": "Route, authorize, and schedule", "kind": "process"},
-        {"id": "review", "label": "Coordinator and clinical review", "kind": "human"},
-        {"id": "appointment", "label": "Accepted appointment or escalation", "kind": "output"}
+        {
+          "id": "referral",
+          "label": "Referral packet",
+          "kind": "input"
+        },
+        {
+          "id": "evidence",
+          "label": "Extract and verify evidence",
+          "kind": "ai"
+        },
+        {
+          "id": "coordinate",
+          "label": "Route, authorize, and schedule",
+          "kind": "process"
+        },
+        {
+          "id": "review",
+          "label": "Coordinator and clinical review",
+          "kind": "human"
+        },
+        {
+          "id": "appointment",
+          "label": "Accepted appointment or escalation",
+          "kind": "output"
+        }
       ],
       "edges": [
-        {"from": "referral", "to": "evidence", "label": "ingest"},
-        {"from": "evidence", "to": "coordinate", "label": "structured facts"},
-        {"from": "coordinate", "to": "review", "label": "exceptions and options"},
-        {"from": "review", "to": "appointment", "label": "authorize"}
+        {
+          "from": "referral",
+          "to": "evidence",
+          "label": "ingest"
+        },
+        {
+          "from": "evidence",
+          "to": "coordinate",
+          "label": "structured facts"
+        },
+        {
+          "from": "coordinate",
+          "to": "review",
+          "label": "exceptions and options"
+        },
+        {
+          "from": "review",
+          "to": "appointment",
+          "label": "authorize"
+        }
       ]
     },
-    "demoPrompts": ["Which referral decisions should use rules instead of AI?", "Where must urgency remain a human decision?"],
+    "demoPrompts": [
+      "Which referral decisions should use rules instead of AI?",
+      "Where must urgency remain a human decision?"
+    ],
     "courseCaseId": "healthcare-referral-coordination",
     "demoStatus": "planned",
     "source": "public-synthetic"
@@ -293,30 +574,86 @@
     "accent": "orange",
     "summary": "Follow one online order from Buy Now to the doorstep, expose six business decisions, and design only the AI-relevant work.",
     "problem": "The documented fulfilment path hides payment review, oversold inventory, delivery exceptions, support rework, and the different decisions embedded in one order.",
-    "outcomes": ["Visible documented and exception paths", "Six decisions classified by intervention", "Payment screening designed through Data, Method, Metric, and Human"],
-    "capabilities": ["Business process mapping", "AI fit analysis", "Decision-support design"],
-    "patterns": ["Inputs to outcomes", "Hunt for the diamonds", "Data-Method-Metric-Human"],
+    "outcomes": [
+      "Visible documented and exception paths",
+      "Six decisions classified by intervention",
+      "Payment screening designed through Data, Method, Metric, and Human"
+    ],
+    "capabilities": [
+      "Business process mapping",
+      "AI fit analysis",
+      "Decision-support design"
+    ],
+    "patterns": [
+      "Inputs to outcomes",
+      "Hunt for the diamonds",
+      "Data-Method-Metric-Human"
+    ],
     "workloadType": "decision-support",
     "dataReadiness": "high",
     "riskLevel": "high",
     "maturity": "prototype",
-    "architecture": ["Interactive business workflow", "Decision fit test", "Structured AI design", "Grounded AI assistant"],
+    "architecture": [
+      "Interactive business workflow",
+      "Decision fit test",
+      "Structured AI design",
+      "Grounded AI assistant"
+    ],
     "workflow": {
       "nodes": [
-        {"id": "input", "label": "Order inputs", "kind": "input"},
-        {"id": "process", "label": "Verify and fulfil", "kind": "process"},
-        {"id": "decision", "label": "Six business decisions", "kind": "ai"},
-        {"id": "action", "label": "Ship, review, or resolve", "kind": "human"},
-        {"id": "outcome", "label": "Delivered and kept", "kind": "output"}
+        {
+          "id": "input",
+          "label": "Order inputs",
+          "kind": "input"
+        },
+        {
+          "id": "process",
+          "label": "Verify and fulfil",
+          "kind": "process"
+        },
+        {
+          "id": "decision",
+          "label": "Six business decisions",
+          "kind": "ai"
+        },
+        {
+          "id": "action",
+          "label": "Ship, review, or resolve",
+          "kind": "human"
+        },
+        {
+          "id": "outcome",
+          "label": "Delivered and kept",
+          "kind": "output"
+        }
       ],
       "edges": [
-        {"from": "input", "to": "process", "label": "start"},
-        {"from": "process", "to": "decision", "label": "find diamonds"},
-        {"from": "decision", "to": "action", "label": "choose intervention"},
-        {"from": "action", "to": "outcome", "label": "complete"}
+        {
+          "from": "input",
+          "to": "process",
+          "label": "start"
+        },
+        {
+          "from": "process",
+          "to": "decision",
+          "label": "find diamonds"
+        },
+        {
+          "from": "decision",
+          "to": "action",
+          "label": "choose intervention"
+        },
+        {
+          "from": "action",
+          "to": "outcome",
+          "label": "complete"
+        }
       ]
     },
-    "demoPrompts": ["Which of the six decisions should not use AI?", "Walk payment screening through Data, Method, Metric, and Human."],
+    "demoPrompts": [
+      "Which of the six decisions should not use AI?",
+      "Walk payment screening through Data, Method, Metric, and Human."
+    ],
     "courseCaseId": "retail-online-order",
     "demoStatus": "available",
     "source": "public-synthetic"
@@ -330,30 +667,86 @@
     "accent": "pink",
     "summary": "Explain demand signals, compare assortment scenarios, and draft a planning rationale for a merchant to adjust.",
     "problem": "Merchants must combine forecasts, inventory, promotions, and local knowledge when selecting assortments across many locations.",
-    "outcomes": ["Faster scenario review", "Explainable recommendations", "Consistent planning narrative"],
-    "capabilities": ["Forecast explanation", "Scenario comparison", "Content drafting"],
-    "patterns": ["Analytics plus copilot", "What-if tools", "Merchant approval"],
+    "outcomes": [
+      "Faster scenario review",
+      "Explainable recommendations",
+      "Consistent planning narrative"
+    ],
+    "capabilities": [
+      "Forecast explanation",
+      "Scenario comparison",
+      "Content drafting"
+    ],
+    "patterns": [
+      "Analytics plus copilot",
+      "What-if tools",
+      "Merchant approval"
+    ],
     "workloadType": "decision-support",
     "dataReadiness": "high",
     "riskLevel": "medium",
     "maturity": "production-pattern",
-    "architecture": ["Forecast service", "Inventory API", "Scenario tools", "Merchant workbench"],
+    "architecture": [
+      "Forecast service",
+      "Inventory API",
+      "Scenario tools",
+      "Merchant workbench"
+    ],
     "workflow": {
       "nodes": [
-        {"id": "signals", "label": "Demand and inventory", "kind": "input"},
-        {"id": "scenario", "label": "Scenario engine", "kind": "process"},
-        {"id": "explain", "label": "Copilot explanation", "kind": "ai"},
-        {"id": "merchant", "label": "Merchant decision", "kind": "human"},
-        {"id": "plan", "label": "Assortment plan", "kind": "system"}
+        {
+          "id": "signals",
+          "label": "Demand and inventory",
+          "kind": "input"
+        },
+        {
+          "id": "scenario",
+          "label": "Scenario engine",
+          "kind": "process"
+        },
+        {
+          "id": "explain",
+          "label": "Copilot explanation",
+          "kind": "ai"
+        },
+        {
+          "id": "merchant",
+          "label": "Merchant decision",
+          "kind": "human"
+        },
+        {
+          "id": "plan",
+          "label": "Assortment plan",
+          "kind": "system"
+        }
       ],
       "edges": [
-        {"from": "signals", "to": "scenario", "label": "calculate"},
-        {"from": "scenario", "to": "explain", "label": "compare"},
-        {"from": "explain", "to": "merchant", "label": "recommend"},
-        {"from": "merchant", "to": "plan", "label": "publish"}
+        {
+          "from": "signals",
+          "to": "scenario",
+          "label": "calculate"
+        },
+        {
+          "from": "scenario",
+          "to": "explain",
+          "label": "compare"
+        },
+        {
+          "from": "explain",
+          "to": "merchant",
+          "label": "recommend"
+        },
+        {
+          "from": "merchant",
+          "to": "plan",
+          "label": "publish"
+        }
       ]
     },
-    "demoPrompts": ["What belongs in the scenario engine rather than the model?", "How can a merchant challenge a recommendation?"],
+    "demoPrompts": [
+      "What belongs in the scenario engine rather than the model?",
+      "How can a merchant challenge a recommendation?"
+    ],
     "source": "public-synthetic"
   },
   {
@@ -365,30 +758,86 @@
     "accent": "teal",
     "summary": "Classify a resident request, retrieve the relevant service guidance, and prepare a routed case for staff review.",
     "problem": "Residents describe needs in natural language while agencies organize services by program, eligibility, and jurisdiction.",
-    "outcomes": ["Faster routing", "Clear service explanations", "Reduced duplicate intake"],
-    "capabilities": ["Intent classification", "Grounded Q&A", "Case routing"],
-    "patterns": ["RAG", "Deterministic eligibility checks", "Staff escalation"],
+    "outcomes": [
+      "Faster routing",
+      "Clear service explanations",
+      "Reduced duplicate intake"
+    ],
+    "capabilities": [
+      "Intent classification",
+      "Grounded Q&A",
+      "Case routing"
+    ],
+    "patterns": [
+      "RAG",
+      "Deterministic eligibility checks",
+      "Staff escalation"
+    ],
     "workloadType": "workflow-automation",
     "dataReadiness": "medium",
     "riskLevel": "high",
     "maturity": "showcase",
-    "architecture": ["Accessible intake", "Service catalog", "Routing rules", "Case management adapter"],
+    "architecture": [
+      "Accessible intake",
+      "Service catalog",
+      "Routing rules",
+      "Case management adapter"
+    ],
     "workflow": {
       "nodes": [
-        {"id": "request", "label": "Resident request", "kind": "input"},
-        {"id": "classify", "label": "Intent and jurisdiction", "kind": "ai"},
-        {"id": "rules", "label": "Eligibility and routing rules", "kind": "process"},
-        {"id": "staff", "label": "Staff review", "kind": "human"},
-        {"id": "case", "label": "Routed case", "kind": "system"}
+        {
+          "id": "request",
+          "label": "Resident request",
+          "kind": "input"
+        },
+        {
+          "id": "classify",
+          "label": "Intent and jurisdiction",
+          "kind": "ai"
+        },
+        {
+          "id": "rules",
+          "label": "Eligibility and routing rules",
+          "kind": "process"
+        },
+        {
+          "id": "staff",
+          "label": "Staff review",
+          "kind": "human"
+        },
+        {
+          "id": "case",
+          "label": "Routed case",
+          "kind": "system"
+        }
       ],
       "edges": [
-        {"from": "request", "to": "classify", "label": "interpret"},
-        {"from": "classify", "to": "rules", "label": "candidate service"},
-        {"from": "rules", "to": "staff", "label": "verify"},
-        {"from": "staff", "to": "case", "label": "submit"}
+        {
+          "from": "request",
+          "to": "classify",
+          "label": "interpret"
+        },
+        {
+          "from": "classify",
+          "to": "rules",
+          "label": "candidate service"
+        },
+        {
+          "from": "rules",
+          "to": "staff",
+          "label": "verify"
+        },
+        {
+          "from": "staff",
+          "to": "case",
+          "label": "submit"
+        }
       ]
     },
-    "demoPrompts": ["Why should eligibility remain deterministic?", "How should language accessibility be tested?"],
+    "demoPrompts": [
+      "Why should eligibility remain deterministic?",
+      "How should language accessibility be tested?"
+    ],
     "courseCaseId": "public-service-intake",
     "source": "public-synthetic"
   },
@@ -401,30 +850,86 @@
     "accent": "amber",
     "summary": "Explain approved academic-success indicators and help an advisor prepare outreach options without making automated student decisions.",
     "problem": "Advisors need to interpret scattered course, engagement, and support-service signals while avoiding opaque automated decisions.",
-    "outcomes": ["Better-prepared advising", "Transparent indicator explanations", "Consistent support options"],
-    "capabilities": ["Risk-factor explanation", "Policy retrieval", "Advisor preparation"],
-    "patterns": ["Explainable analytics", "Advisor copilot", "No automated adverse action"],
+    "outcomes": [
+      "Better-prepared advising",
+      "Transparent indicator explanations",
+      "Consistent support options"
+    ],
+    "capabilities": [
+      "Risk-factor explanation",
+      "Policy retrieval",
+      "Advisor preparation"
+    ],
+    "patterns": [
+      "Explainable analytics",
+      "Advisor copilot",
+      "No automated adverse action"
+    ],
     "workloadType": "decision-support",
     "dataReadiness": "high",
     "riskLevel": "high",
     "maturity": "prototype",
-    "architecture": ["Governed feature service", "Explanation layer", "Support catalog", "Advisor workspace"],
+    "architecture": [
+      "Governed feature service",
+      "Explanation layer",
+      "Support catalog",
+      "Advisor workspace"
+    ],
     "workflow": {
       "nodes": [
-        {"id": "signals", "label": "Approved student signals", "kind": "input"},
-        {"id": "explain", "label": "Explain indicators", "kind": "ai"},
-        {"id": "options", "label": "Retrieve support options", "kind": "process"},
-        {"id": "advisor", "label": "Advisor judgment", "kind": "human"},
-        {"id": "outreach", "label": "Supportive outreach", "kind": "output"}
+        {
+          "id": "signals",
+          "label": "Approved student signals",
+          "kind": "input"
+        },
+        {
+          "id": "explain",
+          "label": "Explain indicators",
+          "kind": "ai"
+        },
+        {
+          "id": "options",
+          "label": "Retrieve support options",
+          "kind": "process"
+        },
+        {
+          "id": "advisor",
+          "label": "Advisor judgment",
+          "kind": "human"
+        },
+        {
+          "id": "outreach",
+          "label": "Supportive outreach",
+          "kind": "output"
+        }
       ],
       "edges": [
-        {"from": "signals", "to": "explain", "label": "interpret"},
-        {"from": "explain", "to": "options", "label": "needs"},
-        {"from": "options", "to": "advisor", "label": "prepare"},
-        {"from": "advisor", "to": "outreach", "label": "decide"}
+        {
+          "from": "signals",
+          "to": "explain",
+          "label": "interpret"
+        },
+        {
+          "from": "explain",
+          "to": "options",
+          "label": "needs"
+        },
+        {
+          "from": "options",
+          "to": "advisor",
+          "label": "prepare"
+        },
+        {
+          "from": "advisor",
+          "to": "outreach",
+          "label": "decide"
+        }
       ]
     },
-    "demoPrompts": ["What makes this use case high risk?", "How do we prevent automated adverse action?"],
+    "demoPrompts": [
+      "What makes this use case high risk?",
+      "How do we prevent automated adverse action?"
+    ],
     "source": "public-synthetic"
   },
   {
@@ -436,30 +941,86 @@
     "accent": "orange",
     "summary": "Extract design requirements and drawing references, then assemble a traceable review checklist for an engineer.",
     "problem": "Reviewers manually trace requirements across specifications, drawings, schedules, and revision packages.",
-    "outcomes": ["Faster package preparation", "Requirement-to-source traceability", "Consistent engineering review"],
-    "capabilities": ["Multimodal extraction", "Requirement matching", "Checklist generation"],
-    "patterns": ["Document intelligence", "Vision plus text", "Engineer sign-off"],
+    "outcomes": [
+      "Faster package preparation",
+      "Requirement-to-source traceability",
+      "Consistent engineering review"
+    ],
+    "capabilities": [
+      "Multimodal extraction",
+      "Requirement matching",
+      "Checklist generation"
+    ],
+    "patterns": [
+      "Document intelligence",
+      "Vision plus text",
+      "Engineer sign-off"
+    ],
     "workloadType": "document-processing",
     "dataReadiness": "medium",
     "riskLevel": "high",
     "maturity": "prototype",
-    "architecture": ["Document intake", "Layout and vision extraction", "Requirement matcher", "Review workbench"],
+    "architecture": [
+      "Document intake",
+      "Layout and vision extraction",
+      "Requirement matcher",
+      "Review workbench"
+    ],
     "workflow": {
       "nodes": [
-        {"id": "package", "label": "Design package", "kind": "input"},
-        {"id": "extract", "label": "Layout and drawing extraction", "kind": "process"},
-        {"id": "match", "label": "Requirement matching", "kind": "ai"},
-        {"id": "engineer", "label": "Engineer review", "kind": "human"},
-        {"id": "checklist", "label": "Traceable checklist", "kind": "output"}
+        {
+          "id": "package",
+          "label": "Design package",
+          "kind": "input"
+        },
+        {
+          "id": "extract",
+          "label": "Layout and drawing extraction",
+          "kind": "process"
+        },
+        {
+          "id": "match",
+          "label": "Requirement matching",
+          "kind": "ai"
+        },
+        {
+          "id": "engineer",
+          "label": "Engineer review",
+          "kind": "human"
+        },
+        {
+          "id": "checklist",
+          "label": "Traceable checklist",
+          "kind": "output"
+        }
       ],
       "edges": [
-        {"from": "package", "to": "extract", "label": "parse"},
-        {"from": "extract", "to": "match", "label": "evidence"},
-        {"from": "match", "to": "engineer", "label": "candidate checks"},
-        {"from": "engineer", "to": "checklist", "label": "approve"}
+        {
+          "from": "package",
+          "to": "extract",
+          "label": "parse"
+        },
+        {
+          "from": "extract",
+          "to": "match",
+          "label": "evidence"
+        },
+        {
+          "from": "match",
+          "to": "engineer",
+          "label": "candidate checks"
+        },
+        {
+          "from": "engineer",
+          "to": "checklist",
+          "label": "approve"
+        }
       ]
     },
-    "demoPrompts": ["How should citations work across drawings and specifications?", "Which checks should remain rule-based?"],
+    "demoPrompts": [
+      "How should citations work across drawings and specifications?",
+      "Which checks should remain rule-based?"
+    ],
     "source": "public-synthetic"
   },
   {
@@ -471,30 +1032,86 @@
     "accent": "teal",
     "summary": "Combine traffic, delivery windows, vehicle constraints, and disruption signals to prepare route options for a fleet dispatcher.",
     "problem": "Dispatchers must continually rebalance routes as congestion, weather, vehicle availability, and customer constraints change.",
-    "outcomes": ["Faster disruption response", "Lower route cost", "Visible safety and service tradeoffs"],
-    "capabilities": ["Travel-time prediction", "Route optimization", "Exception explanation"],
-    "patterns": ["Prediction plus optimization", "Dispatcher approval", "Operational monitoring"],
+    "outcomes": [
+      "Faster disruption response",
+      "Lower route cost",
+      "Visible safety and service tradeoffs"
+    ],
+    "capabilities": [
+      "Travel-time prediction",
+      "Route optimization",
+      "Exception explanation"
+    ],
+    "patterns": [
+      "Prediction plus optimization",
+      "Dispatcher approval",
+      "Operational monitoring"
+    ],
     "workloadType": "decision-support",
     "dataReadiness": "high",
     "riskLevel": "high",
     "maturity": "showcase",
-    "architecture": ["Fleet telemetry", "Traffic prediction", "Constraint solver", "Dispatcher workbench"],
+    "architecture": [
+      "Fleet telemetry",
+      "Traffic prediction",
+      "Constraint solver",
+      "Dispatcher workbench"
+    ],
     "workflow": {
       "nodes": [
-        {"id": "jobs", "label": "Jobs and fleet state", "kind": "input"},
-        {"id": "predict", "label": "Predict travel conditions", "kind": "ai"},
-        {"id": "optimize", "label": "Optimize feasible routes", "kind": "process"},
-        {"id": "dispatcher", "label": "Dispatcher review", "kind": "human"},
-        {"id": "routes", "label": "Released routes", "kind": "system"}
+        {
+          "id": "jobs",
+          "label": "Jobs and fleet state",
+          "kind": "input"
+        },
+        {
+          "id": "predict",
+          "label": "Predict travel conditions",
+          "kind": "ai"
+        },
+        {
+          "id": "optimize",
+          "label": "Optimize feasible routes",
+          "kind": "process"
+        },
+        {
+          "id": "dispatcher",
+          "label": "Dispatcher review",
+          "kind": "human"
+        },
+        {
+          "id": "routes",
+          "label": "Released routes",
+          "kind": "system"
+        }
       ],
       "edges": [
-        {"from": "jobs", "to": "predict", "label": "context"},
-        {"from": "predict", "to": "optimize", "label": "travel estimates"},
-        {"from": "optimize", "to": "dispatcher", "label": "options"},
-        {"from": "dispatcher", "to": "routes", "label": "approve"}
+        {
+          "from": "jobs",
+          "to": "predict",
+          "label": "context"
+        },
+        {
+          "from": "predict",
+          "to": "optimize",
+          "label": "travel estimates"
+        },
+        {
+          "from": "optimize",
+          "to": "dispatcher",
+          "label": "options"
+        },
+        {
+          "from": "dispatcher",
+          "to": "routes",
+          "label": "approve"
+        }
       ]
     },
-    "demoPrompts": ["Which part is prediction and which part is optimization?", "What safety constraints must a dispatcher own?"],
+    "demoPrompts": [
+      "Which part is prediction and which part is optimization?",
+      "What safety constraints must a dispatcher own?"
+    ],
     "courseCaseId": "transportation-fleet-routing",
     "source": "public-synthetic"
   },
@@ -507,30 +1124,86 @@
     "accent": "pink",
     "summary": "Generate campaign drafts from an approved brief and source library, then route claims, rights, and brand checks to an editor.",
     "problem": "Creative teams need more variations without losing factual grounding, brand consistency, attribution, or intellectual-property controls.",
-    "outcomes": ["Faster first drafts", "Traceable source use", "Consistent editorial controls"],
-    "capabilities": ["Grounded generation", "Content transformation", "Quality review"],
-    "patterns": ["Retrieval-grounded generation", "Editor approval", "Rights and claims checks"],
+    "outcomes": [
+      "Faster first drafts",
+      "Traceable source use",
+      "Consistent editorial controls"
+    ],
+    "capabilities": [
+      "Grounded generation",
+      "Content transformation",
+      "Quality review"
+    ],
+    "patterns": [
+      "Retrieval-grounded generation",
+      "Editor approval",
+      "Rights and claims checks"
+    ],
     "workloadType": "content-generation",
     "dataReadiness": "medium",
     "riskLevel": "high",
     "maturity": "prototype",
-    "architecture": ["Approved content library", "Brief and policy retrieval", "Generation service", "Editorial review"],
+    "architecture": [
+      "Approved content library",
+      "Brief and policy retrieval",
+      "Generation service",
+      "Editorial review"
+    ],
     "workflow": {
       "nodes": [
-        {"id": "brief", "label": "Approved brief", "kind": "input"},
-        {"id": "ground", "label": "Retrieve sources and policy", "kind": "process"},
-        {"id": "draft", "label": "Generate draft variants", "kind": "ai"},
-        {"id": "editor", "label": "Editor and rights review", "kind": "human"},
-        {"id": "publish", "label": "Approved content", "kind": "output"}
+        {
+          "id": "brief",
+          "label": "Approved brief",
+          "kind": "input"
+        },
+        {
+          "id": "ground",
+          "label": "Retrieve sources and policy",
+          "kind": "process"
+        },
+        {
+          "id": "draft",
+          "label": "Generate draft variants",
+          "kind": "ai"
+        },
+        {
+          "id": "editor",
+          "label": "Editor and rights review",
+          "kind": "human"
+        },
+        {
+          "id": "publish",
+          "label": "Approved content",
+          "kind": "output"
+        }
       ],
       "edges": [
-        {"from": "brief", "to": "ground", "label": "scope"},
-        {"from": "ground", "to": "draft", "label": "constraints"},
-        {"from": "draft", "to": "editor", "label": "review"},
-        {"from": "editor", "to": "publish", "label": "approve"}
+        {
+          "from": "brief",
+          "to": "ground",
+          "label": "scope"
+        },
+        {
+          "from": "ground",
+          "to": "draft",
+          "label": "constraints"
+        },
+        {
+          "from": "draft",
+          "to": "editor",
+          "label": "review"
+        },
+        {
+          "from": "editor",
+          "to": "publish",
+          "label": "approve"
+        }
       ]
     },
-    "demoPrompts": ["Where are attribution and IP checks enforced?", "Why is fluency not a quality metric?"],
+    "demoPrompts": [
+      "Where are attribution and IP checks enforced?",
+      "Why is fluency not a quality metric?"
+    ],
     "source": "public-synthetic"
   },
   {
@@ -542,30 +1215,86 @@
     "accent": "amber",
     "summary": "Combine field observations, weather, and aerial imagery to prioritize areas for agronomist inspection and intervention planning.",
     "problem": "Large growing areas make it difficult to identify emerging water, pest, nutrient, or disease stress early enough for targeted action.",
-    "outcomes": ["Earlier field inspection", "More targeted intervention", "Reduced unnecessary treatment"],
-    "capabilities": ["Remote-sensing analysis", "Risk classification", "Field prioritization"],
-    "patterns": ["Multimodal monitoring", "Agronomist validation", "Economic and environmental tradeoffs"],
+    "outcomes": [
+      "Earlier field inspection",
+      "More targeted intervention",
+      "Reduced unnecessary treatment"
+    ],
+    "capabilities": [
+      "Remote-sensing analysis",
+      "Risk classification",
+      "Field prioritization"
+    ],
+    "patterns": [
+      "Multimodal monitoring",
+      "Agronomist validation",
+      "Economic and environmental tradeoffs"
+    ],
     "workloadType": "vision-analysis",
     "dataReadiness": "medium",
     "riskLevel": "medium",
     "maturity": "showcase",
-    "architecture": ["Imagery and sensors", "Stress detection", "Weather context", "Agronomist field app"],
+    "architecture": [
+      "Imagery and sensors",
+      "Stress detection",
+      "Weather context",
+      "Agronomist field app"
+    ],
     "workflow": {
       "nodes": [
-        {"id": "observations", "label": "Imagery and field signals", "kind": "input"},
-        {"id": "detect", "label": "Detect stress candidates", "kind": "ai"},
-        {"id": "prioritize", "label": "Prioritize inspection", "kind": "process"},
-        {"id": "agronomist", "label": "Agronomist validates", "kind": "human"},
-        {"id": "plan", "label": "Intervention plan", "kind": "output"}
+        {
+          "id": "observations",
+          "label": "Imagery and field signals",
+          "kind": "input"
+        },
+        {
+          "id": "detect",
+          "label": "Detect stress candidates",
+          "kind": "ai"
+        },
+        {
+          "id": "prioritize",
+          "label": "Prioritize inspection",
+          "kind": "process"
+        },
+        {
+          "id": "agronomist",
+          "label": "Agronomist validates",
+          "kind": "human"
+        },
+        {
+          "id": "plan",
+          "label": "Intervention plan",
+          "kind": "output"
+        }
       ],
       "edges": [
-        {"from": "observations", "to": "detect", "label": "analyze"},
-        {"from": "detect", "to": "prioritize", "label": "risk"},
-        {"from": "prioritize", "to": "agronomist", "label": "inspect"},
-        {"from": "agronomist", "to": "plan", "label": "decide"}
+        {
+          "from": "observations",
+          "to": "detect",
+          "label": "analyze"
+        },
+        {
+          "from": "detect",
+          "to": "prioritize",
+          "label": "risk"
+        },
+        {
+          "from": "prioritize",
+          "to": "agronomist",
+          "label": "inspect"
+        },
+        {
+          "from": "agronomist",
+          "to": "plan",
+          "label": "decide"
+        }
       ]
     },
-    "demoPrompts": ["What can imagery suggest but not prove?", "Which business and sustainability metrics should be paired?"],
+    "demoPrompts": [
+      "What can imagery suggest but not prove?",
+      "Which business and sustainability metrics should be paired?"
+    ],
     "source": "public-synthetic"
   },
   {
@@ -577,30 +1306,316 @@
     "accent": "orange",
     "summary": "Use an immutable event trail to detect unusual provenance patterns, then prepare evidence for a reviewer without treating blockchain entries as proof of physical truth.",
     "problem": "Supply-chain teams can record custody events but still need to detect inconsistencies, missing attestations, and suspicious movement patterns.",
-    "outcomes": ["Faster anomaly review", "Traceable evidence packet", "Clear ledger-versus-reality boundary"],
-    "capabilities": ["Anomaly detection", "Evidence summarization", "Provenance tracing"],
-    "patterns": ["Ledger-backed evidence", "AI anomaly triage", "Human investigation"],
+    "outcomes": [
+      "Faster anomaly review",
+      "Traceable evidence packet",
+      "Clear ledger-versus-reality boundary"
+    ],
+    "capabilities": [
+      "Anomaly detection",
+      "Evidence summarization",
+      "Provenance tracing"
+    ],
+    "patterns": [
+      "Ledger-backed evidence",
+      "AI anomaly triage",
+      "Human investigation"
+    ],
     "workloadType": "decision-support",
     "dataReadiness": "medium",
     "riskLevel": "high",
     "maturity": "showcase",
-    "architecture": ["Permissioned event ledger", "Off-chain evidence store", "Anomaly service", "Investigator workbench"],
+    "architecture": [
+      "Permissioned event ledger",
+      "Off-chain evidence store",
+      "Anomaly service",
+      "Investigator workbench"
+    ],
     "workflow": {
       "nodes": [
-        {"id": "events", "label": "Custody events", "kind": "input"},
-        {"id": "verify", "label": "Validate signatures and rules", "kind": "process"},
-        {"id": "detect", "label": "Detect unusual patterns", "kind": "ai"},
-        {"id": "investigator", "label": "Investigator review", "kind": "human"},
-        {"id": "finding", "label": "Documented finding", "kind": "output"}
+        {
+          "id": "events",
+          "label": "Custody events",
+          "kind": "input"
+        },
+        {
+          "id": "verify",
+          "label": "Validate signatures and rules",
+          "kind": "process"
+        },
+        {
+          "id": "detect",
+          "label": "Detect unusual patterns",
+          "kind": "ai"
+        },
+        {
+          "id": "investigator",
+          "label": "Investigator review",
+          "kind": "human"
+        },
+        {
+          "id": "finding",
+          "label": "Documented finding",
+          "kind": "output"
+        }
       ],
       "edges": [
-        {"from": "events", "to": "verify", "label": "check"},
-        {"from": "verify", "to": "detect", "label": "trusted records"},
-        {"from": "detect", "to": "investigator", "label": "candidate anomaly"},
-        {"from": "investigator", "to": "finding", "label": "substantiate"}
+        {
+          "from": "events",
+          "to": "verify",
+          "label": "check"
+        },
+        {
+          "from": "verify",
+          "to": "detect",
+          "label": "trusted records"
+        },
+        {
+          "from": "detect",
+          "to": "investigator",
+          "label": "candidate anomaly"
+        },
+        {
+          "from": "investigator",
+          "to": "finding",
+          "label": "substantiate"
+        }
       ]
     },
-    "demoPrompts": ["What does an immutable ledger fail to prove?", "Why should anomaly detection not trigger an automatic accusation?"],
+    "demoPrompts": [
+      "What does an immutable ledger fail to prove?",
+      "Why should anomaly detection not trigger an automatic accusation?"
+    ],
     "source": "public-synthetic"
+  },
+  {
+    "id": "financial-credit-risk-lab",
+    "title": "Credit Risk Early-Intervention Review",
+    "industry": "financial-services",
+    "industryLabel": "Financial Services",
+    "icon": "landmark",
+    "accent": "amber",
+    "summary": "Score monthly account snapshots for missed-payment risk, size the review queue with an expected-cost rule, and hand ranked accounts to analysts with plain-language reason codes.",
+    "problem": "A small credit-risk team can review only a fraction of 30,000 accounts each month, and any adverse step must come with specific reasons the customer can understand.",
+    "outcomes": [
+      "A review queue sized by expected cost",
+      "Reason codes behind every flagged account",
+      "Analyst-owned interventions"
+    ],
+    "capabilities": [
+      "Tabular risk prediction",
+      "Cost-based thresholding",
+      "Reason-code explanations"
+    ],
+    "patterns": [
+      "Expected-cost policy",
+      "Protected attributes excluded",
+      "Human-in-the-loop"
+    ],
+    "workloadType": "decision-support",
+    "dataReadiness": "high",
+    "riskLevel": "high",
+    "maturity": "prototype",
+    "architecture": [
+      "UCI credit-card accounts",
+      "Point-in-time snapshot features",
+      "Risk-scoring model",
+      "Expected-cost policy",
+      "FastAPI scoring service",
+      "Analyst review queue"
+    ],
+    "workflow": {
+      "nodes": [
+        {
+          "id": "snapshot",
+          "label": "Monthly account snapshot",
+          "kind": "input"
+        },
+        {
+          "id": "validate",
+          "label": "Data validity check",
+          "kind": "process"
+        },
+        {
+          "id": "score",
+          "label": "Missed-payment risk score",
+          "kind": "ai"
+        },
+        {
+          "id": "policy",
+          "label": "Expected-cost review policy",
+          "kind": "system"
+        },
+        {
+          "id": "analyst",
+          "label": "Analyst review",
+          "kind": "human"
+        },
+        {
+          "id": "notice",
+          "label": "Adverse-action notice",
+          "kind": "system"
+        },
+        {
+          "id": "outcome",
+          "label": "Intervention and outcome recorded",
+          "kind": "output"
+        }
+      ],
+      "edges": [
+        {
+          "from": "snapshot",
+          "to": "validate",
+          "label": "assemble"
+        },
+        {
+          "from": "validate",
+          "to": "score",
+          "label": "clean fields"
+        },
+        {
+          "from": "score",
+          "to": "policy",
+          "label": "probability"
+        },
+        {
+          "from": "policy",
+          "to": "analyst",
+          "label": "flagged queue"
+        },
+        {
+          "from": "analyst",
+          "to": "outcome",
+          "label": "intervention"
+        },
+        {
+          "from": "analyst",
+          "to": "notice",
+          "label": "adverse step"
+        },
+        {
+          "from": "notice",
+          "to": "outcome",
+          "label": "specific reasons"
+        }
+      ]
+    },
+    "demoPrompts": [
+      "Why is this a review queue and not a credit decision?",
+      "How does the expected-cost rule size the monthly queue?"
+    ],
+    "courseCaseId": "financial-credit-risk",
+    "demoStatus": "available",
+    "source": "public-benchmark"
+  },
+  {
+    "id": "financial-complaint-routing-lab",
+    "title": "Customer Complaint Routing Desk",
+    "industry": "financial-services",
+    "industryLabel": "Financial Services",
+    "icon": "landmark",
+    "accent": "pink",
+    "summary": "Read each complaint narrative, name the likely specialist team with visible word-level reasons, and auto-route only confident calls while a human triage desk owns the rest.",
+    "problem": "Banks must answer consumer complaints on a regulatory clock, and a misrouted complaint burns days before the right team even sees it.",
+    "outcomes": [
+      "Fewer misroutes on the response clock",
+      "Word-level reasons for every route",
+      "Human triage below the confidence line"
+    ],
+    "capabilities": [
+      "Text classification",
+      "Confidence thresholds",
+      "Queue routing"
+    ],
+    "patterns": [
+      "Word counts plus logistic regression",
+      "Abstain below threshold",
+      "Human re-route authority"
+    ],
+    "workloadType": "workflow-automation",
+    "dataReadiness": "high",
+    "riskLevel": "medium",
+    "maturity": "prototype",
+    "architecture": [
+      "CFPB complaint sample",
+      "TF-IDF feature pipeline",
+      "Logistic-regression classifier",
+      "Confidence-threshold policy",
+      "FastAPI routing service",
+      "Triage workbench"
+    ],
+    "workflow": {
+      "nodes": [
+        {
+          "id": "intake",
+          "label": "Complaint intake",
+          "kind": "input"
+        },
+        {
+          "id": "classify",
+          "label": "Narrative team classification",
+          "kind": "ai"
+        },
+        {
+          "id": "gate",
+          "label": "Confidence gate",
+          "kind": "system"
+        },
+        {
+          "id": "queue",
+          "label": "Specialist team queue",
+          "kind": "system"
+        },
+        {
+          "id": "triage",
+          "label": "Human triage desk",
+          "kind": "human"
+        },
+        {
+          "id": "response",
+          "label": "Response within the clock",
+          "kind": "output"
+        }
+      ],
+      "edges": [
+        {
+          "from": "intake",
+          "to": "classify",
+          "label": "narrative"
+        },
+        {
+          "from": "classify",
+          "to": "gate",
+          "label": "team and confidence"
+        },
+        {
+          "from": "gate",
+          "to": "queue",
+          "label": "high confidence"
+        },
+        {
+          "from": "gate",
+          "to": "triage",
+          "label": "low confidence"
+        },
+        {
+          "from": "triage",
+          "to": "queue",
+          "label": "assigned"
+        },
+        {
+          "from": "queue",
+          "to": "response",
+          "label": "investigate and answer"
+        }
+      ]
+    },
+    "demoPrompts": [
+      "Why route automatically only above a confidence threshold?",
+      "What happens when a specialist finds a misrouted complaint?"
+    ],
+    "courseCaseId": "financial-complaint-routing",
+    "demoStatus": "available",
+    "source": "public-benchmark"
   }
 ]
