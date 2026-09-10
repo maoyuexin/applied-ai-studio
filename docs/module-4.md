@@ -2,13 +2,13 @@
 
 ## Open in Codespaces
 
-Select the **feat/module-4-finance** branch before creating a Codespace. The release
-is not on `main` until merged. Setup installs the dependencies, verifies the included
+Select the **main** branch when creating a Codespace. Setup installs the dependencies, verifies the included
 model bundles, and starts the app on port 5173. Open that port from the Ports panel;
 do not start a second app process in Codespaces.
 
-Existing Codespaces must check out the release branch and rebuild the container to
-install the new services. Commit or preserve your own work before switching branches.
+Existing Codespaces must update to the latest `main` and rebuild the container to
+install the new services. Commit or preserve your own work before switching branches
+or pulling updates.
 
 ## Two Complete Cases
 

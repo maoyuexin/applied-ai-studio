@@ -86,10 +86,10 @@ Copilot authentication.
 
 ### 1. Clone and install JavaScript dependencies
 
-For the Module 4 release, use the publication branch until it is merged into `main`:
+The `main` branch includes the Module 4 notebooks, demos, and workflows:
 
 ```bash
-git clone --branch feat/module-4-finance https://github.com/maoyuexin/applied-ai-studio.git
+git clone --branch main https://github.com/maoyuexin/applied-ai-studio.git
 cd applied-ai-studio
 npm ci
 ```
