@@ -407,7 +407,18 @@ def verify(
     reproduced_confidence = probabilities.max(axis=1)
     stored_confidence = manifest["confidence"].to_numpy(np.float64)
 
+    # Bit-exactness is the right claim on one machine, and it is what the notebook
+    # asserts. It is NOT portable: these artifacts are built on one platform and
+    # reloaded on another (a Codespace is Linux x86-64), where BLAS can differ in
+    # the last bit of a float. TF-IDF into logistic regression is sensitive enough
+    # to show it. So record bit-exactness, but judge on what the claim actually
+    # requires: the same decisions, and probabilities that agree to far tighter
+    # than any threshold could notice.
     manifest_bitwise = reproduced_confidence.tobytes() == stored_confidence.tobytes()
+    manifest_close = bool(
+        np.allclose(reproduced_confidence, stored_confidence, rtol=0, atol=1e-9)
+    )
+    manifest_max_diff = float(np.max(np.abs(reproduced_confidence - stored_confidence)))
     team_changes = int((reproduced_team != manifest["predicted_team"].to_numpy()).sum())
     reproduced_route = np.where(
         reproduced_confidence >= threshold, config.ROUTE_AUTO, config.ROUTE_TRIAGE
@@ -419,23 +430,47 @@ def verify(
     if test_df is not None:
         rows = reload_slice(test_df)
         slice_probabilities = pipeline.predict_proba(rows[config.TEXT_COLUMN].tolist())
-        slice_matches = (
+        digest_matches = (
             probability_digest(slice_probabilities)
             == evaluation["reload_check"]["probability_sha256"]
         )
+        # Same reasoning as above: the digest is a bit-exact check. When it fails,
+        # fall back to a numeric comparison against the stored probabilities if the
+        # notebook recorded them, and otherwise rely on the predictions comparison
+        # immediately below, which is the decision-level claim.
+        slice_matches = digest_matches
+        stored_probabilities = evaluation["reload_check"].get("probabilities")
+        if not digest_matches and stored_probabilities is not None:
+            slice_matches = bool(
+                np.allclose(
+                    slice_probabilities,
+                    np.asarray(stored_probabilities, np.float64),
+                    rtol=0,
+                    atol=1e-9,
+                )
+            )
+        elif not digest_matches:
+            slice_matches = None  # undecidable numerically; predictions still gate it
         slice_predictions = classes[np.argmax(slice_probabilities, axis=1)]
         prediction_matches = (
             list(slice_predictions) == evaluation["reload_check"]["predictions"]
         )
         slice_matches = bool(slice_matches and prediction_matches)
-        slice_status = "bit-identical" if slice_matches else "MISMATCH"
+        slice_status = (
+            "bit-identical" if digest_matches
+            else "within 1e-9" if slice_matches
+            else "predictions match; probabilities not comparable" if slice_matches is None
+            else "MISMATCH"
+        )
 
-    if not manifest_bitwise or team_changes or route_changes or slice_matches is False:
+    if not manifest_close or team_changes or route_changes or slice_matches is False:
         raise AssertionError("Reloaded artifacts do not reproduce the exported scores.")
     return {
         "status": "verified",
         "manifest_complaints": int(len(manifest)),
         "manifest_confidence_bitwise_identical": bool(manifest_bitwise),
+        "manifest_confidence_within_1e-9": manifest_close,
+        "manifest_confidence_max_abs_diff": manifest_max_diff,
         "predicted_team_changes": team_changes,
         "route_changes": route_changes,
         "reload_slice_complaints": RELOAD_CHECK_ROWS if test_df is not None else 0,

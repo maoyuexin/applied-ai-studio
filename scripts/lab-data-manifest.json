@@ -1,6 +1,6 @@
 {
   "release_tag": "lab-data-v1",
-  "note": "Large lab datasets are published as GitHub Release assets rather than committed. Git LFS was considered and rejected: its free tier meters 1 GB/month of BANDWIDTH, which roughly six student clones would exhaust, after which clones fail outright. Release assets are not metered that way. Everything here is redistributable under the license named beside it.",
+  "note": "These four files are COMMITTED in the repository, so a normal clone already has them and scripts/fetch-lab-data.mjs does nothing. They are also published as GitHub Release assets as a recovery path: a shallow or partial clone, or a file deleted by accident, can be restored without re-cloning. Each entry records the size, SHA-256 and how to rebuild the file from its original public source. Git LFS was considered for hosting them and rejected: its free tier meters 1 GB per month of bandwidth, which roughly six student clones exhaust, after which clones fail outright rather than slowing down.",
   "files": [
     {
       "path": "notebooks/pneumonia-screening/data/pneumoniamnist_128.npz",

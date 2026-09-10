@@ -1,15 +1,19 @@
 #!/usr/bin/env node
-// Download the large lab datasets that are published as GitHub Release assets
-// instead of being committed.
+// Restore the large lab datasets if a checkout is missing any of them.
 //
-// Why they are not in git: four files come to about 105 MB, and one of them is
-// 72 MB. Committing them makes every student's clone slow and puts a permanent
-// binary in history. Git LFS was the obvious alternative and was rejected on
-// purpose: its free tier meters 1 GB per MONTH of bandwidth, which roughly six
-// student clones would exhaust, and after that clones FAIL rather than slow
-// down. Release assets are not metered that way.
+// These files are committed, so a normal clone already has them and this script
+// prints "present" four times and exits. It earns its place when that is not
+// true: a shallow or partial clone, a file deleted by accident, or a Codespace
+// that lost one. The same files are published as Release assets, so they can be
+// restored without re-cloning 200 MB.
 //
-// This runs once, during Codespace creation. Class time needs no network.
+// Git LFS was considered for hosting them and rejected on purpose: its free tier
+// meters 1 GB per MONTH of bandwidth, which roughly six student clones would
+// exhaust, and after that clones FAIL rather than slow down. Release assets are
+// not metered that way.
+//
+// This runs once, during Codespace creation, and is a no-op in the normal case.
+// Class time needs no network.
 //
 //   node scripts/fetch-lab-data.mjs            # fetch anything missing
 //   node scripts/fetch-lab-data.mjs --force    # re-fetch everything
