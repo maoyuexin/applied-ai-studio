@@ -59,11 +59,26 @@ echo "    using ${PYTHON_BIN}"
 echo "==> Creating the Python environment"
 "${PYTHON_BIN}" -m venv .venv
 
+# The large lab datasets live as GitHub Release assets, not in git. Fetch them
+# before anything tries to prepare a model from them. If this fails the setup
+# continues: the notebooks are committed with their outputs and every lab has an
+# offline HTML copy, so only RE-RUNNING those labs is affected.
+echo "==> Fetching the large lab datasets"
+npm run fetch:data || echo "    (some lab data could not be fetched - see the note above)"
+
 echo "==> Installing the Online Order service"
 npm run setup:orders
 
 # Installed here rather than on demand so nobody hits a missing package in the
 # middle of a class. Adds roughly 40 seconds to codespace creation.
+# PyTorch first, from the CPU wheel index. On Linux the default PyPI wheel is the
+# CUDA build: about 3 GB of NVIDIA libraries that nothing in this repo can use,
+# because a Codespace has no GPU. Installing it filled the 32 GB disk and failed
+# container creation with "No space left on device". setup:notebook now runs this
+# first, but it is spelled out here so the ordering is visible.
+echo "==> Installing PyTorch (CPU build - the CUDA build does not fit and is not used)"
+npm run setup:torch-cpu
+
 echo "==> Installing the fraud-detection notebook toolkit"
 npm run setup:notebook
 
@@ -71,7 +86,70 @@ echo "==> Installing the Fraud Detection Lab service"
 npm run setup:fraud
 
 echo "==> Preparing the Fraud Detection Lab model"
-npm run prepare:fraud
+npm run prepare:fraud || echo "    (skipped: prepare:fraud could not complete - the notebook's"\
+    "committed outputs and offline HTML still work; re-run it later)"
+
+echo "==> Installing the Chest X-ray Prioritization service"
+npm run setup:pneumonia
+
+if [[ -s notebooks/pneumonia-screening/artifacts/model.pt \
+   && -s notebooks/pneumonia-screening/artifacts/model_card.json \
+   && -s notebooks/pneumonia-screening/artifacts/operating_policy.json \
+   && -s notebooks/pneumonia-screening/artifacts/evaluation.json \
+   && -s notebooks/pneumonia-screening/artifacts/sample_manifest.parquet ]]; then
+  echo "==> Using the validated Chest X-ray artifacts included with the course"
+else
+  echo "==> Rebuilding missing Chest X-ray artifacts"
+  npm run prepare:pneumonia || echo "    (skipped: prepare:pneumonia could not complete - the notebook's"\
+    "committed outputs and offline HTML still work; re-run it later)"
+fi
+
+echo "==> Installing the Credit Risk Review service"
+npm run setup:credit
+
+echo "==> Preparing the Credit Risk Review model"
+npm run prepare:credit || echo "    (skipped: prepare:credit could not complete - the notebook's"\
+    "committed outputs and offline HTML still work; re-run it later)"
+
+echo "==> Installing the Complaint Routing service"
+npm run setup:complaints
+
+echo "==> Preparing the Complaint Routing model"
+npm run prepare:complaints || echo "    (skipped: prepare:complaints could not complete - the notebook's"\
+    "committed outputs and offline HTML still work; re-run it later)"
+
+echo "==> Installing the Predictive Maintenance service"
+npm run setup:pdm
+
+echo "==> Preparing the Predictive Maintenance model"
+npm run prepare:pdm || echo "    (skipped: prepare:pdm could not complete - the notebook's"\
+    "committed outputs and offline HTML still work; re-run it later)"
+
+echo "==> Installing the Procedure Assistant service"
+npm run setup:procedures
+
+echo "==> Preparing the Procedure Assistant index"
+npm run prepare:procedures || echo "    (skipped: prepare:procedures could not complete - the notebook's"\
+    "committed outputs and offline HTML still work; re-run it later)"
+
+echo "==> Installing the Demand Forecast service"
+npm run setup:forecast
+
+echo "==> Preparing the Demand Forecast model"
+npm run prepare:forecast || echo "    (skipped: prepare:forecast could not complete - the notebook's"\
+    "committed outputs and offline HTML still work; re-run it later)"
+
+echo "==> Installing the Product Recommendation service"
+npm run setup:recommendations
+
+echo "==> Preparing the Product Recommendation model"
+npm run prepare:recommendations || echo "    (skipped: prepare:recommendations could not complete - the notebook's"\
+    "committed outputs and offline HTML still work; re-run it later)"
+
+# pip's wheel cache is worth hundreds of megabytes by now and is never read again
+# in a fresh container. Reclaim it so a student running `df -h` sees honest numbers.
+echo "==> Reclaiming disk (pip cache)"
+node scripts/venv-python.mjs -m pip cache purge || true
 
 cat <<'BANNER'
 

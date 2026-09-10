@@ -1,0 +1,42 @@
+{
+  "release_tag": "lab-data-v1",
+  "note": "Large lab datasets are published as GitHub Release assets rather than committed. Git LFS was considered and rejected: its free tier meters 1 GB/month of BANDWIDTH, which roughly six student clones would exhaust, after which clones fail outright. Release assets are not metered that way. Everything here is redistributable under the license named beside it.",
+  "files": [
+    {
+      "path": "notebooks/pneumonia-screening/data/pneumoniamnist_128.npz",
+      "asset": "pneumoniamnist_128.npz",
+      "bytes": 75506212,
+      "lab": "Pediatric chest X-ray prioritization",
+      "license": "CC BY 4.0 (MedMNIST v2 / PneumoniaMNIST)",
+      "rebuild": "No build script; download from the MedMNIST project.",
+      "sha256": "a03c2ecea389a0ee449ebffe1e07171ca3dab488f6e04919f94ac83f5e7af25b"
+    },
+    {
+      "path": "notebooks/complaint-routing/data/complaints_train.parquet",
+      "asset": "complaints_train.parquet",
+      "bytes": 17626149,
+      "lab": "Consumer complaint routing",
+      "license": "US Government work (CFPB), free to use",
+      "rebuild": "scripts/build_dataset.py, from the 1.4 GB CFPB bulk download",
+      "sha256": "337ac8bbbf0a7b0bc6efd14b39d5ff74a997bb3054dc86b64b42d9a359f9ceb5"
+    },
+    {
+      "path": "notebooks/complaint-routing/data/embeddings_compare_train.parquet",
+      "asset": "embeddings_compare_train.parquet",
+      "bytes": 10547995,
+      "lab": "Consumer complaint routing",
+      "license": "Derived from CFPB public data",
+      "rebuild": "scripts/build_embeddings.py, about 4 minutes on a classroom CPU",
+      "sha256": "59f8d1f207c21173f3e6c2cdc179e53c65367dcbbe66ade48f2323c7de904b18"
+    },
+    {
+      "path": "notebooks/complaint-routing/data/embeddings_compare_val.parquet",
+      "asset": "embeddings_compare_val.parquet",
+      "bytes": 6235687,
+      "lab": "Consumer complaint routing",
+      "license": "Derived from CFPB public data",
+      "rebuild": "scripts/build_embeddings.py, about 4 minutes on a classroom CPU",
+      "sha256": "bdd0b248a3dd04fd1375b05ce80ce4a67256c5cacc913aacc13eea80b4eafe3a"
+    }
+  ]
+}

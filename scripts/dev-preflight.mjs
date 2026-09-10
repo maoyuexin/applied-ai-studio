@@ -6,6 +6,13 @@ const services = [
   { name: "agent API", port: 4320 },
   { name: "order API", port: 4330 },
   { name: "fraud API", port: 4340 },
+  { name: "pneumonia API", port: 4350 },
+  { name: "credit risk API", port: 4360 },
+  { name: "complaint routing API", port: 4370 },
+  { name: "predictive maintenance API", port: 4380 },
+  { name: "procedure assistant API", port: 4390 },
+  { name: "demand forecast API", port: 4400 },
+  { name: "product recommendation API", port: 4410 },
 ];
 
 function isListening(port) {
