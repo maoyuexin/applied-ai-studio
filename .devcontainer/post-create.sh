@@ -87,6 +87,14 @@ else
   npm run prepare:pneumonia
 fi
 
+echo "==> Installing the Module 4 Credit Risk and Complaint Routing services"
+npm run setup:credit
+npm run setup:complaints
+
+echo "==> Verifying the validated Module 4 model bundles"
+npm run prepare:credit
+npm run prepare:complaints
+
 cat <<'BANNER'
 
 ==================================================================

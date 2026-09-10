@@ -1,0 +1,275 @@
+{
+  "split_counts": {
+    "train": {
+      "n": 18000,
+      "default_rate": 0.2212
+    },
+    "validation": {
+      "n": 6000,
+      "default_rate": 0.2212
+    },
+    "test": {
+      "n": 6000,
+      "default_rate": 0.2212
+    }
+  },
+  "validation_leaderboard": [
+    {
+      "Model": "Majority baseline (always predicts the average)",
+      "Validation AUC": 0.5,
+      "Validation PR-AUC": 0.2212,
+      "Fit seconds": 0.0,
+      "Reason codes available?": "none to give"
+    },
+    {
+      "Model": "Logistic regression",
+      "Validation AUC": 0.7386,
+      "Validation PR-AUC": 0.4927,
+      "Fit seconds": 0.0147,
+      "Reason codes available?": "yes (coefficients)"
+    },
+    {
+      "Model": "Gradient boosting",
+      "Validation AUC": 0.7655,
+      "Validation PR-AUC": 0.5277,
+      "Fit seconds": 0.3691,
+      "Reason codes available?": "yes (SHAP)"
+    }
+  ],
+  "calibration_table": [
+    {
+      "Predicted probability bin": "0.0-0.1",
+      "Accounts": 1829,
+      "Mean predicted": 0.066,
+      "Observed default rate": 0.0738
+    },
+    {
+      "Predicted probability bin": "0.1-0.2",
+      "Accounts": 2153,
+      "Mean predicted": 0.147,
+      "Observed default rate": 0.157
+    },
+    {
+      "Predicted probability bin": "0.2-0.3",
+      "Accounts": 854,
+      "Mean predicted": 0.2443,
+      "Observed default rate": 0.2681
+    },
+    {
+      "Predicted probability bin": "0.3-0.4",
+      "Accounts": 319,
+      "Mean predicted": 0.3461,
+      "Observed default rate": 0.3417
+    },
+    {
+      "Predicted probability bin": "0.4-0.5",
+      "Accounts": 177,
+      "Mean predicted": 0.4471,
+      "Observed default rate": 0.4407
+    },
+    {
+      "Predicted probability bin": "0.5-0.6",
+      "Accounts": 137,
+      "Mean predicted": 0.553,
+      "Observed default rate": 0.5985
+    },
+    {
+      "Predicted probability bin": "0.6-0.7",
+      "Accounts": 212,
+      "Mean predicted": 0.6528,
+      "Observed default rate": 0.5896
+    },
+    {
+      "Predicted probability bin": "0.7-0.8",
+      "Accounts": 234,
+      "Mean predicted": 0.7496,
+      "Observed default rate": 0.6752
+    },
+    {
+      "Predicted probability bin": "0.8-0.9",
+      "Accounts": 84,
+      "Mean predicted": 0.8372,
+      "Observed default rate": 0.8571
+    },
+    {
+      "Predicted probability bin": "0.9-1.0",
+      "Accounts": 1,
+      "Mean predicted": 0.9329,
+      "Observed default rate": 1.0
+    }
+  ],
+  "policy_sweep": [
+    {
+      "review_cost_NT": 1000,
+      "flagged": 3425,
+      "flagged_share": 0.5708,
+      "precision": 0.2505,
+      "recall": 0.6466,
+      "net_savings_NT": 26728146
+    },
+    {
+      "review_cost_NT": 2000,
+      "flagged": 2741,
+      "flagged_share": 0.4568,
+      "precision": 0.2703,
+      "recall": 0.5584,
+      "net_savings_NT": 23626281
+    },
+    {
+      "review_cost_NT": 3000,
+      "flagged": 2248,
+      "flagged_share": 0.3747,
+      "precision": 0.2905,
+      "recall": 0.4921,
+      "net_savings_NT": 21182989
+    },
+    {
+      "review_cost_NT": 5000,
+      "flagged": 1469,
+      "flagged_share": 0.2448,
+      "precision": 0.3451,
+      "recall": 0.3821,
+      "net_savings_NT": 16880926
+    },
+    {
+      "review_cost_NT": 8000,
+      "flagged": 988,
+      "flagged_share": 0.1647,
+      "precision": 0.3856,
+      "recall": 0.2871,
+      "net_savings_NT": 13581356
+    },
+    {
+      "review_cost_NT": 10000,
+      "flagged": 780,
+      "flagged_share": 0.13,
+      "precision": 0.4167,
+      "recall": 0.2449,
+      "net_savings_NT": 11939426
+    },
+    {
+      "review_cost_NT": 12000,
+      "flagged": 640,
+      "flagged_share": 0.1067,
+      "precision": 0.4422,
+      "recall": 0.2133,
+      "net_savings_NT": 10282835
+    },
+    {
+      "review_cost_NT": 15000,
+      "flagged": 502,
+      "flagged_share": 0.0837,
+      "precision": 0.4721,
+      "recall": 0.1786,
+      "net_savings_NT": 8858044
+    },
+    {
+      "review_cost_NT": 20000,
+      "flagged": 329,
+      "flagged_share": 0.0548,
+      "precision": 0.5167,
+      "recall": 0.1281,
+      "net_savings_NT": 6973554
+    }
+  ],
+  "chosen_policy_validation": {
+    "review_cost_NT": 10000,
+    "flagged": 780,
+    "flagged_share": 0.13,
+    "precision": 0.4167,
+    "recall": 0.2449,
+    "net_savings_NT": 11939426,
+    "confusion": {
+      "TP": 325,
+      "FP": 455,
+      "FN": 1002,
+      "TN": 4218
+    },
+    "baselines_NT": {
+      "review_nobody": 0,
+      "review_everybody": -29233622
+    }
+  },
+  "fairness": {
+    "auc_without_protected": 0.7655,
+    "auc_with_protected": 0.767,
+    "delta_auc": 0.0015,
+    "slice_audit": {
+      "sex": [
+        {
+          "sex": "female",
+          "accounts": 3663,
+          "mean_score": 0.2104,
+          "flagged_share": 0.1234,
+          "actual_default_rate": 0.2127
+        },
+        {
+          "sex": "male",
+          "accounts": 2337,
+          "mean_score": 0.2248,
+          "flagged_share": 0.1404,
+          "actual_default_rate": 0.2345
+        }
+      ],
+      "age_band": [
+        {
+          "age_band": "20-29",
+          "accounts": 1932,
+          "mean_score": 0.2328,
+          "flagged_share": 0.1144,
+          "actual_default_rate": 0.2324
+        },
+        {
+          "age_band": "30-39",
+          "accounts": 2238,
+          "mean_score": 0.1999,
+          "flagged_share": 0.1403,
+          "actual_default_rate": 0.1993
+        },
+        {
+          "age_band": "40-49",
+          "accounts": 1303,
+          "mean_score": 0.2116,
+          "flagged_share": 0.1305,
+          "actual_default_rate": 0.2295
+        },
+        {
+          "age_band": "50-59",
+          "accounts": 451,
+          "mean_score": 0.2262,
+          "flagged_share": 0.1308,
+          "actual_default_rate": 0.2328
+        },
+        {
+          "age_band": "60+",
+          "accounts": 76,
+          "mean_score": 0.2762,
+          "flagged_share": 0.2105,
+          "actual_default_rate": 0.3684
+        }
+      ]
+    },
+    "note": "Slices computed from withheld demographic columns the model never saw. Exclusion is not proof of fairness; this audit is the check."
+  },
+  "test_frozen": {
+    "auc": 0.7852,
+    "pr_auc": 0.5758,
+    "brier": 0.1325,
+    "review_cost_NT": 10000,
+    "flagged": 761,
+    "flagged_share": 0.1268,
+    "precision": 0.4823,
+    "recall": 0.2766,
+    "net_savings_NT": 14623904,
+    "confusion": {
+      "TP": 367,
+      "FP": 394,
+      "FN": 960,
+      "TN": 4279
+    },
+    "baselines_NT": {
+      "review_nobody": 0,
+      "review_everybody": -27908148
+    }
+  }
+}

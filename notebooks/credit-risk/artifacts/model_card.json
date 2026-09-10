@@ -1,0 +1,113 @@
+{
+  "model_name": "Credit-account review prioritization model",
+  "model_version": "2026-09-02T14:58:00+00:00",
+  "created_utc": "2026-09-02T14:58:00+00:00",
+  "framework": "scikit-learn 1.9.0",
+  "packaging": "joblib Pipeline: creditlab.features.build_features -> HistGradientBoostingClassifier",
+  "estimator": "HistGradientBoostingClassifier(random_state=42), library defaults, no calibration wrapper",
+  "features": {
+    "months_late_now": "How many months behind on payments right now",
+    "worst_delay_6m": "Worst payment delay in the last 6 months",
+    "num_late_months_6m": "Number of late months in the last 6 months",
+    "utilization": "Share of the credit limit currently used",
+    "payment_ratio_6m": "Share of billed amounts actually paid (6 months)",
+    "bill_trend_6m": "Balance growth over 6 months, relative to the limit",
+    "credit_limit": "Credit limit"
+  },
+  "protected_attributes_excluded": {
+    "columns": [
+      "SEX",
+      "MARRIAGE",
+      "AGE"
+    ],
+    "reason": "US fair-lending law (ECOA / Regulation B) restricts using these in a credit decision. They are exported only as audit columns, never as model inputs.",
+    "measured_cost_of_exclusion_auc": 0.0015
+  },
+  "reason_codes": {
+    "mechanism": "shap.TreeExplainer on the deployed model",
+    "output": "up to 3 risk-raising reasons in plain language",
+    "note": "Borderline flags can have fewer than 3 risk-raising features."
+  },
+  "dataset": {
+    "name": "UCI Default of Credit Card Clients",
+    "uci_id": 350,
+    "url": "https://archive.ics.uci.edu/dataset/350/default+of+credit+card+clients",
+    "license": "CC BY 4.0",
+    "source_file_sha256": "30c6be3abd8dcfd3e6096c828bad8c2f011238620f5369220bd60cfc82700933",
+    "citation": "Yeh, I-C. & Lien, C-H. (2009). The comparisons of data mining techniques for the predictive accuracy of probability of default of credit card clients. Expert Systems with Applications, 36(2), 2473-2480.",
+    "population": "30,000 existing credit-card customers of one Taiwanese issuer, observed April-September 2005",
+    "split_counts": {
+      "train": {
+        "n": 18000,
+        "default_rate": 0.2212
+      },
+      "validation": {
+        "n": 6000,
+        "default_rate": 0.2212
+      },
+      "test": {
+        "n": 6000,
+        "default_rate": 0.2212
+      }
+    }
+  },
+  "intended_use": "Educational demonstration: rank existing packaged accounts for analyst review inside a monthly credit-risk workflow.",
+  "measured_on_untouched_test": {
+    "auc": 0.7852,
+    "pr_auc": 0.5758,
+    "brier": 0.1325,
+    "review_cost_NT": 10000,
+    "flagged": 761,
+    "flagged_share": 0.1268,
+    "precision": 0.4823,
+    "recall": 0.2766,
+    "net_savings_NT": 14623904,
+    "confusion": {
+      "TP": 367,
+      "FP": 394,
+      "FN": 960,
+      "TN": 4279
+    },
+    "baselines_NT": {
+      "review_nobody": 0,
+      "review_everybody": -27908148
+    }
+  },
+  "operating_policy": {
+    "name": "Expected-cost review policy",
+    "rule": "flag for review when p(default) x exposure x LGD > review_cost",
+    "parameters": {
+      "loss_given_default": 0.5,
+      "review_cost_NT": 10000,
+      "currency": "NT$ (New Taiwan dollars)",
+      "note": "All dollar parameters are synthetic classroom assumptions, not measured bank costs."
+    },
+    "exposure": "BILL_AMT1 clipped to [0, LIMIT_BAL]",
+    "selected_on": "validation split only; the test split was scored once after freezing",
+    "routes": {
+      "priority_review": "A credit analyst reviews the account and chooses the intervention.",
+      "standard_monitoring": "No review this month; the account stays in ordinary monitoring."
+    },
+    "fallback": "An account with missing fields or codes outside the documented ranges is excluded from scoring and logged for manual data review. It is never silently scored.",
+    "boundary": "A score is not a default determination; the analyst decides. The model never contacts a customer, never changes a limit, and never labels anyone a defaulter."
+  },
+  "limitations": [
+    "One Taiwanese issuer, 2005, existing cardholders only; nothing here generalizes to other populations or eras.",
+    "All accounts share one observation window, so out-of-time validation is impossible in this dataset. A real bank validates behavioral models out-of-time.",
+    "All cost parameters (review cost, loss given default) are synthetic classroom assumptions.",
+    "Excluding SEX, MARRIAGE, and AGE from the inputs does not guarantee fairness: behavior features can act as proxies. The exported slice audit is the check, not the exclusion.",
+    "SHAP reason codes describe this model's arithmetic, not a customer's intent or circumstances."
+  ],
+  "excluded_uses": [
+    "Real credit decisions of any kind (approval, limits, pricing, collection)",
+    "Scoring data from any other source or era",
+    "Automated adverse action without an analyst and a compliance-reviewed notice"
+  ],
+  "environment": {
+    "python": "3.11.16",
+    "numpy": "2.4.6",
+    "pandas": "2.3.3",
+    "scikit_learn": "1.9.0",
+    "shap": "0.51.0"
+  }
+}

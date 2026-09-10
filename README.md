@@ -3,27 +3,29 @@
 Applied AI Studio is a locally hosted workbench for analyzing business workflows,
 judging where AI fits, and inspecting how AI outputs influence operational
 decisions. It combines reusable industry workflows with an executable Online
-Order application, a transaction-fraud lab, and a pediatric chest X-ray
-prioritization lab backed by public teaching data.
+Order application, a transaction-fraud lab, a pediatric chest X-ray
+prioritization lab, and two finance labs backed by public teaching data.
 
 > **Students — start here.** You do not need to install anything. See
 > [docs/student-quickstart.md](docs/student-quickstart.md) to run this in your
 > browser with GitHub Codespaces.
 
-The repository contains no customer data, API keys, model credentials, or
+The repository contains no private customer data, API keys, model credentials, or
 database files. GitHub Copilot features use the current user's authenticated
 Copilot CLI session; authentication material remains outside the project.
 
 ## Highlights
 
-- Eight detailed industry workflows, including Online Order, Card Transaction,
-  and Pediatric Chest X-ray Prioritization.
+- Ten detailed industry workflows, including Online Order, Card Transaction,
+  Pediatric Chest X-ray Prioritization, Credit Risk, and Complaint Routing.
 - Map → Judge AI Fit → Design What Survives analysis method.
 - Deterministic AI-fit scoring with a gated solution blueprint.
 - Executable Online Order storefront, customer tracking, merchant operations,
   and scenario controls.
 - Five-stage fraud and chest X-ray notebooks with artifact-backed FastAPI and
   React workbenches.
+- Module 4 credit-risk and complaint-routing notebooks, offline HTML, validated
+  model bundles, and an optional captured LLM classification comparison.
 - FastAPI, SQLAlchemy, Alembic, and SQLite order vertical.
 - Persisted rule, classification, optimization, and prediction decisions.
 - Explainable AI impact: signals, probabilities, thresholds, workflow branches,
@@ -43,11 +45,15 @@ flowchart LR
     Web --> Orders[Online Order API<br/>Python + FastAPI]
     Web --> Fraud[Fraud API<br/>Python + FastAPI]
     Web --> Pneumonia[Chest X-ray API<br/>Python + FastAPI]
+    Web --> Credit[Credit Risk API<br/>Python + FastAPI]
+    Web --> Complaints[Complaint Routing API<br/>Python + FastAPI]
     Agent --> Copilot[GitHub Copilot SDK]
     Agent --> Catalog
     Orders --> SQLite[(SQLite)]
     Fraud --> FraudArtifacts[(Fraud model artifacts)]
     Pneumonia --> ImageArtifacts[(Pneumonia model artifacts)]
+    Credit --> CreditArtifacts[(Credit model artifacts)]
+    Complaints --> ComplaintArtifacts[(Complaint model artifacts)]
     Aspire[.NET Aspire] --> Web
     Aspire --> Catalog
     Aspire --> Agent
@@ -80,8 +86,10 @@ Copilot authentication.
 
 ### 1. Clone and install JavaScript dependencies
 
+For the Module 4 release, use the publication branch until it is merged into `main`:
+
 ```bash
-git clone https://github.com/maoyuexin/applied-ai-studio.git
+git clone --branch feat/module-4-finance https://github.com/maoyuexin/applied-ai-studio.git
 cd applied-ai-studio
 npm ci
 ```
@@ -97,6 +105,10 @@ npm run setup:notebook
 npm run setup:fraud
 npm run prepare:fraud
 npm run setup:pneumonia
+npm run setup:credit
+npm run setup:complaints
+npm run prepare:credit
+npm run prepare:complaints
 ```
 
 Windows PowerShell:
@@ -108,6 +120,10 @@ npm run setup:notebook
 npm run setup:fraud
 npm run prepare:fraud
 npm run setup:pneumonia
+npm run setup:credit
+npm run setup:complaints
+npm run prepare:credit
+npm run prepare:complaints
 ```
 
 The npm scripts locate `.venv/bin/python` on macOS/Linux and
@@ -129,11 +145,18 @@ Open <http://127.0.0.1:5173>.
 | Online Order API | <http://127.0.0.1:4330/health> |
 | Fraud Detection API | <http://127.0.0.1:4340/health> |
 | Chest X-ray Prioritization API | <http://127.0.0.1:4350/health> |
+| Credit Risk API | <http://127.0.0.1:4360/health> |
+| Complaint Routing API | <http://127.0.0.1:4370/health> |
 
 The Online Order demo is available directly at
 <http://127.0.0.1:5173/online-order?view=customer>.
 The model labs are available at <http://127.0.0.1:5173/fraud> and
 <http://127.0.0.1:5173/pneumonia>.
+
+Module 4 demos are at <http://127.0.0.1:5173/credit> and
+<http://127.0.0.1:5173/complaints>. Both catalog cards also expose their complete
+workflows. See [Module 4: notebooks and demos](docs/module-4.md) for the notebook
+links, offline reports, and Codespaces instructions.
 
 ## GitHub Copilot Setup
 
@@ -187,7 +210,7 @@ Common settings:
 ## Useful Commands
 
 ```bash
-# Start all six resources
+# Start all eight resources
 npm run dev
 
 # Start only the Online Order API
