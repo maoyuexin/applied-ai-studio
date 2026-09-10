@@ -1,0 +1,606 @@
+<?xml version="1.0"?>
+<DIV6 N="Q" TYPE="SUBPART" hierarchy_metadata="{&amp;quot;path&amp;quot;:&amp;quot;/on/_SUBSTITUTE_DATE_/title-29/part-1910/subpart-Q&amp;quot;,&amp;quot;citation&amp;quot;:&amp;quot;29 CFR Part 1910 Subpart Q&amp;quot;}">
+<HEAD>Subpart Q&#x2014;Welding, Cutting and Brazing</HEAD>
+<AUTH>
+<HED>Authority:</HED><PSPACE>Sections 4, 6, and 8 of the Occupational Safety and Health Act of 1970 (29 U.S.C. 653, 655, and 657); Secretary of Labor's Orders Nos. 12-71 (36 FR 8754), 8-76 (41 FR 25059), 9-83 (48 FR 35736), 1-90 (55 FR 9033), 6-96 (62 FR 111), 3-2000 (65 FR 50017), or 5-2007 (72 FR 31159), as applicable; and 29 CFR part 1911.
+</PSPACE></AUTH>
+<SOURCE>
+<HED>Source:</HED><PSPACE>55 FR 13696, Apr. 11, 1990, unless otherwise noted.
+</PSPACE></SOURCE>
+<DIV8 N="1910.251" TYPE="SECTION" hierarchy_metadata="{&quot;path&quot;:&quot;/on/_SUBSTITUTE_DATE_/title-29/section-1910.251&quot;,&quot;citation&quot;:&quot;29 CFR 1910.251&quot;}">
+<HEAD>&#xA7; 1910.251 Definitions.</HEAD>
+<P>As used in this subpart:</P>
+<P>(a) <I>Welder</I> and <I>welding operator</I> mean any operator of electric or gas welding and cutting equipment.</P>
+<P>(b) <I>Approved</I> means listed or approved by a nationally recognized testing laboratory. Refer to &#xA7; 1910.155(c)(3) for definitions of listed and approved, and &#xA7; 1910.7 for nationally recognized testing laboratory.</P>
+<CITA TYPE="N">[55 FR 13696, Apr. 11, 1990, as amended at 61 FR 9240, Mar. 7, 1996; 72 FR 71070, Dec. 14, 2007]
+</CITA>
+</DIV8>
+
+<DIV8 N="1910.252" TYPE="SECTION" hierarchy_metadata="{&quot;path&quot;:&quot;/on/_SUBSTITUTE_DATE_/title-29/section-1910.252&quot;,&quot;citation&quot;:&quot;29 CFR 1910.252&quot;}">
+<HEAD>&#xA7; 1910.252 General requirements.</HEAD>
+<P>(a) <I>Fire prevention and protection</I>&#x2014;(1) <I>Basic precautions.</I> For elaboration of these basic precautions and of the special precautions of paragraph (a)(2) of this section as well as a delineation of the fire protection and prevention responsibilities of welders and cutters, their supervisors (including outside contractors) and those in management on whose property cutting and welding is to be performed, see Standard for Fire Prevention in Use of Cutting and Welding Processes, NFPA Standard 51B, 1962, which is incorporated by reference as specified in &#xA7; 1910.6. The basic precautions for fire prevention in welding or cutting work are:</P>
+<P>(i) <I>Fire hazards.</I> If the object to be welded or cut cannot readily be moved, all movable fire hazards in the vicinity shall be taken to a safe place.</P>
+<P>(ii) <I>Guards.</I> If the object to be welded or cut cannot be moved and if all the fire hazards cannot be removed, then guards shall be used to confine the heat, sparks, and slag, and to protect the immovable fire hazards.</P>
+<P>(iii) <I>Restrictions.</I> If the requirements stated in paragraphs (a)(1)(i) and (a)(1)(ii) of this section cannot be followed then welding and cutting shall not be performed.</P>
+<P>(2) <I>Special precautions.</I> When the nature of the work to be performed falls within the scope of paragraph (a)(1)(ii) of this section certain additional precautions may be necessary:</P>
+<P>(i) <I>Combustible material.</I> Wherever there are floor openings or cracks in the flooring that cannot be closed, precautions shall be taken so that no readily combustible materials on the floor below will be exposed to sparks which might drop through the floor. The same precautions shall be observed with regard to cracks or holes in walls, open doorways and open or broken windows.</P>
+<P>(ii) <I>Fire extinquishers.</I> Suitable fire extinguishing equipment shall be maintained in a state of readiness for instant use. Such equipment may consist of pails of water, buckets of sand, hose or portable extinguishers depending upon the nature and quantity of the combustible material exposed.</P>
+<P>(iii) <I>Fire watch.</I> (A) Fire watchers shall be required whenever welding or cutting is performed in locations where other than a minor fire might develop, or any of the following conditions exist:</P>
+<P>(<I>1</I>) Appreciable combustible material, in building construction or contents, closer than 35 feet (10.7 m) to the point of operation.</P>
+<P>(<I>2</I>) Appreciable combustibles are more than 35 feet (10.7 m) away but are easily ignited by sparks.</P>
+<P>(<I>3</I>) Wall or floor openings within a 35-foot (10.7 m) radius expose combustible material in adjacent areas including concealed spaces in walls or floors.</P>
+<P>(<I>4</I>) Combustible materials are adjacent to the opposite side of metal partitions, walls, ceilings, or roofs and are likely to be ignited by conduction or radiation.</P>
+<P>(B) Fire watchers shall have fire extinguishing equipment readily available and be trained in its use. They shall be familiar with facilities for sounding an alarm in the event of a fire. They shall watch for fires in all exposed areas, try to extinguish them only when obviously within the capacity of the equipment available, or otherwise sound the alarm. A fire watch shall be maintained for at least a half hour after completion of welding or cutting operations to detect and extinguish possible smoldering fires.</P>
+<P>(iv) <I>Authorization.</I> Before cutting or welding is permitted, the area shall be inspected by the individual responsible for authorizing cutting and welding operations. He shall designate precautions to be followed in granting authorization to proceed preferably in the form of a written permit.</P>
+<P>(v) <I>Floors.</I> Where combustible materials such as paper clippings, wood shavings, or textile fibers are on the floor, the floor shall be swept clean for a radius of 35 feet (10.7 m). Combustible floors shall be kept wet, covered with damp sand, or protected by fire-resistant shields. Where floors have been wet down, personnel operating arc welding or cutting equipment shall be protected from possible shock.</P>
+<P>(vi) <I>Prohibited areas.</I> Cutting or welding shall not be permitted in the following situations:</P>
+<P>(A) In areas not authorized by management.</P>
+<P>(B) In sprinklered buildings while such protection is impaired.</P>
+<P>(C) In the presence of explosive atmospheres (mixtures of flammable gases, vapors, liquids, or dusts with air), or explosive atmospheres that may develop inside uncleaned or improperly prepared tanks or equipment which have previously contained such materials, or that may develop in areas with an accumulation of combustible dusts.</P>
+<P>(D) In areas near the storage of large quantities of exposed, readily ignitible materials such as bulk sulfur, baled paper, or cotton.</P>
+<P>(vii) <I>Relocation of combustibles.</I> Where practicable, all combustibles shall be relocated at least 35 feet (10.7 m) from the work site. Where relocation is impracticable, combustibles shall be protected with flameproofed covers or otherwise shielded with metal or asbestos guards or curtains.</P>
+<P>(viii) <I>Ducts.</I> Ducts and conveyor systems that might carry sparks to distant combustibles shall be suitably protected or shut down.</P>
+<P>(ix) <I>Combustible walls.</I> Where cutting or welding is done near walls, partitions, ceiling or roof of combustible construction, fire-resistant shields or guards shall be provided to prevent ignition.</P>
+<P>(x) <I>Noncombustible walls.</I> If welding is to be done on a metal wall, partition, ceiling or roof, precautions shall be taken to prevent ignition of combustibles on the other side, due to conduction or radiation, preferably by relocating combustibles. Where combustibles are not relocated, a fire watch on the opposite side from the work shall be provided.</P>
+<P>(xi) <I>Combustible cover.</I> Welding shall not be attempted on a metal partition, wall, ceiling or roof having a combustible covering nor on walls or partitions of combustible sandwich-type panel construction.</P>
+<P>(xii) <I>Pipes.</I> Cutting or welding on pipes or other metal in contact with combustible walls, partitions, ceilings or roofs shall not be undertaken if the work is close enough to cause ignition by conduction.</P>
+<P>(xiii) <I>Management.</I> Management shall recognize its responsibility for the safe usage of cutting and welding equipment on its property and:</P>
+<P>(A) Based on fire potentials of plant facilities, establish areas for cutting and welding, and establish procedures for cutting and welding, in other areas.</P>
+<P>(B) Designate an individual responsible for authorizing cutting and welding operations in areas not specifically designed for such processes.</P>
+<P>(C) Insist that cutters or welders and their supervisors are suitably trained in the safe operation of their equipment and the safe use of the process.</P>
+<P>(D) Advise all contractors about flammable materials or hazardous conditions of which they may not be aware.</P>
+<P>(xiv) <I>Supervisor.</I> The Supervisor:</P>
+<P>(A) Shall be responsible for the safe handling of the cutting or welding equipment and the safe use of the cutting or welding process.</P>
+<P>(B) Shall determine the combustible materials and hazardous areas present or likely to be present in the work location.</P>
+<P>(C) Shall protect combustibles from ignition by the following:</P>
+<P>(<I>1</I>) Have the work moved to a location free from dangerous combustibles.</P>
+<P>(<I>2</I>) If the work cannot be moved, have the combustibles moved to a safe distance from the work or have the combustibles properly shielded against ignition.</P>
+<P>(<I>3</I>) See that cutting and welding are so scheduled that plant operations that might expose combustibles to ignition are not started during cutting or welding.</P>
+<P>(D) Shall secure authorization for the cutting or welding operations from the designated management representative.</P>
+<P>(E) Shall determine that the cutter or welder secures his approval that conditions are safe before going ahead.</P>
+<P>(F) Shall determine that fire protection and extinguishing equipment are properly located at the site.</P>
+<P>(G) Where fire watches are required, he shall see that they are available at the site.</P>
+<P>(xv) <I>Fire prevention precautions.</I> Cutting or welding shall be permitted only in areas that are or have been made fire safe. When work cannot be moved practically, as in most construction work, the area shall be made safe by removing combustibles or protecting combustibles from ignition sources.</P>
+<P>(3) <I>Welding or cutting containers</I>&#x2014;(i) <I>Used containers.</I> No welding, cutting, or other hot work shall be performed on used drums, barrels, tanks or other containers until they have been cleaned so thoroughly as to make absolutely certain that there are no flammable materials present or any substances such as greases, tars, acids, or other materials which when subjected to heat, might produce flammable or toxic vapors. Any pipe lines or connections to the drum or vessel shall be disconnected or blanked.</P>
+<P>(ii) <I>Venting and purging.</I> All hollow spaces, cavities or containers shall be vented to permit the escape of air or gases before preheating, cutting or welding. Purging with inert gas is recommended.</P>
+<P>(4) <I>Confined spaces</I>&#x2014;(i) <I>Accidental contact.</I> When arc welding is to be suspended for any substantial period of time, such as during lunch or overnight, all electrodes shall be removed from the holders and the holders carefully located so that accidental contact cannot occur and the machine be disconnected from the power source.</P>
+<P>(ii) <I>Torch valve.</I> In order to eliminate the possibility of gas escaping through leaks or improperly closed valves, when gas welding or cutting, the torch valves shall be closed and the gas supply to the torch positively shut off at some point outside the confined area whenever the torch is not to be used for a substantial period of time, such as during lunch hour or overnight. Where practicable, the torch and hose shall also be removed from the confined space.</P>
+<P>(b) <I>Protection of personnel</I>&#x2014;(1) <I>General</I>&#x2014;(i) <I>Railing.</I> A welder or helper working on platforms, scaffolds, or runways shall be protected against falling. This may be accomplished by the use of railings, safety belts, life lines, or some other equally effective safeguards.</P>
+<P>(ii) <I>Welding cable.</I> Welders shall place welding cable and other equipment so that it is clear of passageways, ladders, and stairways.</P>
+<P>(2) <I>Eye protection</I>&#x2014;(i) <I>Selection.</I> (A) Helmets or hand shields shall be used during all arc welding or arc cutting operations, excluding submerged arc welding. Helpers or attendants shall be provided with proper eye protection.</P>
+<P>(B) Goggles or other suitable eye protection shall be used during all gas welding or oxygen cutting operations. Spectacles without side shields, with suitable filter lenses are permitted for use during gas welding operations on light work, for torch brazing or for inspection.</P>
+<P>(C) All operators and attendants of resistance welding or resistance brazing equipment shall use transparent face shields or goggles, depending on the particular job, to protect their faces or eyes, as required.</P>
+<P>(D) Eye protection in the form of suitable goggles shall be provided where needed for brazing operations not covered in paragraphs (b)(2)(i)(A) through (b)(2)(i)(C) of this section.</P>
+<P>(ii) <I>Specifications for protectors.</I> (A) Helmets and hand shields shall be made of a material which is an insulator for heat and electricity. Helmets, shields and goggles shall be not readily flammable and shall be capable of withstanding sterilization.</P>
+<P>(B) Helmets and hand shields shall be arranged to protect the face, neck and ears from direct radiant energy from the arc.</P>
+<P>(C) Helmets shall be provided with filter plates and cover plates designed for easy removal.</P>
+<P>(D) All parts shall be constructed of a material which will not readily corrode or discolor the skin.</P>
+<P>(E) Goggles shall be ventilated to prevent fogging of the lenses as much as practicable.</P>
+<P>(F) All glass for lenses shall be tempered, substantially free from striae, air bubbles, waves and other flaws. Except when a lens is ground to provide proper optical correction for defective vision, the front and rear surfaces of lenses and windows shall be smooth and parallel.</P>
+<P>(G) Lenses shall bear some permanent distinctive marking by which the source and shade may be readily identified.</P>
+<P>(H) The following is a guide for the selection of the proper shade numbers. These recommendations may be varied to suit the individual's needs.</P>
+<DIV width="100%"><DIV class="gpotbl_div">
+<TABLE border="1" cellpadding="1" cellspacing="1" class="gpo_table" frame="void" width="100%">
+<THEAD>
+<TR>
+<TH class="center border-top-single border-bottom-single border-right-single">Welding operation</TH>
+<TH class="center border-top-single border-bottom-single">Shade No.</TH>
+</TR>
+</THEAD>
+<TBODY>
+<TR>
+<TD class="left border-right-single">Shielded metal-arc welding&#x2014;<sup>1</sup>&#x2044;<sub>16</sub>-, <sup>3</sup>&#x2044;<sub>32</sub>-, <sup>1</sup>&#x2044;<sub>8</sub>-, <sup>5</sup>&#x2044;<sub>32</sub>-inch electrodes</TD>
+<TD class="right">10</TD>
+</TR>
+<TR>
+<TD class="left border-right-single">Gas-shielded arc welding (nonferrous)&#x2014;<sup>1</sup>&#x2044;<sub>16</sub>-, <sup>3</sup>&#x2044;<sub>32</sub>-, <sup>1</sup>&#x2044;<sub>8</sub>-, <sup>5</sup>&#x2044;<sub>32</sub>-inch electrodes</TD>
+<TD class="right">11</TD>
+</TR>
+<TR>
+<TD class="left border-right-single">Gas-shielded arc welding (ferrous)&#x2014;<sup>1</sup>&#x2044;<sub>16</sub>-, <sup>3</sup>&#x2044;<sub>32</sub>-, <sup>1</sup>&#x2044;<sub>8</sub>-, <sup>5</sup>&#x2044;<sub>32</sub>-inch electrodes</TD>
+<TD class="right">12</TD>
+</TR>
+<TR>
+<TD class="left border-right-single">Shielded metal-arc welding:</TD>
+<TD class="right"/>
+</TR>
+<TR>
+<TD class="left border-right-single primary-indent-hanging-2"><sup>3</sup>&#x2044;<sub>16</sub>-, <sup>7</sup>&#x2044;<sub>32</sub>-, <sup>1</sup>&#x2044;<sub>4</sub>-inch electrodes</TD>
+<TD class="right">12</TD>
+</TR>
+<TR>
+<TD class="left border-right-single primary-indent-hanging-2"><sup>5</sup>&#x2044;<sub>16</sub>-, <sup>3</sup>&#x2044;<sub>8</sub>-inch electrodes</TD>
+<TD class="right">14</TD>
+</TR>
+<TR>
+<TD class="left border-right-single">Atomic hydrogen welding</TD>
+<TD class="right">10-14</TD>
+</TR>
+<TR>
+<TD class="left border-right-single">Carbon arc welding</TD>
+<TD class="right">14</TD>
+</TR>
+<TR>
+<TD class="left border-right-single">Soldering</TD>
+<TD class="right">2</TD>
+</TR>
+<TR>
+<TD class="left border-right-single">Torch brazing</TD>
+<TD class="right">3 or 4</TD>
+</TR>
+<TR>
+<TD class="left border-right-single">Light cutting, up to 1 inch</TD>
+<TD class="right">3 or 4</TD>
+</TR>
+<TR>
+<TD class="left border-right-single">Medium cutting, 1 inch to 6 inches</TD>
+<TD class="right">4 or 5</TD>
+</TR>
+<TR>
+<TD class="left border-right-single">Heavy cutting, 6 inches and over</TD>
+<TD class="right">5 or 6</TD>
+</TR>
+<TR>
+<TD class="left border-right-single">Gas welding (light) up to <sup>1</sup>&#x2044;<sub>8</sub> inch</TD>
+<TD class="right">4 or 5</TD>
+</TR>
+<TR>
+<TD class="left border-right-single">Gas welding (medium) <sup>1</sup>&#x2044;<sub>8</sub> inch to <sup>1</sup>&#x2044;<sub>2</sub> inch</TD>
+<TD class="right">5 or 6</TD>
+</TR>
+<TR>
+<TD class="left border-bottom-single border-right-single">Gas welding (heavy) <sup>1</sup>&#x2044;<sub>2</sub> inch and over</TD>
+<TD class="right border-bottom-single">6 or 8
+</TD>
+</TR>
+</TBODY>
+<TFOOT><TR><TD colspan="2">Note: In gas welding or oxygen cutting where the torch produces a high yellow light, it is desirable to use a filter or lens that absorbs the yellow or sodium line in the visible light of the operation.</TD></TR></TFOOT></TABLE>
+</DIV></DIV>
+<P>(I) Filter lenses must meet the test for transmission of radiant energy prescribed by any of the consensus standards listed in 29 CFR 1910.133(b)(1).</P>
+<P>(iii) <I>Protection from arc welding rays.</I> Where the work permits, the welder should be enclosed in an individual booth painted with a finish of low reflectivity such as zinc oxide (an important factor for absorbing ultraviolet radiations) and lamp black, or shall be enclosed with noncombustible screens similarly painted. Booths and screens shall permit circulation of air at floor level. Workers or other persons adjacent to the welding areas shall be protected from the rays by noncombustible or flameproof screens or shields or shall be required to wear appropriate goggles.</P>
+<P>(3) <I>Protective clothing&#x2014;General requirements.</I> Employees exposed to the hazards created by welding, cutting, or brazing operations shall be protected by personal protective equipment in accordance with the requirements of &#xA7; 1910.132 of this part. Appropriate protective clothing required for any welding operation will vary with the size, nature and location of the work to be performed.</P>
+<P>(4) <I>Work in confined spaces</I>&#x2014;(i) <I>General.</I> As used herein confined space is intended to mean a relatively small or restricted space such as a tank, boiler, pressure vessel, or small compartment of a ship.</P>
+<P>(ii) <I>Ventilation.</I> Ventilation is a prerequisite to work in confined spaces. For ventilation requirements see paragraph (c) of this section.</P>
+<P>(iii) <I>Securing cylinders and machinery.</I> When welding or cutting is being performed in any confined spaces the gas cylinders and welding machines shall be left on the outside. Before operations are started, heavy portable equipment mounted on wheels shall be securely blocked to prevent accidental movement.</P>
+<P>(iv) <I>Lifelines.</I> Where a welder must enter a confined space through a manhole or other small opening, means shall be provided for quickly removing him in case of emergency. When safety belts and lifelines are used for this purpose they shall be so attached to the welder's body that his body cannot be jammed in a small exit opening. An attendant with a preplanned rescue procedure shall be stationed outside to observe the welder at all times and be capable of putting rescue operations into effect.</P>
+<P>(v) <I>Electrode removal.</I> When arc welding is to be suspended for any substantial period of time, such as during lunch or overnight, all electrodes shall be removed from the holders and the holders carefully located so that accidental contact cannot occur and the machine disconnected from the power source.</P>
+<P>(vi) <I>Gas cylinder shutoff.</I> In order to eliminate the possibility of gas escaping through leaks of improperly closed valves, when gas welding or cutting, the torch valves shall be closed and the fuel-gas and oxygen supply to the torch positively shut off at some point outside the confined area whenever the torch is not to be used for a substantial period of time, such as during lunch hour or overnight. Where practicable the torch and hose shall also be removed from the confined space.</P>
+<P>(vii) <I>Warning sign.</I> After welding operations are completed, the welder shall mark the hot metal or provide some other means of warning other workers.</P>
+<P>(c) <I>Health protection and ventilation</I>&#x2014;(1) <I>General</I>&#x2014;(i) <I>Contamination.</I> The requirements in this paragraph have been established on the basis of the following three factors in arc and gas welding which govern the amount of contamination to which welders may be exposed:</P>
+<P>(A) Dimensions of space in which welding is to be done (with special regard to height of ceiling).</P>
+<P>(B) Number of welders.</P>
+<P>(C) Possible evolution of hazardous fumes, gases, or dust according to the metals involved.</P>
+<P>(ii) <I>Screens.</I> When welding must be performed in a space entirely screened on all sides, the screens shall be so arranged that no serious restriction of ventilation exists. It is desirable to have the screens so mounted that they are about 2 feet (0.61 m) above the floor unless the work is performed at so low a level that the screen must be extended nearer to the floor to protect nearby workers from the glare of welding.</P>
+<P>(iii) <I>Maximum allowable concentration.</I> Local exhaust or general ventilating systems shall be provided and arranged to keep the amount of toxic fumes, gases, or dusts below the maximum allowable concentration as specified in &#xA7; 1910.1000 of this part.</P>
+<P>(iv) <I>Hazard communication.</I> The employer shall include the potentially hazardous materials employed in fluxes, coatings, coverings, and filler metals, all of which are potentially used in welding and cutting, or are released to the atmosphere during welding and cutting, in the program established to comply with the Hazard Communication Standard (HCS) (&#xA7; 1910.1200). The employer shall ensure that each employee has access to labels on containers of such materials and safety data sheets, and is trained in accordance with the provisions of &#xA7; 1910.1200. Potentially hazardous materials shall include but not be limited to the materials itemized in paragraphs (c)(5) through (c)(12) of this section.</P>
+<P>(v) <I>Additional considerations for hazard communication in welding, cutting, and brazing.</I> (A) The suppliers shall determine and shall label in accordance with &#xA7; 1910.1200 any hazards associated with the use of their materials in welding, cutting, and brazing.</P>
+<P>(B) In addition to any requirements imposed by &#xA7; 1910.1200, all filler metals and fusible granular materials shall carry the following notice, as a minimum, on tags, boxes, or other containers:</P>
+<EXTRACT>
+<P>Do not use in areas without adequate ventilation. <I>See</I> ANSI Z49.1-1967 Safety in Welding, Cutting, and Allied Processes published by the American Welding Society.</P></EXTRACT>
+<P>(C) Where brazing (welding) filler metals contain cadmium in significant amounts, the labels shall indicate the hazards associated with cadmium including cancer, lung and kidney effects, and acute toxicity effects.</P>
+<P>(D) Where brazing and gas welding fluxes contain fluorine compounds, the labels shall indicate the hazards associated with fluorine compounds including eye and respiratory tract effects.</P>
+<P>(vi) Prior to June 1, 2015, employers may include the following information on labels in lieu of the labeling requirements in paragraph (c)(1)(v) of this section:</P>
+<P>(A) All filler metals and fusible granular materials shall carry the following notice, as a minimum, on tags, boxes, or other containers:</P>
+<EXTRACT>
+<FP>CAUTION</FP></EXTRACT>
+<P>Welding may produce fumes and gases hazardous to health. Avoid breathing these fumes and gases. Use adequate ventilation. <I>See</I> ANSI Z49.1-1967 Safety in Welding and Cutting published by the American Welding Society.</P>
+<P>(B) Brazing (welding) filler metals containing cadmium in significant amounts shall carry the following notice on tags, boxes, or other containers:</P>
+<EXTRACT>
+<FP>WARNING
+</FP>
+<FP-1>CONTAINS CADMIUM&#x2014;POISONOUS FUMES MAY BE FORMED ON HEATING</FP-1></EXTRACT>
+<P>Do not breathe fumes. Use only with adequate ventilation such as fume collectors, exhaust ventilators, or air-supplied respirators. <I>See</I> ANSI Z49.1-1967. If chest pain, cough, or fever develops after use call physician immediately.</P>
+<P>(C) Brazing and gas welding fluxes containing fluorine compounds shall have a cautionary wording to indicate that they contain fluorine compounds. One such cautionary wording recommended by the American Welding Society for brazing and gas welding fluxes reads as follows:</P>
+<EXTRACT>
+<FP>CAUTION
+</FP>
+<FP>CONTAINS FLUORIDES</FP></EXTRACT>
+<P>This flux when heated gives off fumes that may irritate eyes, nose and throat.</P>
+<P>1. Avoid fumes&#x2014;use only in well-ventilated spaces.</P>
+<P>2. Avoid contact of flux with eyes or skin.</P>
+<P>3. Do not take internally.</P>
+<P>(2) <I>Ventilation for general welding and cutting</I>&#x2014;(i) <I>General.</I> Mechanical ventilation shall be provided when welding or cutting is done on metals not covered in paragraphs (c)(5) through (c)(12) of this section. (For specific materials, see the ventilation requirements of paragraphs (c)(5) through (c)(12) of this section.)</P>
+<P>(A) In a space of less than 10,000 cubic feet (284 m
+<SU>3</SU>) per welder.</P>
+<P>(B) In a room having a ceiling height of less than 16 feet (5 m).</P>
+<P>(C) In confined spaces or where the welding space contains partitions, balconies, or other structural barriers to the extent that they significantly obstruct cross ventilation.</P>
+<P>(ii) <I>Minimum rate.</I> Such ventilation shall be at the minimum rate of 2,000 cubic feet (57 m
+<SU>3</SU>) per minute per welder, except where local exhaust hoods and booths as per paragraph (c)(3) of this section, or airline respirators approved by the Mine Safety and Health Administration and the National Institute for Occupational Safety and Health, pursuant to the provisions of 30 CFR part 11, are provided. Natural ventilation is considered sufficient for welding or cutting operations where the restrictions in paragraph (c)(2)(i) of this section are not present.</P>
+<P>(3) <I>Local exhaust hoods and booths.</I> Mechanical local exhaust ventilation may be by means of either of the following:</P>
+<P>(i) <I>Hoods.</I> Freely movable hoods intended to be placed by the welder as near as practicable to the work being welded and provided with a rate of air-flow sufficient to maintain a velocity in the direction of the hood of 100 linear feet (30 m) per minute in the zone of welding when the hood is at its most remote distance from the point of welding. The rates of ventilation required to accomplish this control velocity using a 3-inch (7.6 cm) wide flanged suction opening are shown in the following table:</P>
+<DIV width="100%"><DIV class="gpotbl_div">
+<TABLE border="1" cellpadding="1" cellspacing="1" class="gpo_table" frame="void" width="100%">
+<THEAD>
+<TR>
+<TH class="center border-top-single border-bottom-single border-right-single">Welding zone</TH>
+<TH class="center border-top-single border-bottom-single border-right-single">Minimum air flow <sup>1</sup> cubic feet/minute</TH>
+<TH class="center border-top-single border-bottom-single">Duct diameter, inches <sup>2</sup></TH>
+</TR>
+</THEAD>
+<TBODY>
+<TR>
+<TD class="left border-right-single">4 to 6 inches from arc or torch</TD>
+<TD class="right border-right-single">150</TD>
+<TD class="right">3 </TD>
+</TR>
+<TR>
+<TD class="left border-right-single">6 to 8 inches from arc or torch</TD>
+<TD class="right border-right-single">275</TD>
+<TD class="right">3<sup>1</sup>&#x2044;<sub>2</sub></TD>
+</TR>
+<TR>
+<TD class="left border-right-single">8 to 10 inches from arc or torch</TD>
+<TD class="right border-right-single">425</TD>
+<TD class="right">4<sup>1</sup>&#x2044;<sub>2</sub></TD>
+</TR>
+<TR>
+<TD class="left border-bottom-single border-right-single">10 to 12 inches from arc or torch</TD>
+<TD class="right border-bottom-single border-right-single">600</TD>
+<TD class="right border-bottom-single">5<sup>1</sup>&#x2044;<sub>2</sub>
+</TD>
+</TR>
+</TBODY>
+<TFOOT><TR><TD colspan="3"><sup>1</sup> When brazing with cadmium bearing materials or when cutting on such materials increased rates of ventilation may be required.
+</TD></TR><TR><TD colspan="3"><sup>2</sup> Nearest half-inch duct diameter based on 4,000 feet per minute velocity in pipe.</TD></TR></TFOOT></TABLE>
+</DIV></DIV>
+<P>(ii) <I>Fixed enclosure.</I> A fixed enclosure with a top and not less than two sides which surround the welding or cutting operations and with a rate of airflow sufficient to maintain a velocity away from the welder of not less than 100 linear feet (30 m) per minute.</P>
+<P>(4) <I>Ventilation in confined spaces</I>&#x2014;(i) <I>Air replacement.</I> All welding and cutting operations carried on in confined spaces shall be adequately ventilated to prevent the accumulation of toxic materials or possible oxygen deficiency. This applies not only to the welder but also to helpers and other personnel in the immediate vicinity. All air replacing that withdrawn shall be clean and respirable.</P>
+<P>(ii) <I>Airline respirators.</I> In circumstances for which it is impossible to provide such ventilation, airline respirators or hose masks approved for this purpose by the National Institute for Occupational Safety and Health (NIOSH) under 42 CFR part 84 must be used.</P>
+<P>(iii) <I>Self-contained units.</I> In areas immediately hazardous to life, a full-facepiece, pressure-demand, self-contained breathing apparatus or a combination full-facepiece, pressure-demand supplied-air respirator with an auxiliary, self-contained air supply approved by NIOSH under 42 CFR part 84 must be used.</P>
+<P>(iv) <I>Outside helper.</I> Where welding operations are carried on in confined spaces and where welders and helpers are provided with hose masks, hose masks with blowers or self-contained breathing equipment approved by the Mine Safety and Health Administration and the National Institute for Occupational Safety and Health, a worker shall be stationed on the outside of such confined spaces to insure the safety of those working within.</P>
+<P>(v) <I>Oxygen for ventilation.</I> Oxygen shall never be used for ventilation.</P>
+<P>(5) <I>Fluorine compounds</I>&#x2014;(i) <I>General.</I> In confined spaces, welding or cutting involving fluxes, coverings, or other materials which contain fluorine compounds shall be done in accordance with paragraph (c)(4) of this section. A fluorine compound is one that contains fluorine, as an element in chemical combination, not as a free gas.</P>
+<P>(ii) <I>Maximum allowable concentration.</I> The need for local exhaust ventilation or airline respirators for welding or cutting in other than confined spaces will depend upon the individual circumstances. However, experience has shown such protection to be desirable for fixed-location production welding and for all production welding on stainless steels. Where air samples taken at the welding location indicate that the fluorides liberated are below the maximum allowable concentration, such protection is not necessary.</P>
+<P>(6) <I>Zinc</I>&#x2014;(i) <I>Confined spaces.</I> In confined spaces welding or cutting involving zinc-bearing base or filler metals or metals coated with zinc-bearing materials shall be done in accordance with paragraph (c)(4) of this section.</P>
+<P>(ii) <I>Indoors.</I> Indoors, welding or cutting involving zinc-bearing base or filler metals coated with zinc-bearing materials shall be done in accordance with paragraph (c)(3) of this section.</P>
+<P>(7) <I>Lead</I>&#x2014;(i) <I>Confined spaces.</I> In confined spaces, welding involving lead-base metals (erroneously called lead-burning) shall be done in accordance with paragraph (c)(4) of this section.</P>
+<P>(ii) <I>Indoors.</I> Indoors, welding involving lead-base metals shall be done in accordance with paragraph (c)(3) of this section.</P>
+<P>(iii) <I>Local ventilation.</I> In confined spaces or indoors, welding or cutting operations involving metals containing lead, other than as an impurity, or metals coated with lead-bearing materials, including paint, must be done using local exhaust ventilation or airline respirators. Such operations, when done outdoors, must be done using respirators approved for this purpose by NIOSH under 42 CFR part 84. In all cases, workers in the immediate vicinity of the cutting operation must be protected by local exhaust ventilation or airline respirators.</P>
+<P>(8) <I>Beryllium.</I> Welding or cutting indoors, outdoors, or in confined spaces involving beryllium-containing base or filler metals shall be done using local exhaust ventilation and airline respirators unless atmospheric tests under the most adverse conditions have established that the workers' exposure is within the acceptable concentrations defined by &#xA7; 1910.1000 of this part. In all cases, workers in the immediate vicinity of the welding or cutting operations shall be protected as necessary by local exhaust ventilation or airline respirators.</P>
+<P>(9) <I>Cadmium</I>&#x2014;(i) <I>General.</I> In confined spaces or indoors, welding or cutting operations involving cadmium-bearing or cadmium-coated base metals must be done using local exhaust ventilation or airline respirators unless atmospheric tests under the most adverse conditions show that employee exposure is within the acceptable concentrations specified by 29 CFR 1910.1000. Such operations, when done outdoors, must be done using respirators, such as fume respirators, approved for this purpose by NIOSH under 42 CFR part 84.</P>
+<P>(ii) <I>Confined space.</I> Welding (brazing) involving cadmium-bearing filler metals shall be done using ventilation as prescribed in paragraph (c)(3) or (c)(4) of this section if the work is to be done in a confined space.</P>
+<P>(10) <I>Mercury.</I> In confined spaces or indoors, welding or cutting operations involving metals coated with mercury-bearing materials, including paint, must be done using local exhaust ventilation or airline respirators unless atmospheric tests under the most adverse conditions show that employee exposure is within the acceptable concentrations specified by 29 CFR 1910.1000. Such operations, when done outdoors, must be done using respirators approved for this purpose by NIOSH under 42 CFR part 84.</P>
+<P>(11) <I>Cleaning compounds</I>&#x2014;(i) <I>Manufacturer's instructions.</I> In the use of cleaning materials, because of their possible toxicity or flammability, appropriate precautions such as manufacturers instructions shall be followed.</P>
+<P>(ii) <I>Degreasing.</I> Degreasing and other cleaning operations involving chlorinated hydrocarbons shall be so located that no vapors from these operations will reach or be drawn into the atmosphere surrounding any welding operation. In addition, trichloroethylene and perchlorethylene should be kept out of atmospheres penetrated by the ultraviolet radiation of gas-shielded welding operations.</P>
+<P>(12) <I>Cutting of stainless steels.</I> Oxygen cutting, using either a chemical flux or iron powder or gas-shielded arc cutting of stainless steel, shall be done using mechanical ventilation adequate to remove the fumes generated.</P>
+<P>(13) <I>First-aid equipment.</I> First-aid equipment shall be available at all times. All injuries shall be reported as soon as possible for medical attention. First aid shall be rendered until medical attention can be provided.</P>
+<P>(d) <I>Industrial applications</I>&#x2014;(1) <I>Transmission pipeline</I>&#x2014;(i) <I>General.</I> The requirements of paragraphs (b) and (c) of this section and &#xA7; 1910.254 of this part shall be observed.</P>
+<P>(ii) <I>Field shop operations.</I> Where field shop operations are involved for fabrication of fittings, river crossings, road crossings, and pumping and compressor stations the requirements of paragraphs (a), (b), and (c) of this section and &#xA7;&#xA7; 1910.253 and 1910.254 of this part shall be observed.</P>
+<P>(iii) <I>Electric shock.</I> When arc welding is performed in wet conditions, or under conditions of high humidity, special protection against electric shock shall be supplied.</P>
+<P>(iv) <I>Pressure testing.</I> In pressure testing of pipelines, the workers and the public shall be protected against injury by the blowing out of closures or other pressure restraining devices. Also, protection shall be provided against expulsion of loose dirt that may have become trapped in the pipe.</P>
+<P>(v) <I>Construction standards.</I> The welded construction of transmission pipelines shall be conducted in accordance with the Standard for Welding Pipe Lines and Related Facilities, API Std. 1104&#x2014;1968, which is incorporated by reference as specified in &#xA7; 1910.6.</P>
+<P>(vi) <I>Flammable substance lines.</I> The connection, by welding, of branches to pipelines carrying flammable substances shall be performed in accordance with Welding or Hot Tapping on Equipment Containing Flammables, API Std. PSD No. 2201&#x2014;1963, which is incorporated by reference as specified in &#xA7; 1910.6.</P>
+<P>(vii) <I>X-ray inspection.</I> The use of X-rays and radioactive isotopes for the inspection of welded pipeline joints shall be carried out in conformance with the American National Standard Safety Standard for Non-Medical X-ray and Sealed Gamma-Ray Sources, ANSI Z54.1&#x2014;1963, which is incorporated by reference as specified in &#xA7; 1910.6.</P>
+<P>(2) <I>Mechanical piping systems</I>&#x2014;(i) <I>General.</I> The requirements of paragraphs (a), (b), and (c) of this section and &#xA7;&#xA7; 1910.253 and 1910.254 of this part shall be observed.</P>
+<P>(ii) <I>X-ray inspection.</I> The use of X-rays and radioactive isotopes for the inspection of welded piping joints shall be in conformance with the American National Standard Safety Standard for Non-Medical X-ray and Sealed Gamma-Ray Sources, ANSI Z54.1&#x2014;1963.</P>
+<CITA TYPE="N">[55 FR 13696, Apr. 11, 1990, as amended at 61 FR 9240, Mar. 7, 1996; 63 FR 1284, Jan. 8, 1998; 74 FR 46357, Sept. 9, 2009; 77 FR 17777, Mar. 26, 2012]
+</CITA>
+</DIV8>
+
+<DIV8 N="1910.253" TYPE="SECTION" hierarchy_metadata="{&quot;path&quot;:&quot;/on/_SUBSTITUTE_DATE_/title-29/section-1910.253&quot;,&quot;citation&quot;:&quot;29 CFR 1910.253&quot;}">
+<HEAD>&#xA7; 1910.253 Oxygen-fuel gas welding and cutting.</HEAD>
+<P>(a) <I>General requirements</I>&#x2014;(1) <I>Flammable mixture.</I> Mixtures of fuel gases and air or oxygen may be explosive and shall be guarded against. No device or attachment facilitating or permitting mixtures of air or oxygen with flammable gases prior to consumption, except at the burner or in a standard torch, shall be allowed unless approved for the purpose.</P>
+<P>(2) <I>Maximum pressure.</I> Under no condition shall acetylene be generated, piped (except in approved cylinder manifolds) or utilized at a pressure in excess of 15 psig (103 kPa gauge pressure) or 30 psia (206 kPa absolute). The 30 psia (206 kPa absolute) limit is intended to prevent unsafe use of acetylene in pressurized chambers such as caissons, underground excavations or tunnel construction.) This requirement is not intended to apply to storage of acetylene dissolved in a suitable solvent in cylinders manufactured and maintained according to U.S. Department of Transportation requirements, or to acetylene for chemical use. The use of liquid acetylene shall be prohibited.</P>
+<P>(3) <I>Apparatus.</I> Only approved apparatus such as torches, regulators or pressure-reducing valves, acetylene generators, and manifolds shall be used.</P>
+<P>(4) <I>Personnel.</I> Workmen in charge of the oxygen or fuel-gas supply equipment, including generators, and oxygen or fuel-gas distribution piping systems shall be instructed and judged competent by their employers for this important work before being left in charge. Rules and instructions covering the operation and maintenance of oxygen or fuel-gas supply equipment including generators, and oxygen or fuel-gas distribution piping systems shall be readily available.</P>
+<P>(b) <I>Cylinders and containers</I>&#x2014;(1) <I>Approval and marking.</I> (i) All portable cylinders used for the storage and shipment of compressed gases shall be constructed and maintained in accordance with the regulations of the U.S. Department of Transportation, 49 CFR parts 171-179.</P>
+<P>(ii) Compressed gas cylinders shall be legibly marked, for the purpose of identifying the gas content, with either the chemical or the trade name of the gas. Such marking shall be by means of stenciling, stamping, or labeling, and shall not be readily removable. Whenever practical, the marking shall be located on the shoulder of the cylinder.</P>
+<P>(iii) Compressed gas cylinders shall be equipped with connections complying with the American National Standard Compressed Gas Cylinder Valve Outlet and Inlet Connections, ANSI B57.1&#x2014;1965, which is incorporated by reference as specified in &#xA7; 1910.6.</P>
+<P>(iv) All cylinders with a water weight capacity of over 30 pounds (13.6 kg) shall be equipped with means of connecting a valve protection cap or with a collar or recess to protect the valve.</P>
+<P>(2) <I>Storage of cylinders&#x2014;general.</I> (i) Cylinders shall be kept away from radiators and other sources of heat.</P>
+<P>(ii) Inside of buildings, cylinders shall be stored in a well-protected, well-ventilated, dry location, at least 20 feet (6.1 m) from highly combustible materials such as oil or excelsior. Cylinders should be stored in definitely assigned places away from elevators, stairs, or gangways. Assigned storage spaces shall be located where cylinders will not be knocked over or damaged by passing or falling objects, or subject to tampering by unauthorized persons. Cylinders shall not be kept in unventilated enclosures such as lockers and cupboards.</P>
+<P>(iii) Empty cylinders shall have their valves closed.</P>
+<P>(iv) Valve protection caps, where cylinder is designed to accept a cap, shall always be in place, hand-tight, except when cylinders are in use or connected for use.</P>
+<P>(3) <I>Fuel-gas cylinder storage.</I> Inside a building, cylinders, except those in actual use or attached ready for use, shall be limited to a total gas capacity of 2,000 cubic feet (56 m
+<SU>3</SU>) or 300 pounds (135.9 kg) of liquefied petroleum gas.</P>
+<P>(i) For storage in excess of 2,000 cubic feet (56 m
+<SU>3</SU>) total gas capacity of cylinders or 300 (135.9 kg) pounds of liquefied petroleum gas, a separate room or compartment conforming to the requirements specified in paragraphs (f)(6)(i)(H) and (f)(6)(i)(I) of this section shall be provided, or cylinders shall be kept outside or in a special building. Special buildings, rooms or compartments shall have no open flame for heating or lighting and shall be well ventilated. They may also be used for storage of calcium carbide in quantities not to exceed 600 (271.8 kg) pounds, when contained in metal containers complying with paragraphs (g)(1)(i) and (g)(1)(ii) of this section.</P>
+<P>(ii) Acetylene cylinders shall be stored valve end up.</P>
+<P>(4) <I>Oxygen storage.</I> (i) Oxygen cylinders shall not be stored near highly combustible material, especially oil and grease; or near reserve stocks of carbide and acetylene or other fuel-gas cylinders, or near any other substance likely to cause or accelerate fire; or in an acetylene generator compartment.</P>
+<P>(ii) Oxygen cylinders stored in outside generator houses shall be separated from the generator or carbide storage rooms by a noncombustible partition having a fire-resistance rating of at least 1 hour. This partition shall be without openings and shall be gastight.</P>
+<P>(iii) Oxygen cylinders in storage shall be separated from fuel-gas cylinders or combustible materials (especially oil or grease), a minimum distance of 20 feet (6.1 m) or by a noncombustible barrier at least 5 feet (1.5 m) high having a fire-resistance rating of at least one-half hour.</P>
+<P>(iv) Where a liquid oxygen system is to be used to supply gaseous oxygen for welding or cutting and the system has a storage capacity of more than 13,000 cubic feet (364 m
+<SU>3</SU>) of oxygen (measured at 14.7 psia (101 kPa) and 70 &#xB0;F (21.1 &#xB0;C)), connected in service or ready for service, or more than 25,000 cubic feet (700 m
+<SU>3</SU>) of oxygen (measured at 14.7 psia (101 kPa) and 70 &#xB0;F (21.1 &#xB0;C)), including unconnected reserves on hand at the site, it shall comply with the provisions of the Standard for Bulk Oxygen Systems at Consumer Sites, NFPA No. 566&#x2014;1965, which is incorporated by reference as specified in &#xA7; 1910.6.</P>
+<P>(5) <I>Operating procedures.</I> (i) Cylinders, cylinder valves, couplings, regulators, hose, and apparatus shall be kept free from oily or greasy substances. Oxygen cylinders or apparatus shall not be handled with oily hands or gloves. A jet of oxygen must never be permitted to strike an oily surface, greasy clothes, or enter a fuel oil or other storage tank.</P>
+<P>(ii)(A) When transporting cylinders by a crane or derrick, a cradle, boat, or suitable platform shall be used. Slings or electric magnets shall not be used for this purpose. Valve-protection caps, where cylinder is designed to accept a cap, shall always be in place.</P>
+<P>(B) Cylinders shall not be dropped or struck or permitted to strike each other violently.</P>
+<P>(C) Valve-protection caps shall not be used for lifting cylinders from one vertical position to another. Bars shall not be used under valves or valve-protection caps to pry cylinders loose when frozen to the ground or otherwise fixed; the use of warm (not boiling) water is recommended. Valve-protection caps are designed to protect cylinder valves from damage.</P>
+<P>(D) Unless cylinders are secured on a special truck, regulators shall be removed and valve-protection caps, when provided for, shall be put in place before cylinders are moved.</P>
+<P>(E) Cylinders not having fixed hand wheels shall have keys, handles, or nonadjustable wrenches on valve stems while these cylinders are in service. In multiple cylinder installations only one key or handle is required for each manifold.</P>
+<P>(F) Cylinder valves shall be closed before moving cylinders.</P>
+<P>(G) Cylinder valves shall be closed when work is finished.</P>
+<P>(H) Valves of empty cylinders shall be closed.</P>
+<P>(I) Cylinders shall be kept far enough away from the actual welding or cutting operation so that sparks, hot slag, or flame will not reach them, or fire-resistant shields shall be provided.</P>
+<P>(J) Cylinders shall not be placed where they might become part of an electric circuit. Contacts with third rails, trolley wires, etc., shall be avoided. Cylinders shall be kept away from radiators, piping systems, layout tables, etc., that may be used for grounding electric circuits such as for arc welding machines. Any practice such as the tapping of an electrode against a cylinder to strike an arc shall be prohibited.</P>
+<P>(K) Cylinders shall never be used as rollers or supports, whether full or empty.</P>
+<P>(L) The numbers and markings stamped into cylinders shall not be tampered with.</P>
+<P>(M) No person, other than the gas supplier, shall attempt to mix gases in a cylinder. No one, except the owner of the cylinder or person authorized by him, shall refill a cylinder.</P>
+<P>(N) No one shall tamper with safety devices in cylinders or valves.</P>
+<P>(O) Cylinders shall not be dropped or otherwise roughly handled.</P>
+<P>(P) Unless connected to a manifold, oxygen from a cylinder shall not be used without first attaching an oxygen regulator to the cylinder valve. Before connecting the regulator to the cylinder valve, the valve shall be opened slightly for an instant and then closed. Always stand to one side of the outlet when opening the cylinder valve.</P>
+<P>(Q) A hammer or wrench shall not be used to open cylinder valves. If valves cannot be opened by hand, the supplier shall be notified.</P>
+<P>(R)(<I>1</I>) Cylinder valves shall not be tampered with nor should any attempt be made to repair them. If trouble is experienced, the supplier should be sent a report promptly indicating the character of the trouble and the cylinder's serial number. Supplier's instructions as to its disposition shall be followed.</P>
+<P>(<I>2</I>) Complete removal of the stem from a diaphragm-type cylinder valve shall be avoided.</P>
+<P>(iii)(A) Fuel-gas cylinders shall be placed with valve end up whenever they are in use. Liquefied gases shall be stored and shipped with the valve end up.</P>
+<P>(B) Cylinders shall be handled carefully. Rough handling, knocks, or falls are liable to damage the cylinder, valve or safety devices and cause leakage.</P>
+<P>(C) Before connecting a regulator to a cylinder valve, the valve shall be opened slightly and closed immediately. The valve shall be opened while standing to one side of the outlet; never in front of it. Never crack a fuel-gas cylinder valve near other welding work or near sparks, flame, or other possible sources of ignition.</P>
+<P>(D) Before a regulator is removed from a cylinder valve, the cylinder valve shall be closed and the gas released from the regulator.</P>
+<P>(E) Nothing shall be placed on top of an acetylene cylinder when in use which may damage the safety device or interfere with the quick closing of the valve.</P>
+<P>(F) If cylinders are found to have leaky valves or fittings which cannot be stopped by closing of the valve, the cylinders shall be taken outdoors away from sources of ignition and slowly emptied.</P>
+<P>(G) A warning should be placed near cylinders having leaking fuse plugs or other leaking safety devices not to approach them with a lighted cigarette or other source of ignition. Such cylinders should be plainly tagged; the supplier should be promptly notified and his instructions followed as to their return.</P>
+<P>(H) Safety devices shall not be tampered with.</P>
+<P>(I) Fuel-gas shall never be used from cylinders through torches or other devices equipped with shutoff valves without reducing the pressure through a suitable regulator attached to the cylinder valve or manifold.</P>
+<P>(J) The cylinder valve shall always be opened slowly.</P>
+<P>(K) An acetylene cylinder valve shall not be opened more than one and one-half turns of the spindle, and preferably no more than three-fourths of a turn.</P>
+<P>(L) Where a special wrench is required it shall be left in position on the stem of the valve while the cylinder is in use so that the fuel-gas flow can be quickly turned off in case of emergency. In the case of manifolded or coupled cylinders at least one such wrench shall always be available for immediate use.</P>
+<P>(c) <I>Manifolding of cylinders</I>&#x2014;(1) <I>Fuel-gas manifolds.</I> (i) Manifolds shall be approved either separately for each component part or as an assembled unit.</P>
+<P>(ii) Except as provided in paragraph (c)(1)(iii) of this section fuel-gas cylinders connected to one manifold inside a building shall be limited to a total capacity not exceeding 300 pounds (135.9 kg) of liquefied petroleum gas or 3,000 cubic feet (84 m
+<SU>3</SU>) of other fuel-gas. More than one such manifold with connected cylinders may be located in the same room provided the manifolds are at least 50 feet (15 m) apart or separated by a noncombustible barrier at least 5 feet (1.5 m) high having a fire-resistance rating of at least one-half hour.</P>
+<P>(iii) Fuel-gas cylinders connected to one manifold having an aggregate capacity exceeding 300 pounds (135.9 kg) of liquefied petroleum gas or 3,000 cubic feet (84 m
+<SU>3</SU>) of other fuel-gas shall be located outdoors, or in a separate building or room constructed in accordance with paragraphs (f)(6)(i)(H) and (f)(6)(i)(I) of this section.</P>
+<P>(iv) Separate manifold buildings or rooms may also be used for the storage of drums of calcium carbide and cylinders containing fuel gases as provided in paragraph (b)(3) of this section. Such buildings or rooms shall have no open flames for heating or lighting and shall be well-ventilated.</P>
+<P>(v) High-pressure fuel-gas manifolds shall be provided with approved pressure regulating devices.</P>
+<P>(2) <I>High-pressure oxygen manifolds (for use with cylinders having a Department of Transportation service pressure above 200 psig (1.36 MPa)).</I> (i) Manifolds shall be approved either separately for each component part or as an assembled unit.</P>
+<P>(ii) Oxygen manifolds shall not be located in an acetylene generator room. Oxygen manifolds shall be separated from fuel-gas cylinders or combustible materials (especially oil or grease), a minimum distance of 20 feet (6.1 m) or by a noncombustible barrier at least 5 feet (1.5 m) high having a fire-resistance rating of at least one-half hour.</P>
+<P>(iii) Except as provided in paragraph (c)(2)(iv) of this section, oxygen cylinders connected to one manifold shall be limited to a total gas capacity of 6,000 cubic feet (168 m
+<SU>3</SU>). More than one such manifold with connected cylinders may be located in the same room provided the manifolds are at least 50 feet (15 m) apart or separated by a noncombustible barrier at least 5 feet (1.5 m) high having a fire-resistance rating of at least one-half hour.</P>
+<P>(iv) An oxygen manifold, to which cylinders having an aggregate capacity of more than 6,000 cubic feet (168 m
+<SU>3</SU>) of oxygen are connected, should be located outdoors or in a separate noncombustible building. Such a manifold, if located inside a building having other occupancy, shall be located in a separate room of noncombustible construction having a fire-resistance rating of at least one-half hour or in an area with no combustible material within 20 feet (6.1 m) of the manifold.</P>
+<P>(v) An oxygen manifold or oxygen bulk supply system which has storage capacity of more than 13,000 cubic feet (364 m
+<SU>3</SU>) of oxygen (measured at 14.7 psia (101 kPa) and 70 &#xB0;F (21.1 &#xB0;C)), connected in service or ready for service, or more than 25,000 cubic feet (700 m
+<SU>3</SU>) of oxygen (measured at 14.7 psia (101 kPa) and 70 &#xB0;F (21.1 &#xB0;C)), including unconnected reserves on hand at the site, shall comply with the provisions of the Standard for Bulk Oxygen Systems at Consumer Sites, NFPA No. 566-1965.</P>
+<P>(vi) High-pressure oxygen manifolds shall be provided with approved pressure-regulating devices.</P>
+<P>(3) <I>Low-pressure oxygen manifolds (for use with cylinders having a Department of Transportation service pressure not exceeding 200 psig (1.36 MPa)).</I> (i) Manifolds shall be of substantial construction suitable for use with oxygen at a pressure of 250 psig (1.7 MPa). They shall have a minimum bursting pressure of 1,000 psig (6.8 MPa) and shall be protected by a safety relief device which will relieve at a maximum pressure of 500 psig (3.4 MPa). DOT-4L200 cylinders have safety devices which relieve at a maximum pressure of 250 psig (1.7 MPa) (or 235 psig (1.6 MPa) if vacuum insulation is used).</P>
+<P>(ii) Hose and hose connections subject to cylinder pressure shall comply with paragraph (e)(5) of this section. Hose shall have a minimum bursting pressure of 1,000 psig (6.8 MPa).</P>
+<P>(iii) The assembled manifold including leads shall be tested and proven gas-tight at a pressure of 300 psig (2.04 MPa). The fluid used for testing oxygen manifolds shall be oil-free and not combustible.</P>
+<P>(iv) The location of manifolds shall comply with paragraphs (c)(2)(ii), (c)(2)(iii), (c)(2)(iv), and (c)(2)(v) of this section.</P>
+<P>(v) The following sign shall be conspicuously posted at each manifold:</P>
+<EXTRACT>
+<HD3>Low-Pressure Manifold
+</HD3>
+<HD3>Do Not Connect High-Pressure Cylinders
+</HD3>
+<HD3>Maximum Pressure&#x2014;250 psig (1.7 MPa)</HD3></EXTRACT>
+<P>(4) <I>Portable outlet headers.</I> (i) Portable outlet headers shall not be used indoors except for temporary service where the conditions preclude a direct supply from outlets located on the service piping system.</P>
+<P>(ii) Each outlet on the service piping from which oxygen or fuel-gas is withdrawn to supply a portable outlet header shall be equipped with a readily accessible shutoff valve.</P>
+<P>(iii) Hose and hose connections used for connecting the portable outlet header to the service piping shall comply with paragraph (e)(5) of this section.</P>
+<P>(iv) Master shutoff valves for both oxygen and fuel-gas shall be provided at the entry end of the portable outlet header.</P>
+<P>(v) Portable outlet headers for fuel-gas service shall be provided with an approved hydraulic back-pressure valve installed at the inlet and preceding the service outlets, unless an approved pressure-reducing regulator, an approved back-flow check valve, or an approved hydraulic back-pressure valve is installed at each outlet. Outlets provided on headers for oxygen service may be fitted for use with pressure-reducing regulators or for direct hose connection.</P>
+<P>(vi) Each service outlet on portable outlet headers shall be provided with a valve assembly that includes a detachable outlet seal cap, chained or otherwise attached to the body of the valve.</P>
+<P>(vii) Materials and fabrication procedures for portable outlet headers shall comply with paragraphs (d)(1), (d)(2), and (d)(5) of this section.</P>
+<P>(viii) Portable outlet headers shall be provided with frames which will support the equipment securely in the correct operating position and protect them from damage during handling and operation.</P>
+<P>(5) <I>Manifold operation procedures.</I> (i) Cylinder manifolds shall be installed under the supervision of someone familiar with the proper practices with reference to their construction and use.</P>
+<P>(ii) All manifolds and parts used in methods of manifolding shall be used only for the gas or gases for which they are approved.</P>
+<P>(iii) When acetylene cylinders are coupled, approved flash arresters shall be installed between each cylinder and the coupler block. For outdoor use only, and when the number of cylinders coupled does not exceed three, one flash arrester installed between the coupler block and regulator is acceptable.</P>
+<P>(iv) The aggregate capacity of fuel-gas cylinders connected to a portable manifold inside a building shall not exceed 3,000 cubic feet (84 m
+<SU>3</SU>) of gas.</P>
+<P>(v) Acetylene and liquefied fuel-gas cylinders shall be manifolded in a vertical position.</P>
+<P>(vi) The pressure in the gas cylinders connected to and discharged simultaneously through a common manifold shall be approximately equal.</P>
+<P>(d) <I>Service piping systems</I>&#x2014;(1) <I>Materials and design.</I> (i)(A) Piping and fittings shall comply with section 2, Industrial Gas and Air Piping Systems, of the American National Standard Code for Pressure Piping ANSI B31.1, 1967, which is incorporated by reference as specified in &#xA7; 1910.6, insofar as it does not conflict with paragraphs (d)(1)(i)(A)(<I>1</I>) and (d)(1)(i)(A)(<I>2</I>) of this section:</P>
+<P>(<I>1</I>) Pipe shall be at least Schedule 40 and fittings shall be at least standard weight in sizes up to and including 6-inch nominal.</P>
+<P>(<I>2</I>) Copper tubing shall be Types K or L in accordance with the Standard Specification for Seamless Copper Water Tube, ASTM B88-66a, which is incorporated by reference as specified in &#xA7; 1910.6.</P>
+<P>(B) Piping shall be steel, wrought iron, brass or copper pipe, or seamless copper, brass or stainless steel tubing, except as provided in paragraphs (d)(1)(ii) and (d)(1)(iii) of this section.</P>
+<P>(ii)(A) Oxygen piping and fittings at pressures in excess of 700 psi (4.8 MPa), shall be stainless steel or copper alloys.</P>
+<P>(B) Hose connections and hose complying with paragraph (e)(5) of this section may be used to connect the outlet of a manifold pressure regulator to piping providing the working pressure of the piping is 250 psi (1.7 MPa) or less and the length of the hose does not exceed 5 feet (1.5 m). Hose shall have a minimum bursting pressure of 1,000 psig (6.8 MPa).</P>
+<P>(C) When oxygen is supplied to a service piping system from a low-pressure oxygen manifold without an intervening pressure regulating device, the piping system shall have a minimum design pressure of 250 psig (1.7 MPa). A pressure regulating device shall be used at each station outlet when the connected equipment is for use at pressures less than 250 psig (1.7 MPa).</P>
+<P>(iii)(A) Piping for acetylene or acetylenic compounds shall be steel or wrought iron.</P>
+<P>(B) Unalloyed copper shall not be used for acetylene or acetylenic compounds except in listed equipment.</P>
+<P>(2) <I>Piping joints.</I> (i) Joints in steel or wrought iron piping shall be welded, threaded or flanged. Fittings, such as ells, tees, couplings, and unions, may be rolled, forged or cast steel, malleable iron or nodular iron. Gray or white cast iron fittings are prohibited.</P>
+<P>(ii) Joints in brass or copper pipe shall be welded, brazed, threaded, or flanged. If of the socket type, they shall be brazed with silver-brazing alloy or similar high melting point (not less than 800 &#xB0;F (427 &#xB0;C)) filler metal.</P>
+<P>(iii) Joints in seamless copper, brass, or stainless steel tubing shall be approved gas tubing fittings or the joints shall be brazed. If of the socket type, they shall be brazed with silver-brazing alloy or similar high melting point (not less than 800 &#xB0;F (427 &#xB0;C)) filler metal.</P>
+<P>(3) <I>Installation.</I> (i) Distribution lines shall be installed and maintained in a safe operating condition.</P>
+<P>(ii) All piping shall be run as directly as practicable, protected against physical damage, proper allowance being made for expansion and contraction, jarring and vibration. Pipe laid underground in earth shall be located below the frost line and protected against corrosion. After assembly, piping shall be thoroughly blown out with air, nitrogen, or carbon dioxide to remove foreign materials. For oxygen piping, only oil-free air, oil-free nitrogen, or oil-free carbon dioxide shall be used.</P>
+<P>(iii) Only piping which has been welded or brazed shall be installed in tunnels, trenches or ducts. Shutoff valves shall be located outside such conduits. Oxygen piping may be placed in the same tunnel, trench or duct with fuel-gas pipelines, provided there is good natural or forced ventilation.</P>
+<P>(iv) Low points in piping carrying moist gas shall be drained into drip pots constructed so as to permit pumping or draining out the condensate at necessary intervals. Drain valves shall be installed for this purpose having outlets normally closed with screw caps or plugs. No open end valves or petcocks shall be used, except that in drips located out of doors, underground, and not readily accessible, valves may be used at such points if they are equipped with means to secure them in the closed position. Pipes leading to the surface of the ground shall be cased or jacketed where necessary to prevent loosening or breaking.</P>
+<P>(v) Gas cocks or valves shall be provided for all buildings at points where they will be readily accessible for shutting off the gas supply to these buildings in any emergency. There shall also be provided a shutoff valve in the discharge line from the generator, gas holder, manifold or other source of supply.</P>
+<P>(vi) Shutoff valves shall not be installed in safety relief lines in such a manner that the safety relief device can be rendered ineffective.</P>
+<P>(vii) Fittings and lengths of pipe shall be examined internally before assembly and, if necessary freed from scale or dirt. Oxygen piping and fittings shall be washed out with a suitable solution which will effectively remove grease and dirt but will not react with oxygen. Hot water solutions of caustic soda or trisodium phosphate are effective cleaning agents for this purpose.</P>
+<P>(viii) Piping shall be thoroughly blown out after assembly to remove foreign materials. For oxygen piping, oil-free air, oil-free nitrogen, or oil-free carbon dioxide shall be used. For other piping, air or inert gas may be used.</P>
+<P>(ix) When flammable gas lines or other parts of equipment are being purged of air or gas, open lights or other sources of ignition shall not be permitted near uncapped openings.</P>
+<P>(x) No welding or cutting shall be performed on an acetylene or oxygen pipeline, including the attachment of hangers or supports, until the line has been purged. Only oil-free air, oil-free nitrogen, or oil-free carbon dioxide shall be used to purge oxygen lines.</P>
+<P>(4) <I>Painting and signs.</I> (i) Underground pipe and tubing and outdoor ferrous pipe and tubing shall be covered or painted with a suitable material for protection against corrosion.</P>
+<P>(ii) Aboveground piping systems shall be marked in accordance with the American National Standard Scheme for the Identification of Piping Systems, ANSI A13.1&#x2212;1956, which is incorporated by reference as specified in &#xA7; 1910.6.</P>
+<P>(iii) Station outlets shall be marked to indicate the name of the gas.</P>
+<P>(5) <I>Testing.</I> (i) Piping systems shall be tested and proved gastight at 1
+<FR>1/2</FR> times the maximum operating pressure, and shall be thoroughly purged of air before being placed in service. The material used for testing oxygen lines shall be oil free and noncombustible. Flames shall not be used to detect leaks.</P>
+<P>(ii) When flammable gas lines or other parts of equipment are being purged of air or gas, sources of ignition shall not be permitted near uncapped openings.</P>
+<P>(e) <I>Protective equipment, hose, and regulators</I>&#x2014;(1) <I>General.</I> Equipment shall be installed and used only in the service for which it is approved and as recommended by the manufacturer.</P>
+<P>(2) <I>Pressure relief devices.</I> Service piping systems shall be protected by pressure relief devices set to function at not more than the design pressure of the systems and discharging upwards to a safe location.</P>
+<P>(3) <I>Piping protective equipment.</I> (i) The fuel-gas and oxygen piping systems, including portable outlet headers shall incorporate the protective equipment shown in Figures Q-1, Q-2, and Q-3. When only a portion of a fuel-gas system is to be used with oxygen, only that portion need comply with this paragraph (e)(3)(i).</P>
+<img src="/graphics/ec27oc91.084.gif"/>
+<P>(ii) Approved protective equipment (designated P<E T="52">F</E> in Figures Q-1, Q-2, and Q-3) shall be installed in fuel-gas piping to prevent:</P>
+<P>(A) Backflow of oxygen into the fuel-gas supply system;</P>
+<P>(B) Passage of a flash back into the fuel-gas supply system; and</P>
+<P>(C) Excessive back pressure of oxygen in the fuel-gas supply system. The three functions of the protective equipment may be combined in one device or may be provided by separate devices.</P>
+<P>(<I>1</I>) The protective equipment shall be located in the main supply line, as in Figure Q-1 or at the head of each branch line, as in Figure Q-2 or at each location where fuel-gas is withdrawn, as in Figure Q-3. Where branch lines are of 2-inch pipe size or larger or of substantial length, protective equipment (designated as P<E T="52">F</E>) shall be located as shown in either Q-2 and Q-3.</P>
+<P>(<I>2</I>) Backflow protection shall be provided by an approved device that will prevent oxygen from flowing into the fuel-gas system or fuel from flowing into the oxygen system (see S<E T="52">F</E>, Figures Q-1 and Q-2).</P>
+<P>(<I>3</I>) Flash-back protection shall be provided by an approved device that will prevent flame from passing into the fuel-gas system.</P>
+<P>(<I>4</I>) Back-pressure protection shall be provided by an approved pressure-relief device set at a pressure not greater than the pressure rating of the backflow or the flashback protection device, whichever is lower. The pressure-relief device shall be located on the downstream side of the backflow and flashback protection devices. The vent from the pressure-relief device shall be at least as large as the relief device inlet and shall be installed without low points that may collect moisture. If low points are unavoidable, drip pots with drains closed with screw plugs or caps shall be installed at the low points. The vent terminus shall not endanger personnel or property through gas discharge; shall be located away from ignition sources; and shall terminate in a hood or bend.</P>
+<P>(iii) If pipeline protective equipment incorporates a liquid, the liquid level shall be maintained, and a suitable antifreeze may be used to prevent freezing.</P>
+<P>(iv) Fuel gas for use with equipment not requiring oxygen shall be withdrawn upstream of the piping protective devices.</P>
+<P>(4) <I>Station outlet protective equipment.</I> (i) A check valve, pressure regulator, hydraulic seal, or combination of these devices shall be provided at each station outlet, including those on portable headers, to prevent backflow, as shown in Figures Q-1, Q-2, and Q-3 and designated as S<E T="52">F</E> and S<E T="52">O</E>.</P>
+<P>(ii) When approved pipeline protective equipment (designated P<E T="52">F</E>) is located at the station outlet as in Figure Q-3, no additional check valve, pressure regulator, or hydraulic seal is required.</P>
+<P>(iii) A shutoff valve (designated V<E T="52">F</E> and V<E T="52">O</E>) shall be installed at each station outlet and shall be located on the upstream side of other station outlet equipment.</P>
+<P>(iv) If the station outlet is equipped with a detachable regulator, the outlet shall terminate in a union connection that complies with the Regulator Connection Standards, 1958, Compressed Gas Association, which is incorporated by reference as specified in &#xA7; 1910.6.</P>
+<P>(v) If the station outlet is connected directly to a hose, the outlet shall terminate in a union connection complying with the Standard Hose Connection Specifications, 1957, Compressed Gas Association, which is incorporated by reference as specified in &#xA7; 1910.6.</P>
+<P>(vi) Station outlets may terminate in pipe threads to which permanent connections are to be made, such as to a machine.</P>
+<P>(vii) Station outlets shall be equipped with a detachable outlet seal cap secured in place. This cap shall be used to seal the outlet except when a hose, a regulator, or piping is attached.</P>
+<P>(viii) Where station outlets are equipped with approved backflow and flashback protective devices, as many as four torches may be supplied from one station outlet through rigid piping, provided each outlet from such piping is equipped with a shutoff valve and provided the fuel-gas capacity of any one torch does not exceed 15 cubic feet (0.42 m
+<SU>3</SU>) per hour. This paragraph (e)(4)(viii) does not apply to machines.</P>
+<P>(5) <I>Hose and hose connections.</I> (i) Hose for oxy-fuel gas service shall comply with the Specification for Rubber Welding Hose, 1958, Compressed Gas Association and Rubber Manufacturers Association, which is incorporated by reference as specified in &#xA7; 1910.6.</P>
+<P>(ii) When parallel lengths of oxygen and acetylene hose are taped together for convenience and to prevent tangling, not more than 4 inches (10.2 cm) out of 12 inches (30.5 cm) shall be covered by tape.</P>
+<P>(iii) Hose connections shall comply with the Standard Hose Connection Specifications, 1957, Compressed Gas Association.</P>
+<P>(iv) Hose connections shall be clamped or otherwise securely fastened in a manner that will withstand, without leakage, twice the pressure to which they are normally subjected in service, but in no case less than a pressure of 300 psi (2.04 MPa). Oil-free air or an oil-free inert gas shall be used for the test.</P>
+<P>(v) Hose showing leaks, burns, worn places, or other defects rendering it unfit for service shall be repaired or replaced.</P>
+<P>(6) <I>Pressure-reducing regulators.</I> (i) Pressure-reducing regulators shall be used only for the gas and pressures for which they are intended. The regulator inlet connections shall comply with Regulator Connection Standards, 1958, Compressed Gas Association.</P>
+<P>(ii) When regulators or parts of regulators, including gages, need repair, the work shall be performed by skilled mechanics who have been properly instructed.</P>
+<P>(iii) Gages on oxygen regulators shall be marked &#x201C;USE NO OIL.&#x201D;</P>
+<P>(iv) Union nuts and connections on regulators shall be inspected before use to detect faulty seats which may cause leakage of gas when the regulators are attached to the cylinder valves.</P>
+<P>(f) <I>Acetylene generators</I>&#x2014;(1) <I>Approval and marking.</I> (i) Generators shall be of approved construction and shall be plainly marked with the maximum rate of acetylene in cubic feet per hour for which they are designed; the weight and size of carbide necessary for a single charge; the manufacturer's name and address; and the name or number of the type of generator.</P>
+<P>(ii) Carbide shall be of the size marked on the generator nameplate.</P>
+<P>(2) <I>Rating and pressure limitations.</I> (i) The total hourly output of a generator shall not exceed the rate for which it is approved and marked. Unless specifically approved for higher ratings, carbide-feed generators shall be rated at 1 cubic foot (0.028 m
+<SU>3</SU>) per hour per pound of carbide required for a single complete charge.</P>
+<P>(ii) Relief valves shall be regularly operated to insure proper functioning. Relief valves for generating chambers shall be set to open at a pressure not in excess of 15 psig (103 kPa gauge pressure). Relief valves for hydraulic back pressure valves shall be set to open at a pressure not in excess of 20 psig (137 kPa gauge pressure).</P>
+<P>(iii) Nonautomatic generators shall not be used for generating acetylene at pressures exceeding l psig (7 kPa gauge pressure), and all water overflows shall be visible.</P>
+<P>(3) <I>Location.</I> The space around the generator shall be ample for free, unobstructed operation and maintenance and shall permit ready adjustment and charging.</P>
+<P>(4) <I>Stationary acetylene generators (automatic and nonautomatic).</I> (i)(A) The foundation shall be so arranged that the generator will be level and so that no excessive strain will be placed on the generator or its connections. Acetylene generators shall be grounded.</P>
+<P>(B) Generators shall be placed where water will not freeze. The use of common salt (sodium chloride) or other corrosive chemicals for protection against freezing is not permitted. (For heating systems see paragraph (f)(6)(iii) of this section.)</P>
+<P>(C) Except when generators are prepared in accordance with paragraph (f)(7)(v) of this section, sources of ignition shall be prohibited in outside generator houses or inside generator rooms.</P>
+<P>(D) Water shall not be supplied through a continuous connection to the generator except when the generator is provided with an adequate open overflow or automatic water shutoff which will effectively prevent overfilling of the generator. Where a noncontinuous connection is used, the supply line shall terminate at a point not less than 2 inches (5 cm) above the regularly provided opening for filling so that the water can be observed as it enters the generator.</P>
+<P>(E) Unless otherwise specifically approved, generators shall not be fitted with continuous drain connections leading to sewers, but shall discharge through an open connection into a suitably vented outdoor receptacle or residue pit which may have such connections. An open connection for the sludge drawoff is desirable to enable the generator operator to observe leakage of generating water from the drain valve or sludge cock.</P>
+<P>(ii)(A) Each generator shall be provided with a vent pipe.</P>
+<P>(B) The escape or relief pipe shall be rigidly installed without traps and so that any condensation will drain back to the generator.</P>
+<P>(C) The escape or relief pipe shall be carried full size to a suitable point outside the building. It shall terminate in a hood or bend located at least 12 feet (3.7 m) above the ground, preferably above the roof, and as far away as practicable from windows or other openings into buildings and as far away as practicable from sources of ignition such as flues or chimneys and tracks used by locomotives. Generating chamber relief pipes shall not be inter-connected but shall be separately led to the outside air. The hood or bend shall be so constructed that it will not be obstructed by rain, snow, ice, insects, or birds. The outlet shall be at least 3 feet (0.9 m) from combustible construction.</P>
+<P>(iii)(A) Gas holders shall be constructed on the gasometer principle, the bell being suitably guided. The gas bell shall move freely without tendency to bind and shall have a clearance of at least 2 inches (5 cm) from the shell.</P>
+<P>(B) The gas holder may be located in the generator room, in a separate room or out of doors. In order to prevent collapse of the gas bell or infiltration of air due to a vacuum caused by the compressor or booster pump or cooling of the gas, a compressor or booster cutoff shall be provided at a point 12 inches (0.3 m) or more above the landing point of the bell. When the gas holder is located indoors, the room shall be ventilated in accordance with paragraph (f)(6)(ii) of this section and heated and lighted in accordance with paragraphs (f)(6)(iii) and (f)(6)(iv) of this section.</P>
+<P>(C) When the gas holder is not located within a heated building, gas holder seals shall be protected against freezing.</P>
+<P>(D) Means shall be provided to stop the generator-feeding mechanism before the gas holder reaches the upper limit of its travel.</P>
+<P>(E) When the gas holder is connected to only one generator, the gas capacity of the holder shall be not less than one-third of the hourly rating of the generator.</P>
+<P>(F) If acetylene is used from the gas holder without increase in pressure at some points but with increase in pressure by a compressor or booster pump at other points, approved piping protective devices shall be installed in each supply line. The low-pressure protective device shall be located between the gas holder and the shop piping, and the medium-pressure protective device shall be located between the compressor or booster pump and the shop piping (see Figure Q-4). Approved protective equipment (designated P<E T="52">F</E>) is used to prevent: Backflow of oxygen into the fuel-gas supply system; passage of a flashback into the fuel-gas supply system; and excessive back pressure of oxygen in the fuel-gas supply system. The three functions of the protective equipment may be combined in one device or may be provided by separate devices.</P>
+<img src="/graphics/ec27oc91.085.gif"/>
+<P>(iv)(A) The compressor or booster system shall be of an approved type.</P>
+<P>(B) Wiring and electric equipment in compressor or booster pump rooms or enclosures shall conform to the provisions of subpart S of this part for Class I, Division 2 locations.</P>
+<P>(C) Compressors and booster pump equipment shall be located in well-ventilated areas away from open flames, electrical or mechanical sparks, or other ignition sources.</P>
+<P>(D) Compressor or booster pumps shall be provided with pressure relief valves which will relieve pressure exceeding 15 psig (103 kPa gauge pressure) to a safe outdoor location as provided in paragraph (f)(4)(ii) of this section, or by returning the gas to the inlet side or to the gas supply source.</P>
+<P>(E) Compressor or booster pump discharge outlets shall be provided with approved protective equipment. (See paragraph (e) of this section.)</P>
+<P>(5) <I>Portable acetylene generators.</I> (i)(A) All portable generators shall be of a type approved for portable use.</P>
+<P>(B) Portable generators shall not be used within 10 feet (3 m) of combustible material other than the floor.</P>
+<P>(C) Portable generators shall not be used in rooms of total volume less than 35 times the total gas-generating capacity per charge of all generators in the room. Generators shall not be used in rooms having a ceiling height of less than 10 feet (3 m). (To obtain the gas-generating capacity in cubic feet per charge, multiply the pounds of carbide per charge by 4.5.)</P>
+<P>(D) Portable generators shall be protected against freezing. The use of salt or other corrosive chemical to prevent freezing is prohibited.</P>
+<P>(ii)(A) Portable generators shall be cleaned and recharged and the air mixture blown off outside buildings.</P>
+<P>(B) When charged with carbide, portable generators shall not be moved by crane or derrick.</P>
+<P>(C) When not in use, portable generators shall not be stored in rooms in which open flames are used unless the generators contain no carbide and have been thoroughly purged of acetylene. Storage rooms shall be well ventilated.</P>
+<P>(D) When portable acetylene generators are to be transported and operated on vehicles, they shall be securely anchored to the vehicles. If transported by truck, the motor shall be turned off during charging, cleaning, and generating periods.</P>
+<P>(E) Portable generators shall be located at a safe distance from the welding position so that they will not be exposed to sparks, slag, or misdirection of the torch flame or overheating from hot materials or processes.</P>
+<P>(6) <I>Outside generator houses and inside generator rooms for stationary acetylene generators.</I> (i)(A) No opening in any outside generator house shall be located within 5 feet (1.5 m) of any opening in another building.</P>
+<P>(B) Walls, floors, and roofs of outside generator houses shall be of noncombustible construction.</P>
+<P>(C) When a part of the generator house is to be used for the storage or manifolding of oxygen cylinders, the space to be so occupied shall be separated from the generator or carbide storage section by partition walls continuous from floor to roof or ceiling, of the type of construction stated in paragraph (f)(6)(i)(H) of this section. Such separation walls shall be without openings and shall be joined to the floor, other walls and ceiling or roof in a manner to effect a permanent gas-tight joint.</P>
+<P>(D) Exit doors shall be located so as to be readily accessible in case of emergency.</P>
+<P>(E) Explosion venting for outside generator houses and inside generator rooms shall be provided in exterior walls or roofs. The venting areas shall be equal to not less than 1 square foot (0.09 m
+<SU>2</SU>) per 50 cubic feet (1.4 m
+<SU>3</SU>) of room volume and may consist of any one or any combination of the following: Walls of light, noncombustible material preferably single-thickness, single-strength glass; lightly fastened hatch covers; lightly fastened swinging doors in exterior walls opening outward; lightly fastened walls or roof designed to relieve at a maximum pressure of 25 pounds per square foot (0.001 MPa).</P>
+<P>(F) The installation of acetylene generators within buildings shall be restricted to buildings not exceeding one story in height; <I>provided, however,</I> that this will not be construed as prohibiting such installations on the roof or top floor of a building exceeding such height.</P>
+<P>(G) Generators installed inside buildings shall be enclosed in a separate room.</P>
+<P>(H) The walls, partitions, floors, and ceilings of inside generator rooms shall be of noncombustible construction having a fire-resistance rating of at least 1 hour. The walls or partitions shall be continuous from floor to ceiling and shall be securely anchored. At least one wall of the room shall be an exterior wall.</P>
+<P>(I) Openings from an inside generator room to other parts of the building shall be protected by a swinging type, self-closing fire door for a Class B opening and having a rating of at least 1 hour. Windows in partitions shall be wired glass and approved metal frames with fixed sash. Installation shall be in accordance with the Standard for the Installation of Fire Doors and Windows, NFPA 80-1970, which is incorporated by reference as specified in &#xA7; 1910.6.</P>
+<P>(ii) Inside generator rooms or outside generator houses shall be well ventilated with vents located at floor and ceiling levels.</P>
+<P>(iii) Heating shall be by steam, hot water, enclosed electrically heated elements or other indirect means. Heating by flames or fires shall be prohibited in outside generator houses or inside generator rooms, or in any enclosure communicating with them.</P>
+<P>(iv)(A) Generator houses or rooms shall have natural light during daylight hours. Where artificial lighting is necessary it shall be restricted to electric lamps installed in a fixed position. Unless specifically approved for use in atmospheres containing acetylene, such lamps shall be provided with enclosures of glass or other noncombustible material so designed and constructed as to prevent gas vapors from reaching the lamp or socket and to resist breakage. Rigid conduit with threaded connections shall be used.</P>
+<P>(B) Lamps installed outside of wired-glass panels set in gas-tight frames in the exterior walls or roof of the generator house or room are acceptable.</P>
+<P>(v) Electric switches, telephones, and all other electrical apparatus which may cause a spark, unless specifically approved for use inside acetylene generator rooms, shall be located outside the generator house or in a room or space separated from the generator room by a gas-tight partition, except that where the generator system is designed so that no carbide fill opening or other part of the generator is open to the generator house or room during the operation of the generator, and so that residue is carried in closed piping from the residue discharge valve to a point outside the generator house or room, electrical equipment in the generator house or room shall conform to the provisions of subpart S of this part for Class I, Division 2 locations.</P>
+<P>(7) <I>Maintenance and operation.</I> (i) Unauthorized persons shall not be permitted in outside generator houses or inside generator rooms.</P>
+<P>(A) Operating instructions shall be posted in a conspicuous place near the generator or kept in a suitable place available for ready reference.</P>
+<P>(B) When recharging generators the order of operations specified in the instructions supplied by the manufacturer shall be followed.</P>
+<P>(C) In the case of batch-type generators, when the charge of carbide is exhausted and before additional carbide is added, the generating chamber shall always be flushed out with water, renewing the water supply in accordance with the instruction card furnished by the manufacturer.</P>
+<P>(D) The water-carbide residue mixture drained from the generator shall not be discharged into sewer pipes or stored in areas near open flames. Clear water from residue settling pits may be discharged into sewer pipes.</P>
+<P>(ii) The carbide added each time the generator is recharged shall be sufficient to refill the space provided for carbide without ramming the charge. Steel or other ferrous tools shall not be used in distributing the charge.</P>
+<P>(iii) Generator water chambers shall be kept filled to proper level at all times except while draining during the recharging operation.</P>
+<P>(iv) Whenever repairs are to be made or the generator is to be charged or carbide is to be removed, the water chamber shall be filled to the proper level.</P>
+<P>(v) Previous to making repairs involving welding, soldering, or other hot work or other operations which produce a source of ignition, the carbide charge and feed mechanism shall be completely removed. All acetylene shall be expelled by completely flooding the generator shell with water and the generator shall be disconnected from the piping system. The generator shall be kept filled with water, if possible, or positioned to hold as much water as possible.</P>
+<P>(vi) Hot repairs shall not be made in a room where there are other generators unless all the generators and piping have been purged of acetylene.</P>
+<P>(g) <I>Calcium carbide storage</I>&#x2014;(1) <I>Packaging.</I> (i) Calcium carbide shall be contained in metal packages of sufficient strength to prevent rupture. The packages shall be provided with a screw top or equivalent. These packages shall be constructed water- and air-tight. Solder shall not be used in such a manner that the package would fail if exposed to fire.</P>
+<P>(ii) Packages containing calcium carbide shall be conspicuously marked &#x201C;Calcium Carbide&#x2014;Dangerous If Not Kept Dry&#x201D; or with equivalent warning.</P>
+<P>(iii) Caution: Metal tools, even the so-called spark resistant type may cause ignition of an acetylene and air mixture when opening carbide containers.</P>
+<P>(iv) Sprinkler systems shall not be installed in carbide storage rooms.</P>
+<P>(2) <I>Storage indoors.</I> (i) Calcium carbide in quantities not to exceed 600 pounds (272.2 kg) may be stored indoors in dry, waterproof, and well-ventilated locations.</P>
+<P>(A) Calcium carbide not exceeding 600 pounds (272.2 kg) may be stored indoors in the same room with fuel-gas cylinders.</P>
+<P>(B) Packages of calcium carbide, except for one of each size, shall be kept sealed. The seals shall not be broken when there is carbide in excess of 1 pound (0.5 kg) in any other unsealed package of the same size of carbide in the room.</P>
+<P>(ii) Calcium carbide exceeding 600 pounds (272.2 kg) but not exceeding 5,000 pounds (2,268 kg) shall be stored:</P>
+<P>(A) In accordance with paragraph (g)(2)(iii) of this section;</P>
+<P>(B) In an inside generator room or outside generator house; or</P>
+<P>(C) In a separate room in a one-story building which may contain other occupancies, but without cellar or basement beneath the carbide storage section. Such rooms shall be constructed in accordance with paragraphs (f)(6)(i)(H) and (f)(6)(i)(I) of this section and ventilated in accordance with paragraph (f)(6)(ii) of this section. These rooms shall be used for no other purpose.</P>
+<P>(iii) Calcium carbide in excess of 5,000 pounds (2,268 kg) shall be stored in one-story buildings without cellar or basement and used for no other purpose, or in outside generator houses. If the storage building is of noncombustible construction, it may adjoin other one-story buildings if separated therefrom by unpierced firewalls; if it is detached less than 10 feet (3 m) from such building or buildings, there shall be no opening in any of the mutually exposing sides of such buildings within 10 feet (3 m). If the storage building is of combustible construction, it shall be at least 20 feet (6.1 m) from any other one- or two-story building, and at least 30 feet (9.1 m) from any other building exceeding two stories.</P>
+<P>(3) <I>Storage outdoors.</I> (i) Calcium carbide in unopened metal containers may be stored outdoors.</P>
+<P>(ii) Carbide containers to be stored outdoors shall be examined to make sure that they are in good condition. Periodic reexaminations shall be made for rusting or other damage to a container that might affect its water or air tightness.</P>
+<P>(iii) The bottom tier of each row shall be placed on wooden planking or equivalent, so that the containers will not come in contact with the ground or ground water.</P>
+<P>(iv) Containers of carbide which have been in storage the longest shall be used first.</P>
+<CITA TYPE="N">[55 FR 13696, Apr. 11, 1990, as amended at 55 FR 32015, Aug. 6, 1990; 55 FR 46053, Nov. 1, 1990; 61 FR 9241, Mar. 7, 1996; 72 FR 71070, Dec. 14, 2007]
+</CITA>
+</DIV8>
+
+<DIV8 N="1910.254" TYPE="SECTION" hierarchy_metadata="{&quot;path&quot;:&quot;/on/_SUBSTITUTE_DATE_/title-29/section-1910.254&quot;,&quot;citation&quot;:&quot;29 CFR 1910.254&quot;}">
+<HEAD>&#xA7; 1910.254 Arc welding and cutting.</HEAD>
+<P>(a) <I>General</I>&#x2014;(1) <I>Equipment selection.</I> Welding equipment shall be chosen for safe application to the work to be done as specified in paragraph (b) of this section.</P>
+<P>(2) <I>Installation.</I> Welding equipment shall be installed safely as specified by paragraph (c) of this section.</P>
+<P>(3) <I>Instruction.</I> Workmen designated to operate arc welding equipment shall have been properly instructed and qualified to operate such equipment as specified in paragraph (d) of this section.</P>
+<P>(b) <I>Application of arc welding equipment</I>&#x2014;(1) <I>General.</I> Assurance of consideration of safety in design is obtainable by choosing apparatus complying with the Requirements for Electric Arc-Welding Apparatus, NEMA EW-1-1962, National Electrical Manufacturers Association or the Safety Standard for Transformer-Type Arc-Welding Machines, ANSI C33.2&#x2014;1956, Underwriters' Laboratories, both of which are incorporated by reference as specified in &#xA7; 1910.6.</P>
+<P>(2) <I>Environmental conditions.</I> (i) Standard machines for arc welding service shall be designed and constructed to carry their rated load with rated temperature rises where the temperature of the cooling air does not exceed 40 &#xB0;C (104 &#xB0;F) and where the altitude does not exceed 3,300 feet (1,005.8 m), and shall be suitable for operation in atmospheres containing gases, dust, and light rays produced by the welding arc.</P>
+<P>(ii) Unusual service conditions may exist, and in such circumstances machines shall be especially designed to safely meet the requirements of the service. Chief among these conditions are:</P>
+<P>(A) Exposure to unusually corrosive fumes.</P>
+<P>(B) Exposure to steam or excessive humidity.</P>
+<P>(C) Exposure to excessive oil vapor.</P>
+<P>(D) Exposure to flammable gases.</P>
+<P>(E) Exposure to abnormal vibration or shock.</P>
+<P>(F) Exposure to excessive dust.</P>
+<P>(G) Exposure to weather.</P>
+<P>(H) Exposure to unusual seacoast or shipboard conditions.</P>
+<P>(3) <I>Voltage.</I> The following limits shall not be exceeded:</P>
+<P>(i) Alternating-current machines</P>
+<P>(A) Manual arc welding and cutting&#x2014;80 volts.</P>
+<P>(B) Automatic (machine or mechanized) arc welding and cutting&#x2014;100 volts.</P>
+<P>(ii) Direct-current machines</P>
+<P>(A) Manual arc welding and cutting&#x2014;100 volts.</P>
+<P>(B) Automatic (machine or mechanized) arc welding and cutting-100 volts.</P>
+<P>(iii) When special welding and cutting processes require values of open circuit voltages higher than the above, means shall be provided to prevent the operator from making accidental contact with the high voltage by adequate insulation or other means.</P>
+<P>(iv) For a.c. welding under wet conditions or warm surroundings where perspiration is a factor, the use of reliable automatic controls for reducing no load voltage is recommended to reduce the shock hazard.</P>
+<P>(4) <I>Design.</I> (i) A controller integrally mounted in an electric motor driven welder shall have capacity for carrying rated motor current, shall be capable of making and interrupting stalled rotor current of the motor, and may serve as the running overcurrent device if provided with the number of overcurrent units as specified by subpart S of this part.</P>
+<P>(ii) On all types of arc welding machines, control apparatus shall be enclosed except for the operating wheels, levers, or handles.</P>
+<P>(iii) Input power terminals, tap change devices and live metal parts connected to input circuits shall be completely enclosed and accessible only by means of tools.</P>
+<P>(iv) Terminals for welding leads should be protected from accidental electrical contact by personnel or by metal objects, i.e., vehicles, crane hooks, etc. Protection may be obtained by use of: Dead-front receptacles for plug connections; recessed openings with nonremovable hinged covers; heavy insulating sleeving or taping or other equivalent electrical and mechanical protection. If a welding lead terminal which is intended to be used exclusively for connection to the work is connected to the grounded enclosure, it must be done by a conductor at least two AWG sizes smaller than the grounding conductor and the terminal shall be marked to indicate that it is grounded.</P>
+<P>(v) No connections for portable control devices such as push buttons to be carried by the operator shall be connected to an a.c. circuit of higher than 120 volts. Exposed metal parts of portable control devices operating on circuits above 50 volts shall be grounded by a grounding conductor in the control cable.</P>
+<P>(vi) Auto transformers or a.c. reactors shall not be used to draw welding current directly from any a.c. power source having a voltage exceeding 80 volts.</P>
+<P>(c) <I>Installation of arc welding equipment</I>&#x2014;(1) <I>General.</I> Installation including power supply shall be in accordance with the requirements of subpart S of this part.</P>
+<P>(2) <I>Grounding.</I> (i) The frame or case of the welding machine (except engine-driven machines) shall be grounded under the conditions and according to the methods prescribed in subpart S of this part.</P>
+<P>(ii) Conduits containing electrical conductors shall not be used for completing a work-lead circuit. Pipelines shall not be used as a permanent part of a work-lead circuit, but may be used during construction, extension or repair providing current is not carried through threaded joints, flanged bolted joints, or caulked joints and that special precautions are used to avoid sparking at connection of the work-lead cable.</P>
+<P>(iii) Chains, wire ropes, cranes, hoists, and elevators shall not be used to carry welding current.</P>
+<P>(iv) Where a structure, conveyor, or fixture is regularly employed as a welding current return circuit, joints shall be bonded or provided with adequate current collecting devices.</P>
+<P>(v) All ground connections shall be checked to determine that they are mechanically strong and electrically adequate for the required current.</P>
+<P>(3) <I>Supply connections and conductors.</I> (i) A disconnecting switch or controller shall be provided at or near each welding machine which is not equipped with such a switch or controller mounted as an integral part of the machine. The switch shall be in accordance with subpart S of this part. Overcurrent protection shall be provided as specified in subpart S of this part. A disconnect switch with overload protection or equivalent disconnect and protection means, permitted by subpart S of this part, shall be provided for each outlet intended for connection to a portable welding machine.</P>
+<P>(ii) For individual welding machines, the rated current-carrying capacity of the supply conductors shall be not less than the rated primary current of the welding machines.</P>
+<P>(iii) For groups of welding machines, the rated current-carrying capacity of conductors may be less than the sum of the rated primary currents of the welding machines supplied. The conductor rating shall be determined in each case according to the machine loading based on the use to be made of each welding machine and the allowance permissible in the event that all the welding machines supplied by the conductors will not be in use at the same time.</P>
+<P>(iv) In operations involving several welders on one structure, d.c. welding process requirements may require the use of both polarities; or supply circuit limitations for a.c. welding may require distribution of machines among the phases of the supply circuit. In such cases no load voltages between electrode holders will be 2 times normal in d.c. or 1, 1.41, 1.73, or 2 times normal on a.c. machines. Similar voltage differences will exist if both a.c. and d.c. welding are done on the same structure.</P>
+<P>(A) All d.c. machines shall be connected with the same polarity.</P>
+<P>(B) All a.c. machines shall be connected to the same phase of the supply circuit and with the same instantaneous polarity.</P>
+<P>(d) <I>Operation and maintenance</I>&#x2014;(1) <I>General.</I> Workers assigned to operate or maintain arc welding equipment shall be acquainted with the requirements of this section and with 1910.252 (a), (b), and (c) of this part.</P>
+<P>(2) <I>Machine hook up.</I> Before starting operations all connections to the machine shall be checked to make certain they are properly made. The work lead shall be firmly attached to the work; magnetic work clamps shall be freed from adherent metal particles of spatter on contact surfaces. Coiled welding cable shall be spread out before use to avoid serious overheating and damage to insulation.</P>
+<P>(3) <I>Grounding.</I> Grounding of the welding machine frame shall be checked. Special attention shall be given to safety ground connections of portable machines.</P>
+<P>(4) <I>Leaks.</I> There shall be no leaks of cooling water, shielding gas or engine fuel.</P>
+<P>(5) <I>Switches.</I> It shall be determined that proper switching equipment for shutting down the machine is provided.</P>
+<P>(6) <I>Manufacturers' instructions.</I> Printed rules and instructions covering operation of equipment supplied by the manufacturers shall be strictly followed.</P>
+<P>(7) <I>Electrode holders.</I> Electrode holders when not in use shall be so placed that they cannot make electrical contact with persons, conducting objects, fuel or compressed gas tanks.</P>
+<P>(8) <I>Electric shock.</I> Cables with splices within 10 feet (3 m) of the holder shall not be used. The welder should not coil or loop welding electrode cable around parts of his body.</P>
+<P>(9) <I>Maintenance.</I> (i) The operator should report any equipment defect or safety hazard to his supervisor and the use of the equipment shall be discontinued until its safety has been assured. Repairs shall be made only by qualified personnel.</P>
+<P>(ii) Machines which have become wet shall be thoroughly dried and tested before being used.</P>
+<P>(iii) Cables with damaged insulation or exposed bare conductors shall be replaced. Joining lengths of work and electrode cables shall be done by the use of connecting means specifically intended for the purpose. The connecting means shall have insulation adequate for the service conditions.</P>
+<CITA TYPE="N">[55 FR 13696, Apr. 11, 1990, as amended at 61 FR 9241, Mar. 7, 1996; 70 FR 53929, Sept. 13, 2005]
+</CITA>
+</DIV8>
+
+<DIV8 N="1910.255" TYPE="SECTION" hierarchy_metadata="{&quot;path&quot;:&quot;/on/_SUBSTITUTE_DATE_/title-29/section-1910.255&quot;,&quot;citation&quot;:&quot;29 CFR 1910.255&quot;}">
+<HEAD>&#xA7; 1910.255 Resistance welding.</HEAD>
+<P>(a) <I>General</I>&#x2014;(1) <I>Installation.</I> All equipment shall be installed by a qualified electrician in conformance with subpart S of this part. There shall be a safety-type disconnecting switch or a circuit breaker or circuit interrupter to open each power circuit to the machine, conveniently located at or near the machine, so that the power can be shut off when the machine or its controls are to be serviced.</P>
+<P>(2) <I>Thermal protection.</I> Ignitron tubes used in resistance welding equipment shall be equipped with a thermal protection switch.</P>
+<P>(3) <I>Personnel.</I> Workmen designated to operate resistance welding equipment shall have been properly instructed and judged competent to operate such equipment.</P>
+<P>(4) <I>Guarding.</I> Controls of all automatic or air and hydraulic clamps shall be arranged or guarded to prevent the operator from accidentally activating them.</P>
+<P>(b) <I>Spot and seam welding machines (nonportable)</I>&#x2014;(1) <I>Voltage.</I> All external weld initiating control circuits shall operate on low voltage, not over 120 volts, for the safety of the operators.</P>
+<P>(2) <I>Capacitor welding.</I> Stored energy or capacitor discharge type of resistance welding equipment and control panels involving high voltage (over 550 volts) shall be suitably insulated and protected by complete enclosures, all doors of which shall be provided with suitable interlocks and contacts wired into the control circuit (similar to elevator interlocks). Such interlocks or contacts shall be so designed as to effectively interrupt power and short circuit all capacitors when the door or panel is open. A manually operated switch or suitable positive device shall be installed, in addition to the mechanical interlocks or contacts, as an added safety measure assuring absolute discharge of all capacitors.</P>
+<P>(3) <I>Interlocks.</I> All doors and access panels of all resistance welding machines and control panels shall be kept locked and interlocked to prevent access, by unauthorized persons, to live portions of the equipment.</P>
+<P>(4) <I>Guarding.</I> All press welding machine operations, where there is a possibility of the operator's fingers being under the point of operation, shall be effectively guarded by the use of a device such as an electronic eye safety circuit, two hand controls or protection similar to that prescribed for punch press operation, &#xA7; 1910.217 of this part. All chains, gears, operating bus linkage, and belts shall be protected by adequate guards, in accordance with &#xA7; 1910.219 of this part.</P>
+<P>(5) <I>Shields.</I> The hazard of flying sparks shall be, wherever practical, eliminated by installing a shield guard of safety glass or suitable fire-resistant plastic at the point of operation. Additional shields or curtains shall be installed as necessary to protect passing persons from flying sparks. (See &#xA7; 1910.252(b)(2)(i)(C) of this part.)</P>
+<P>(6) <I>Foot switches.</I> All foot switches shall be guarded to prevent accidental operation of the machine.</P>
+<P>(7) <I>Stop buttons.</I> Two or more safety emergency stop buttons shall be provided on all special multispot welding machines, including 2-post and 4-post weld presses.</P>
+<P>(8) <I>Safety pins.</I> On large machines, four safety pins with plugs and receptacles (one in each corner) shall be provided so that when safety pins are removed and inserted in the ram or platen, the press becomes inoperative.</P>
+<P>(9) <I>Grounding.</I> Where technically practical, the secondary of all welding transformers used in multispot, projection and seam welding machines shall be grounded. This may be done by permanently grounding one side of the welding secondary current circuit. Where not technically practical, a center tapped grounding reactor connected across the secondary or the use of a safety disconnect switch in conjunction with the welding control are acceptable alternates. Safety disconnect shall be arranged to open both sides of the line when welding current is not present.</P>
+<P>(c) <I>Portable welding machines</I>&#x2014;(1) <I>Counterbalance.</I> All portable welding guns shall have suitable counterbalanced devices for supporting the guns, including cables, unless the design of the gun or fixture makes counterbalancing impractical or unnecessary.</P>
+<P>(2) <I>Safety chains.</I> All portable welding guns, transformers and related equipment that is suspended from overhead structures, eye beams, trolleys, etc., shall be equipped with safety chains or cables. Safety chains or cables shall be capable of supporting the total shock load in the event of failure of any component of the supporting system.</P>
+<P>(3) <I>Clevis.</I> Each clevis shall be capable of supporting the total shock load of the suspended equipment in the event of trolley failure.</P>
+<P>(4) <I>Switch guards.</I> All initiating switches, including retraction and dual schedule switches, located on the portable welding gun shall be equipped with suitable guards capable of preventing accidental initiation through contact with fixturing, operator's clothing, etc. Initiating switch voltage shall not exceed 24 volts.</P>
+<P>(5) <I>Moving holder.</I> The movable holder, where it enters the gun frame, shall have sufficient clearance to prevent the shearing of fingers carelessly placed on the operating movable holder.</P>
+<P>(6) <I>Grounding.</I> The secondary and case of all portable welding transformers shall be grounded. Secondary grounding may be by center tapped secondary or by a center tapped grounding reactor connected across the secondary.</P>
+<P>(d) <I>Flash welding equipment</I>&#x2014;(1) <I>Ventilation and flash guard.</I> Flash welding machines shall be equipped with a hood to control flying flash. In cases of high production, where materials may contain a film of oil and where toxic elements and metal fumes are given off, ventilation shall be provided in accordance with &#xA7; 1910.252(c) of this part.</P>
+<P>(2) <I>Fire curtains.</I> For the protection of the operators of nearby equipment, fire-resistant curtains or suitable shields shall be set up around the machine and in such a manner that the operators movements are not hampered.</P>
+<P>(e) <I>Maintenance.</I> Periodic inspection shall be made by qualified maintenance personnel, and a certification record maintained. The certification record shall include the date of inspection, the signature of the person who performed the inspection and the serial number, or other identifier, for the equipment inspected. The operator shall be instructed to report any equipment defects to his supervisor and the use of the equipment shall be discontinued until safety repairs have been completed.</P>
+</DIV8>
+
+</DIV6>

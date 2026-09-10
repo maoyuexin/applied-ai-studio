@@ -39,7 +39,7 @@ export default function ShowcasePage() {
         </div>
         <div className="source-badge">
           <Database size={16} aria-hidden="true" />
-          Synthetic scenarios
+          Public teaching scenarios
         </div>
       </header>
 
@@ -77,6 +77,20 @@ export default function ShowcasePage() {
               ? "/online-order?view=customer"
               : item.id === "financial-fraud-detection-lab"
                 ? "/fraud"
+              : item.id === "healthcare-pneumonia-prioritization-lab"
+                ? "/pneumonia"
+              : item.id === "financial-credit-risk-lab"
+                ? "/credit"
+              : item.id === "financial-complaint-routing-lab"
+                ? "/complaints"
+              : item.id === "manufacturing-predictive-maintenance-lab"
+                ? "/maintenance"
+              : item.id === "manufacturing-procedure-assistant-lab"
+                ? "/procedures"
+              : item.id === "retail-demand-forecasting-lab"
+                ? "/forecast"
+              : item.id === "retail-product-recommendations-lab"
+                ? "/recommendations"
               : `/demo?case=${encodeURIComponent(item.id)}`;
             return (
               <article key={item.id} className={`use-case-card accent-${item.accent}`}>

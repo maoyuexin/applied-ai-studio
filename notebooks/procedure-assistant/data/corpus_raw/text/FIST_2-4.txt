@@ -1,0 +1,3251 @@
+Facilities Instructions, Standards, 
+and Techniques – Volume 2-4 
+
+Lubrication of Equipment 
+
+U.S. Department of the Interior 
+
+May 2024 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+Cover Photo 
+Bureau of Reclamation, Typical generator bearing. 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Facilities Instructions, Standards, 
+and Techniques – Volume 2-4 
+
+Lubrication of Equipment 
+
+Prepared by 
+
+Power Resources Office 
+and 
+Technical Service Center 
+
+U.S. Department of the Interior 
+Bureau of Reclamation 
+Power Resources Office 
+Denver, Colorado  
+
+May 2024 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+Mission Statements 
+
+The U.S. Department of the Interior protects and manages the 
+Nation’s natural resources and cultural heritage; provides 
+scientific and other information about those resources; honors 
+its trust responsibilities or special commitments to American 
+Indians, Alaska Natives, Native Hawaiians, and affiliated 
+Island Communities. 
+
+The mission of the Bureau of Reclamation is to manage, 
+develop, and protect water and related resources in an 
+environmentally and economically sound manner in the 
+interest of the American public. 
+
+Disclaimer 
+
+This written material consists of general information for internal use only by Bureau of 
+Reclamation operations and maintenance staff. Information contained in this document regarding 
+commercial products or firms may not be used for advertising or promotional purposes and is not 
+to be construed as an endorsement or depreciation of any product or firm by the Bureau of 
+Reclamation. 
+
+ii 
+
+ (FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Contents 
+
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+Page 
+
+3.2 
+
+Codes and Standards ....................................................................................................................... v 
+Reclamation Standards and Documents.......................................................................................... v 
+Reclamation Forms ......................................................................................................................... v 
+References ....................................................................................................................................... v 
+Acronyms and Abbreviations ....................................................................................................... vii 
+Symbols......................................................................................................................................... vii 
+Introduction ......................................................................................................................... 1 
+Purpose and Scope .................................................................................................. 1 
+1.1 
+Reclamation Standard Practices .............................................................................. 1 
+1.2 
+1.3 
+FIST Revision Requests .......................................................................................... 2 
+Fundamentals of Lubrication .............................................................................................. 3 
+Fluid Film Lubrication ............................................................................................ 3 
+2.1 
+2.2 
+Boundary Lubrication ............................................................................................. 6 
+Lubricant Characteristics .................................................................................................... 8 
+Oil ........................................................................................................................... 8 
+3.1 
+3.1.1  General .............................................................................................................. 8 
+3.1.2  Oil Characteristics ............................................................................................. 8 
+Grease ................................................................................................................... 11 
+3.2.1  General ............................................................................................................ 11 
+3.2.2  Grease Characteristics ..................................................................................... 13 
+Lubricant Additives .......................................................................................................... 15 
+Surface Protective Additives ................................................................................. 15 
+4.1 
+4.1.1  Lubricity Additives ......................................................................................... 15 
+4.1.2  Antiwear Additives ......................................................................................... 15 
+4.1.3  Extreme Pressure Additives ............................................................................ 15 
+4.1.4  Tackiness Agents ............................................................................................ 16 
+4.1.5  Corrosion and Rust Inhibitors ......................................................................... 16 
+4.1.6  Detergents and Dispersants ............................................................................. 16 
+Performance Enhancing Additives ....................................................................... 16 
+4.2.1  Viscosity Index Improvers .............................................................................. 16 
+4.2.2  Pour Point Depressants ................................................................................... 16 
+4.2.3  Demulsifiers .................................................................................................... 16 
+4.2.4  Emulsifiers ...................................................................................................... 16 
+Lubricant Protective Additives ............................................................................. 17 
+4.3.1  Oxidation Inhibitors ........................................................................................ 17 
+4.3.2  Foam Inhibitors ............................................................................................... 17 
+Additive Depletion ................................................................................................ 17 
+Aftermarket Additives .......................................................................................... 17 
+  Maintenance of Lubrication Systems ................................................................................ 19 
+Oil Lubricated Systems ......................................................................................... 19 
+5.1.1  Oil Testing and Analysis ................................................................................. 19 
+
+4.4 
+4.5 
+
+4.2 
+
+4.3 
+
+5.1 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+iii 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+5.2 
+
+5.1.2  Operating Temperature ................................................................................... 23 
+5.1.3  Oil Compatibility ............................................................................................ 24 
+Grease Lubricated Systems ................................................................................... 25 
+5.2.1  Antifriction Bearings ...................................................................................... 25 
+5.2.2 
+Journal Bearings or Bushings ......................................................................... 26 
+5.2.3  Grease Compatibility ...................................................................................... 26 
+Lubricant Storage and Handling ....................................................................................... 29 
+Safety .................................................................................................................... 29 
+6.1 
+Oil ......................................................................................................................... 29 
+6.2 
+Grease ................................................................................................................... 29 
+6.3 
+Lubricant Selection ........................................................................................................... 31 
+Lubricant Standards .............................................................................................. 31 
+7.1 
+Turbine Oil ............................................................................................................ 31 
+7.2 
+Hydraulic Systems ................................................................................................ 32 
+7.3 
+7.4 
+Hydraulic Governor Systems ................................................................................ 33 
+7.5  Wicket Gates, Radial Gates, and Butterfly Valves ............................................... 33 
+7.6 
+Gears ..................................................................................................................... 34 
+7.7  Wire Rope ............................................................................................................. 35 
+Environmentally Acceptable Lubricants ............................................................... 35 
+7.8 
+7.8.1  EAL Selection Criteria .................................................................................... 36 
+7.8.2  EAL Maintenance ........................................................................................... 38 
+
+Tables 
+
+Table 1.—Grease application guide .............................................................................................. 12 
+Table 2.—Grease compatibility .................................................................................................... 28 
+Table 3.—Typical Oil Specifications ........................................................................................... 32 
+Table 4.—Recommended grease properties ................................................................................. 34 
+
+Figures 
+
+Figure 1.—Fluid film lubrication. ................................................................................................... 4 
+Figure 2.—Pivoting shoe thrust bearing. ........................................................................................ 5 
+Figure 3.—Horizontal journal bearing ............................................................................................ 6 
+Figure 4.—Fluid film and boundary lubrication. ............................................................................ 7 
+Figure 5.—Viscosity grading systems comparison. ..................................................................... 10 
+
+iv 
+
+ (FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+Codes and Standards 
+29 Code of Federal Regulation (CFR) 1910.147, The Control of Hazardous Energy Sources 
+(Lockout/Tagout). 
+
+Reclamation Standards and Documents 
+Power Facilities Technical Documents 
+FAC 04-14 
+Power Operations and Maintenance (PO&M) Technical Standards 
+FAC P14 
+Reclamation Safety and Health Standards. 
+Hazardous Energy Control Program 
+
+FIST 1-1 
+
+Reclamation Forms 
+POM: https://teamssp.bor.doi.net/printanddup/forms/POM%20Forms/Forms/AllItems.aspx 
+POM-226, FIST Revision Request 
+POM-400, Engine-Generators 
+
+References 
+Asseff, P.A., Lubrication Theory and Practice. The Lubrizol Corporation. 
+
+Bloch, H.P., 2000. Practical Lubrication for Industrial Facilities. Fairmont Press. 
+
+Conoco Inc., 1981. Lubrication Manual. 
+
+Ehrlich, M. (Ed). 1984 Lubricating Grease Guide, National Lubricating Grease Institute, 1st 
+
+Edition, Kansas City, Missouri. 
+
+Exxon Corporation. 1988. Proving Ground. 
+
+Fein, R.S., and F.J. Villforth, 1973. Lubrication Fundamentals, LUBRICATION, vol. 59, 
+
+October-December 1973. 
+
+Pirro, D.M., and A.A. Wessol, Lubricant Fundamentals, 2nd Edition, Marcel Dekker, Inc., 2001. 
+
+Rein, S.W., Viscosity-I, LUBRICATION, vol. 64, No. 1, 1978. 
+
+Standard Guide for Cleaning, Flushing, and Purification of Steam, Gas and Hydroelectric 
+
+Turbine Lubrication Systems. ASTM Standard No. D6439-99. 
+
+Troyer, D., and J. Fitch. 2001. Oil Analysis Basics. Noria Corporation. 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+v 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+U.S. Army Corps of Engineers. 1999 Lubricants and Hydraulic Fluids, Engineering Manual 
+
+1110-2-1424. 
+
+vi 
+
+ (FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+Acronyms and Abbreviations 
+
+AGMA 
+ASTM 
+CEATI 
+EA 
+EAL 
+FIST 
+HPLIG 
+ISO 
+NLGI 
+PRO 
+psi 
+RPVOT 
+Reclamation 
+SDS 
+TSC 
+ZDDP 
+
+American Gear Manufacturers’ Association 
+American Society for Testing and Materials 
+Centre for Energy Advancement through Technological Innovation 
+environmentally acceptable 
+environmentally acceptable lubricant 
+Facilities Instructions, Standards, and Techniques 
+Hydraulic Plant Life Interest Group 
+International Organization for Standardization 
+National Lubricating Grease Institute 
+Power Resources Office 
+pounds per square inch 
+Rotating Pressure Vessel Oxidation Test 
+Bureau of Reclamation 
+Safety Data Sheet 
+Technical Service Center 
+zinc dialkyl dithiophosphates 
+
+Symbols 
+
+β2 
+= 
+% 
+
+Beta rating 
+equals 
+percent 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+vii 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+This page intentionally left blank. 
+
+viii 
+
+ (FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+  Introduction 
+
+The Bureau of Reclamation operates and maintains hydroelectric powerplants, switchyards, 
+pumping plants, water delivery equipment and associated facilities in the 17 western United 
+States. These facilities house complex electrical and mechanical equipment that must be kept 
+operational because they are critical to the electric power and water delivery systems relied on by 
+many. FIST are technical documents that provide criteria and procedures that should be utilized 
+by the offices involved in managing Reclamation facilities and assets. 
+
+This document establishes standard technical practices to ensure the, safe, reliable, economic and 
+efficient O&M of Federal facilities by keeping related assets in good condition and ultimately 
+protecting Federal investments. These technical practices provide a sufficient level of detail to 
+ensure consistent application while providing flexibility for the use of innovative techniques and 
+approaches. This document was developed with input from staff in Reclamation’s Denver, 
+regional, and area offices. 
+
+1.1 
+
+Purpose and Scope 
+
+This document is intended to promote uniformity in the manner that assets are managed, 
+documented, and coordinated, and may be utilized by transferred facilities and other entities as 
+appropriate. It establishes consistent procedures, minimum standards and O&M criteria for 
+hydroelectric equipment and systems owned and operated by Reclamation. Other technical 
+documents may provide additional electrical and mechanical maintenance information for the 
+equipment or systems discussed in this document. 
+
+O&M requirements are based on industry standards and experience. Maintenance requirements 
+vary based on equipment condition and past performance, and sound engineering practices and 
+maintenance management should be employed for special circumstances. Manufacturer 
+recommendations and instructions should be consulted for additional maintenance that may be 
+required beyond what is stated in this manual.  
+
+This volume includes standards, practices, procedures, and advice on day-to-day operation, 
+maintenance, and testing of mechanical equipment in Reclamation facilities. 
+
+1.2 
+
+Reclamation Standard Practices 
+
+FIST manuals are designed to provide guidance for maintenance and testing on equipment in 
+Reclamation’s facilities. There may be multiple ways to accomplish tasks outlined in this 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+1 
+
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+document. Facilities may exercise discretion as to how to accomplish certain tasks based on 
+equipment configurations and available resources.  
+
+Reclamation’s regions, PRO, and TSC agree that certain practices are required to be consistent 
+across all Reclamation facilities. Mandatory FIST procedures, practices, and schedules that 
+appear in {Red, bold, and bracketed}  or [Black, bold, and bracketed]  text are considered 
+Reclamation requirements for the O&M of equipment in power facilities. RM D&S FAC 04-14, 
+Power Facilities Technical Documents, describes the responsibilities required by text 
+designations: {Red, bold, and bracketed}, [Black, bold, and bracketed], and plain text, within 
+this technical document. 
+
+Refer to RM D&S FAC 04-14 for more details concerning technical documents. 
+
+1.3 
+
+FIST Revision Requests 
+
+The FIST Revision Request Form (POM-226) is used to request changes to a FIST document. 
+The request will include a summary of the recommended changes and a basis for the revision or 
+new FIST. These forms will be submitted to the Manager, PRO. The PRO Manager will keep a 
+list of Revision Requests for each FIST and include these in the next scheduled revision unless 
+the change is prioritized sooner. 
+
+2 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+  Fundamentals of Lubrication 
+
+The proper selection and use of lubricants, as well as the care and operation of lubricating 
+systems, is an essential part of any powerplant maintenance program. Any piece of equipment 
+with moving parts depends on some type of lubricant to reduce friction and wear and to extend 
+its life. To choose an appropriate lubricant for a particular application and to maintain the 
+lubricant’s effectiveness, a basic understanding of lubrication theory and the characteristics of 
+lubricants can be very beneficial. This document discusses lubrication fundamentals, lubricant 
+characteristics, additives, maintenance of lubrication systems, and the selection of lubricants for 
+common powerplant equipment. 
+
+The basic purpose of a lubricant is to reduce friction and wear between two surfaces moving 
+relative to one another. In most cases, a lubricant also dissipates heat, prevents rust or corrosion, 
+acts as a seal to outside contaminants, and flushes contaminants away from bearing surfaces. For 
+the lubricant to accomplish these functions, a fluid lubricant film must be maintained between 
+the moving surfaces. This condition is known as fluid film lubrication. 
+
+2.1 
+
+Fluid Film Lubrication 
+
+Fluid film lubrication reduces friction between moving surfaces by substituting fluid friction for 
+mechanical friction. Fluid film lubrication is illustrated on Figure 1. Surface 1 moves over 
+surface 2 at velocity V, separated by a film of fluid with a thickness h. The oil film can be 
+considered to be made up of many layers. The layer in contact with moving surface 1 clings to 
+that surface and moves at the same velocity. Similarly, the layer in contact with surface 2 is 
+stationary. The remaining inner layers move at velocities directly proportional to their distance 
+from the moving surface. For example, at a distance of ½ h from surface 1, the velocity would be 
+½ V. The force, F, required to move surface 1 across surface 2 is the force required to overcome 
+the friction between the layers of fluid. This internal friction, or resistance to flow, is defined as 
+the viscosity of the fluid. Viscosity is discussed in more detail later in this document. 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+3 
+
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+Fluid Film Lubrication
+
+Bearing Surface Area = A
+
+Force = F
+
+Moving Surface 1
+
+Fluid Thickness = h
+
+Stationary Surface 2
+
+Shear Stress = F/A = dynes/cm2
+
+Shear Rate = V/h = (cm/sec)/cm = 1/sec
+
+Dynamic Viscosity = Shear Stress/Shear Rate = (dynes/cm2)/(1/sec) = 1 Poise
+
+Figure 1.—Fluid film lubrication. 
+
+Velocity = V
+
+1/2 h
+
+Velocity = 1/2V
+
+Velocity = 0
+
+To keep the surfaces separated, the fluid pressure must be high enough to support the load. In 
+highly loaded bearings, such as thrust bearings and horizontal journal bearings, relatively high 
+fluid pressures are necessary. If this pressure is supplied by an outside source, it is called 
+hydrostatic lubrication. If the pressure is generated internally (i.e., within the bearing by dynamic 
+action), it is referred to as hydrodynamic lubrication. In hydrodynamic lubrication, a fluid wedge 
+is formed by the relative surface motion of the bearing journals or the thrust runners over their 
+respective bearing surfaces. This wedge is similar to the fluid wedge that forms under a speeding 
+boat, pushing the bow out of the water, or under water skis, allowing the skier to skim across the 
+water.  
+
+Figure 2 illustrates the wedge action in a pivoting shoe thrust bearing. As the thrust runner 
+moves over the thrust shoe, fluid adhering to the runner is drawn in between the runner and the 
+shoe, causing the shoe to pivot and forming a wedge of oil. As the speed of the runner increases, 
+the pressure of this wedge increases, the runner is lifted vertically, and full fluid film lubrication 
+takes place. 
+
+4 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Pivoting Shoe Thrust Bearing
+
+Direction of Rotation
+
+Thrust Runner
+
+Oil Wedge
+
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+Thrust Shoe
+
+Figure 2.—Pivoting shoe thrust bearing. 
+
+Figure 3 demonstrates the wedge that forms in a horizontal journal bearing. In drawing “A,” the 
+journal is at rest and the weight of the journal has squeezed out the oil film at “E” so that the 
+journal rests on the bearing surface. As rotation starts, as shown in drawing “B,” the journal has a 
+tendency to roll up the side of the bearing. At the same time, fluid adhering to the journal is 
+drawn into the contact area at “F.” As the speed increases, an oil wedge is formed at “G.” The 
+pressure of the oil wedge increases until the journal is lifted off the bearing at “H,” as shown in 
+drawing “C.” Drawing “D” shows the condition at full speed. The journal is not only lifted 
+vertically but is also pushed to the left by the pressure of the oil wedge so that the resultant force 
+from the fluid pressure acts along the line “PO.” The minimum fluid film thickness at full speed 
+occurs at “J”, not at the bottom of the bearing. 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+5 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+Figure 3.—Horizontal journal bearing 
+(courtesy of Conoco Inc.) 
+
+In both the pivoting shoe thrust bearing and the horizontal journal bearing, the minimum 
+thickness of the fluid film increases with an increase in fluid viscosity and surface speed and 
+decreases with an increase in load. 
+
+2.2 
+
+Boundary Lubrication 
+
+A well-designed fluid film bearing operates with a full fluid film under most circumstances. 
+Under less-than-ideal conditions, such as during start up and shut down, the fluid film may 
+become so thin that contact may occur between the rubbing surfaces. This condition is called 
+boundary lubrication and is compared to fluid film lubrication in Figure 4. Observing the bearing 
+surfaces at a microscopic level reveals peaks on the surfaces, referred to as asperities. During 
+boundary lubrication conditions (i.e., low velocities), the asperities of one surface contact the 
+other surface and can be torn or worn off. The lubricant’s viscosity alone cannot provide 
+sufficient lubrication under these circumstances. To combat this, use lubricant additives that 
+form an extremely thin boundary film on the bearing surfaces or, in the case of hydroelectric 
+generator thrust bearings, use an outside pressure source or hydrostatic system. 
+
+6 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+Fluid Film Lubrication 
+
+Bearing 
+Surfaces 
+Separated 
+by 
+Lubricant 
+Film 
+
+Asperities 
+
+Boundary Lubrication 
+
+Boundary Film 
+
+Figure 4.—Fluid film and boundary lubrication. 
+
+Some reciprocating equipment, such as pistons in compressors or engines, and slow-moving 
+equipment, such as turbine wicket gates, rely entirely on boundary lubrication. Gear teeth also 
+depend on boundary lubrication. For boundary lubrication to be effective (i.e., to reduce friction 
+and provide damage control to the rubbing surfaces), a very thin film of lubricant and/or additive 
+must be maintained. This can be accomplished through the use of various extreme pressure, 
+antiwear, and lubricity additives. Solid lubricants, such as graphite, molybdenum disulfide, and 
+polytetrafluoroethylene (PTFE) may also be added by the lubricant manufacturer, but research 
+on greases used in boundary lubrication applications following the Folsom gate failure found that 
+adding molybdenum disulfide or PTFE was not effective. 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+7 
+
+ 
+ 
+ 
+ 
+   
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+  Lubricant Characteristics 
+
+3.1  Oil 
+
+3.1.1  General 
+
+A lubricating oil is composed of a base stock blended with various additives to enhance 
+performance and maintain quality. The base stock may be a mineral (petroleum), vegetable, or a 
+synthetic oil. Petroleum oils are usually classified as either paraffinic or naphthenic. Paraffinic 
+oils, as the name implies, contain paraffin wax and are the most widely used type of lubricating 
+oil base stock. In comparison to naphthenic (low wax content), paraffinic oils are more resistant 
+to oxidation, have a lower volatility, a higher viscosity index, and are generally a better lubricant. 
+Since naphthenic oils are essentially wax free, they have naturally low pour points. Mineral oils 
+are the most common base oils. 
+
+Vegetables oils are derived from vegetables, biodegradable, and considered less toxic than 
+petroleum-based lubricants. These oils typically require additives to increase their low oxidation 
+stability. Without additives, they can oxidize quickly and become rancid. Vegetable oils can be 
+expensive because of increased manufacturing effort due to the formulation of additives, 
+chemical modification of the vegetable oil, and special refining processes depending on the type 
+of seed.  
+
+Synthetic oils are man-made fluids synthesized from different chemical compounds. Group IV 
+base oils are polyalphaolefins (PAOs), and Group V base oils include diesters/polyol esters and 
+polyalkylene glycols (PAGs). Synthetic based lubricants are produced to provide a product with 
+precise and predictable properties through the chemical reaction of materials of a specific 
+chemical composition. Synthetic lubricants are superior to petroleum lubricants in most 
+circumstances. Despite the superior performance of synthetic lubricants, their use is usually 
+limited to severe or unusual applications because of their cost, which can be many times higher 
+than a similar petroleum product. 
+
+No matter the oil base, the manufacturer should provide specific information on their lubricant 
+type and on the periodic recommended maintenance for a particular application. 
+
+3.1.2  Oil Characteristics 
+
+3.1.2.1  Viscosity 
+One of the most important characteristics of a lubricant is its viscosity. As mentioned earlier, 
+viscosity is a measure of a fluid’s internal friction or resistance to flow. The higher the viscosity 
+of a fluid, the greater the internal resistance and the greater its load capacity. However, higher 
+internal resistance can cause temperatures to rise. The correct viscosity for any particular 
+
+8 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+application is thick enough to support the load but not so thick as to cause excessive fluid friction 
+and the corresponding increase in temperature. 
+
+Dynamic or absolute viscosity is defined as the ratio of shear stress to shear rate and is most 
+commonly measured in poise or centipoise. Figure 1 illustrates this. Kinematic viscosity is the 
+dynamic viscosity divided by the density of the lubricant and is most commonly measured in 
+centistokes. The kinematic viscosity is related to the time required for a fixed volume of 
+lubricant to flow through a capillary tube at a given test temperature, usually 40 degrees Celsius 
+(ºC) or 100ºC, under the influence of gravity. The kinematic viscosity is the most common 
+method of expressing a lubricant’s viscosity. 
+
+There are many other methods for measuring and expressing the viscosity of lubricants. A 
+common but outdated viscosity measuring system seen in many original powerplant equipment 
+specifications is Saybolt Universal Seconds (SUS), or Saybolt Seconds Universal (SSU). In this 
+system, the viscosity is the amount of time, in seconds, it takes for 60 cubic centimeters of the 
+lubricant to flow through a standard orifice at a given test temperature, usually 100 degrees 
+Fahrenheit (ºF) or 210ºF. 
+
+Various organizations have developed grading systems for lubricant viscosity. The most 
+common grading systems now in use have been developed by the International Organization for 
+Standardization (ISO), the Society of Automotive Engineers (SAE), and the American Gear 
+Manufacturers’ Association (AGMA). Note that these grades do not correspond to a specific 
+kinematic or Saybolt viscosity value, but to a viscosity range. Figure 5 compares these viscosity 
+grading systems to kinematic and Saybolt viscosities. 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+9 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+Figure 5.—Viscosity grading systems comparison. 
+
+3.1.2.2  Viscosity Index 
+An oil’s viscosity index (VI) is an empirical number used to describe its viscosity-temperature 
+relationship. A high VI for an oil indicates a relatively low change in viscosity for a change in 
+temperature. 
+
+10 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+3.1.2.3  Pour Point 
+A fluid’s pour point is the lowest temperature at which the fluid will flow. In paraffinic oils, the 
+pour point is the result of the crystallization of waxy particles. In naphthenic oils, the pour point 
+is the result of the decrease in viscosity caused by a decrease in temperature. This property is 
+important in choosing a lubricant for cold weather applications. 
+
+3.1.2.4  Flash Point 
+The flash point is the lowest temperature at which vapors are given off in sufficient quantity to 
+ignite when brought into contact with a spark or flame. The flash point is not necessarily the safe 
+upper temperature limit. Instead, it is a relative indication of the fire and explosion hazard of a 
+particular oil. The flash point can also be used as an indication of the evaporation losses that can 
+be expected under high temperature applications. 
+
+3.1.2.5  Fire Point 
+The fire point is the lowest temperature at which vapors are given off in sufficient quantity to 
+sustain combustion. 
+
+3.1.2.6  Neutralization Number 
+The neutralization number is a measure of the acidity of an oil. Specifically, it is the amount, in 
+milligrams, of potassium hydroxide (KOH) required to neutralize 1 gram of oil. A relative 
+increase in the neutralization number indicates oxidation of the oil. 
+
+3.2  Grease 
+
+3.2.1  General 
+
+Lubricating grease is a mixture of a lubricating fluid, a thickening agent, and additives. 
+Petroleum oils mixed with a soap thickening agent make up most of the grease in use today. The 
+soaps are formed by the reaction of animal or vegetable fats or fatty acids with strong alkalis 
+such as calcium or sodium. Non-soap thickening agents, such as modified clays and polyureas, 
+are also used in some instances. Table 1 lists some of the thickening agent types and their usual 
+characteristics. Synthetic oils are used in severe conditions or when a normal petroleum oil is not 
+adequate. 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+11 
+
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+Table 1.—Grease application guide 
+(Copyright 1989, National Grease Lubricating Institute, reprinted with permission) 
+
+Grease Application Guide 
+
+Properties 
+
+Aluminum 
+
+Sodium 
+
+Calcium 
+Conventional 
+
+Calcium 
+Anhydrous 
+
+Lithium 
+
+Aluminum 
+Complex 
+
+Calcium 
+Complex 
+
+Lithium 
+Complex 
+
+Polyurea 
+
+110 
+
+163-177 
+
+96-104 
+
+135-143 
+
+177-204 
+
+260+ 
+
+260+ 
+
+260+ 
+
+79 
+
+121 
+
+93 
+
+110 
+
+135 
+
+177 
+
+177 
+
+177 
+
+Dropping Point 
+ºC 
+
+Max. Usable 
+Temp ºC 
+
+Water Resistance 
+
+Good to 
+Excellent 
+
+Poor to Fair  Good to Excellent 
+
+Excellent 
+
+Good 
+
+Work Stability 
+
+Poor 
+
+Fair 
+
+Fair to Good 
+
+Good to 
+Excellent 
+
+Oxidation 
+Stability 
+
+Excellent 
+
+Poor to Good  Poor to Excellent 
+
+Fair to Excellent 
+
+Protection 
+Against Rust 
+
+Good to 
+Excellent 
+
+Good to 
+Excellent 
+
+Poor to Excellent  Poor to Excellent 
+
+Pumpability 
+
+Poor 
+
+Poor to Fair  Good to Excellent  Fair to Excellent 
+
+Oil Separation 
+
+Good 
+
+Fair to Good 
+
+Poor to Good 
+
+Good 
+
+Good to 
+Excellent 
+
+Fair to 
+Excellent 
+
+Poor to 
+Excellent 
+
+Fair to 
+Excellent 
+
+Good to 
+Excellent 
+
+Good to 
+Excellent 
+
+Good to 
+Excellent 
+
+Fair to 
+Excellent 
+
+Good to 
+Excellent 
+
+Fair to 
+Excellent 
+
+Fair to 
+Excellent 
+
+Poor to 
+Good 
+
+Fair to 
+Excellent 
+
+Fair to Good  Poor to Fair 
+
+Good to 
+Excellent 
+
+Good to 
+Excellent 
+
+Good to 
+Excellent 
+
+Good to 
+Excellent 
+
+Fair to 
+Excellent 
+
+Fair to 
+Excellent 
+
+Good to 
+Excellent 
+
+Good to 
+Excellent 
+
+Organo- 
+Clay 
+
+260+ 
+
+177 
+
+Fair to 
+Excellent 
+
+Fair to Good 
+
+Good 
+
+Poor to 
+Excellent 
+
+Good 
+
+Good to 
+Excellent 
+
+243 
+
+177 
+
+Good to 
+Excellent 
+
+Poor to 
+Good 
+
+Good to 
+Excellent 
+
+Fair to 
+Excellent 
+
+Good to 
+Excellent 
+
+Good to 
+Excellent 
+
+Appearance 
+
+Smooth and 
+Clear 
+
+Smooth to 
+Fibrous 
+
+Smooth and 
+Buttery 
+
+Smooth and 
+Buttery 
+
+Smooth and 
+Buttery 
+
+Smooth and 
+Buttery 
+
+Smooth and 
+Buttery 
+
+Smooth and 
+Buttery 
+
+Smooth and 
+Buttery 
+
+Smooth and 
+Buttery 
+
+Other Properties 
+
+Adhesive and 
+Cohesive 
+
+EP Grades 
+Available 
+
+EP Grades 
+Available 
+
+EP Grades 
+Available, 
+Reversible 
+
+EP Grades 
+Available, 
+Reversible 
+
+EP and 
+Antiwear 
+Inherent 
+
+EP Grades 
+Available 
+
+EP Grades 
+Available 
+
+Principal Uses 
+
+Thread Lubricant 
+
+Rolling 
+Contact 
+Bearings 
+
+General Uses for 
+Economy 
+
+Military 
+Multiservice 
+
+Multiservice 
+Automotive & 
+Industrial 
+
+Multiservice 
+Industrial 
+
+Multiservice 
+Automotive 
+& Industrial 
+
+Multiservice 
+Automotive & 
+Industrial 
+
+Multiservice 
+Automotive 
+& Industrial 
+
+High Temp. 
+(Freq. Relube) 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+12 
+
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment  
+
+The lubricating fluid, which is usually petroleum oil, is the main ingredient of all greases, 
+making up 85 to 95 percent of the final product. While thickening agents impart some important 
+characteristics to a grease, the oil and its additives perform the actual lubrication. The base oil’s 
+characteristics, such as viscosity and pour point, influence the performance of the grease. 
+
+As moving parts come in contact with the grease, oil “bleeds” from the grease to provide either 
+fluid film or boundary lubrication. The oil picked up by the moving parts will be lost because of 
+evaporation or leakage, so the grease must continually “bleed” to provide sufficient lubrication. 
+Eventually, the grease must be replenished or replaced. 
+
+Grease is used when it is not practical or convenient to use oil. In applications where oil would 
+leak out of the bearing or where the bearing is submerged in water, grease works very well. 
+Grease also has the advantages of requiring less frequent relubrication or replenishment than 
+many oil lubricated systems and can more readily seal dust and dirt out of the bearing. 
+
+3.2.2  Grease Characteristics 
+
+3.2.2.1  Consistency 
+The consistency, or hardness, of a grease is the measure of its resistance to deformation by an 
+applied force and is, in most cases, the most important characteristic of a grease. A grease’s 
+consistency depends on its base oil’s viscosity and the type and amount of thickening agent used. 
+Consistency is measured in terms of the depth, in tenths of a millimeter, that a standard cone will 
+sink into a grease under prescribed conditions and is referred to as the penetration number. The 
+National Lubricating Grease Institute (NLGI) has established consistency numbers, or grades, 
+ranging from 000 (soft) to 6 (hard), corresponding to specified ranges of penetration numbers. 
+This rating system covers most greases, but there are greases available that are softer than a 
+NLGI No. 000 or harder than a No. 6. 
+
+The consistency of a grease should be soft enough to allow easy application and provide 
+acceptable lubrication but not so soft that the grease leaks out of the area being lubricated. In 
+centralized greasing systems, a grease with a consistency softer than is optimum for the 
+lubrication of equipment may be required in order to be pumped through long lines and metering 
+valves. The consistency must be thin enough to be pumped through the grease lines but thick 
+enough to stay in the bearings once it is there. A grease that is impervious to water and has 
+excellent lubricating qualities is useless if it doesn’t get to the component.  Some compromise in 
+the desired qualities is required to obtain a workable grease. As with an oil’s viscosity, grease 
+consistency becomes thinner, or more fluid, with an increase in temperature and thicker, or more 
+solid, with a decrease in temperature. 
+
+3.2.2.2  Consistency Stability. 
+The consistency of a grease may change while in use primarily because of the mechanical 
+shearing of the thickening agent particles. The resistance to this change is referred to as 
+consistency stability. 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+13 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+3.2.2.3  Dropping Point 
+The dropping point of a grease is the temperature at which the grease becomes soft enough for a 
+drop of fluid to fall from the grease. A grease acts as a fluid at or above its dropping point. Note 
+that the dropping point is not the highest allowable operating temperature for a grease, as the 
+grease may actually start to break down far below the dropping point. The dropping point should 
+only be used as a general indication of a grease’s temperature limit. Most grease manufacturers 
+list a usable temperature range along with the dropping point in the specifications for a grease. 
+
+The consistency of most greases permanently changes if exposed to temperatures at or above 
+their dropping point, but a few types of grease have the ability to return to their original 
+consistency. This property is referred to as reversibility. 
+
+14 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+  Lubricant Additives 
+
+While it is beneficial to have as few types of oil in stock as possible, there is no one all-purpose 
+oil that can be used in all applications. Practically all lubricants contain additives to enhance 
+existing properties or to impart new properties. Various additives, such as emulsifiers, rust and 
+corrosion inhibitors, detergent, and dispersants are added to oil to enhance performance for a 
+given application. Characteristics that may be desirable in one case may be very undesirable in 
+another. For example, emulsifiers are added to motor oil to allow the oil to hold water in an 
+emulsion until the engine’s heat can boil it away. In bearing lubrication, where there is not 
+sufficient heat to evaporate the water, the oil must be capable of readily separating from water. 
+
+Three general classifications of lubricant additives are surface protective, performance 
+enhancing, and lubricant protective. As the names imply, surface protective additives protect the 
+bearing surfaces, performance enhancing additives enhance the lubricant’s performance for 
+particular applications, and lubricant protective additives prevent deterioration of the lubricant. 
+
+4.1 
+
+Surface Protective Additives 
+
+4.1.1 
+
+Lubricity Additives 
+
+Lubricity, also referred to as oiliness, with respect to lubricating oil, is defined as the ability of an 
+oil to reduce friction between moving surfaces. Lubricity additives, usually vegetable or animal 
+fats, enhance lubricity by tenaciously adhering to the metal’s surface, forming an adsorbed film 
+of high lubricating value. 
+
+4.1.2  Antiwear Additives 
+
+Antiwear additives work by coating a metal’s surface. If light metal-to-metal contact is made, the 
+heat from the friction melts the additives, forming a liquid layer between the surfaces. This 
+molten additive layer, being softer than the metal, acts as a lubricant, preventing wear of the 
+metal surfaces. 
+
+4.1.3 
+
+Extreme Pressure Additives 
+
+Extreme pressure (EP) additives work by reacting with a metal to form a compound that acts as a 
+protective layer on the metal’s surface. Because this layer is softer than the metal itself, under 
+extreme pressure conditions, the compound layer wears away first, protecting the metal. As this 
+layer is removed, the EP additive acts to form another layer. In contrast to the action of antiwear 
+additives, EP additives control wear instead of preventing it. Some EP additives, because of their 
+reactive nature, can be corrosive to brass or copper-containing alloys. To prevent excessive 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+15 
+
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+corrosion, most EP additives are activated by the heat of friction created during extreme pressure 
+conditions but do not react at room temperature. 
+
+4.1.4 
+
+Tackiness Agents 
+
+Tackiness agents act to increase the adhesiveness of an oil or grease. 
+
+4.1.5  Corrosion and Rust Inhibitors 
+
+Rust inhibitors protect ferrous (iron or steel) parts by forming a film on the part, thus resisting 
+attack by water. Corrosion inhibitors act in a similar way to protect nonferrous parts and also act 
+to neutralize acids with a basic compound such as calcium carbonate. 
+
+4.1.6  Detergents and Dispersants 
+
+Detergents and dispersants are used primarily in engine oils to keep surfaces free of deposits and 
+keep contaminants dispersed in the lubricant. 
+
+4.2 
+
+Performance Enhancing Additives 
+
+4.2.1  Viscosity Index Improvers 
+
+Viscosity index improvers lower the rate of change of viscosity with temperature and are used to 
+produce multigrade motor oils. 
+
+4.2.2  Pour Point Depressants 
+
+Pour point depressants enable lubricants to flow at low temperature. 
+
+4.2.3  Demulsifiers 
+
+A demulsifier promotes the separation of oil and water in lubricants exposed to water. 
+
+4.2.4 
+
+Emulsifiers 
+
+An emulsifier promotes the rapid mixing of oil and water to form a stable emulsion. Emulsifiers 
+are used in motor oils to allow water, formed by combustion of fuel, to be kept in emulsion until 
+engine heat can evaporate it. Emulsifiers are also used in soluble oils used in some metal 
+
+16 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+working operations and in fire-resistant hydraulic fluids. Emulsification is usually not a desirable 
+property in most hydraulic fluids or turbine oils. 
+
+4.3 
+
+Lubricant Protective Additives 
+
+4.3.1  Oxidation Inhibitors 
+
+Oxidation inhibitors, or antioxidants, lengthen a lubricant’s service or storage life by increasing 
+its oxidation resistance by binding the free oxygen in the oil or by neutralizing the catalytic effect 
+of metals. 
+
+4.3.2 
+
+Foam Inhibitors 
+
+Foam inhibitors prevent lubricant foaming by decreasing the surface tension of air bubbles, 
+allowing them to combine into large ones, which break more rapidly. 
+
+4.4  Additive Depletion 
+
+Some additives, such as antiwear and extreme pressure additives, and some inhibitors such as 
+rust, oxidation, and corrosion inhibitors, are consumed as they are used. When all of a particular 
+additive has been consumed, the lubricant is no longer capable of performing as originally 
+intended. Usually, this condition requires replacement of the lubricant, but in some cases, 
+replenishment of the additive is possible. Consult the lubricant manufacturer before attempting 
+this. 
+
+4.5  Aftermarket Additives 
+
+A number of aftermarket lubricant additives are marketed as solutions to many lubricating 
+problems. These additives may contain Teflon ® or some other “secret ingredient” that 
+supposedly imparts improved lubricating qualities to the lubricant. There may be cases where 
+these additives improve performance in some way, or at least appear to improve performance, 
+but in most cases their usefulness is questionable at best. These additives may actually reduce a 
+lubricant’s effectiveness by reacting with some of the additives already in the oil. 
+
+The major lubricant manufacturers spend a great deal of time and money formulating their 
+products to provide optimum performance for particular applications. If some additive is 
+available that will improve a lubricant to the extent claimed by many of the aftermarket additive 
+distributors, most lubricant manufacturers would have added it to their product. 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+17 
+
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+If a lubricant is not performing as it should, a different lubricant may be required, or some 
+mechanical problem may exist. Consult the lubricant’s manufacturer before adding anything to a 
+lubricant. The lubricant manufacturer can provide information on the possible benefits or 
+consequences of the additive and determine whether a different lubricant is required. 
+
+18 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+  Maintenance of Lubrication Systems 
+Oil lubrication can take many forms, ranging from a simple squirt oil can to a complex 
+circulating system. Regardless of application method, the intent for all these forms is the same—
+to keep a lubricant film between moving surfaces. For a lubricant to perform as intended, some 
+maintenance of the system is required. Take care to ensure that the correct quantity and type of 
+lubricant is used, and that the lubricant and the system are clean and free of contaminants.  
+Cleanliness is extremely important. All seals in a system should be installed properly and in good 
+condition. Dirt, water, or other contaminants can not only cause premature wear of the bearings 
+and hydraulic system components, but they can also deplete some of the oil’s additives. 
+
+5.1  Oil Lubricated Systems 
+
+5.1.1  Oil Testing and Analysis 
+
+The periodic analysis of lubricating oil can be a beneficial part of a preventive maintenance 
+program. Tests can measure the effects of oxidation and detect the types and amount of various 
+contaminants in the oil. These can be helpful in detecting problems within a lubricating system, 
+determining whether the oil is still serviceable, and setting up a filtering or purification schedule. 
+Keeping track of the condition of the oil can prevent damage to equipment caused by oil 
+deterioration. A variety of tests can be performed on an oil depending on its type and service. 
+Some tests can be performed in the field to obtain a quick indication of an oil’s condition, but 
+because field testing is not as complete or as accurate as laboratory analysis, laboratory tests 
+should be performed as well. 
+
+5.1.1.1  Sample Collection 
+For oil analysis to be effective, the sample must be representative of the oil in the system. A 
+sample skimmed off the top of an oil tub after the oil has cooled and contaminants have settled 
+out, may test cleaner than the oil actually is. Conversely, a sample taken from a drain line at the 
+bottom of an oil tub will likely contain sediment and contaminants that have built up over time, 
+providing a much worse picture of the oil condition. Ideally, the oil sample should be drawn 
+from the middle of the oil tub while the unit is operating. In most cases this is not practical and 
+other procedures are required. The procedure used varies depending on whether the system is 
+circulating. 
+
+Circulating systems have a continuous flow of oil provided by a pump. An example of this in a 
+hydroplant is a turbine guide bearing where the oil is supplied through the side of the bearing and 
+flows out the top and bottom of the bearing to return to the sump. In a circulating system, it is 
+best to obtain a sample from the supply pipe to the bearing. The sampling port should be from an 
+area where there is turbulence in the pipe, such as at or directly after an elbow or other fitting. 
+This ensures that the oil is well mixed. The sampling port should be downstream from the pump 
+but before any inline filters. 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+19 
+
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+The most common noncirculating systems in hydroelectric plants are the generator guide and 
+thrust bearing. Gear boxes, as found on gate operators, are another example. The bearings or 
+gears are submerged or partially submerged in a tub of oil with no external pump to circulate the 
+oil. Also, thrust bearings typically have hydrostatic lubrication through the high-pressure 
+lubrication system, but these are operated only during startup and shutdown. When the unit is 
+operating, oil in the tub circulates because of the rotating shaft. Once the unit is shut down, any 
+contaminants will separate out of the oil. To get a representative sample of the oil, take the 
+sample while the unit is operating or shortly after shutdown. The most common place to take a 
+sample on a noncirculating system is from the drain. Even with the unit running, a sample drawn 
+from the drain will likely have a higher concentration of contaminants than the oil lubricating the 
+bearing. If this is the only place to obtain a sample, it is best to wait until the unit is shut down 
+and the bearing is being drained for filtering. Drain the bearing while the oil is still warm. To 
+flush the line and sediment that may be near the drain, drain at least ¼ of the oil out of the tub 
+before taking the sample. 
+
+If the sampling is to be accomplished on a regular basis between filtering, use a permanently 
+mounted tube extending into the bearing housing. The tubing can be installed on the bottom or 
+the side of the oil tub and extend into the oil near the bearing that is being lubricated. A sample 
+drawn from this area of the tub will be more representative of the oil actually lubricating the 
+bearing. Vacuum devices are available that can assist in obtaining the sample. 
+
+When using a permanently mounted sample tube, it is important to flush the tube before taking 
+the sample. Flush at least five times the dead volume of the tube before taking the sample. This 
+flushing should remove any contaminants that may have settled in the tube. 
+
+The bottle used to take the sample must be very clean to prevent contaminating the sample. ISO 
+3722 is the standard for the cleanliness of sample bottles. For most applications in hydroplants, a 
+bottle meeting the ISO 3722 requirements for “Super Clean” is recommended. There are several 
+options for bottle material. The type of material is not important. Clear materials, such as glass 
+and Polyethylene Terephthalate (PET) plastic, allow a visual inspection of the oil. 
+
+Numerous sizes of bottles are available. The size required depends on the tests to be performed. 
+Coordinate the size of the bottle with the testing laboratory based on the volume of oil required. 
+
+5.1.1.2  Field Tests 
+A visual inspection of an oil sample is the simplest type of field test. Store the sample to be 
+inspected at room temperature away from direct sunlight for at least 24 hours before the 
+inspection. Check the sample for sediment, separated water, unusual color or cloudiness, and any 
+unusual odors. It is a good idea to keep a sample of new, unused oil of the same type and 
+manufacturer stored in a sealed container in a cool dark place for comparison to the used sample 
+with respect to color, odor, and general appearance. 
+
+Hazy or cloudy oil may be the result of water contamination. The crackle test can be used to 
+verify the presence of water in oil but does not give any quantitative results. Conduct the crackle 
+test by making a small cup from aluminum foil, adding a few drops of the oil, and heating 
+
+20 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+rapidly with a small flame or by immersing a hot soldering iron in a sample of the oil. In either 
+method, an audible crackling sound will be heard if water is present. Wear eye protection during 
+the test because oil may splatter while being heated. 
+
+If water or sediment is found during the visual inspection, purify the oil and send samples of the 
+unpurified oil and the purified oil to a laboratory for analysis. In this way, the sediment of the 
+unpurified oil can be analyzed to determine its source, and the condition of the purified oil can be 
+verified as safe for continued use. 
+
+Test kits are available that allow the oil’s neutralization number to be determined in the field. 
+With the exception of some motor oils, which may be alkali to counteract acidic products of 
+combustion, most lubricating oils are essentially neutral. If an oil is found to be acidic, it is likely 
+the result of oxidation of the oil caused by extended service or abnormal operating conditions. 
+The neutralization number of new oil is usually less than 0.08. The maximum allowable number 
+depends on the type of oil and its service and should be obtained from the oil manufacturer. The 
+maximum value is usually less than 0.5. Of greatest concern in this test is the rate of increase and 
+not necessarily the neutralization number itself. A sudden increase in the neutralization number 
+may indicate that an operational problem exists or that the oil has reached the end of its useful 
+life. In either case, action is required before further deterioration and equipment damage occurs. 
+If a large increase in the neutralization number is noted or if the number exceeds the maximum 
+allowable, contact the oil’s manufacturer to determine what, if anything, can be done to reclaim 
+the oil. 
+
+Equipment is also available to allow tests such as viscosity, water content, and particle count to 
+be done onsite. Doing these tests onsite saves time and allows quick decisions to be made 
+concerning filtering or other maintenance, but unless a facility does a large volume of lubricant 
+testing, having these tests done by a laboratory is likely more cost effective. 
+
+5.1.1.3  Laboratory Tests 
+Periodic laboratory testing should be performed to include viscosity, water content, total acid 
+number, particle count, and elemental analysis for wear metals and additives. Also, it may be 
+necessary to perform a Rotating Pressure Vessel Oxidation Test (RPVOT), which is a test to 
+determine the oil resistance to oxidation and an indication of the condition of the oxidation 
+inhibitor in the oil. This test is not required as part of the regular testing schedule, but based on 
+the initial testing, the laboratory may recommend this or other tests. These tests can usually be 
+accomplished by any laboratory equipped for lubricant testing, but preferably the tests should be 
+performed by someone knowledgeable in the use and formulation of the lubricants being tested. 
+Because the composition and additive content of oils is usually considered proprietary 
+information, the manufacturer may have to be contacted to determine the extent of additive 
+depletion. Also, contact the manufacturer anytime the tests indicate there is some question about 
+the continued serviceability of an oil. 
+
+5.1.1.4  Test Schedule 
+Refer to the parent FIST for the specific oil testing schedule of a component or system. Samples 
+should be drawn from component systems periodically. A visual inspection of the samples 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+21 
+
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+should be performed, and the samples should be submitted for laboratory analysis. More frequent 
+testing may be warranted if a visual inspection of the oil indicates the presence of water or 
+sediment, or if previous laboratory tests indicated a sudden increase in contaminants or oxidation 
+products. In most cases, a standard periodic laboratory test is sufficient. 
+
+5.1.1.5  Oil Purification and Filtration 
+For a lubricating or hydraulic oil to perform properly, it must be kept free of contaminants. In 
+hydroelectric powerplants, water is the most common contaminant. The presence of water in oil 
+may promote oxidation, corrosion, sludge formation, foaming, or additive depletion, generally 
+reducing an oil’s effectiveness. Solid contaminants such as dirt, dust, and wear particles may also 
+be present. These solid particles may increase wear, promote sludge formation and foaming, and 
+restrict oil flow within the system. The correct frequency of purification, filtration or 
+replacement should be determined based on the results of an oil testing program. 
+
+The oil from large bearings and governor sumps should periodically be drained and filtered, and 
+the oil reservoir or sump thoroughly cleaned. The most efficient method of determining when to 
+filter is through the results of the oil tests. Filtering more frequently than is necessary is a waste 
+of time, while waiting too long to filter the oil will shorten the oil’s life and potentially damage 
+the equipment being lubricated. 
+
+The oil from small bearings should be drained periodically, and the reservoir or case cleaned and 
+filled with new oil. Care should be taken when filling a bearing oil reservoir so as not to under or 
+over fill. In many cases, over filling an oil reservoir can cause as much damage as under filling 
+
+The following are some of the most common purification or filtration methods: 
+
+5.1.1.5.1  Gravity Purification 
+Gravity purification is the separation or the settling of contaminants that are heavier than the oil. 
+Gravity separation occurs while oil is in storage but is usually not considered an adequate means 
+of purification for most applications. Use other purification methods in addition to gravity 
+separation. 
+
+5.1.1.5.2  Centrifugal Purification 
+Centrifugal purification is gravity separation accelerated by the centrifugal forces developed by 
+rotating the oil at high speed. Centrifugal purification is an effective means of removing water 
+and most solid contaminants from the oil. The rate of purification depends on the viscosity of the 
+oil and the size of the contaminants. 
+
+5.1.1.5.3  Mechanical FiltrationMechanical filtration removes contaminants by forcing the oil 
+through a filter medium with holes smaller than the contaminants. Mechanical filters 
+with a fine filter medium can remove particles as small as 1 micron. The filter medium 
+of a mechanical filter requires periodic replacement as the contaminants collect on the 
+medium’s surface. Kidney loop filters have been successfully used at various 
+Reclamation facilities when installed on individual bearing or governor sumps. 
+
+22 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+When choosing a filter medium, specify the Beta rating rather than a nominal rating. The 
+nominal rating some filter manufacturers may use is an arbitrary rating that means the filter stops 
+most particles at the nominal size. The Beta rating is a filter rating expressed as the ratio of the 
+particles at a given size or larger entering the filter to the number of the same sized particles 
+leaving the filter. For example, a Beta rating of β2=200 means that for every 200 particles greater 
+than 2 microns that entered the filter, only 1 particle would leave the filter. Likewise, a β5 = 
+1,000 filter would remove 999 out of every 1,000 particles 5 microns and bigger. For most 
+equipment in hydroplants, a β5 = 200 filter is sufficient, but if cleaner oil is desired, a β2=200 can 
+be used. Before using a filter finer than a β5 = 200, contact the oil manufacturer to verify what it 
+recommends for a minimum filter rating. Some additives may be filtered out of the oil if the filter 
+medium is too fine. 
+
+5.1.1.5.4  Coalescence Purification 
+A coalescing filter system uses special cartridges to combine small, dispersed water droplets into 
+larger ones. The larger water drops are retained within a separator screen and fall to the bottom 
+of the filter while the dry oil passes through the screen. A coalescing filter also removes solid 
+contaminants by the mechanical filtration principle. 
+
+5.1.1.5.5  Vacuum Dehydration 
+A vacuum dehydration system removes water from oil through the application of heat and 
+vacuum. The contaminated oil is exposed to a vacuum and is heated to temperatures of 
+approximately 100 to 140 ºF (38 to 60 ºC). The water is removed as a vapor. Take care so that 
+some of the desirable, low-vapor-pressure components or additives are not removed by the heat 
+or vacuum. 
+
+5.1.1.5.6  Adsorption Purification 
+Adsorption or surface attraction purification uses an active media, such as Fuller’s earth, to 
+remove oil oxidation products by their attraction or adherence to the large internal surfaces of the 
+media. This is a common method of purifying transformer insulating oils. Note: This method 
+also removes most of an oil’s additives and should not be used for turbine or hydraulic oil 
+purification. 
+
+5.1.2  Operating Temperature 
+
+A recommended range for the oil operating temperature for a particular application is usually 
+specified by the equipment manufacturer. Exceeding this range may reduce the oil’s viscosity to 
+the point that it can no longer provide adequate lubrication. Subjecting oil to high temperatures 
+also increases the oxidation rate. For every 18 ºF (10 ºC) increase above 150 ºF (66 ºC), an oil’s 
+oxidation rate doubles, which means the oil’s life is essentially cut in half. This is especially 
+critical for turbine oil in hydroelectric generating units where the oil is expected to last for years. 
+Typically, the ideal range for turbine oil is between 120 and 140 ºF (50 and 60 ºC), although in 
+many cases, the actual operating temperature may be below this range. If the oil operates 
+consistently above this range, some problem, such as misalignment, tight bearings, or clogged 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+23 
+
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+cooling lines, may exist and should be corrected. If it is necessary to operate at higher 
+temperatures, check the oil’s neutralization number more frequently. An increase in the 
+neutralization number indicates the oxidation inhibitors have been used up and the oil is 
+beginning to oxidize. Contact the lubricant manufacturer for recommendations regarding the 
+continued use of the oil. 
+
+5.1.3  Oil Compatibility 
+
+When it becomes necessary to replenish an oil lubrication system, the best practice is to always 
+use oil that is identical to the oil already in the system. Mixing incompatible oils is a possible 
+source of contamination or degradation. Many of Reclamation’s field offices have expressed 
+concerns about mixing different brands of similar turbine oil. It is common practice to procure 
+make-up oil to replace oil that has been lost over the years due to leaks, filtering losses, 
+evaporation, and losses that occur due to routine maintenance. Similar oils made by different 
+manufacturers for the same service may be incompatible because of different additives in the 
+oils. The additives may react with one another, depleting the additives and leaving the oil unable 
+to perform as it was intended.  
+
+If the exact type or brand of the existing oil is not known, the best option is to completely replace 
+the oil supply. The cost to repair the damage caused by incompatible oils in most cases will 
+outweigh the cost of the new oil. If a system is converted to a different lubricant, it is 
+recommended that the entire system be cleaned and thoroughly flushed before the new lubricant 
+is added. ASTM Standard D 6439-11(2017), Standard Guide for Cleaning, Flushing, and 
+Purification of Steam, Gas, and Hydroelectric Turbine Lubrication Systems, provides guidance 
+for flushing bearing systems. 
+
+In larger systems where there is a very large volume of oil, and the existing oil is still in good 
+condition, complete replacement may not be feasible. In these cases, the make-up oil should be 
+formulated using the same type of base oil as the existing oil, Group I in many cases, and a 
+compatibility test such as Federal Test Method (FTM) 791C should be performed. While the test 
+is not quantitative, it will give some indication of precipitate formation. Even if tests show that 
+two different oils are compatible, it is always prudent to check the oil more frequently if a 
+different makeup oil is used. The oil and components should be checked for signs of foaming, 
+precipitate, or overheating. 
+
+This incompatibility problem arose from the change in the type of base oil used by many 
+manufacturers, or more accurately, the type of refining process used to process the base oil. Until 
+the mid-1990s, most base oil stock was refined by the solvent refining process. This process uses 
+solvents to remove some of the impurities of the crude oil. Solvent-refined base oils are 
+commonly referred to as Group I oils. In the mid-1990s, many manufacturers started using base 
+oils that are refined by hydrocracking. This process adds hydrogen at high temperatures and 
+pressures to remove impurities and change the molecular structure of some of the molecules. Oil 
+refined by hydrocracking is referred to as Group II oil. Group II oil is a purer oil that offers better 
+thermal and oxidation stability, lower toxicity, increased biodegradability, improved low 
+
+24 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+temperature flow, and a generally longer life than a comparable Group I oil. Because of the 
+superior characteristics, most oil companies are changing to Group II base oils for their turbine 
+oil formulations. 
+
+Group I and Group II base oils are not necessarily incompatible, but the additive packages used 
+in the oils may be incompatible. An example of this incompatibility occurred at a Corps of 
+Engineers plant. In this case, the existing Group I oil was replaced by a Group II oil. The original 
+oil used a silicone-based antifoaming additive. The silicon-based additive was easily held in 
+solution in a Group I base oil but did not dissolve in a Group II base oil. When the new Group II 
+oil was put in service, the antifoaming additive in the residual Group I oil precipitated out of 
+solution and coated everything in contact with the lubricant. If the mixing occurs in a bearing 
+housing or governor sump, the precipitate coats bearing surfaces, clogs filters and valves, and 
+likely requires at least partial disassembly to clean. If the mixing occurs in a storage tank, the 
+entire volume of oil in the tank may be contaminated and, at a minimum, require an extensive 
+reclaiming process to make the oil acceptable for use. 
+
+While there are tests for oil compatibility, the tests are not quantitative, and certification of 
+compatibility by a test laboratory or a manufacturer is difficult or impossible to obtain. The tests 
+are pass/fail, and no reference standard is available for the accuracy of these tests. Requiring a 
+compatibility test as part of a specification for makeup oil may not guarantee that the new oil is 
+compatible with the existing oil. 
+
+Even if tests show that two different oils are compatible, it is always prudent to check the oil 
+more frequently if a different makeup oil is used. Check the oil and bearing for signs of foaming, 
+precipitate, or overheating. If a system is converted to a different lubricant, it is recommended 
+that the entire system be cleaned and thoroughly flushed before the new lubricant is added. 
+American Society for Testing and Materials (ASTM) Standard D 6439-99, Standard Guide for 
+Cleaning, Flushing, and Purification of Steam, Gas, and Hydroelectric Turbine Lubrication 
+Systems, provides guidance for flushing bearing systems. 
+
+5.2  Grease Lubricated Systems 
+
+5.2.1  Antifriction Bearings 
+
+The most common problem with grease lubrication of antifriction bearings is over-lubrication. 
+The idea that more is better, coupled with the fact that it often is difficult to determine the actual 
+amount of grease in a bearing housing, causes many bearings to be overgreased. Excess grease 
+will churn within the bearing housing and cause excessive heat, which can soften the grease, 
+reducing its effectiveness and leading to overheating of the bearing, causing damage. The heat 
+can also cause the grease to expand, increasing the temperature and creating enough pressure to 
+damage the bearing seals. 
+
+Ideally, a grease lubricated antifriction bearing should be “packed” by hand so that the bearing 
+housing is approximately one-third full of grease. Open the bearing housing, remove the bearing 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+25 
+
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+and all of the old grease, and thoroughly clean the bearing and the housing. Do not use 
+compressed air for cleaning or drying the bearing because moisture in the air may induce 
+corrosion in the highly polished bearing surfaces. When clean, thoroughly pack the bearing in 
+new grease and fill the bearing housing one-third full of grease. 
+
+It is not always practical or possible to hand pack a bearing. In these cases, grease guns or other 
+high-pressure devices may be used. Exercise caution when using high-pressure systems to 
+prevent overgreasing or creating excess pressure in the bearing housing. When grease is applied 
+using a grease gun, remove the relief plug, if equipped, so that, as the new grease is applied, all 
+the old grease is purged from the bearing housing. Operate the machine for approximately 30 
+minutes before replacing the plug to allow excess grease to escape. If the bearing housing does 
+not have a relief plug, add grease very infrequently to prevent overgreasing. After grease is 
+added, remove the pressure fitting, or “zerk,” to prevent pressure retention. 
+
+5.2.2 
+
+Journal Bearings or Bushings 
+
+Grease lubricated bushings or journal bearings are not as sensitive to over-lubrication as 
+antifriction bearings, so “hand packing” is not usually necessary. The most common method of 
+applying grease to a journal bearing is by a high-pressure system. This may be a centralized, 
+automatic system, as is used on turbine wicket gates, or it may be a grease gun. Overgreasing 
+with a high-pressure system does not normally damage a journal bearing, but it can damage 
+seals, waste grease, and cause a mess. 
+
+The most common problem encountered with centralized greasing systems is plugging of the 
+lines. Regularly check all points that are to be lubricated to ensure they are receiving grease. If 
+clogging of the lines is a persistent problem, it may be necessary to switch to a grease with a 
+lighter consistency or less adhesiveness or adjust the cycle frequency and volume of grease per 
+cycle. 
+
+5.2.3  Grease Compatibility 
+
+Mixing two greases frequently results in a product inferior to either of the component greases. 
+The mixture may be softer in consistency, less resistant to heat, and have a lower shear stability. 
+When this happens, the greases are considered incompatible. Incompatibility of greases is 
+normally a result of the incompatibility of the thickening agents of the component greases. Table 
+2 lists the compatibility of some of the most common types of greases. Note that this table is 
+intended only as a guide. In some instances, grease types listed as compatible may be 
+incompatible because of adverse reactions between the thickening agent of one grease and 
+additives in the other. In rare cases, greases with the same thickening agent but made by different 
+manufacturers may be incompatible because of the additives. 
+
+If it becomes necessary to change the type of grease used in a piece of equipment, thoroughly 
+clean the bearing housing or the area being greased to remove all of the old grease. If this is not 
+
+26 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+ 
+ 
+ 
+ 
+ 
+possible, flush out as much of the old grease as possible using the new grease during the initial 
+application and increase the greasing frequency until it is determined that all of the old grease 
+has been purged from the system. 
+
+FIST Volume 2-4 
+Lubrication of Equipment 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+27 
+
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Powerplant Equipment 
+
+Table 2.—Grease compatibility 
+
+Aluminum
+complex 
+
+Barium  Calcium 
+
+Calcium 
+complex 
+
+Calcium 
+12 
+Hydroxy 
+
+Calcium 
+Stearate 
+
+Calcium 
+Sulfonate  Clay  Lithium 
+
+Lithium 
+Complex 
+
+Lithium 
+12 
+Hydroxy 
+
+Lithium 
+Stearate  Polyurea  Sodium 
+
+Grease Compatibility 
+
+Grease 
+
+Aluminum  
+Complex 
+
+Barium 
+
+Calcium 
+
+Calcium 
+Complex 
+
+Calcium 12 
+Hydroxy 
+
+Calcium 
+Stearate 
+
+Calcium 
+Sulfonate 
+
+Clay 
+
+Lithium 
+
+Lithium 
+Complex 
+
+Lithium 12 
+Hydroxy 
+
+Lithium 
+Stearate 
+
+Polyurea 
+
+C 
+
+I 
+
+I 
+
+I 
+
+C 
+
+I 
+
+B 
+
+I 
+
+I 
+
+C 
+
+I 
+
+I 
+
+I 
+
+I 
+
+C 
+
+I 
+
+I 
+
+C 
+
+NI 
+
+B 
+
+I 
+
+I 
+
+I 
+
+I 
+
+I 
+
+I 
+
+C 
+
+B 
+
+C 
+
+NI 
+
+I 
+
+C 
+
+C 
+
+C 
+
+B 
+
+NI 
+
+NI 
+
+I 
+
+I 
+
+I 
+
+I 
+
+I 
+
+I 
+
+B 
+
+C 
+
+B 
+
+I 
+
+C 
+
+I 
+
+I 
+
+C 
+
+I 
+
+I 
+
+C 
+
+I 
+
+C 
+
+C 
+
+C 
+
+B 
+
+C 
+
+C 
+
+NI 
+
+B 
+
+C 
+
+C 
+
+C 
+
+C 
+
+I 
+
+I 
+
+I 
+
+NI 
+
+NI 
+
+I 
+
+C 
+
+C 
+
+B 
+
+C 
+
+NI 
+
+C 
+
+B 
+
+C 
+
+I 
+
+NI 
+
+B 
+
+B 
+
+I 
+
+C 
+
+NI 
+
+B 
+
+C 
+
+B 
+
+C 
+
+C 
+
+B 
+
+B 
+
+B 
+
+I 
+
+I 
+
+I 
+
+C 
+
+I 
+
+B 
+
+C 
+
+B 
+
+C 
+
+I 
+
+I 
+
+I 
+
+I 
+
+I 
+
+I 
+
+I 
+
+I 
+
+C 
+
+I 
+
+C 
+
+NI 
+
+C 
+
+I 
+
+C 
+
+C 
+
+C 
+
+NI 
+
+I 
+
+B 
+
+C 
+
+I 
+
+C 
+
+C 
+
+C 
+
+C 
+
+C 
+
+I 
+
+C 
+
+C 
+
+C 
+
+C 
+
+I 
+
+B 
+
+I 
+
+I 
+
+B 
+
+I 
+
+C 
+
+B 
+
+B 
+
+I 
+
+C 
+
+C 
+
+C 
+
+C 
+
+I 
+
+I 
+
+I 
+
+NI 
+
+NI 
+
+I 
+
+C 
+
+C 
+
+B 
+
+I 
+
+NI 
+
+C 
+
+C 
+
+C 
+
+I 
+
+NI 
+
+I 
+
+I 
+
+I 
+
+C 
+
+I 
+
+I 
+
+B 
+
+I 
+
+I 
+
+I 
+
+I 
+
+I 
+
+C 
+
+I 
+
+I 
+
+Sodium 
+B – Borderline compatibility 
+C – Compatible 
+I – Incompatible 
+NI – No information on compatibility
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+I 
+
+I 
+
+I 
+
+I 
+
+I 
+
+NI 
+
+I 
+
+I 
+
+B 
+
+B 
+
+I 
+
+NI 
+
+I 
+
+C 
+
+28 
+
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Powerplant Equipment 
+
+  Lubricant Storage and Handling 
+
+6.1 
+
+Safety 
+
+When handled properly, most lubricants are safe; when handled improperly, some hazards may 
+exist. The Safety Data Sheet (SDS) provides information on the potential hazards associated with 
+a specific lubricant and should be readily accessible to all personnel involved in any way in the 
+handling of lubricants. Each lubricant’s SDS provides information on any hazardous ingredients, 
+physical and chemical characteristics, fire and explosion data, health hazards, and precautions for 
+safe use. 
+
+6.2  Oil 
+
+Most powerplants use a bulk storage system with separate clean and dirty oil tanks to store the 
+oil for the guide bearings and governors. At times, the clean oil tank can become contaminated 
+by water condensation or dust or dirt in the air. To prevent the contamination of the bearing or 
+governor oil reservoirs, filter the oil from the clean tank again as it is being pumped into these 
+reservoirs. If this is not possible, direct the initial oil drawn from the clean tank into the dirty oil 
+tank to remove any settled contaminants. 
+
+Periodically drain and thoroughly clean the clean oil storage tank. If the area where the storage 
+tanks are located is dusty, it may be desirable to install a filter in the tank’s vent line. If water 
+contamination is persistent or excessive, a desiccant breather may be required. 
+
+Store oil in drums indoors, if possible, following label directions as they pertain to special 
+precautions regarding temperature or ventilation requirements. If it is necessary to store drums 
+outside, store them on their side to prevent water or dirt from collecting on top of the drum. 
+Always keep the bungs on the drums tightly closed, except when oil is being drawn out. If a tap 
+or pump is installed on the drum, wipe the outlet clean after drawing oil to prevent dust from 
+collecting. 
+
+When dispensing oil from bulk storage, such as a drum or tank, dispense it only into clean, 
+closed containers to prevent contamination. Mark the containers for the oil they are to be used 
+with to prevent mixing incompatible oils. 
+
+6.3  Grease 
+
+Characteristics of some greases may change in storage. A grease may bleed, change consistency, 
+or pick up contaminants during storage. Because some greases may be more susceptible to the 
+effects of prolonged storage than others, consult the manufacturer or distributor for information 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+29 
+
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Powerplant Equipment 
+
+on the maximum shelf life of a particular grease. To be safe, do not store more than a 1-year 
+supply of a grease at any time. Store grease in a tightly sealed container away from furnaces or 
+heaters to prevent dust, moisture, other contamination, or exposure to excessive heat. Excessive 
+heat may cause the grease to bleed and oxidize. 
+
+30 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Powerplant Equipment 
+
+  Lubricant Selection 
+
+When choosing a lubricant for a particular piece of equipment, consult the equipment 
+manufacturer’s operation and maintenance manual. The operation and maintenance manual 
+usually outlines the required characteristics of the lubricants as well as a recommended schedule 
+for replacement or filtering. If the maintenance manual is not available, or is vague in its 
+recommendations, contact the lubricant manufacturer or distributor for this information. Provide 
+all the pertinent information on the equipment, such as operating speed, frequency of operation, 
+operating temperature, and any other special or unusual conditions, to the lubricant manufacturer 
+or distributor so that a lubricant with the proper characteristics can be chosen. Use prudence 
+when dealing with a lubricant salesperson to prevent purchasing an expensive lubricant with 
+capabilities in excess of what is required. 
+
+Whenever possible, purchase lubricants that can be used in several applications. Limiting the 
+number of lubricants onsite minimizes the chance of mixing different lubricants or using the 
+wrong lubricant. 
+
+7.1 
+
+Lubricant Standards 
+
+A number of tests and standards have been developed to define and measure the properties of 
+lubricants. Most of these tests have been standardized by ASTM. The properties determined by 
+these tests can be very helpful in comparing relative performance of several lubricants, but note 
+that many of these tests have little correlation to actual service conditions. When selecting a 
+lubricant, review the test procedures for the required properties to keep the relevance of the test 
+in perspective. 
+
+7.2 
+
+Turbine Oil 
+
+Under normal conditions, the lubricating oil for a hydroelectric unit’s guide and thrust bearings 
+experiences relatively mild service, but is expected to have a long service life. A long service life 
+requires a high-quality oil with various additives to enhance and maintain its quality. 
+
+Most powerplants use a highly refined turbine oil for bearing lubrication. Table 3 lists some 
+typical properties of a Group I turbine oil. A Group II oil would have better oxidation stability. 
+The oil should be rust and oxidation inhibited with an antifoam additive. The oil should also be 
+resistant to emulsification and separate readily from water. Antiwear or extreme pressure 
+additives are not required or desired. 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+31 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Powerplant Equipment 
+
+Table 3.—Typical Oil Specifications 
+
+Typical Specifications For Turbine Oil 
+
+ISO viscosity grade 
+
+Characteristics 
+
+32 
+
+46 
+
+68 
+
+ASTM 
+Test No. 
+
+Viscosity, centistokes at 40 ºC 
+
+28.8 – 35.2 
+
+41.4 –50.6 
+
+61.2 – 74.8 
+
+D 445 
+
+Viscosity Index, minimum 
+
+Pour Point, ºC maximum 
+
+Flash Point, ºC minimum 
+
+94 
+
+-6 
+
+180 
+
+94 
+
+-6 
+
+180 
+
+94 
+
+-6 
+
+180 
+
+D 2270 
+
+D 97 
+
+D 92 
+
+Total Acid Number, mg KOH/g 
+
+Report 
+
+Report 
+
+Report 
+
+D 974 
+
+Rust Preventive Characteristics 
+
+Foaming Characteristics 
+ Sequence 1, mL maximum 
+
+Air Release, 50 ºC, minutes max 
+
+Emulsion Characteristics 
+ @ 54 ºC, minutes to 3 mL emulsion max 
+
+Oxidation Stability 
+ Hours to neutral. No. 2.0 minimum 
+ Minutes to 175 kPa drop, minimum 
+
+Pass 
+
+50/0 
+
+5 
+
+30 
+
+Pass 
+
+50/0 
+
+7 
+
+30 
+
+Pass 
+
+50/0 
+
+10 
+
+30 
+
+D 665A 
+
+D 892 
+
+D 3427 
+
+D 1401 
+
+2000 
+350 
+
+2000 
+350 
+
+2000 
+175 
+
+D 943 
+D 2272 
+
+The equipment manufacturer usually specifies the recommended oil viscosity, which depends on 
+the operating speed, load, and temperature, as well as the bearing clearances. The most common 
+viscosities used in turbines are the ISO viscosity grades 32, 46, and 68. 
+
+7.3  Hydraulic Systems 
+
+The primary purpose of hydraulic fluid is to transmit power. To accomplish this effectively, the 
+fluid must be incompressible and flow readily through the system. The fluid must also have 
+sufficient viscosity to seal and lubricate the components of the hydraulic system. A variety of 
+fluids are capable of performing these functions, but the most satisfactory hydraulic fluid is 
+usually oil. 
+
+A hydraulic oil has many of the same requirements as a lubricating oil used in the unit bearings, 
+and, in many cases, the same oil can be used. If the system uses a gear pump, operates at 
+pressures less than 1,000 pounds per square inch (psi), and has similar viscosity requirements, 
+the bearing lubricating oil can function very well as a hydraulic oil. Systems that operate over 
+1,000 psi or use a piston or sliding vane pump usually require a fluid with an antiwear additive. 
+Systems that operate in areas of great temperature extremes may require a multigrade oil to 
+provide desirable high and low temperature viscosity characteristics. 
+
+32 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Powerplant Equipment 
+
+Some instances may require a fire-resistant hydraulic fluid. These fluids are usually either a 
+water-based or a synthetic fluid. In either case, the system must be designed specifically for the 
+fluid it uses. Water-based fluids have a very low viscosity. Synthetic fluids are not compatible 
+with many seal materials found in hydraulic systems. 
+
+7.4  Hydraulic Governor Systems 
+
+A hydraulic governor system, at its core, is simply a hydraulic system and in most cases can use 
+the turbine oil used in the unit bearings. Some cases, such as low plant temperatures or extremely 
+long control lines, require a lighter viscosity oil than is used in the turbine. 
+
+7.5  Wicket Gates, Radial Gates, and Butterfly Valves 
+
+Grease for slow moving, highly loaded, bronze bushings, such as those found on wicket gates, 
+radial gates, and butterfly valves, should be adhesive, water resistant, able to withstand high 
+bearing pressures, and of a consistency that can be pumped at the lowest temperature 
+encountered. Usually, a grease with extreme pressure or antiwear capabilities is specified. Note 
+that grease manufacturers use the term “extreme pressure” fairly liberally. Verify the presence of 
+extreme pressure additives and extreme pressure properties. Because the grease is lubricating a 
+bronze bearing, it should not be corrosive to copper. The dropping point of the grease has little 
+relevance in this case. 
+
+A great deal of research was conducted on the lubrication of radial gate trunnion bearings 
+following the failure of the Folsom Dam radial gate. Table 4 lists some of the properties of 
+grease recommended for this application as a result of this research. Because wicket gate 
+bushings and butterfly valve trunnion bearings see similar service, the list applies to both. 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+33 
+
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Powerplant Equipment 
+
+Table 4.—Recommended grease properties 
+
+Recommended Grease Properties for Wicket Gates, Radial Gates, Butterfly Valves 
+
+Grease Property 
+
+Purpose of 
+Property 
+
+ASTM Test 
+
+ASTM Test 
+Desired Result 
+
+Maximum 
+Allowable 
+
+Lubricity 
+
+Low static and 
+kinetic friction for 
+bronze on steel 
+
+G99-03 
+
+Rust inhibitors 
+
+Prevent rust on steel 
+
+D1743-01 
+
+Coefficient of static 
+friction, fs (breakaway), 
+0.10, (b) coefficient of 
+kinetic friction at 0.2 
+inch/min, fk, 0.10 
+
+Pass, no rusting of steel 
+after 48 hrs. 
+
+Fs, 0.15, 
+(b) fk, 0.12 
+
+Pass 
+
+4C 
+
+Copper corrosion 
+
+Wear and scuffing 
+resistance 
+
+Water washout 
+
+Consistency 
+
+Oxidation stability 
+
+Oil separation 
+
+Low corrosion of 
+bronze bushing 
+
+Prevent scuffing 
+between steel and 
+bronze 
+
+Resists washout by 
+water 
+
+Easy to pump but 
+thick enough to stay 
+in bushing 
+
+Resistance to 
+oxidation 
+
+Indication of 
+stability in storage 
+
+7.6  Gears 
+
+D4048-02 
+
+1 to 4B 
+
+G99-03 
+
+No scuffing or transfer 
+of metal of bronze to 
+steel 
+
+No Scuffing 
+
+D1264-00 
+
+0% washout 
+
+1.9% 
+
+D-217-02 
+
+NLGI 1 to 1.5 
+
+NLGI 2 
+
+D-942-02 
+
+D-1742-94 
+
+Pass, no acid formation 
+or discoloration 
+
+Pass 
+
+Less than 0.1% 
+bleeding of oil 
+
+1.6% in 24 hours 
+
+Gears vary greatly in design and in their requirements for lubrication. When selecting a lubricant 
+for any gear application, consider the type of gearing and the operating conditions, such as speed, 
+load, and temperature. Enclosed gears (i.e., gears encased in an oil tight housing) usually use a 
+mineral oil with rust, oxidation, and foam inhibitors and, where loads are severe, extreme 
+pressure additives. 
+
+Worm gears are a special case because the action between the worm and its mating gear is 
+sliding, rather than the rolling action found in most gears. The sliding action allows fluid film 
+lubrication to take place. Worm gears are also different in that the mating gears (the worm and 
+the bull gears) are usually made of dissimilar materials. The use of dissimilar material reduces 
+the friction and the chance of galling. Worm gears do not usually require extreme pressure 
+additives, but lubrication can be improved by lubricity additives. 
+
+34 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Powerplant Equipment 
+
+A highly adhesive lubricant is required for most open gear applications. An open gear lubricant 
+must resist being thrown off by centrifugal force or being scraped off by the action of the gear 
+teeth. Most open gear lubricants are heavy oils, many times asphalt based, or soft greases. 
+Depending on the service conditions, oxidation inhibitors or extreme pressure additives may be 
+added. Because these lubricants are very adhesive, they also attract dust and dirt. These 
+contaminants can act as abrasives if the gears are not periodically cleaned. 
+
+7.7  Wire Rope 
+
+The life of a wire rope can be extended through the proper application of the correct lubricant. 
+The individual wires in a wire rope are subject to abrasive wear as they move relative to each 
+other any time the rope is bent, such as when it goes over a sheave or is wound on a drum. 
+Unless the rope is constructed of stainless steel, it is also subject to corrosion damage. Corrosion 
+is especially a problem for wire ropes that are exposed to the elements. 
+
+To be effective, the lubricant must penetrate into the rope to provide lubrication between the 
+individual wires and strands. It also must provide external lubrication to reduce friction between 
+the rope and sheaves or drum, and it should act as a sealant to prevent corrosion. The lubricant 
+coating should not prevent visual inspection of the rope for broken wires or other damage. 
+
+Many times, a light mineral oil, such as an SAE 10 motor oil, is used to lubricate wire rope. The 
+advantages of such a light oil are that it can be applied cold and it penetrates into the rope easily. 
+The main disadvantages are that it works out of the rope just as easily as it works in, requiring 
+frequent application. 
+
+Heavy, adhesive lubricants can provide longer lasting protection, but most require heating, or in 
+some cases thinning with a solvent, before application to provide proper penetration. A heavy 
+lubricant, when properly applied, not only provides internal lubrication, but also provides a 
+durable outer coating to prevent corrosion and keep dust and abrasives out of the rope.  
+
+The lubricant can be applied by brush, spray, dripped on, or, preferably, by passing the rope 
+through a heated reservoir filled with the lubricant. Before applying the lubricant, clean any 
+accumulated dirt, dust, or rust from the rope because they can prevent the lubricant from 
+penetrating properly. Apply the lubricant to the entire circumference of the rope and slowly wind 
+the rope on and off the drum several times to work the lubricant into the rope. If the lubricant is 
+applied by hand, it may be helpful to apply the lubricant as it passes over a sheave because the 
+bending spreads the rope’s strands, allowing the lubricant to penetrate more easily. 
+
+7.8 
+
+Environmentally Acceptable Lubricants 
+
+More stringent regulations on the use, containment, and disposal of lubricants, have generated a 
+great deal of interest in the use of “environmentally friendly” or “environmentally acceptable” 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+35 
+
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Powerplant Equipment 
+
+(EA) lubricants (EAL) and hydraulic fluids. The desire is to use products that are less toxic and 
+more readily biodegradable if they are inadvertently released.  
+
+Environmentally acceptable lubricants are similar to traditional (mineral oil) lubricants in that 
+they are both made of one of the three types of base oils (mineral, vegetable, or synthetic) 
+blended with an additive package.  
+
+A number of terms are used to describe lubricants, such as environmentally acceptable, readily 
+biodegradable, inherently biodegradable, food grade, or non-toxic. Their meanings can be 
+subjective, leading to negative environmental or health consequences if the wrong product is 
+selected. Exercise careful deliberation when selecting EALs for each specific application.  
+
+At the time of this document’s publication, Reclamation has begun replacing traditional 
+lubricants with EALs at some facilities on specific equipment. The primary reasons for slow 
+adoption of EALs are the relatively recent availability of proven EALs, the potential 
+compatibility risk involved with replacing time-tested traditional lubricants and the increased 
+cost.  
+
+Additives are used to change the characteristics of the base oils to increase performance for each 
+application. EALs present a challenge to chemists in that they are limited to additives that are 
+environmentally acceptable. An example of this challenge is with the common antiwear additive 
+ZDDP (zinc dialkyl dithiophosphates). ZDDP does not provide the antiwear protection itself, but 
+the breakdown of it does. ZDDP contains heavy metals and is not considered environmentally 
+acceptable, as it is not readily biodegradable. ZDDP may be beneficial in some gate applications, 
+but not desirable for hydro turbine oil applications as our operating conditions are mild, and the 
+benefit does not outweigh the potential impact to the environment. 
+
+Mineral oil based EALs are the least common. Crude oil is inherently not biodegradable; 
+however, a sugar cane based mineral oil that is biodegradable may be suitable for certain 
+applications. 
+
+Vegetable oils are inherently less toxic to the environment; however, they are more prone to 
+oxidize and become rancid. Additives are formulated to help reduce this oxidation potential. 
+
+Synthetic oils are phenomenal candidates as they can be custom formulated to meet specific 
+needs; however, they can be significantly more expensive.  
+
+7.8.1 
+
+EAL Selection Criteria 
+
+In 2020, Centre for Energy Advancement through Technological Innovation (CEATI) published 
+a testing guideline, Hydraulic Plant Life Interest Group (HPLIG) 03/103, to evaluate EA 
+hydraulic and gear oils. This guide allows Reclamation and CEATI HPLIG members to hold EA 
+manufacturers to a well-defined standard and better respond to potential legislative changes 
+requiring the use of EALs.  
+
+36 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Powerplant Equipment 
+
+The guideline is broken up into two primary testing sections: environmental acceptability and 
+performance testing.  
+
+Environmental Acceptability Tests 
+
+•  Biodegradability 
+•  Toxicity 
+
+Performance Tests 
+
+•  Flash Point 
+•  Pour Point 
+•  Viscosity 
+•  Moisture 
+•  Color 
+•  Acid Number 
+•  Copper Corrosion 
+•  Foam 
+•  Air Release 
+•  Oxidation and RPVOT 
+•  Water Separation 
+•  Particle Counts 
+•  Varnish Potential 
+•  Rust Prevention 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+37 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-4 
+Lubrication of Powerplant Equipment 
+
+Although there are several tests for toxicity and biodegradability from organizations such as the 
+Organization for Economic Co-operation and Development (OECD), ASTM, and ISO, the 
+results of these tests may have very little correlation to the conditions under which the lubricant 
+is actually used. A product may be nontoxic to one organism but toxic to another. Likewise, a 
+product may readily biodegrade under certain test conditions but less so under different 
+conditions. When choosing an EA product, review the test procedures and the results to back up 
+any toxicity and biodegradability claims. Note that at the time of this publication, there is still no 
+global standardized test method for determining biodegradability. 
+
+7.8.2 
+
+EAL Maintenance 
+
+Test EALs that are in use more frequently due to their tendency to biodegrade more quickly. The 
+test results will indicate the need for lubricant replacement. Oxidation stability is usually not as 
+good as with a comparable mineral oil based product. Any water contamination can accelerate 
+the oxidation process. In general, EA products have to be replaced more frequently than a 
+mineral oil based product. 
+
+38 
+
+(FIST 025) 07/01/2004 
+NEW RELEASE 
+(Minor revisions approved 05/29/2024) 
+
+ 
+ 
+ 
+ 
+ 
+

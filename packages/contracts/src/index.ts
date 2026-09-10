@@ -157,7 +157,7 @@ export const useCaseSchema = z.object({
   demoPrompts: z.array(z.string()).min(1),
   courseCaseId: z.string().optional(),
   demoStatus: z.enum(["planned", "available"]).optional(),
-  source: z.literal("public-synthetic"),
+  source: z.enum(["public-synthetic", "public-benchmark"]),
 });
 
 export const fitAssessmentInputSchema = z.object({

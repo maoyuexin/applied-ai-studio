@@ -112,13 +112,9 @@ export default function BusinessWorkflowCanvas({
     if (!element) return;
     const updateWidth = () => {
       if (element.clientWidth === 0) return;
-      const nextBaseWidth = element.clientWidth >= fitToPanelBreakpoint
-        ? element.clientWidth
-        : 1050;
-      const nextFitZoom = Math.min(
-        1,
-        Math.floor((element.clientWidth / nextBaseWidth) * 100) / 100,
-      );
+      const isNarrowViewport = element.clientWidth < fitToPanelBreakpoint;
+      const nextBaseWidth = isNarrowViewport ? minimumCanvasWidth : element.clientWidth;
+      const nextFitZoom = isNarrowViewport ? minimumZoom : 1;
       setBaseWidth(nextBaseWidth);
       setFitZoom(nextFitZoom);
     };
@@ -242,7 +238,18 @@ export default function BusinessWorkflowCanvas({
           {isFullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
         </button>
       </div>
-      <div ref={viewportRef} className="business-flow-canvas" aria-label={`${courseCase.title} interactive business workflow`}>
+      <div
+        ref={viewportRef}
+        className="business-flow-canvas"
+        aria-label={`${courseCase.title} interactive business workflow`}
+        tabIndex={0}
+        onKeyDown={(event) => {
+          if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+          event.preventDefault();
+          const direction = event.key === "ArrowRight" ? 1 : -1;
+          event.currentTarget.scrollLeft += direction * Math.max(80, event.currentTarget.clientWidth * 0.4);
+        }}
+      >
         <div className="business-flow-zoom-surface" style={{ width: `${baseWidth * effectiveZoom}px` }}>
           <svg
             className="business-flow-svg"
@@ -291,17 +298,12 @@ export default function BusinessWorkflowCanvas({
             const { node, decision, x, y, width, height } = layout;
             const lines = wrapLabel(node.label, node.kind === "decision" ? 13 : 16);
             const firstLineY = height / 2 - ((lines.length - 1) * nodeLineHeight / 2);
-            const selectable = Boolean(node.decisionId);
-            const selectDecision = () => {
-              if (node.decisionId) onSelectDecision(node.decisionId);
-            };
             return (
               <g
                 key={node.id}
                 transform={`translate(${x} ${y})`}
                 className={nodeClass(layout, phase, selectedDecisionId)}
-                aria-label={selectable ? `${node.label}. ${decision?.verdictLabel}. Select to inspect.` : node.label}
-                onClick={selectDecision}
+                aria-label={node.label}
               >
                 {node.kind === "decision" ? (
                   <polygon className="svg-node-shape" points={`${width / 2},0 ${width},${height / 2} ${width / 2},${height} 0,${height / 2}`} />
@@ -321,6 +323,34 @@ export default function BusinessWorkflowCanvas({
           })}
         </g>
           </svg>
+          <div className="workflow-node-controls">
+            {[...layouts.values()].map(({ node, decision, x, y, width, height }) => {
+              if (!node.decisionId || !decision) return null;
+              return (
+                <button
+                  type="button"
+                  key={node.id}
+                  className={node.decisionId === selectedDecisionId ? "selected" : ""}
+                  aria-label={`${node.label}. ${decision.verdictLabel}. Select to inspect.`}
+                  aria-pressed={node.decisionId === selectedDecisionId}
+                  aria-controls="workflow-decision-inspector"
+                  style={{
+                    left: `${(x / canvasWidth) * 100}%`,
+                    top: `${(y / canvasHeight) * 100}%`,
+                    width: `${(width / canvasWidth) * 100}%`,
+                    height: `${(height / canvasHeight) * 100}%`,
+                  }}
+                  onClick={() => onSelectDecision(node.decisionId!)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      onSelectDecision(node.decisionId!);
+                    }
+                  }}
+                />
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

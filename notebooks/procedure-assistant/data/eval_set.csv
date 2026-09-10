@@ -1,0 +1,61 @@
+qid,bucket,question,gold_citations,gold_value,match_mode,note
+A01,A,Who is allowed to remove a lockout device from a machine?,29 CFR 1910.147(e)(3),,any,regulation/LOTO
+A02,A,How often does the written energy control procedure have to be inspected?,29 CFR 1910.147(c)(6)(i),,any,
+A03,A,"Does the lockout procedure have to be written down, or can it be verbal?",29 CFR 1910.147(c)(4)(i),,any,
+A04,A,What has to be included in a written energy control procedure?,29 CFR 1910.147(c)(4)(ii),,any,
+A05,A,"Before I take my lock off, what do I have to check in the work area?",29 CFR 1910.147(e)(1),,any,
+A06,A,Do I have to tell other employees when I put a lock on and when I take it off?,29 CFR 1910.147(c)(9),,any,
+A07,A,Who is allowed to actually apply the lockout devices?,29 CFR 1910.147(c)(8),,any,
+A08,A,How long do we have to keep a cancelled confined space entry permit?,29 CFR 1910.146(e)(6),,any,
+A09,A,What is the attendant supposed to do while people are inside a permit space?,29 CFR 1910.146(i),,any,
+A10,A,Does someone have to stay outside the confined space the whole time?,29 CFR 1910.146(d)(6),,any,
+A11,A,How is a retrieval line supposed to be attached to an entrant?,29 CFR 1910.146(k)(3)(i),,any,
+A12,A,When do we need a fire watch for welding or cutting?,29 CFR 1910.252(a)(2)(iii)(A),,any,
+A13,A,What is the fire watcher actually responsible for?,29 CFR 1910.252(a)(2)(iii)(B),,any,
+A14,A,Can I weld on a used drum that had solvent in it?,29 CFR 1910.252(a)(3)(i),,any,
+A15,A,How do I check a grinding wheel for cracks before I mount it?,29 CFR 1910.215(d)(1)|29 CFR 1910.215(d)(1)(i),,any,
+A16,A,Who is allowed to work on electrical parts that are still energized?,29 CFR 1910.333(c)(2),,any,
+A17,A,When do I have to use insulated tools?,29 CFR 1910.335(a)(2)(i),,any,
+A18,A,What protective equipment do employees need around electrical hazards?,29 CFR 1910.335(a)(1)(i),,any,
+A19,A,"Is a machine guard required, and what kinds of guarding count?",29 CFR 1910.212(a)(1),,any,
+A20,A,How often does a sling have to be inspected?,29 CFR 1910.184(d),,any,
+A21,A,Can I work under another employee's personal lock at this facility?,USBR FIST 1-1 p. 36|USBR FIST 1-1 p. 70,,any,site procedure
+A22,A,How often does the facility hazardous energy control program get reviewed?,USBR FIST 1-1 p. 21,,any,
+A23,A,The generator engine will not crank. What should I check?,TM 9-6115-464-12 p. 99|TM 9-6115-464-12 p. 111,,any,equipment manual
+A24,A,The generator set is overheating. What should I check first?,TM 9-6115-464-12 p. 102,,any,
+A25,A,What happens when an outside contractor services our machines?,OSHA 3120 p. 22,,any,plain language
+B01,B,"What does the written procedure have to cover, and what training do employees need?",29 CFR 1910.147(c)(4)(ii)|29 CFR 1910.147(c)(7)(i),,all,
+B02,B,"We are working on fixed electrical equipment. Does lockout/tagout apply, and which rule governs?",29 CFR 1910.333(b)(2)|29 CFR 1910.147(a)(1)(ii)(D),,all,
+B03,B,"For a permit space entry, what has to be on the permit and who has to be posted outside?",29 CFR 1910.146(e)(6)|29 CFR 1910.146(d)(6),,all,
+B04,B,Welding near combustibles: what distance matters and what does the fire watch have to do?,29 CFR 1910.252(a)(2)(iii)(A)|29 CFR 1910.252(a)(2)(iii)(B),,all,
+B05,B,Removing another employee's lock: what does the regulation say and what does our facility program say?,29 CFR 1910.147(e)(3)|USBR FIST 1-1 p. 35,,all,
+B06,B,"On a bench grinder, what are the work rest and tongue guard requirements?",29 CFR 1910.215(a)(4)|29 CFR 1910.215(b)(9),,all,
+B07,B,"Overhead crane: what gets inspected frequently, and what gets inspected periodically?",29 CFR 1910.179(j)(2)|29 CFR 1910.179(j)(3),,all,
+B08,B,Alloy steel chain slings: what inspection and what proof testing are required?,29 CFR 1910.184(d)|29 CFR 1910.184(e)(4),,all,
+B09,B,Forklift operators: what training is required and how often is performance re-evaluated?,29 CFR 1910.178(l)(1)(i)|29 CFR 1910.178(l)(4)(iii),,all,
+B10,B,Storing oxygen and fuel gas cylinders indoors: what separation applies to each?,29 CFR 1910.253(b)(2)(ii)|29 CFR 1910.253(b)(4)(iii),,all,
+C01,C,How often does a forklift operator's performance have to be re-evaluated?,29 CFR 1910.178(l)(4)(iii),three years,any,
+C02,C,How far away does a forklift operator have to be for the truck to count as unattended?,29 CFR 1910.178(m)(5)(ii),25 ft,any,
+C03,C,How close can combustible material be to welding before a fire watch is required?,29 CFR 1910.252(a)(2)(iii)(A),35 feet (10.7 m),any,
+C04,C,How far apart do oxygen cylinders and fuel gas cylinders have to be stored?,29 CFR 1910.253(b)(4)(iii),20 feet (6.1 m); or a noncombustible barrier at least 5 feet (1.5 m) high with a half-hour fire resistance rating,any,
+C05,C,How far inside a building must cylinders be kept from highly combustible material?,29 CFR 1910.253(b)(2)(ii),20 feet (6.1 m),any,
+C06,C,How close can an unqualified person get to an overhead line at 50 kV or below?,29 CFR 1910.333(c)(3)(i)(A),10 ft. (305 cm),any,
+C07,C,What distributed load does a crane footwalk have to sustain?,29 CFR 1910.179(d)(2)(i),50 pounds per square foot,any,
+C08,C,How long do we keep a cancelled entry permit?,29 CFR 1910.146(e)(6),1 year,any,
+C09,C,What is the torque on the exhaust manifold mounting nuts for the 15 kW generator set?,TM 9-6115-464-12 p. 28,35 lb-ft,any,
+C10,C,What is the overspeed trip point on the 15 kW generator set engine?,TM 9-6115-464-12 p. 28,120 to 122.5 percent of continuous engine speed (2400 to 2450 rpm),any,
+D01,D,What does fault code E-42 mean on the line 3 PLC?,,,any,no fault codes exist in a public corpus
+D02,D,What is the head bolt torque sequence for a Caterpillar 3512B engine?,,,any,"OEM manual, not in corpus"
+D03,D,How do I clear a servo alarm on our Fanuc R-30iB controller?,,,any,"OEM manual, not in corpus"
+D04,D,What is our plant's overtime policy for maintenance technicians?,,,any,"HR policy, not in corpus"
+D05,D,Which grease does Siemens specify for the SIMOTICS gearbox on the mixer?,,,any,"OEM, not in corpus"
+D06,D,What did the last vibration survey on pump P-104 show?,,,any,"site record, not in corpus"
+D07,D,How much does a replacement light curtain cost from our vendor?,,,any,"commercial, not in corpus"
+D08,D,What is the maximum ambient temperature rating of our specific VFD model?,,,any,"OEM datasheet, not in corpus"
+E01,E,What pressure rating does the air piping on a forging machine need?,29 CFR 1910.218(e)(1)(iv),,any,"ANSI B31.1.0-1967 named, not reproduced"
+E02,E,What are the specifications for steam or air pressure piping on forging equipment?,29 CFR 1910.218(d)(4),,any,ANSI B31.1.0-1967
+E03,E,What design specifications must a new overhead crane meet?,29 CFR 1910.179(b)(2),,any,ANSI B30.2.0-1967
+E04,E,What are the guard design specifications for abrasive wheel machinery?,29 CFR 1910.215(b)(12),,any,ANSI B7.1-1970
+E05,E,How must LP-gas fuel for forklifts be stored and handled?,29 CFR 1910.178(f)(2),,any,NFPA 58-1969
+E06,E,How bright does the lighting have to be to use the illumination exception for power transmission guarding?,29 CFR 1910.219(c)(5)(iii),,any,ANSI A11.1-1965 (R-1970)
+E07,E,What valve connections are required on compressed gas cylinders?,29 CFR 1910.253(b)(1)(iii),,any,ANSI B57.1-1965

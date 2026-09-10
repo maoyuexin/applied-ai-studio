@@ -1,0 +1,6398 @@
+Facilities Instructions, Standards, 
+and Techniques - Volume 2-6 
+
+Maintenance of Auxiliary Mechanical Equipment 
+
+U.S. Department of the Interior 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+   
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+This page intentionally left blank. 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Facilities Instructions, Standards, 
+and Techniques - Volume 2-6 
+
+Maintenance of Auxiliary Mechanical Equipment 
+
+Prepared by: 
+
+Power Resources Office 
+
+Technical Service Center 
+
+Regions 
+
+ U.S. Department of the Interior 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+   
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Mission  Statements  
+
+The U.S. Department of the  Interior protects and manages the  
+Nation’s natural resources and cultural heritage; provides scientific  
+and other information about those resources; honors its trust  
+responsibilities or special commitments to American  Indians,  Alaska 
+Natives, Native Hawaiians, and affiliated  Island Communities.  
+
+The mission of the Bureau of Reclamation is to manage, develop, 
+and protect water  and related resources in an environmentally and 
+economically sound manner  in the interest of the  American public.  
+
+Disclaimer 
+
+This written material consists of general information for internal use only by Bureau of Reclamation 
+operations and maintenance staff. Information contained in this document regarding commercial 
+products or firms may not be used for advertising or promotional purposes and is not to be construed as 
+an endorsement or depreciation of any product or firm by the Bureau of Reclamation. 
+
+ii 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Contents  
+
+Page  
+
+2.0  
+
+Codes and Standards ......................................................................................................................  vi  
+Reclamation Standards and Documents.........................................................................................  vi  
+Reclamation Forms  ........................................................................................................................  vi  
+References ......................................................................................................................................  vi  
+Acronyms and Abbreviations  .......................................................................................................  vii  
+Introduction ..........................................................................................................................1  
+1.0  
+Purpose and Scope  ...................................................................................................1  
+1.1  
+1.2  
+Reclamation Standard Practices ...............................................................................1  
+1.3   Maintenance Tables  .................................................................................................2  
+1.4   Manufacturer Recommendations .............................................................................2  
+1.5  
+FIST Revision Requests ...........................................................................................2  
+Auxiliary Piping Systems  ....................................................................................................3  
+General .....................................................................................................................3  
+2.1  
+Gravity Drainage Systems  .......................................................................................5  
+2.2  
+Unwatering Systems  ................................................................................................6  
+2.3  
+Unit Cooling Water Systems  ...................................................................................8  
+2.4  
+Service-Water Systems  ..........................................................................................13  
+2.5  
+Domestic Water and Sanitary Waste Systems .......................................................14  
+2.6  
+Oil Systems  ............................................................................................................17  
+2.7  
+Compressed Air Systems  .......................................................................................22  
+2.8  
+2.8.1   Service Air Systems ...................................................................................22  
+2.8.2   Brake Air Systems  .....................................................................................23  
+2.8.3   Governor/Discharge Valve Systems ..........................................................24  
+2.8.4   Water Depression Air Systems  ..................................................................24  
+Valves for  Auxiliary Piping Systems .....................................................................25  
+2.9.1   General .......................................................................................................25  
+2.9.2   Gate Valves ................................................................................................26  
+2.9.3   Globe Valves, Angle Valves and Needle Valves.......................................27  
+2.9.4   Butterfly Valves .........................................................................................29  
+2.9.5   Ball and Plug Valves ..................................................................................30  
+2.9.6   Check Valves  .............................................................................................31  
+2.9.7   Pressure-Relief and Safety Valves .............................................................32  
+2.9.8   Pressure-Reducing Valves  .........................................................................33  
+2.9.9   Valve Operators  .........................................................................................34  
+Instrumentation  ......................................................................................................35  
+2.10.1   General .....................................................................................................35  
+2.10.2   Pressure Gauges .......................................................................................35  
+2.10.3   Thermometers  ..........................................................................................35  
+2.10.4   Rate-of-Flow Gauges ...............................................................................36  
+2.10.5   Pressure Switches.....................................................................................36  
+2.10.6   Elapsed-Time Meters ...............................................................................36  
+
+2.10  
+
+2.9  
+
+Revision 1.0 
+
+iii 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+2.10.7   Liquid Level and Sight Flow Gauges  ......................................................36  
+2.11   Maintenance of Auxiliary Piping Systems  ............................................................36  
+Air Compressors ................................................................................................................39  
+General ...................................................................................................................39  
+3.1  
+Reciprocating Air Compressors .............................................................................39  
+3.2  
+Rotary Screw Air Compressors  .............................................................................41  
+3.3  
+Air Compressor Accessories ..................................................................................44  
+3.4  
+Inlet Filters .................................................................................................44  
+3.4.1  
+3.4.2  
+Intercoolers and Aftercoolers .....................................................................44  
+3.4.3   Separators ...................................................................................................44  
+3.4.4   Traps  ..........................................................................................................44  
+3.4.5   Dryers .........................................................................................................45  
+3.4.6   Pressure-Regulating Valves .......................................................................45  
+3.4.7   Receiver Tanks (Pressure Vessels), Gauges and Pressure Relief  Valves ..45  
+3.4.8   Unloader Valves.........................................................................................45  
+3.5   Maintenance  for All Types of Air Compressors ....................................................45  
+3.6   Maintenance  for Reciprocating Compressors ........................................................47  
+3.7   Maintenance for Rotary  Screw Compressors  ........................................................48  
+Heating, Ventilating, and Air-Conditioning (HVAC) Systems .........................................49  
+4.1   Maintenance of HVAC Systems ............................................................................49  
+Engine Generator Sets........................................................................................................51  
+5.1   Maintenance of Engine Generator Sets..................................................................52  
+Auxiliary Pumps ................................................................................................................55  
+Auxiliary Pump Functional Description  ................................................................55  
+6.1  
+6.1.1   General .......................................................................................................55  
+6.1.2   Dynamic Pumps .........................................................................................55  
+6.1.3   Positive Displacement Pumps ....................................................................61  
+Auxiliary Pump Component Description...............................................................63  
+Impellers  ....................................................................................................63  
+6.2.1  
+6.2.2   Antifriction Bearings  .................................................................................63  
+6.2.3   Shaft Seals ..................................................................................................66  
+6.2.4   Shaft Couplings ..........................................................................................68  
+Auxiliary Pump Maintenance  ................................................................................69  
+6.3.1   Operational Inspections  .............................................................................69  
+6.3.2   Maintenance Inspections ............................................................................70  
+Revision History ................................................................................................................75  
+
+6.2  
+
+6.3  
+
+3.0 
+
+4.0  
+
+5.0  
+
+6.0 
+
+7.0 
+
+Figures  
+
+1.—Gate valve  components. .........................................................................................................  26  
+2.—Globe valve components. .......................................................................................................  28  
+3.—Butterfly valve components.  ..................................................................................................  29  
+4.—Ball valve components. ..........................................................................................................  30  
+5.—Plug valve components.  .........................................................................................................  31  
+
+iv 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+6.—Check valve components.  ......................................................................................................  32  
+7.—Pressure relief safety valve components. ...............................................................................  33  
+8.—Pressure reducing valve components. ....................................................................................  34  
+9.—Simple compressed air system. ..............................................................................................  39  
+10.—Two-stage reciprocating compressor.  ..................................................................................  41  
+11.—Cutaway view of  a twin-screw reciprocating compressor.  ..................................................  43  
+12.—Vertical volute pump............................................................................................................  57  
+13.—Two stage vertical turbine pump. .........................................................................................  59  
+14.—Double suction horizontal volute pump. ..............................................................................  60  
+15.—Positive displacement pumps. ..............................................................................................  62  
+
+Photographs  
+
+1.—Plant sump oil skimmer assembly............................................................................................  5  
+2.—Sump pumping unit  discharge  assembly..................................................................................  6  
+3.—Float operated sump-water-level monitoring and indicating systems.  ....................................  8  
+4.—Unit cooling water pump assembly..........................................................................................  9  
+5.—Automatic, self-cleaning, moto-operated strainer and associated piping components. .........  10  
+6.—Manual basket duplex strainer.  ..............................................................................................  11  
+7.—Service-water hydropneumatic tank.  .....................................................................................  14  
+8.—Pneumatic duplex sewage ejectors.........................................................................................  16  
+9.—Sewage pumping units and collection reservoir tank.  ...........................................................  17  
+10.—Portable oil purifier equipment.  ...........................................................................................  18  
+11.—Construction of the oil transfer system piping assembly. ....................................................  20  
+12.—Brake air  receiver tank. ........................................................................................................  23  
+13.—Reciprocating type air compressors. ....................................................................................  40  
+14.—Rotary screw type air compressor. .......................................................................................  42  
+15.—Engine generator set and fuel supply tank.  ..........................................................................  51  
+16.—Flexible Shaft Coupling.  ......................................................................................................  68  
+
+Revision 1.0 
+
+v 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Codes and Standards 
+
+Code of Federal Regulations, 40 CFR Chapter 1 Subchapter D Part 112, Oil Pollution Prevention 
+National Fire Protection Association 
+
+NFPA 110, Standard for Emergency and Standby Power Systems, 2022 
+
+Reclamation Standards and Documents 
+
+FAC 01-04  Review of Operation and Maintenance Program Examination of Associated 
+
+Facilities (Facilities Other Than High- and Significant-Hazard Potential Dams) 
+
+Power Review of Operation and Maintenance (PRO&M) Program 
+Power Facilities Technical Documents 
+Lubrication of Equipment 
+Inspection of Unfired Pressure Vessels 
+
+FAC 01-07  Review/Examination Program for High and Significant Hazard Dams 
+FAC 04-01 
+FAC 04-14 
+FIST 2-4 
+FIST 2-9 
+FIST 4-1A  Maintenance Schedules for Mechanical Equipment 
+FIST 4-1B  Maintenance Schedules for Electrical Equipment 
+FIST 4-5 
+FIST 5-2 
+RCD 03-03  Request for Deviation from a Reclamation Manual Requirement and Approval or 
+
+Corrosion Protection 
+Fire Protection 
+
+RSHS 
+
+Disapproval of the Request 
+Reclamation Safety and Health Standards 
+
+Reclamation Forms 
+
+POM: POM Forms - All Documents 
+POM-226, FIST Revision Request 
+POM-300, FIST Variance Form 
+POM-400, Engine Generator Operation and Testing Log 
+
+References 
+
+T. Wireman, World Class Maintenance Management, Industrial Press Inc., 1990.
+
+vi 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+   
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Acronyms and Abbreviations 
+
+EPSS  
+
+FAC  
+
+FIST  
+
+HDPE  
+
+HVAC  
+
+NFPA  
+
+O&M  
+
+PRO  
+
+psig  
+
+RCD  
+
+Emergency Power Supply System  
+
+ Project Planning and Facility Operations, Maintenance, and Rehabilitation 
+(of the Reclamation Manual)  
+
+facilities  instructions, standards, and techniques  
+
+High Density Polyethylene  
+
+heating, ventilating and air-conditioning  
+
+National Fire Protection  Association  
+
+Operations  and Maintenance  
+
+Power Resources Office  
+
+pounds per square inch g  auge  
+
+Records Management (of the Reclamation Manual)  
+
+Reclamation  
+
+Bureau of Reclamation  
+
+RM D&S  
+
+Reclamation Manual Directive and Standard  
+
+SOP  
+
+SPCC  
+
+TSC  
+
+Symbols  
+
+°C  
+
+%  
+
+standard operating procedure  
+
+spill prevention control and countermeasures  
+
+Technical Services Center  
+
+degree Celsius  
+
+percent  
+
+Revision 1.0 
+
+vii 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+This page intentionally left blank. 
+
+viii 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+1.0  Introduction 
+
+The Bureau of Reclamation (Reclamation) operates and maintains hydroelectric powerplants, 
+switchyards, pumping plants, water delivery equipment and associated facilities in the 17 
+western United States. These facilities house complex electrical and mechanical equipment that 
+must be kept operational because they are critical to the electric power and water delivery 
+systems relied on by many. Facilities Instructions, Standards, and Techniques are technical 
+documents that provide criteria and procedures that should be utilized by the offices involved in 
+managing Reclamation facilities and assets. 
+
+This document establishes standard technical practices to ensure the safe, reliable, economical, 
+and efficient Operations and Maintenance (O&M) of Federal facilities by keeping related assets 
+in good condition and ultimately protecting Federal investments. These technical practices 
+provide a sufficient level of detail to ensure consistent application while providing flexibility for 
+the use of innovative techniques and approaches. This document was developed with input from 
+staff in Reclamation’s Denver, regional, and area offices. 
+
+1.1 
+
+Purpose and Scope 
+
+This document is intended to promote uniformity in the manner that assets are managed, 
+documented, and coordinated, and may be utilized by transferred facilities and other entities as 
+appropriate. It establishes consistent procedures, minimum standards and O&M criteria for 
+hydroelectric equipment and systems owned and operated by Reclamation. Other technical 
+documents may provide additional electrical and mechanical maintenance information for the 
+equipment or systems discussed in this document. 
+
+The O&M requirements are based on industry standards and experience. Maintenance 
+requirements vary based on equipment condition and past performance, and sound engineering 
+practices and maintenance management should be employed for special circumstances. 
+Manufacturer recommendations and instructions should be consulted for additional maintenance 
+that may be required beyond what is stated in this manual. 
+
+This volume includes standards, practices, procedures, and advice on day-to-day operation, 
+maintenance, and testing of mechanical equipment in Reclamation facilities. 
+
+1.2 
+
+Reclamation Standard Practices 
+
+The facilities instructions, standards, and techniques (FIST) manuals are designed to provide 
+guidance for maintenance and testing on equipment in Reclamation’s facilities. There may be 
+multiple ways to accomplish tasks outlined in this document. Facilities may exercise discretion 
+as to how to accomplish certain tasks based on equipment configurations and available resources. 
+
+Revision 1.0 
+
+1 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Reclamation’s regions, Power Resources Office (PRO), and Technical Services Center (TSC) 
+agree that certain practices are required to be consistent across all Reclamation facilities. 
+Mandatory FIST procedures, practices, and schedules that appear in {Red, bold, and bracketed} 
+or [Black, bold, and bracketed] text are considered Reclamation requirements for the O&M of 
+equipment in power facilities. The Reclamation Manual Directive and Standard (RM D&S) FAC 
+04-14, Power Facilities Technical Documents, describes the responsibilities required by text
+designations: {Red, bold, and bracketed}, [Black, bold, and bracketed], and plain text, within
+this technical document.
+Refer to RM D&S FAC 04-14 for more details concerning technical documents.
+
+1.3  Maintenance Tables 
+
+Maintenance tables for tasks described in this document are included in FIST 4-1A, Maintenance 
+Scheduling for Mechanical Equipment, and FIST 4-1B, Maintenance Scheduling for Electrical 
+Equipment. 
+
+1.4  Manufacturer Recommendations 
+
+The information in this document is based on manufacturers’ documentation and historic 
+Reclamation practices. Due to the differences in equipment designs, owner’s manuals and 
+manufacturer’s recommended maintenance should be consulted when developing job plans. Not 
+following the manufacturer’s guidance may void the warranty of new equipment. If there is a 
+discrepancy between the FIST and the manufacturer’s recommendations, the job plan must use 
+the more stringent practice unless there is a reason that a less restrictive maintenance practice is 
+warranted. Use of a less restrictive maintenance practice must be approved as outlined in RM 
+D&S FAC 04-14 by either a deviation or a variance. A deviation maybe granted in accordance 
+with RCD 03-03 and variances are approved in accordance with FAC 04-14 using POM Form 
+300. 
+
+1.5 
+
+FIST Revision Requests 
+
+The FIST Revision Request Form, POM-226, is used to request changes to a FIST document. 
+The request will include a summary of the recommended changes and a basis for the revision or 
+new FIST. These forms will be submitted to the Manager, PRO. The PRO Manager will keep a 
+list of Revision Requests for each FIST and include these in the next scheduled revision unless 
+the change is prioritized sooner. 
+
+2 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+   
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+2.0  Auxiliary Piping Systems 
+
+2.1  General 
+
+Auxiliary piping systems typically refers to the sub-system piping that support the critical 
+function(s) of a larger, more complex system or assembly. It typically conveys water, oil, or air 
+either under atmospheric conditions or under pressure in water delivery and power generation 
+applications. This includes the piping, valves, and instrumentation on gravity drainage and 
+unwatering systems, unit cooling water systems, service-water systems, domestic water and 
+sanitary waste systems, oil systems, compressed air systems. The materials used for these 
+systems include, but are not limited to, cast iron, steel pipes, copper tubing, galvanized piping, 
+high density polyethylene piping, polyvinyl chloride piping, and rubber hoses. The material 
+choice for the piping system is based on what best suits the fluid, the construction of the system, 
+and the environment in which it is installed. 
+
+Note that all pipe that supplies a fire system is considered part of a fire system. See FIST 5-2, 
+Fire Protection, for specific requirements for fire protection systems. 
+
+The design of these systems depends on their intended use. The pertinent factors within the 
+system design include but are not limited to flow rate, operating pressure, fluid type 
+(compressible or non-compressible), fluid friction factors, thermal expansion, and 
+maintainability. This type of information will yield performance requirements for pumps, 
+motors, valves, fittings, piping, etc. It is also valuable in maintenance for when repairs are 
+necessary. Those same parameters determine a baseline of an in-kind part replacement, not 
+including material properties of the component(s). Any upgrades must meet or exceed the system 
+operating parameters and design intent. 
+
+Attention must be paid to the construction materials used within a piping system such that 
+galvanic corrosion is not induced and is instead mitigated. The ease of maintenance in the design 
+phase of a system considers concepts like system isolation, part location, part accessibility, the 
+control of energy with the system, the ability to disable parts of the system without affecting 
+critical systems, the ability to quickly disassemble components, and using commercial-off-the-
+shelf parts with up-to-date construction standards. 
+
+Piping systems require maintenance over time to extend their useful life and ensure reliable 
+function. Be aware of the failure modes that your subject piping system can experience and 
+develop your maintenance program on that along with manufacturer recommendations of 
+components within the piping system. Follow maintenance procedures pertinent to the fluid 
+being transferred and the construction of the piping system. 
+
+Monitor the condition of piping systems to reduce unscheduled outages due to piping failures. 
+The first indication of a large-scale systemic problem may be a leak, or the failure of system 
+component like a valve. Although a leak or valve failure may just be an isolated event, it may be 
+an indication of the condition of the entire system. Determining the internal condition of water 
+
+Revision 1.0 
+
+3 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+piping can be difficult. Partial disassembly of a piping system can provide a good indication of 
+the condition of the entire system. It may also introduce local damage due to degradation of 
+piping connections over time. Nondestructive tests, such as radiographs or ultrasonic tests, can 
+be used to determine the condition of a piping system. Radiographs not only show pipe wall 
+thickness but also the amount of scale buildup inside the pipe. 
+
+The most common water piping failure is a result of corrosion over time. The life of water piping 
+systems depends greatly on the pipe material properties, and the corrosion promoting properties 
+of the water it carries. A best practice is to select system materials with a similar valence-
+electron property within the Galvanic Series of Metals to minimize galvanic corrosion between 
+adjacent parts, see FIST 4-5, Corrosion Protection. For exterior corrosion of piping systems, a 
+protective coatings program may be required to mitigate exterior corrosion as a primary means of 
+system failure. Corrosion and joints and fittings may be problematic. Ensure leaks through joints 
+are quickly repaired or replace the parts that make up the joint to refresh the connection with new 
+uncorroded surfaces. 
+
+Service air systems may also suffer corrosion damage because of internal condensation build-up 
+over time. Scale and rust particles can damage pneumatic tools and cause pneumatic cylinders to 
+stick. If moisture in air piping is a problem, a moisture separator should be installed where best 
+suited. Moisture collection and drainage should be designed for the system. Purging collected 
+water from air piping should be part of a preventative maintenance program for that system. 
+
+Oil piping systems typically require little maintenance other than repair of an occasional leak, 
+routine oil testing, and filtering. Continue to inspect oil systems to assess the system reliability 
+and potential functional performance decrease resulting from a leak or faulty component within 
+the system. Oil pumps still need regular maintenance of bearings, seals, and pumping 
+components. If an oil pump fails, then it is correct to assume particles or shavings of the failed 
+parts will flow throughout the piping system. Oil testing and analysis help detect early onset of 
+these moving component failures. The goal of these tests and inspections is to allow for enough 
+time to address repair or replacement of the failing component(s) in a scheduled effort rather 
+than in an emergency scenario. 
+
+If a piping system fails prematurely because of corrosion, in rare instances it may be acceptable 
+to replace piping with a nonmetallic material. Specific usage of nonmetallic piping needs to be 
+verified with any applicable codes and careful consideration should be taken regarding the 
+temperature, pressure (strength), and durability limitations of the material. The installation 
+instructions for nonmetallic piping should be followed carefully. Nonmetallic piping should not 
+be used in compressed air systems. 
+
+4 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+2.2  Gravity Drainage Systems 
+
+A gravity drainage system drains wastewater open to atmospheric pressure to the facility sump. 
+Drainage water is pumped by the Unwatering System to a location outside of the facility; in a 
+powerplant these locations are either the tailbay or forebay reservoirs. This system typically 
+includes floor drains, equipment drains, and other drains which have intermittent discharge. 
+
+Since the wastewater does not contain sanitary waste or sewage, the gravity drainage system 
+floor drains are not equipped with traps. Only the sanitary waste system plumbing drains must be 
+provided with a trap. The wastewater that is collected by the gravity drainage system collection 
+piping is not pressurized, but instead flows by gravity. Floor drains with hinged or removable 
+grates are typically provided for easy access to the drainage piping during cleanout activities. 
+
+The drainage system near tools, equipment, and oil storage reservoirs may collect oil from 
+accidental leakage, spill or rupture. Before the water in the sump is pumped out of the plant, the 
+oil must be separated from the water to avoid contaminating the tailbay. This is normally 
+accomplished by allowing the oil-water mixture to settle out within the sump over time, followed 
+by removal with an oil skimmer or equivalent piece of equipment (photograph 1). Oil removed 
+from a sump is collected within a reservoir, like a 55-gallon drum, and periodically disposed of 
+using best practices. 
+
+Photograph 1.—Plant sump oil skimmer assembly. 
+
+Revision 1.0 
+
+5 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+   
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+2.3  Unwatering Systems 
+
+The unwatering system (photograph 2) is a pressurized piping system for draining the waterway 
+of a turbine or a pump impeller. Components in the turbine waterway include a spiral case, draft 
+tube, and penstock. Components in a pump waterway include a spiral case, suction tube, and 
+discharge line. The primary means of unwatering is draining by gravity to the powerplant sump 
+and allowing air ventilation within the waterways so that there is never a risk of pipeline failure 
+due to internal vacuum pressure. The powerplant sump is pumped out by dedicated high-capacity 
+sump pumps. Their discharge piping has both embedded and exposed piping, valves, and 
+instrumentation. 
+
+Photograph 2.—Sump pumping unit discharge assembly. 
+
+Sump Pumps — A common configuration of powerplant sump pumps are two high-capacity 
+vertical turbine-type pumps. They are likely automatically operated by a series of floats that 
+identify a minimum water level, a high-water level “pump on”, and a high-water level alarm. The 
+two sump pumps are typically operated over the range of sump levels on a lead/lag basis with an 
+alternator that changes the lead pump every start. The sump water inflows come from the 
+drainage system and the unwatering of the main unit turbine/pump casing, casing extension, 
+draft/suction tube, and penstock/discharge line. The sump water is usually discharged to the 
+tailbay. 
+
+There are a few key design features in the discharge line of the sump evacuation pumps. It 
+should include a check valve, an air vacuum vent valve, and an isolation valve. The check valve 
+should be located downstream of the pump close to pump elevation to prevent water backflow 
+from the tailbay back into the sump. An air vacuum vent valve should be installed upstream of 
+
+6 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+the check valve on the discharge line to prevent water column separation during pump shut 
+down. An isolation valve in the discharge line is necessary for pump replacement and repair of 
+piping on the interior of the powerplant. The location of the valve may be placed right at the wall 
+of the embedded pipe to reduce the amount of exposed pipe in the event of pipe failure. The 
+discharge line exterior to the powerplant is typically located below the low-tailbay level to 
+prevent splashing and to thwart waterfowl and vermin from building nests in the outlet of the 
+discharge pipe. 
+
+Sump Drainage Pump — In addition to the two main sump pumps, a manually operated jet-
+type sump drainage pump is common to completely unwater the sump when required for 
+maintenance activities, such as removing sediment from the floor of the sump. Some facilities 
+have also used scavenging eductors for completely unwatering the sump for maintenance 
+purposes. 
+
+Sump Water-Level Indication — A sump water-level indication system (photograph 3) is used 
+to control pumps, alarm, and trip equipment based on the water level within the sump. This 
+system will operate the two sump pumps in a lead/lag configuration to accommodate different 
+inflow rates to the sump. It is used to annunciate a high-sump water-level alarm and pumping 
+status. It may also be configured as protection to shut off the generators under high-water 
+emergency conditions. 
+The monitoring system usually consists of a float-operated or electronic probe unit water-level 
+assembly located two floors above the sump, adjacent to the sump pump motors. It is common to 
+see the water level-indication devices installed with physical barriers, such as vented pipes or 
+screens, that reduce fouling by sump debris and calm wave action. Mechanical floats may be 
+protected within an enclosure that prevents debris from contacting the float. Inflows and pumps 
+can induce currents and wave action that can give false indication or make pump switches chatter 
+on and off. Measuring calm water keeps the elevation signal stable. A float on a rotary encoder 
+will typically reside within a vented pipe that submerges all the way down to the bottom of the 
+sump. If debris gets inside of the pipe, then it can pin the float in place and give a false sense of 
+lower water level increasing the risk of powerplant lower floor flooding. These sensor guide 
+pipes can be made from metal, plastic, or fiberglass as long as the function and material 
+properties are suited for their intended installation purpose. 
+
+Revision 1.0 
+
+7 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Photograph 3.—Float operated sump-water-level 
+monitoring and indicating systems. 
+
+The sump pumps are not to pump under low submergence conditions. A low water-level 
+indicator and pump control switch will be set at an elevation to prevent damage to the pumps in 
+that scenario. The pump manufacturer will define pump operating parameters. If that information 
+does not exist, then a good rule of thumb is to keep the pump intake fully submerged during 
+operation such that it does not draw in air. 
+
+The elevation level of the sump is reported by the water-level indicating systems through 
+supervisory control and data acquisition (SCADA). An example of this system is a 4 to 20-
+milliamp output electronic water-level pressure sensor installed in the sump and a digital display 
+system panel meter either in a control room or at a control panel. 
+
+2.4  Unit Cooling Water Systems 
+
+Unit cooling water systems (photograph 4) is a pumped raw water system that provides water for 
+cooling the unit stator and unit auxiliaries in a hydro powerplant. The equipment included in a 
+unit cooling water system includes, but is not limited to, stator air cooler heat exchangers, the 
+
+8 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+shaft bearing sump oil coolers, turbine/pump shaft packing or mechanical seals, turbine/pump 
+wearing rings, and air compressors. Thermal control of the equipment ensures long life and 
+reliable operation of the unit and its auxiliaries. 
+
+Photograph 4.—Unit cooling water pump assembly. 
+
+The cooling water flow requirements for these various unit components are determined by the 
+equipment manufacturers to include the unit, the turbine/pump, and their auxiliaries. Seasonal 
+source water temperatures will affect the equipment operating temperatures but will not likely 
+have a negative impact when all else is normal and the equipment is regularly maintained. 
+
+The system design depends on whether the source water comes from the forebay or tailbay. 
+Water from the forebay usually has sufficient pressure and volume for all cooling water needs. 
+Supply water pressure may need to be regulated to a lower operating pressure to match 
+downstream equipment specifications or to reduce the life cycle cost of the downstream systems. 
+Water sourced from the tailbay will require pumps to deliver water to match unit cooling water 
+flow and pressure requirements. Regardless of the source water location, the supply piping is 
+equipped with a strainer and distribution piping. This can be isolated to deliver water in various 
+ways to prioritize generation reliability through shared cooling water intake and piping 
+configuration options. Note that other facility water supply needs, like fire water and service 
+water, may be sourced from the same intake location as the unit cooling water systems. 
+
+The main cooling water-supply strainer should be sized to accommodate the range of flow 
+required by its downstream equipment. The design parameters include, but are not limited to, the 
+range of minimum and maximum flow rates, upstream supply pressure, required downstream 
+supply pressure, range of incoming debris size, and downstream particulate size straining 
+requirement. 
+
+Revision 1.0 
+
+9 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+The main cooling water-supply is typically a manual duplex basket type strainer or an automatic, 
+motor-operated, self-cleaning backwash strainer. The type typically depends on the anticipated 
+frequency of cleaning and whether plant personnel will be available to perform maintenance 
+duties on a regular basis (photographs 5 and 6). Silt or other abrasive material is usually present 
+in varying degrees in reservoir or river water, at least seasonally. Typical main cooling water 
+strainer basket perforation requirements are from 1/32-inch to 1/8-inch. 
+
+Photograph 5.—Automatic, self-cleaning, moto-operated 
+strainer and associated piping components. 
+
+Those unit components requiring water with a finer degree of filtration, such as pressure-
+reducing valves, turbine mechanical seals, packing boxes, or small tube/port heat exchangers 
+may require additional filtration equipment such as a centrifugal separator, bag filter, sand filter 
+or a similar system. Typical mechanical seal filtration requirements are 25 microns. Water 
+lubricated turbine bearings commonly run raw water, but it may be good practice to require finer 
+particulate filtration for extended service life (reduced particulate wear) of the bearing staves and 
+journal. heating, ventilating, and air-conditioning (HVAC) heat exchangers are good examples of 
+this but are not usually counted within a unit cooling water system. An alternate supply of water, 
+such as a potable water system, can also be used for components requiring finer filtration. 
+
+The manufacturer of the unit components can supply the specific filtration requirements to be 
+provided. In lieu of a manufacturer’s filtration recommendation, a qualified engineer must 
+review the system components and determine an acceptable particle size allowed through the 
+most stringent component. Note that filters may be only for specific equipment like a packing 
+box or mechanical seal. Unnecessarily finer mesh strainers, which require frequent cleaning, 
+should be avoided to ensure that proper flow is supplied to the equipment. Multiple strainers 
+configured in a parallel arrangement may also be provided where necessary to maintain 
+continuous flow during maintenance cleaning operations. 
+
+10 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Photograph 6.—Manual basket duplex strainer. 
+
+The cooling capacity of the cooling water system is determined by the equipment it services. The 
+equipment manufacturers will provide operating criteria required for function and reliability of 
+the equipment. The unit air coolers and bearing oil sump coolers are susceptible to changing 
+environmental air and water temperatures. Operational alarms and trip settings must be set from 
+functional testing and system commissioning procedures. However, operating temperatures may 
+change over time, and it is imperative that any operational changes from design parameters are 
+reviewed and approved by qualified personnel. In the case of an off design operational 
+parameter, a qualified engineer should review operating data and whether the new system 
+operating parameters are acceptable to employ for normal operation. Risks of total and 
+subsystem failure must be considered in this analysis. 
+
+Cooling water may also be needed for the unit transformers. These water/oil heat exchangers are 
+typically a double-tubed design. Water pressure in the transformer water/oil heat exchangers is 
+less than the oil pressure to prevent water from entering the transformer oil under minor leakage 
+conditions. Since the unit power transformers are normally located on the exterior of the plant, 
+the cooling water system must be protected where freezing conditions can occur when the 
+transformer is not energized. 
+
+Cooling water piping should have an isolation valve located as far upstream as possible within 
+the powerplant such as at the penstock, spiral case, or tailbay water supply piping. This valve is 
+the first line of defense if the water supply must be isolated. This valve may have high 
+
+Revision 1.0 
+
+11 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+differential pressures across the valve and are sometimes equipped with both a motor operator 
+and manual operator. If the valve is elevated out of the reach of a plant operator, it may be 
+equipped with remote operation such as a push button station and a manual operating device 
+such as a chain. 
+
+Throttling valves are typically provided on the water discharge of each unit air cooler, turbine 
+bearing oil cooler, and turbine packing box to balance the water flow and pressures through their 
+distribution piping. This allows for temperature control among the various heat exchangers and 
+ensures that the cooling water is properly distributed. Valves for control of flow are always 
+provided on the discharge of a cooler to provide the required back pressure to ensure the filling 
+of all water passages. 
+
+Air or vacuum valves are typically included on air cooler inlet piping to support filling and 
+draining operations. The valve should be located at the high point to the piping system. Care 
+should be taken to ensure nuisance discharge from the valve does not drip on sensitive 
+equipment. 
+
+Flow rates within the cooling water system may need to be regulated either because of critical 
+functions or to balance flow distribution. Flowmeters are used to ensure that critical equipment 
+get the necessary volume flow rates they require for optimum performance. Flow switches may 
+be used to alarm or trip a unit based on low flow scenarios that will result in significant damage. 
+Packing box flow switches are typically set up to provide unit protection/unit start permissive 
+(interlock) to ensure that the packing box will not overheat. A failed packing box can result in 
+excess water within the turbine pit and potential flooding. A thermometer is also commonly 
+installed on the discharge of each cooler branch to verify proper operating temperatures. 
+
+A pumped cooling-water supply requires a standby supply so that if a pump is out of service the 
+unit can still be operated. This can be provided by having two pumps per unit, each of which can 
+supply a unit’s cooling water requirement, or one pump per unit consisting of a common 
+discharge header to all units and fed by one main pump plus one or more backup pumps in the 
+system. Other arrangements to provide backup pump capacity may also be acceptable depending 
+upon the particular circumstances. An isolation valve is typically installed on the suction and 
+discharge of the pumping unit for use during maintenance activities, and a check valve or an air-
+operated valve in the discharge piping is used to prevent backflow through the pumping unit 
+when it is not operating. 
+
+All cooling water systems are provided with means for limiting the pressure, such as a pressure-
+relief valve, when there is a possibility of subjecting the heat-exchange coolers to a pressure in 
+excess of the design pressure. Avoid running water pipes over machinery or electrical equipment 
+which would be damaged by condensate or leakage. The piping may be insulated to prevent 
+condensation. 
+
+Some generator air-coolers are equipped with “tell-tale” drains which terminate outside of the air 
+housing for the purpose of checking for air-cooler leakage. These drains can become blocked by 
+debris or insects which would prevent the detection of leakage. 
+
+12 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Since unit-cooling water systems are conducive to the growth of organisms such as zebra or 
+quagga mussels, it should be determined whether a biological control program should be 
+implemented for the unit cooling water system. 
+
+2.5 
+
+Service-Water Systems 
+
+Service-water systems supply water for general usage within the facility through a series of hard 
+piped outlets. Service-water piping includes process and support equipment to move or filter 
+water to meet downstream needs. This typically includes strainers, filters, pumps, 
+hydropneumatic tanks, flow meters, hose outlets, throttling valves, isolation valves, and bypass 
+piping. The construction of this system within the facility should be configured for reasonable 
+maintenance and operational configuration. 
+
+In a hydroelectric powerplant, the service water is usually drawn from the forebay. Since the 
+service water is typically raw, untreated water, it can be supplied from the same raw water that 
+supplies the fire suppression and unit cooling water systems. The raw water supply strainer is 
+either manual cleaning or automatic cleaning filter depending on the facility needs. Duplex 
+basket strainers are common on older systems that are not automated. Automatic, self-cleaning 
+strainers are useful for high debris inflow and reduced personnel-required maintenance. If supply 
+water pressure is too low for the end process or equipment, then it may be necessary to add a 
+booster pump to ensure sufficient pressure and flow are directed to the appropriate equipment. 
+This may require throttling valves to balance the system flows. Service-water hose outlets 
+typically require an outlet pressure of at least 65 pounds per square inch gauge (psig) or enough 
+to supply sufficient flow at the outlet location of highest elevation. 
+
+Service water piping selection depends on the system operating pressures, flow rates, water 
+quality, water salinity, and maintainability. For permanent facilities a material’s ruggedness to 
+exterior impacts and long-term corrosion should be prioritized. Ensure that galvanic corrosion is 
+considered when pairing dissimilar metals and that there is an appropriate use of dielectric 
+coupling and hardware isolation. Corrosion protection of steel pipe is critical for long-term 
+reliable service. Ensure that pipe exteriors are properly coated to reduce corrosion due to 
+humidity or condensation over time. If condensation is common and causes a maintenance issue, 
+then consider applying thermal berries or coatings to reduce pipe sweat (condensation formation) 
+on the pipes. Provisions for freeze protection should be made where required. 
+
+A hydropneumatic tank is used to keep constant pressure in the service water system and allows 
+for reasonable, intermittent pump operation unless the service water demand is significant 
+(photograph 7). The purpose of these tanks in a service water system installation is to reduce the 
+number of pump starts, to passively maintain system pressure, to buffer system pressure spikes, 
+and allow for a minimum pump run time to ensure that, when the pump does start, it runs long 
+enough to reach normal operating conditions (power, temperature, lubricity, etc.).The tank can 
+be of the commercially available pre-charged rubber bladder type or can be fabricated to the 
+capacity specified and pressurized with air from a connection to the compressed air system. 
+
+Revision 1.0 
+
+13 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+   
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Photograph 7.—Service-water hydropneumatic tank. 
+
+The capacity of the tank should be sized so that the pump motor does not start so frequently as to 
+cause overheating from repetitive inrush current scenarios. The limit in the number of starts per 
+hour depends upon the motor horsepower and speed. Some sump pumps or well pumps require 
+flow around the inline motor casing to provide cooling, so a minimum run time per pump is also 
+desired when sizing a hydropneumatic tank for a given pump. Refer to the pump motor 
+manufacturer’s specifications for duty cycle and maximum start cycles per hour. 
+
+Where the source water is contaminated or where local laws require, the supply should be treated 
+per the State Health Department regulations before delivery to any service-water hose outlet or 
+lawn sprinkler system. 
+
+The outlets should be spaced to allow delivery of water to all needed plant locations using 
+available hose lengths. Typically, quick disconnect hose connections are used at the service 
+water outlets. If hose water shows signs of corrosion, then it may be time to perform pipe 
+inspections and system replacement to reestablish non-corrosion conditions within the wetted 
+pipe. 
+
+2.6  Domestic Water and Sanitary Waste Systems 
+
+The domestic water system supplies water for drinking fountains, lavatory basins, janitor’s floor 
+sinks, and toilets independent of any other facility water system. Cooling water for air 
+compressors may also come from the domestic supply because of the cleanliness and low flow 
+requirements. 
+
+14 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Reclamation facilities are often in a remote location where the powerplant domestic water supply 
+cannot be connected to a municipal water source. In those cases, the domestic water has 
+traditionally been taken from an adjacent reservoir or river, passed through a sand-type filter or 
+other suitable filter, and chemically treated within the facility. Many Reclamation plants still use 
+this type of disinfection of the plant potable water supply; however, some facilities use municipal 
+water supplies for domestic water because of their supplier’s regular infrastructure maintenance 
+and stringent industry standard water treatment guidelines. Many plants now use commercially 
+available bottled water for drinking purposes. Domestic water piping is typically of copper tube 
+materials due to its corrosion-resistant properties and ease of installation. Plumbing products 
+used for potable water are held to a different manufacturing standard than industrial piping, so 
+repair or replacement parts when maintaining a potable water system should focus on any 
+specifications unique to potable water use. 
+
+It is important to provide a sufficient number of isolation valves in the plumbing system to 
+provide operational flexibility in system configuration management. These valves enable various 
+areas to be isolated for maintenance purposes without requiring the whole system to be taken out 
+of service. Bypass piping paired with isolation valves may provide benefits to keeping systems 
+online while allowing routine maintenance activities to take place. 
+
+The plant sanitary waste plumbing system typically utilizes hub-and-spigot cast iron soil pipe for 
+the embedded sanitary waste piping, and hub-and-spigot or no-hub cast iron soil pipe for the 
+exposed sanitary waste piping. Where exposed waste and vent piping is not subject to exterior 
+exposure, damage, or excessive temperatures, plastic piping has been used. While the gravity 
+drainage system can use floor drains without traps, all floor drains in the sanitary waste system 
+should use traps to prevent sewer gas from entering the plant. 
+
+Since the multiple floors of power and pumping plants are traditionally located below grade, the 
+sewage collected from the plumbing fixtures must be lifted to ground level for disposal outside 
+the plant. It is therefore helpful that restroom and other plumbing fixtures be located in a central 
+location of the service bay from which the gravity flow sewage piping can be collected and 
+routed to a lower floor in the plant. The sewage drainage piping can either be emptied into 
+sewage ejectors or into a sewage pump collection reservoir tank. 
+
+Sewage ejector equipment is automatically operated by electrodes in the receivers which allow 
+pressurized air from the compressed air system to force sewage accumulated in the receivers 
+from the plant (photograph 8). Pneumatic sewage ejector assemblies typically consist of two 
+duplex receivers that will allow one receiver to discharge its sewage, while the other receiver is 
+receiving sewage flow from the sanitary waste system. The amount of sewage ejector static and 
+friction head discharge lift is limited by the pressure of the plant’s compressed air system. 
+
+Please refer to the Reclamation Safety and Health Standards (RSHS) document for details not 
+covered in this section. 
+
+Revision 1.0 
+
+15 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Photograph 8.—Pneumatic duplex sewage 
+ejectors. 
+
+Non-clog-type sewage pumps are typically used where high lifts are required to remove sewage 
+from the plant (photograph 9). They are also provided in parallel with one primary pump and one 
+pump to serve as a backup in the event of primary pump failure. Each pump should be capable of 
+handling rated system inflow. If it is desired that the pumps be operated an equal amount of time, 
+an alternator can be installed to switch the primary pump every time the pumps are needed to 
+discharge sewage. 
+
+16 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Photograph 9.—Sewage pumping units and collection reservoir 
+tank. 
+
+2.7  Oil Systems 
+
+Reference FIST 2-4, Lubrication of Equipment, for additional information on lubricants not 
+contained within this document. There are two types of bulk oil used within powerplants: turbine 
+oil and transformer oil. These systems are plumbed from an oil processing room to either storage 
+facilities, their equipment for filling and draining, or to the service/erection bay connections for 
+adding more oil to the system or evacuating it from the facility. It is common to have on-site oil 
+filtration so that oil can be filtered and reused on a periodic maintenance cycle. 
+
+Turbine oil is used for generator and turbine guide bearing lubrication and cooling. A common 
+type of turbine oil is International Standards Organization (ISO) 68 for large vertical hydro 
+generators. The turbine oil can also be used for governor equipment oil, although a governor may 
+require different fluid properties and therefore need a different oil type. Using the same type of 
+oil for guide bearings and governors simplifies maintenance and storage practices. Critical 
+properties for an oil include viscosity, additive package, particulate count, and acid number. An 
+effective oil testing program can monitor all these properties. This testing will provide 
+preventative maintenance information regarding failing parts as evidenced by high particulate 
+counts in the oil. 
+
+Transformer oil is used for electrical insulation and cooling. Transformer oil cleanliness and 
+moisture control are essential. Most large transformers are pressurized just above atmospheric 
+pressure with a nitrogen blanket (inert gas pocket). This positive pressure helps ensure that the 
+transformer does not introduce outside air with humidity into the transformer body. The 
+temperature swing of a large transformer when online and offline is large enough to have 
+
+Revision 1.0 
+
+17 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+significant oil and gas expansion and contraction within the transformer body. It is crucial that 
+large transformers are sealed well with respect to retaining their oil and gas for optimum long-
+term operation. 
+
+Each type of oil system often has its own complete system of clean oil storage tanks, dirty oil 
+storage tanks, transfer pumps, oil filtration, and supply and return piping. Turbine oil often has 
+accumulator tanks (hydropneumatic tanks) and oil sumps within auxiliary equipment. Both 
+piping systems should be equipped with valves and piping necessary to transfer oil, purify the 
+oil, and service the equipment unique to the type of oil. This piping system design reduces the 
+likelihood that turbine oil and transformer oil mix, which would result in potentially catastrophic 
+performance issues with unit bearings, unit hydraulic control, or transformer insulating 
+properties. Separate piping systems are not required for disposal of the oil. 
+
+The oil purifier should be designed to handle all types of oil, and the routing valves in the 
+transfer lines should be identified to prevent mixing of the different types of oil (photograph 10). 
+The direction of flow should be clearly marked for each position of the routing valves. In smaller 
+plants, these routing valves may be replaced by valved hose connectors, permitting the oil 
+purifier or oil transfer pump to be connected to either system as desired by changing hose 
+connections. 
+
+Photograph 10.—Portable oil purifier equipment. 
+
+All oil handling and storage devices should be covered under the facility’s Spill Prevention 
+Control and Countermeasures (SPCC) plan. Inspections should verify that all necessary 
+equipment, containment features, and clean-up required by the SPCC plan are available and in 
+good operational condition. 
+
+18 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+There may be an advantage to servicing and replacing transformer oil at powerplants via 
+contractor. A main driver for this is the past storage and regulation of polychlorinated biphenyls 
+(PCBs) within transformer oil and the low frequency of their bulk replacement. If the facility 
+authorities prefer this method of transformer oil maintenance, then they must change the facility 
+business practices. The unused transformer oil storage devices and the associated transfer oil 
+piping and filtering equipment can be removed from the plant. 
+
+The oil storage room is typically located on a lower floor of the powerplant so that the oil-return 
+piping in the plant can flow by gravity to the oil storage tanks. The floor of the oil storage room 
+should be outfitted with the ability to contain the stored oil within the room in the event of a tank 
+rupture and loss of stored oil; this may be in the form of a recessed floor. If there is no way to 
+contain the oil, a curb should be built in front of all oil storage components to contain the volume 
+of all oil stored in the room, including the volume of oil in the associated piping. There should be 
+ample space in the room for all equipment, including the oil purifier, oil filter, transfer pumps, 
+storage tanks and piping system. 
+
+A fire-suppression system is typically provided for the oil storage room. There are several types 
+available such as automatic (fusible link) sprinkler systems, deluge sprinkler systems, fire 
+suppressant foam, clean agent, and water mist system. The oil storage room should be outfitted 
+with an automatically closing fire-rated door(s) for all openings to the room. Chilling drains may 
+be necessary for all drainage locations within the oil room to reduce the risk of burning oil 
+draining to the sump. 
+
+Oil Storage Tanks — Each filtered and unfiltered transformer oil storage tank should hold a 
+minimum of 110 percent of the oil capacity of the largest plant transformer. The filtered and 
+unfiltered lubricating oil storage tanks should be designed to hold a minimum of 110 percent of 
+the oil capacity of the governor oil system and all bearings of the largest unit. Circuit-breaker oil 
+storage tanks, if required, should hold sufficient oil to fill the largest breaker. Each tank should 
+have an overflow pipe the same size as the incoming pipe. The overflow pipe for a filtered tank 
+should discharge into the corresponding unfiltered tank. In the event of an overflow or spill into 
+the facility sump, every reasonable effort should be made to provide adequate containment. 40 
+CFR Part 112.7 lists the requirements for SPCC Plans. 
+
+Transfer Pumps — The oil-transfer pumps are normally of the positive displacement rotary 
+gear type and are provided with a safety relief valve (photograph 11). Normally, an oil-transfer 
+pump is configured to pump to an open atmosphere container like a storage tank or bearing 
+sump. These pumps should be rated for a continuous duty cycle for use during long duration 
+filtration or large transfer volumes. These systems are typically manned so that they do not run 
+without pumping oil. 
+
+Revision 1.0 
+
+19 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Photograph 11.—Construction of the oil transfer system piping assembly. 
+
+Waste Oil Pumps — A pump is provided to pump waste oil from the oil storage tanks to the 
+plant deck waste valve for removal by a tank truck. These may sometimes be the same as the oil 
+transfer pumps used when servicing equipment or filtering oil. 
+
+Oil-Return Pump — An oil-return pump may be required to pump oil from the turbine bearing 
+or governor sump to the gravity-flow oil-return piping if these components are lower than the 
+gravity-flow oil-return piping. The location of this pump is normally in the turbine pit. 
+
+Hoses — Portable flexible hoses are often used in the oil storage and purifying room to connect 
+various pieces of equipment and storage tanks; however, a permanently installed fixed piping 
+system without hoses provides for cleaner operation and reduces the chance of the oil piping 
+becoming contaminated. If contamination is a concern, then consider purging pipes and or hoses 
+with a slug of oil intended to be transferred to reduce the potential amount of volumetric mixing 
+of different oils. Oil compatibility tests can be performed to determine the expectations of two 
+oils mixing in varying volumetric percentages. 
+
+Oil-Return Piping — The oil-return piping is used to drain oil from the transformers, unit guide 
+bearings, and governor sump to their specific unfiltered storage tanks. The oil-return piping from 
+the unit bearings also carries the overflow from the bearing reservoir(s) in the event that 
+reservoir is overfilled. The oil-return piping typically operates by gravity and terminates at the 
+unfiltered oil storage tank. For anything lower in elevation that doesn’t allow for gravity feed, an 
+oil-return pump must be used. As an aid in maintenance and cleaning, all piping should be 
+drainable to a storage tank, reservoir, or a sump. All pipeline bypasses required to facilitate such 
+drainage should be provided. 
+
+20 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Filter — The purpose of a filter is to remove suspended contaminants in an oil system to ensure 
+that all equipment oil quality needs and specifications are met. Filters can keep oil clean from 
+gradual particulate accumulation over time, or they can be the first line of defense if there is 
+device failure resulting in in-flow debris from damaged parts finding their way to more critical, 
+harder to replace equipment. The location of a filter must ensure that it is protecting critical 
+equipment, that it does not put an undue burden on the performance of the system, and that it is 
+maintainable. 
+
+The design and selection of a filter should include the following parameters: flow capacity, 
+pressure drop for a given flow, particulate filtration rate, and maintainability. A filter’s flow 
+capacity should be equal to that of the lubricating oil-transfer pump for the necessary filtration 
+rate. The filter should not present an unacceptable pressure drop when clean and it should not 
+plug with debris faster than can be maintained or replaced. The particulate filtration rate depends 
+on the equipment that it protects. The type and configuration of the filter should best fit the 
+facility maintenance program. The filter should have replaceable, disposable cartridge-type 
+elements with a filtration (micron) size recommended by the unit manufacturer. 
+
+Valves — The use of each valve of the oil handling system should be readily apparent upon 
+inspection. The primary purpose of valves is for piping configuration management and energy 
+isolation. Different styles of valves are used for different functions within configuration 
+management. A properly specified valve accounts for galvanic corrosion of dissimilar metals, the 
+connection type to the adjacent pipes, the normal working pressure, it is intended use (throttling, 
+isolation, manual control, automatic control, etc.), and the maintenance it requires over time. 
+
+A flushing connection should be provided at the end of each supply line and connected through a 
+bypass to the oil-return line. A globe valve should be provided in the flushing connection and 
+should only be opened when flushing the lines. At all other times it must remain closed. A check 
+valve should be provided in the bypass piping connection to prevent dirty oil from entering the 
+clean oil supply piping. 
+
+Oil Sampling — Sampling valves may be installed at all locations where oil quality checks are 
+required. Oil sampling procedures are critical to ensure that the proper oil quality sampled is 
+representative of what is going through the equipment. For example, a unit bearing oil sump 
+circulates oil. The appropriate type of oil in the system to sample is the circulating oil that makes 
+its way to the journal interface with the bearing shoes. The oil sample location must pull from 
+that circulating location and not the bottom of the oil sump or drain because it may have more 
+sediment and not reflect the true health of the oil system. The placement of oil sampling inlets 
+should be within the circulating flow and should not interfere with equipment function. It is not 
+always practical to have optimum sampling locations, so if a drain is used to sample oil then 
+ensure that the oil system is at normal operating conditions (temperature, flow rates, etc.) and be 
+sure to purge the sample piping/tubing of stagnant oil that may not be representative of the 
+desired oil sample. The typical locations include the lower points of tanks, reservoirs, ends of 
+supply lines, supply and return lines of the purifier, and low points of the transformers. 
+
+Revision 1.0 
+
+21 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Governor Sump Fill Line  —  The governor sump oil filling line should discharge into the  
+strainer basket of the governor sump and should be controlled by a valve within the cabinet. 
+Small governor systems may be filled by other means such as directly from an oil storage  
+container.  
+
+2.8  
+
+Compressed Air Systems  
+
+The compressed air systems in a powerplant can be broken down into the following types of  
+systems:  
+
+•  Service air systems 
+
+•  Brake air systems 
+
+•  Governor  air systems 
+
+•  Water Depression (Condense Mode)  air systems 
+
+A powerplant requires  a  constant supply of compressed air. Air is needed for facility 
+maintenance, unit braking, equipment control, pressurization of the governor or discharge valve  
+operating system, draft tube water level depressing (a.k.a. Condense Mode  Operations), turbine  
+rough zone mitigation, and other plant functions. The air for each of the systems is typically 
+stored in separate compressed air storage tanks when there  are different working pressures  
+required, different volume flow rates required, or  when operating critical components.  
+
+Powerplant compressors are machines designed for compressing air  from an initial intake  
+pressure to a higher discharge pressure. Single-stage compressors  are those in which 
+compression from initial to final pressure is complete in a single step or stage. Two-stage  
+compressors are those in which compression from initial to final pressure is completed in two or  
+more distinct steps or stages. Air compressors are  discussed in detail in later in this document.  
+
+2.8.1  
+
+Service Air Systems  
+
+The service air system typically operates  at a nominal 100-psig a  nd provides air for maintenance  
+and control systems. Maintenance  activities include utilizing pneumatic tools within the facility  
+as needed. It is also used for system control of a variety of plant equipment and devices such as  
+control air for valving operations, sewage ejectors, pressurization of  a hydropneumatic tank, and 
+supply air for an ice-bubbler system.  
+
+The compressor capacity can vary by plant size and the air-supply functions required. Typically, 
+two air-cooled compressors with automatic start/stop and manual control features maintain the  
+service air receiver at normal pressure. The two compressors are typically furnished with lead/lag 
+control and with the ability to alternate the lead compressor by the use of pressure switches  
+located on the air  receiver tanks.  
+
+22 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Typically, service air is distributed throughout the entire plant so that personnel working on all 
+floors have access to it. Service air connections with quick-disconnect hose connections and 50 
+feet of hose are usually located next to each fire-hose reel for use by plant maintenance 
+personnel. 
+
+These service air systems may accumulate condensation over time, so purging pipes maybe 
+required prior to use through tools or equipment, and on a periodic basis. 
+
+2.8.2  Brake Air Systems 
+
+The unit brakes are supplied by an independent compressed-air distribution system complete 
+with receiver (photograph 12). The air-brake receiver is supplied with compressed air from the 
+service air system through a check valve to ensure that adequate pressure and quantity of air for 
+braking is maintained regardless of the variation of pressure in the service air system. The 
+receiver is sized to have sufficient volume to supply the air required for one complete stop of one 
+generating unit in a plant of four units or less and proportioned to the same ratio in larger plants. 
+
+Photograph 12.—Brake air receiver tank. 
+
+Revision 1.0 
+
+23 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+2.8.3  Governor/Discharge Valve Systems 
+
+A Governor/Discharge Valve operates on higher pressures than typical service air pressures. A 
+smaller air-cooled compressor with a capacity between 350 to 1000 psig, depending on the 
+facility needs, is used for this service. It is expected that the air-over-oil pressure tank (a.k.a. 
+hydropneumatic tank and accumulator tank) will have to be recharged with compressed air 
+occasionally to maintain the necessary stored energy air cushion. Air can be lost through 
+pressure leaks within their system connections, but some may be lost as dissolved air within the 
+oil during operation. 
+
+An appropriately sized air compressor should have the ability to sufficiently charge the oil 
+pressure tank in a reasonable time for its intended operations and maintenance. Some tanks use a 
+combination of air pressure and pumped oil to achieve final tank pressure. Filling a governor 
+accumulator tank, for example, may be a combination of filling the tank with compressed air and 
+pumping oil to reach the normal operating pressure. The end goal is to have the accumulator tank 
+oil level within the normal operating range. Some systems utilize pre-charged sealed nitrogen 
+containers in lieu of a compressed air system for operating a governor or discharge valve 
+operating system. With either an air or nitrogen system, there should be enough energy in the 
+system to fully stroke the governor wicket gates or the discharge valve open or close 2½ times. 
+
+2.8.4  Water Depression Air Systems 
+
+Where the tailbay elevation is normally above the elevation of the turbine runner, compressed air 
+is also used for depressing (pushing down) water in the draft tube for generator synchronous 
+condense (motoring) operation. This reduces the drag friction on the turbine runner while it is 
+motoring so that it does not need to consume as much power to maintain speed. Two methods for 
+controlling the elevation of draft tube water elevation during condense mode is generator power 
+output data or directly monitoring the draft tube elevation via floats or pressure sensors. 
+Although there are many ways to design a control system to establish a bubble in the draft tube 
+for condense mode operations, designs should primarily consider the reliability of the feedback 
+and the failure modes of the total air admission system (e.g., air compressor duty cycle, heat 
+dissipation of a rapidly compressed gas, float system control signal chatter, vibration of the 
+turbine runner, energy consumption with and without water contacting the turbine runner, etc.). 
+
+There are several methods for initiating a bubble below the turbine runner for condense mode 
+operations. Typically, separate large-capacity air compressors and receivers are used to provide a 
+large volume of air to depress the water level in the draft tube quickly. The tailbay pressure is the 
+backpressure that this air system must oppose. Therefore, the amount of air is a function of the 
+supplied pressure expanding to tailbay pressure and displacing a known volume of water. Air 
+will leak out of the draft tube through the tailbay over time due to wave action in the draft tube 
+capturing bubbles. 
+
+24 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+These air compressors are typically water-cooled rotary screw compressors and have a nominal 
+pressure of 100 psig with capacities from 250 to 500 cubic feet per minute depending on the 
+volume of the turbine. The receivers are typically interconnected to the service air system so that 
+minor leakage from the system will be replenished with the smaller service air compressors. This 
+avoids starting the large-capacity water depressing compressors for a short amount of time in 
+order to bring the system back up to the required pressure. 
+
+Some facilities also use high-volume, low-pressure blowers to supplement their compressor 
+systems. An example of high-volume, low-pressure blower use is to mitigate turbine runner and 
+draft tube rough zones. When distributed to the right location, the compressible gas in the draft 
+tube will reduce or eliminate the creation of water vapor bubbles at vacuum and is observed to 
+significantly reduce turbine vibration and draft tube pressure pulsations during a rough zone. A 
+“rough zone” is considered to be a range of generator operation that is of concern and requires 
+additional operational knowledge as to whether damage is occurring to components within the 
+system, or that the likelihood of unit failure is increased and is unacceptable. 
+
+During depressing operations, the system receivers will be drawn down to a very low pressure, 
+and sufficient compressor capacity should be provided to recover normal pressure in a 
+reasonable amount of time. The compressors should normally be under automatic start-and-stop 
+control, starting when the pressure drops below a prescribed minimum, and stopping when the 
+maximum pressure in the water-level depressing system is obtained. The amount of air delivered 
+to depress the water level within a draft tube is tuned during system commissioning. The opening 
+time of an automated valve that admits depression system air will be regulated and adjusted to 
+ensure that: (1) enough air is admitted to get water off of the turbine runner, (2) too much air is 
+not admitted and sent out to the tailbay, and (3) the time between depression air bursts is 
+sufficient for the duty cycle of the air compressor and recharging its pressure tank. Once a 
+bubble is established, the high-volume low-pressure blowers may be used to extend the time 
+between high-pressure bursts. 
+
+2.9  Valves for Auxiliary Piping Systems 
+
+2.9.1  General 
+
+The suitability of a valve for a particular service is decided by its materials of construction in 
+relation to the conveyed fluid or gas as well as its mechanical design. The valves described 
+below are available in a variety of corrosion-resistant materials depending on the particular fluid 
+or gas and pressure rating required. The interior of these valves can also be furnished coated or 
+with a lining material to resist deterioration. The size of these valves is determined by the size of 
+the end connections which connect to the piping system or equipment. 
+
+Revision 1.0 
+
+25 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+2.9.2  Gate Valves 
+
+The main purpose of gate valves is to start and stop flow. In operation, these valves are primarily 
+either fully open or completely closed. When fully open, the fluid or gas flows through the valve 
+with very little resistance and, as a result, there is very little pressure or friction loss through the 
+valve. 
+
+Gate valves should not be used in the regulation or throttling of flow for a number of reasons. 
+High flow velocities in partially opened gate valves may cause cavitation and erosion damage to 
+the valve leaf disk and seating surfaces. There may also be material deformation due to vibration 
+and chattering of the disc. 
+
+Gate valves consist of three major components, as shown in figure 1. These are the body, the 
+bonnet, and the trim of the valve. The body of the valve is usually connected to the piping system 
+by means of flanged, threaded, or welded connections. The bonnet consists of the moving, 
+operating parts of the valve, and it is connected to the body usually with bolts to permit 
+disassembly for cleaning and maintenance. The valve trim includes such components as the 
+stem, the gate leaf wedge or disk, and the seat rings. 
+
+Figure 1.—Gate valve components. 
+
+26 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+There are two basic types of gate valves: 
+
+• The wedge type, in which a tapered wedge is forced on both sides against the valve seats
+
+when the valve is closed.
+
+• The double disk type, in which the disks are forced against a set of parallel valve seats by
+
+a wedging mechanism as the stem is tightened.
+
+Gate valves can be furnished with a rising or non-rising stem. In a rising stem valve, the 
+operating stem threads are not in direct contact with the fluid or gas, and the stem rises through 
+the handwheel. The operating stem threads are in contact with the fluid or gas in a non-rising 
+stem valve. With non-rising stem valves, the handwheel and stem are in the same position 
+whether the valve is open or closed. These valves are convenient where space is limited. 
+
+Rising stem valves should be used wherever possible, since plant personnel can tell whether the 
+valve is open or closed just by looking at the position of the valve stem. Larger rising stem type 
+gate valves are furnished in an outside screw and yoke configuration. 
+
+2.9.3  Globe Valves, Angle Valves and Needle Valves 
+
+Globe valves are primarily used in applications where throttling for the control of flow is 
+required and where tight shutoff is necessary. Due to the internal configuration of the valve, 
+pressure or friction loss of flow is higher through a globe valve than through a gate valve. 
+
+Globe valve components are shown in figure 2. The disks and seats are generally easily 
+replaceable. Due to the opening and closing action of the valve, the shorter disk travel offers a 
+time advantage for open and closing. 
+
+Revision 1.0 
+
+27 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Figure 2.—Globe valve components. 
+
+The principal variations in globe valves are the different types of disks employed. Plug-type 
+disks have a long-tapered shape that provides maximum resistance to the erosive action of the 
+fluid stream. Composition disks have a flat face that is pressed against the valve seat like a cap. 
+Foreign material that might score or prevent tight closure of metal-to-metal seated valves does 
+not normally affect the tight closure of composition disks. A variety of different materials are 
+available for composition disks to serve a wide range of applications. Valves can be changed 
+from one application to another by simply changing out the material of the composition disk. 
+
+Globe valves usually have a rising stem configuration and the larger sizes, just like gate valves, 
+have an outside screw and yoke configuration. 
+
+A variation of the globe valve is the angle valve. The components and configuration of an angle 
+valve are the same as those of a globe valve except that the inlet and outlet are at 90 degrees to 
+each other. 
+
+A needle valve is similar in configuration to a globe valve except that the end of the stem is 
+needle-pointed. These are traditionally small valves that are used for instrument and gauge 
+applications. Very accurate throttling can be achieved with needle valves, and they are 
+extensively used in applications involving high pressures and temperatures. 
+
+28 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+2.9.4  Butterfly Valves 
+
+Butterfly valves are primary designed for the starting and stopping of flow. Even though they are 
+not primarily designed for the throttling of flow, they have been used for this purpose. Since the 
+valve leaf is in the fluid stream, they often have to be held in their operating position, since the 
+configuration of the leaf tends to open or close the valve when fluid passes over it. 
+
+The major components of a butterfly valve are the body and the disk leaf, as shown in figure 3. 
+These shutoff valves are capable of being bubble-tight and can be furnished with resilient or 
+metal seats, depending on the application for which the valve is used. Body and disk leaf 
+materials can be fabricated from a variety of corrosion-resistant materials. Even though the leaf 
+is in the flow stream, they are considered low-head-loss valves since they have a low differential 
+pressure loss. Butterfly valves can be operated quickly, as they require only a quarter turn to 
+open or close. 
+
+Figure 3.—Butterfly valve components. 
+
+Butterfly valves can be installed in piping systems by flange-end connections and also in a 
+wafer-type configuration between two flanges. 
+
+Revision 1.0 
+
+29 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+2.9.5  Ball and Plug Valves 
+
+Ball and plug valves are primary designed for the starting and stopping of flow. In operation, 
+these valves are primarily either fully open or completely closed. They are not designed for the 
+regulation of flow, although they have been used in some applications for gas flow throttling. 
+When these valves are fully open, the fluid or gas flows through them with very little resistance 
+and, as a result, there is very little pressure or friction loss. Since these valves operate from fully 
+open to fully closed with only a quarter of a turn, they are capable of quick operation. These 
+valves are easy to repair and usually do not need to be removed from the pipeline; hence, 
+maintenance costs are low. 
+
+Ball Valves. — The major components of a ball valve are the body, the spherical ball plug, and 
+the seats (figure 4). They are made in three general configurations: full port, reduced port, and 
+venturi port. The full port valve has an inside diameter equal to the inside diameter of the pipe. 
+The reduced port usually is one pipe size smaller than the line size. The venturi port has a 
+constricted port with higher velocities and subsequent higher pressure losses through the valve. 
+
+Figure 4.—Ball valve components. 
+
+Plug Valves. — The major components of a plug valve are the body and the tapered plug (figure 
+5). Maximum flow efficiency is obtained when the opened tapered plug faces in the direction of 
+flow. Plug valves provide bubble-tight closure when the plug is rotated a quarter turn from fully 
+open. The hole or port in the tapered plug is generally rectangular, but these type valves are also 
+available with a round port design. Major plug valve patterns or types are identified as regular, 
+venturi, short, round port, and multi-port. Plug valves can be furnished with or without 
+lubrication. The lubricant seal type valves are less subject to seizing or wear and may exhibit 
+somewhat greater resistance to corrosion in some service environments. 
+
+30 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Figure 5.—Plug valve components. 
+
+2.9.6  Check Valves 
+
+Check valves (figure 6) are used to prevent backflow in piping systems, and are designed in 
+various configurations, including swing checks, lift checks, ball checks, piston checks, and 
+poppet check valves. The force of gravity plays an obvious part in the functioning of a check 
+valve, and the position of the valve must always be given consideration. Swing checks are the 
+most commonly used type, and they must be located in the piping system so that the flapper will 
+always close freely and positively by gravity. Caution must be exercised when using swing-type 
+check valves in systems where frequent and rapid flow reversals can take place. If the flapper is 
+allowed to slam shut, the valve or pipeline could be damaged or fail due to hydraulic transients in 
+the piping system. This condition can often be avoided by using a swing check valve with an 
+outside weight and lever or damper. 
+
+Revision 1.0 
+
+31 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Figure 6.—Check valve components. 
+
+2.9.7  Pressure-Relief and Safety Valves 
+
+Pressure-relief valves are primarily used in liquid service applications, and pressure safety valves 
+are used in gaseous service operations (figure 7). Both types of these valves prevent excessive 
+pressures in piping systems and equipment, which subsequently protects the piping system from 
+failure. When using these types of valves, it is important to use materials in the valves that will 
+not be corroded by the liquid or gas; install the valves so they are not subject to back pressure; 
+install the valves so they do not have to discharge to remote locations, which could increase the 
+backpressure; or allow someone to bypass the valve so that it is isolated. Also, if using these 
+valves in a series configuration, ensure proper engineering is performed to avoid a potential 
+surging effect. 
+
+32 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Figure 7.—Pressure relief safety 
+valve components. 
+
+2.9.8  Pressure-Reducing Valves 
+
+Pressure-reducing valves are primarily used to maintain a constant and reduced pressure in a 
+piping system that is supplied from a higher pressure source (figure 8). There are generally two 
+types of pressure-reducing valves: (1) the simple rubber diaphragm type, in which the valve 
+opening is controlled by the pressure on the diaphragm from the reduced side of the valve, or (2) 
+the more complicated pilot-operated type, which involves a pilot valve that is controlled by the 
+reduced-pressure side and, in turn, controls the main valve opening. 
+
+Revision 1.0 
+
+33 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Figure 8.—Pressure reducing valve 
+components. 
+
+Pressure-reducing valves tend to wear at the disk and seat because of continual throttling action. 
+This wear is made worse in many installations, because of a tendency to select a valve which is 
+too large for the intended application. When sizing a pressure-reducing valve, the valve 
+manufacturer should be given the operating pressure and temperature conditions, along with the 
+flow rate required, so that the correct size valve can be selected for a particular application. 
+
+2.9.9  Valve Operators 
+
+The operators to control the position of valving are available in many different configurations 
+and types. Quarter-turn and multi-turn operators are available to mount on the valve body or 
+remotely by use of a floor stand with a connecting shaft. Operators can be configured to be in-
+line with the valve body or at a 90-degree angle by utilizing gearing in the operator housing. 
+
+Manual operators can be configured as quarter-turn hand levers for butterfly, ball, and plug 
+valves or as hand wheels for gate and globe valves. Gear operators should be considered to 
+reduce the operating torque for easy operation even under high differential pressure conditions. 
+When the manual valve operator is at an elevation which cannot be reached from the floor, a 
+chain operator extending from the valve to the floor is often used for convenience of operating 
+personnel. 
+
+34 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Electric, pneumatic, or hydraulically powered operators are available for most types of valves. 
+Powered valve actuators are frequently used when a valve is remotely located from the main 
+working area, when the required frequency of operation of the valve would require unreasonable 
+time and effort, or when the rapid opening and/or closing of a valve is required. 
+
+2.10 
+
+Instrumentation 
+
+2.10.1  General 
+
+Instrumentation can be used to control, protect, indicate, and monitor the condition of auxiliary 
+mechanical systems. When installing piping systems and equipment, the designer should 
+determine what types of instrumentation should be provided to properly operate and monitor the 
+performance and condition of the system equipment and devices. Instrumentation can provide 
+operation and maintenance personnel valuable information concerning actual operating 
+conditions and will assist in the troubleshooting and diagnosis of problems that occur. The 
+following instrumentation is useful in monitoring and indicating the operating conditions of plant 
+auxiliary mechanical systems. 
+
+2.10.2  Pressure Gauges 
+
+Pressure gauges are useful in determining the pressure at a particular point in a piping system. 
+Pressure gauges can be of the single pressure, differential pressure, or duplex pressure type. They 
+can be obtained in various accuracies in conformance to standard ASME B40.100 “Pressure 
+Gauges and Gauge Attachments”. A 2½-percent Grade A accuracy is typically used in power and 
+pumping plants. Pressure gauges are commonly used on the suction and discharge sides of 
+pumping units; upstream and downstream of pressure-reducing valves; at the inlet in a raw, 
+domestic, fire-suppression, or cooling water supply system; on hydropneumatic tanks, oil tanks 
+and air receivers; on the discharge of air compressors; on the sewage ejector air inlet; and on the 
+inlet and outlet of filters and strainers to indicate the differential pressure drop. Pressure gauges 
+with a minimum 4½-inch dial face are normally used so that they can be easily read by plant 
+personnel. 
+
+2.10.3  Thermometers 
+
+Thermometers should be provided wherever it would be beneficial to know the operating 
+temperature of a particular piece of equipment or fluid. Typical uses are to indicate the 
+temperature of the supply and discharge of cooling water and oil from generators, motors, 
+turbines, pumps, heat exchangers, bearings, and mechanical seals. To avoid any possible 
+contamination from mercury, thermometers containing a nontoxic, environmentally friendly 
+fluid should be used. 
+
+Revision 1.0 
+
+35 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+2.10.4  Rate-of-Flow Gauges 
+
+Rate-of-flow gauges are often used to determine the actual flow rate of cooling water and oil 
+from generators, motors, turbines, pumps, heat exchangers, bearings, and mechanical seals. In 
+order to balance the flow of cooling water through the various water-cooled bearings and heat 
+exchangers of plant equipment, plant personnel use the information obtained from rate-of-flow 
+gauges to adjust the flow of fluid by throttling the discharge valves from this equipment. 
+
+2.10.5  Pressure Switches 
+
+Pressure switches are commonly used to control the on/off operation of various pumping units, 
+compressor units, and other plant equipment. Pressure switches are also used as a starting 
+interlock or safety device in systems where it must be known if the water or oil in a system has 
+reached the required operating pressure. If, in addition to the required pressure being obtained, 
+the actual flow of fluid through a piping system must be confirmed, a flow switch will also be 
+needed. 
+
+2.10.6  Elapsed-Time Meters 
+
+Elapsed-time meters are typically installed on all operating equipment, such as pumping units 
+and compressors, to measure the elapsed time the equipment has operated so that periodic 
+maintenance can be scheduled and conducted. 
+
+2.10.7  Liquid Level and Sight Flow Gauges 
+
+Liquid level and sight flow gauges are used to determine the liquid level in tanks, reservoirs, and 
+sumps to indicate when fluid must be added for proper operation of the applicable mechanical 
+system. 
+
+2.11   Maintenance of  Auxiliary Piping Systems 
+
+Auxiliary piping systems include:   
+
+•   gravity drainage and unwatering systems;   
+
+•   cooling water systems;  
+
+•  
+
+service-water systems,   
+
+•   domestic water  and sanitary waste systems,   
+
+•   oil systems; and   
+
+•   compressed air systems.  
+
+36 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Inspect the auxiliary piping systems, including the condition of the piping, fittings, valves, and 
+strainers.  
+
+The following steps shall be performed to inspect  auxiliary piping systems:  
+
+1)  Inspect pipes for signs of corrosion leaks, cuts, gouges, and other damage. 
+
+a)  Visually inspect all threaded, welded, and flanged fittings, checking for any leaks or 
+corrosion. Replace or tighten fittings or pipe as required. Check pipe hangers and
+supports to make sure they are carrying their share of the load and that anchors are 
+tight. Examine paint for cracking, chalking, or other deterioration. Remove corrosion
+by wire brushing, sandblasting, or other acceptable method and repaint. 
+
+b)  If there is  evidence of significant wall loss or severe damage, visually inspect or 
+
+perform nondestructive testing on interior surfaces of piping. If disassembling pipes 
+for inspection with the intent to reinstall the old components, use caution and have 
+replacement parts on hand prior to system disassembly. 
+
+2)  Visually inspect piping system components such as valves. Inspect valves  for external 
+
+leaks. Repair as  required.  
+
+a)  Exercise  all auxiliary piping system valves by operating through their full range of 
+motion several times. The operation of valves prevents seizing components.  
+
+b)  With the valve closed and under pressure, check for seat leakage by listening or by
+
+using pressure gauges. 
+
+c)  Check valve stem packing for leaks and tighten packing gland as required. Operate 
+valve through its full range of movement several times. Lubricate the valve stems,
+plug valve seats, and other components as  required with appropriate lubricant. 
+
+d)  Disassemble valve and inspect condition of valve  body, stem, and sealing surfaces 
+and repair as required. Completely remove old valve stem packing and install new 
+packing. 
+
+3)  Inspect pressure-regulating and pressure-reducing valves for operation and setting.
+
+Disassemble and remove any scale build-up that interferes with operation as required. 
+
+4)  Clean strainers as necessary to clear plugging or fouling. Corrosion should be corrected
+
+by repairing or  replacing strainers.  
+
+5)  Remove and calibrate each pressure gauge on auxiliary piping systems and pressure 
+
+vessel 
+
+Revision 1.0 
+
+37 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+This page intentionally left blank. 
+
+38 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+3.0  Air Compressors 
+
+3.1  General 
+
+Air compressors are a common piece of equipment found in most power generation plants, 
+pumping plants, and maintenance shops. Many different types of compressors are available. The 
+two most common types used by Reclamation are the reciprocating and the rotary screw 
+compressors. Typical equipment of compressed air systems include air compressors, air 
+receivers, air dryers, instrumentation, pressure piping, air hose outlets, cooling piping, and 
+control valves. Figure 9 shows a simple layout of a compressed air system and typical 
+components. Prior to performing maintenance on compressed air equipment, plant personnel 
+should refer to the manufacturer’s maintenance instructions and recommended maintenance 
+intervals. 
+
+Figure 9.—Simple compressed air system. 
+
+3.2 
+
+Reciprocating Air Compressors 
+
+Reciprocating compressors have been available for many years in a variety of sizes and 
+configurations, and they make up the majority of air compressors found in plants and 
+maintenance shops (photograph 13). They are relatively efficient and simple to operate and 
+maintain. Most reciprocating compressors can be overhauled completely with a minimum of 
+tools and parts. 
+
+39 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Photograph 13.—Reciprocating type air compressors. 
+
+A reciprocating compressor uses a reciprocating piston to compress air in a cylinder against a 
+cylinder head. While all reciprocating compressors operate in basically the same manner, there 
+are many variations in their construction. For example, a reciprocating compressor can be single-
+or multi-cylinder, single- or double-acting, single- or multi-stage, and air or water cooled, and it 
+can have a horizontal, vertical, or angled cylinder arrangement. Other variations are possible, 
+depending on the application. 
+
+Single-acting compressors use automotive-type pistons, connected directly to the crankshaft by 
+connecting rods, and compress air on one side of the piston only. Double-acting compressors 
+have a double-acting piston, compressing air on both sides, driven by a piston rod that extends 
+through a packing box. The piston rod is connected to a crosshead, which is connected to the 
+crankshaft by a connecting rod. Both single- and double-acting compressors are available as 
+single- or multi-stage. Multi-stage compressors develop their final pressure in steps by 
+connecting the discharge of the first stage, through an intercooler, to the intake of the second 
+stage. The intercooler removes the heat of compression of the first stage using either air or water 
+as a cooling medium. Figure 10 is a section view of a two-stage air compressor. 
+
+40 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Figure 10.—Two-stage reciprocating compressor. 
+
+3.3 
+
+Rotary Screw Air Compressors 
+
+Rotary screw air compressors (photograph 14) use two meshing helical-shaped rotors to 
+compress air (figure 11). As the rotors turn, air is compressed by the advancing helix. The rotor 
+may be oil-flooded or dry. Dry rotor compressors require the use of timing gears to maintain 
+proper clearance between the rotors. The oil in the oil-flooded type compressor lubricates and 
+seals the rotors and acts as a coolant to remove the heat of compression. The oil-flooded type 
+does not require timing gears, as the oil film prevents contact of the rotors, but an air-oil 
+separator is necessary to remove the oil suspended in the compressed air as it leaves the 
+compressor. 
+
+41 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Photograph 14.—Rotary screw type air compressor. 
+
+42 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Figure  11.—Cutaway view of a twin-screw reciprocating compressor.  
+
+Rotary screw  compressors have fewer moving parts than reciprocating compressors and provide  
+a smooth, nearly pulse-free air supply. Rotary screw compressors  are typically provided in a  
+“package”  which only requires connections to electrical power, service  air  piping, and in some  
+cases, water as  a cooling medium. Since there is little vibration, they generally operate with 
+lower noise emissions and do not require the massive foundation a comparable reciprocating 
+compressor would need. They are also very popular in trailer-mounted, internal combustion 
+engine driven portable compressors.  
+
+The construction of rotary screw  compressors is such that little maintenance can be  
+accomplished in the field by plant personnel. The lubricating oil should be filtered regularly, as  
+tight tolerances make  clean oil a necessity. The air end (i.e., rotors  and their housing) of the  
+rotary screw compressor  has no significant wear items, such as piston rings of the reciprocating 
+type. Since the air end is  constructed with such high precision and tight tolerances, in most cases, 
+the entire air  end must be replaced as a unit. Some units have sacrificial anode components in the  
+aftercoolers/intercoolers.  
+
+43 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+3.4  Air Compressor Accessories 
+
+3.4.1 
+
+Inlet Filters 
+
+Inlet filters prevent dust and other particulates from entering the compressor. Rotary screw 
+compressors are especially susceptible to wear or damage from dirt particles. 
+
+3.4.2 
+
+Intercoolers and Aftercoolers 
+
+Intercoolers are mechanical heat exchangers installed between the first and second stage of a 
+two-stage compressor to lower the discharge temperature, remove moisture, and increase the 
+density of the air entering the second stage. This intermediate stage transfers heat via air or liquid 
+and results in an increased compressor efficiency. 
+
+Like intercoolers, aftercoolers are also mechanical heat exchangers, but instead are installed on 
+the air discharge line. This lowers the compressed air’s discharge temperature and condenses 
+water from the air. Without aftercooling, typical outlet temperatures of compressors are 93 
+degrees Celsius (°C) for oil-injected rotary screw type, 107°C for centrifugal type, 150°C for 
+two-stage reciprocating type, and 175°C for oil-free rotary screw type. Stationary compressors 
+typically use water, but may use air as a cooling medium for their aftercoolers. Most water-
+cooled aftercoolers are appropriately sized to cool the compressed air within 4.5°C to 8°C of 
+ambient air temperature. 
+
+Aftercoolers or intercoolers are usually installed with a separator and trap to handle the 
+condensate. 
+
+3.4.3 
+
+Separators 
+
+Separators are used to remove entrained liquids from the compressed air. This is usually 
+accomplished by changing the direction of movement of the liquid particles so they are removed 
+from the air either centrifugally or through impingement against a separator element. The most 
+common types of separators are impingement, centrifugal, and cyclone types. 
+
+3.4.4  Traps 
+
+Traps collect liquid that has been removed from the air by separation or condensation and release 
+it, either automatically or through a manual valve. Traps are installed with separators, filters, 
+aftercoolers, receivers, and dryers. They also should be installed at the low points in distribution 
+systems, especially on lines passing through a cold area. An in-line strainer is usually installed 
+directly upstream of a trap to prevent sediment or other contamination from clogging the trap. 
+
+44 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+3.4.5  Dryers 
+
+Dryers are used when drier air is required than can be provided by an aftercooler/intercooler 
+system. The most common are refrigerated dryers, which condense the moisture from the air by 
+reducing the air temperature. 
+
+Desiccant dryers use porous moisture-adsorbing materials that hold the moisture in the pores 
+until they are regenerated by electric heat, air purging, or both. 
+
+3.4.6  Pressure-Regulating Valves 
+
+Pressure-regulating valves are used to supply small volumes of air to various pneumatic 
+equipment at a pressure lower than system pressure. Pressure-regulating valves are not 
+considered to be safety devices. 
+
+3.4.7  Receiver Tanks (Pressure Vessels), Gauges and Pressure Relief Valves 
+
+Please refer to FIST 2-9, Inspection of Unfired Pressure Vessels, for any information regarding 
+receiver tanks (pressure vessels) and pressure relief valves. 
+
+3.4.8   Unloader Valves 
+
+Reciprocating compressors have an unloader valve located between the discharge of the 
+compressor and the air receiver. Unloader valves are used to minimize the load required to start a 
+reciprocating compressor. The output of a compressor is typically connected to the air receiver 
+through a short section of piping. When the pressure switch is activated and the compressor 
+stops, an unloader valve opens and the pressure in this piping is blown down to atmospheric 
+pressure. This allows the compressor motor to restart under a lower load condition. Once the 
+compressor reaches its normal operating speed, the unloader valve closes to allow compressed 
+air to resume flow into the air receiver. 
+
+3.5   Maintenance for All Types of Air Compressors  
+
+For all compressor types, reference the compressor manufacturer’s documentation.  
+
+Perform the following steps frequently for inspection and maintenance:   
+
+1)   Inspect the compressor structure.  
+
+a)   Check concrete for cracks and spalling. Check foundation with level for settling.  
+
+b)   Examine the frame for metal corrosion and  cracks. Clean and paint as required.  
+
+45 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+2)
+
+Inspect the compressor drive system.
+
+a) Check V-belts for slippage, chains for looseness, and shaft couplings for excessive runout
+
+or vibration.
+
+b) Check V-belts for signs of wear or aging and replace as needed. Using a dial indicator,
+check for excessive runout of direct-coupled shafts; check shaft alignment if runout is
+excessive.
+
+3)
+
+Inspect the compressors’ cooling system.
+
+a) Check flow of water coolant through compressor and aftercooler. Check for accumulation
+of dirt or lint on cooling fins of air-cooled compressors and radiators of water-cooled
+compressors.
+
+b) Check for corrosion and scale buildup and clean or flush as required. Thoroughly clean
+cooling fins of air-cooled compressors and radiators of water-cooled compressors.
+
+4)
+
+Inspect the air intake system.
+
+a) Check air intake for obstructions. Check the condition of the air filter. Replace as
+
+required.
+
+5)
+
+Inspect the compressor’s piping and valves.
+
+a) Check piping for corrosion. Replace, clean, or repaint as required.
+
+b) Check valves for leakage. Repack, reseat, or replace as required.
+
+c)
+
+Inspect pressure regulating valves for operation and verify the valves are providing the
+correct pressure downstream of the valve.
+
+6)
+
+Inspect the separator.
+
+a) Check for leaks. Disassemble and check for internal corrosion and scale buildup as
+
+required.
+
+7) Operate and inspect traps.
+
+a) Drain manual traps
+
+b) Check automatic traps for leaks and proper operation. Clean strainer and inspect for
+
+corrosion or scale buildup.
+
+8) Maintain the air dryers.
+
+a) Check for operation of refrigerated and desiccant type dryers.
+
+b) Replace dryer elements on deliquescent type dryers as necessary.
+
+9)
+
+Inspect and maintain the compressor’s gauges.
+
+a) Check operation of each gauge. Look for a loose or stuck pointer. If there is any doubt
+
+about the accuracy of a gauge, remove it and check its calibration or replace it with a new
+gauge.
+
+10) Inspect the operation of pressure and temperature switches.
+
+46 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+a)   Verify that pressure switches cut in and out at proper pressures. Check settings of  
+
+temperature switches.  
+
+b)   Check pressure and temperature switch calibration and set points.  
+
+11)  Inspect and maintain compressor bearings.  
+
+a)   Check anti-friction bearings for excessive vibration or noise and for  adequate lubrication.  
+
+b)   Disassemble compressor  and inspect condition of  all bushings and Babbitt-lined bearings  
+
+as required. Replace as needed.  
+
+3.6   Maintenance for Reciprocating Compressors  
+
+For this section on reciprocating compressors, reference the compressor manufacturer’s  
+documentation to perform the following steps for the inspection and maintenance:  
+
+1)   Inspect and maintain the  lubrication system.  
+
+a)   Check that oil or grease cups are full and  fill as necessary. Ensure that the crank case oil  
+and/or oil reservoir is filled to the proper level with the correct lubricant. Check oil feed 
+rate to cylinder. Check forced oil systems for proper operation. Note  any leaks and repair  
+if necessary.  
+
+b)   Clean oil or grease cups  and piping. Check condition of lubricant and change if required.  
+
+2)   Inspect and maintain the  packing gland.  
+
+a)   Check for excessive leakage and for scoring on piston rod. Adjust packing as necessary.  
+
+b)   Check condition of packing and replace if necessary.  
+
+3)   Inspect and maintain the  unloader.  
+
+a)   Check that the unloader is functioning correctly, allowing the compressor to reach 
+operating speed before loading followed by unloading at the proper pressure.  
+
+b)   Inspect valves  and air lines for leaks. Inspect valves for proper seating. Lap valves if  
+
+required. Examine solenoid for deteriorated insulation or loose connections.  
+
+4)   Inspect and maintain the crosshead.  
+
+a)   Check fit and lubrication of crosshead if accessible.  
+
+b)   Check bearing shoes for  scoring, wear, and fit to crosshead. Shim shoes to obtain proper  
+
+fit if necessary. Check pin and bushing for wear and replace or refit as required.  
+
+5)   Inspect and maintain the  cylinder.  
+
+a)   Check cylinder walls for  wear  and scoring. Measure inside diameters  at top, bottom, and 
+middle in two directions, 90 degrees  apart. If cylinder is out-of-round or oversized 
+according to manufacturer’s documentation, re-bore or replace the cylinder.  
+
+6)   Inspect and maintain the  piston.  
+
+47 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+a)  Check piston for wear and clearance  within the bore. Examine rings for tightness and fit.
+
+Replace if necessary.  
+
+7)  Inspect and maintain the  connecting rod. 
+
+a)  Visually inspect for distortion or bending.  
+
+b)  Check connecting rod for trueness, scoring or  wear. Refurbish or replace as required.  
+
+c)  Inspect bearing fasteners  for damage and replace as required. 
+
+8)  Inspect and maintain the  intake and discharge valves. 
+
+a)  Inspect valves  and seats for scoring and proper seating. Clean any deposits off valve 
+
+plates and seat, being very careful not to scratch the surfaces. Lap valve seats if there are
+any imperfections. Deposits on the valves indicate a dirty intake, the wrong t  ype or 
+excessive oil, or a leaking valve or valve gasket. 
+
+3.7   Maintenance for Rotary Screw Compressors  
+
+For this section on rotary screw  compressors, reference the compressor manufacturer’s  
+documentation to perform the following steps for the inspection and maintenance:  
+
+1)  Inspect and maintain the  compressor air end. 
+
+a)  Visually inspect rotors and bearings for  wear. Replace if necessary or if  compressor 
+
+efficiency has noticeably declined. 
+
+2)  Inspect and maintain the  system’s oil reservoir, separator, and oil filter.  
+
+a)  Drain condensate from the bottom of oil reservoir. 
+
+b)  Visually inspect condition of separator element. Service or replace as necessary. 
+
+c)  Clean or replace the oil filter as required.  
+
+48 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+4.0  Heating, Ventilating, and Air-Conditioning 
+
+(HVAC) Systems 
+
+Heating and ventilation systems in hydroelectric powerplants and pumping plants are not only 
+important to maintain the comfort of personnel working in the plant but also to maintain proper 
+operating conditions for plant equipment. Ventilating equipment may vary in complexity. 
+
+HVAC commissioning is a thorough and comprehensive testing of a mechanical system’s 
+performance. HVAC systems should be commissioned periodically to ensure they are 
+functioning as detailed in the facility’s SOP and that they meet current operation requirements, 
+some of which may have changed since the writing of the SOP (e.g., storage room converted to a 
+conference room). 
+
+General commissioning processes consist of operating HVAC systems through each of the 
+anticipated modes of operation (heating, cooling, ventilation, emergency, occupied, unoccupied, 
+etc.) utilizing control systems (thermostats, switches, etc.) and then verifying, through physical 
+observation and measurement of airflow and temperatures, that the systems are operating as 
+required. 
+
+Maintenance and operations procedures should be reviewed based on the previous year’s 
+operational performance and adjusted as necessary. 
+
+4.1  Maintenance of HVAC Systems 
+
+1)
+
+Inspect and maintain the cooling fan(s).
+
+a) Visually and audibly inspect fan(s) for abnormal/excessive vibration or noise. Replace
+
+bearings or balance as required.
+
+b) Check and clean fan blades as necessary. Lubricate fan motor bearings as required.
+
+Replace bearings or balance as necessary.
+
+2)
+
+Inspect and maintain belts and pulleys.
+
+a) Check belts for condition, tension, and alignment. Adjust or replace as necessary. Check
+
+for wear on pulleys and replace as necessary.
+
+3)
+
+Inspect filters.
+
+a) Visually inspect filters. Clean or replace as necessary.
+
+4)
+
+Inspect cooling or heating coils.
+
+a) Visually inspect heating or cooling coils for leaks. Clean as necessary. Remove cleanout
+
+plug in strainer and flush out. Replace strainer gasket if necessary.
+
+5) Maintain intake, louvers, and screens.
+
+Revision 1.0 
+
+49 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+a) Clean intake, louvers, and screens as necessary.
+
+b) Ensure the areas near intakes are free from debris or contaminants.
+
+6)
+
+Inspect and maintain dampers.
+
+a) Visually inspect dampers for freedom of motion. Lubricate bearing points as necessary.
+
+50 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ 
+  
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+5.0  Engine Generator Sets 
+
+Engine generator sets are important systems at powerplants, dams, and other water-related 
+facilities (photograph 15). They require maintenance and testing regularly to ensure they perform 
+as expected. Engine generator sets provide power to supply an electrical load in the event of loss 
+of the normal power source. Engine generator power may be needed to operate spillway or outlet 
+gates/valves for water-release purposes. Powerplant critical loads such as sump pumps, fire 
+pumps, and battery chargers also are dependent on reliable power. Engine generator sets may 
+also be used to power unit auxiliaries and the generator excitation system for blackstart 
+(generators assigned to restore the power system after a blackout). Many facilities rely on their 
+specific manufacturer’s maintenance recommendations. 
+
+Photograph 15.—Engine generator set and fuel supply tank. 
+
+Engine generator sets are typically powered by the following types of engines:  
+
+•  Otto Cycle (spark-ignited) utilizing liquid petroleum (gasoline) or liquid petroleum gas 
+
+(LPG, propane/butane mixture)  
+
+•  Diesel Cycle utilizing liquid petroleum (diesel) 
+
+The Emergency Power Supply System  (EPSS)  and standby power supply systems, comprising of  
+engine-generators  and associated equipment such  as automatic transfer switches, must be 
+maintained, inspected, and tested in accordance with the manufacturer’s  recommendations or the  
+National Fire Protection  Association  (NFPA)  110, Standard for Emergency and Standby Power  
+Systems. Annex A, Figure A.8.3.1 (a) has a  complete maintenance schedule. Testing and 
+maintenance  records for  engine generator sets should be maintained and stored on site.  
+
+Revision 1.0 
+
+51 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Maintenance on, inspection, and testing of engine generators must be completed as outlined in 
+POM Form 400 and NFPA 110, chapter 8. 
+
+POM 400 form lists weekly, monthly, quarterly, semiannual, and annual maintenance tasks 
+based on the two levels of EPSS, described as follows: 
+
+Level 1 EPSS maintenance, inspection, and testing are required where failure of the engine 
+generator system could result in the loss of human life or a serious injury, per NFPA 110, 
+Chapter 4. This includes engine generators required for life safety equipment and for support of 
+plant systems related to personnel safety. These tend to be Type 10 (10 second between loss of 
+power and engine generator fully assuming emergency loads). 
+
+Level 2 EPSS maintenance, inspection, and testing are applicable where failure of the 
+emergency power supply system is less critical to human life and safety and where flexibility 
+greater than Level 1 is permissible (NFPA 110, Chapter 4). Level 2 maintenance, inspection, and 
+testing apply where the emergency power supply system is utilized for water release purposes 
+(via gate or valves) and where no significant damage to the plant would occur if the system fails. 
+This classification is not common at Reclamation facilities. 
+
+Standby power supply systems are those systems that do not provide power to emergency loads, 
+are classified under Level 2 EPSS. This is the most common type of engine generator set used in 
+Reclamation facilities. Common loads may include lighting, sump pumps, or gate operators. 
+Generally standby power systems aren’t capable of powering all motors, gates, and facility loads. 
+Typically, only loads required for the safety of the facility are powered by the standby system. 
+Black start facility capabilities would be considered a standby system. 
+
+5.1  Maintenance of Engine Generator Sets 
+
+For this section on engine generator sets, reference POM Form 400 and the manufacturer’s 
+documentation to assist in performing following steps for the inspection and maintenance: 
+
+1)  Inspect and maintain EPSS Components, which include fuel, lubrication system, cooling 
+system, exhaust system, battery system, electrical system, prime mover, and generator. 
+
+a)  Inspect and perform maintenance for all EPSS components per manufacturer’s 
+
+recommendations or POM Form 400. 
+
+2)  Inspect the generator set battery. 
+
+a)  Visually inspect engine generator set battery. Check for signs of damage, leakage or other 
+
+abnormalities. 
+
+3)  Maintain engine generator set transfer switch. 
+
+a)  Operate transfer switch electrically in both directions. 
+
+52 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+4)  Maintain circuit breakers. 
+
+a)  Manually exercise circuit breakers. 
+
+5)  Operate engine generator set. 
+
+a)  EPSS Level 1 and Level 2 - *Exercise for a minimum of 30 minutes at operating 
+
+temperature (including automatic cold start, if equipped) by: 
+
+(1) Running diesel-fueled generators at operating temperature conditions and at not 
+
+less than 30 percent (%) of nameplate kW rating; or 
+
+(2) Running diesel-fueled generators by loading the system to maintain the minimum 
+
+exhaust gas temperatures as recommended by the manufacturer; or 
+
+(3) Running spark-ignited generators under available load (typically a load bank). 
+
+* For diesel-fueled generators, load exercising at normal operating temperature prevents 
+accumulation of carbon particles, unburned fuel, lube oil, condensed water, and acids in the 
+exhaust system and other engine problems that can occur with unloaded exercising. 
+
+b)  For EPSS Level 1, operate at loads defined for the assigned class duration (not less than 
+30% of nameplate kW rating) and a minimum of 4 hours by operating at least one 
+transfer switch test function then by operating the test function of all remaining transfer 
+switches. 
+
+Revision 1.0 
+
+53 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+This page intentionally left blank. 
+
+54 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+6.0  Auxiliary Pumps 
+
+6.1  Auxiliary Pump Functional Description 
+
+6.1.1  General 
+
+Pumps are classified as dynamic and positive displacement, depending on the method the pump 
+uses to impart motion and pressure to the fluid. In Reclamation we use the term Auxiliary Pump 
+in reference to support systems (e.g., cooling water, hydraulic systems, and dewatering) in our 
+facilities. These pumps usually have less access (i.e., limited physical entry) and inspection tasks 
+for routine maintenance. 
+
+6.1.2  Dynamic Pumps 
+
+Dynamic pumps continuously accelerate the fluid within the pump to a much higher velocity 
+than the velocity at the discharge. The subsequent decrease of the fluid velocity at the discharge 
+causes a corresponding increase in pressure. The dynamic pump category is primarily centrifugal 
+pumps, but includes special effect pumps, such as eductor and hydraulic ram pumps. 
+
+Eductors, also known as jet pumps, use a high-pressure stream of fluid to pump a larger volume 
+of fluid at a lower pressure. An eductor consists of three basic parts: the nozzle, the suction 
+chamber, and the diffuser. The high-pressure fluid is directed through a nozzle to increase its 
+velocity. This high velocity creates a low-pressure area that causes the low-pressure fluid to be 
+drawn into the suction chamber. The low-pressure fluid is then mixed with the high-velocity 
+fluid as it flows through the diffuser, and the velocity of the mixture is converted into pressure at 
+the discharge. Eductors are commonly used in powerplants and dams to dewater sumps. Some 
+plants use eductors to pump cooling water for the units. 
+
+The most common type of dynamic pump is the centrifugal pump. The impeller of a centrifugal 
+pump, the rotating component of the pump which imparts the necessary energy to the fluid to 
+provide flow and pressure, is classified according to the direction of flow in reference to the axis 
+of rotation of the impeller. The three major classes of centrifugal impellers are: 
+
+1) Axial-flow. Pump discharge of the fluid is in plane with the shaft.
+
+2) Radial-flow. Pump discharge of the fluid is radial, i.e. at right angles, to the shaft.
+
+3) Mixed-flow. Discharge angle is between radial and axial; incorporates features of both axial
+
+and radial flow pumps.
+
+Impellers may be classified further by their construction. The impeller construction may be: 
+
+1) Open. An open impeller consists of vanes attached to a central hub.
+
+Revision 1.0 
+
+55 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+2) Semi-open. A semi-open impeller has a single shroud supporting the vanes, usually on the
+
+back of the impeller.
+
+3) Closed. The closed impeller incorporates shrouds on both sides of the vanes. The shrouds
+
+totally enclose the impeller’s waterways and support the impeller vanes.
+
+Centrifugal pumps are also classified by the method used to convert the velocity to pressure that 
+the impeller imparts to the fluid. Volute pumps use an impeller to impart velocity to the fluid; the 
+high-velocity fluid passes into the fluid spiral or volute-shaped casing where the velocity of the 
+fluid is converted into pressure (figure 12). Pumps which use a set of stationary diffuser vanes to 
+change velocity to pressure are called diffuser pumps. The most common diffuser type pumps 
+are vertical turbine pumps and single stage, low head, propeller pumps. Large volute pumps may 
+also have diffuser vanes, but while these vanes direct the water flow, their main purpose is 
+structural and not energy conversion. 
+
+56 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Figure 12.—Vertical volute pump. 
+
+Centrifugal pumps are further classified as either horizontal or vertical, referring to the 
+orientation of the pump shaft. A vertical volute pump is shown in figure 12. In comparison to 
+horizontal pumps, vertical pumps take up less floor space; the pump suction can be positioned 
+more easily below the water surface to eliminate the need for priming. Vertical pumps can be 
+either dry-pit or wet-pit. Dry-pit pumps are surrounded by air, while wet-pit pumps are either 
+
+Revision 1.0 
+
+57 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+fully or partially submerged. The dry-pit pumps commonly are used in medium to high head, 
+large capacity pumping plants. These large dry-pit pumps are generally volute pumps with 
+closed, radial flow impellers. 
+
+There are a variety of wet pit pump designs for differing applications. One of the most common 
+types is the vertical turbine pump. The vertical turbine pump is a diffuser pump with either 
+closed or semi-open, radial-flow, or mixed-flow impellers. Vertical turbine pumps, while most 
+commonly used for deep well applications, have a wide variety of uses, including irrigation 
+pumping plants and sumps in powerplants and dams (figure 13). This type of pump normally is 
+constructed of several stages. A stage consists of an impeller and its casing, called a bowl. The 
+main advantage of this type of construction is that system pressure can be varied by simply 
+adding or reducing the number of stages of the pump. 
+
+58 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+   
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Figure 13.—Two stage vertical turbine pump. 
+
+Revision 1.0 
+
+59 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Horizontal pumps are classified according to the location of the suction pipe. The suction can be 
+from the end, side, top, or bottom. Also common in horizontal pumps is the use of double suction 
+impellers. In a double-suction impeller pump, water flows symmetrically from both sides into the 
+impeller which helps to reduce the axial thrust load (figure 14). Horizontal pumps are normally 
+used in a hydroelectric plant for fire, water, and cooling water applications. 
+
+Figure 14.—Double suction horizontal volute pump. 
+
+60 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+6.1.3  Positive Displacement Pumps 
+
+Positive displacement pumps enclose the fluid using gears, pistons, or other devices (figure 15). 
+These pumps push or “displace” the fluid out through the discharge line. Displacement pumps 
+are divided into two groups: reciprocating (such as piston and diaphragm pumps) and rotary 
+(such as gear, screw, and vane pumps). Since positive displacement pumps do “displace” the 
+fluid being pumped, relief valves are required in the discharge line ahead of any shutoff valve or 
+any device that could conceivably act as a flow restriction which could result in high discharge 
+pressure. 
+
+Reciprocating piston or diaphragm pumps are suitable where a constant capacity is required over 
+a variety of pressures. Piston and diaphragm pumps are capable of developing very high 
+pressures, although capacities are somewhat limited. These pumps provide a pulsating output 
+which, depending on the application, may be objectionable. 
+
+Rotary positive displacement pumps are used in a variety of applications, one of the most 
+common being hydraulic systems. Gear, vane, radial piston, and axial piston pumps are some of 
+the most common rotary positive displacement pumps used in hydraulic systems. Screw pumps, 
+with a single helical screw or multiple interlocking helical screws, are most commonly used for 
+fluid transfer, although they are sometimes used in hydraulic system applications. 
+
+Gear pumps are relatively simple in design, relying on the meshing of the mating gears and the 
+fit of the gears in the pump casing to pump the fluid. External gear pumps use two meshing 
+gears, usually spur or herringbone types, in a close-fitting casing. The fluid is pumped as it is 
+trapped between the rotating gears and the casing and moved from the suction of the pump to the 
+discharge. An internal gear pump uses an external gear rotating eccentrically within and driving 
+an internal gear to pump the fluid. 
+
+Vane pumps consist of a case and a single eccentric rotor with multiple vanes sliding in slots in 
+the rotor. Centrifugal force keeps the vanes in contact with the interior of the pump casing. As 
+the rotor rotates, the fluid is drawn into the pump by the gradually increasing volume between 
+the vanes. The fluid is then pushed out through the discharge as the volume gradually decreases. 
+
+The radial piston pump is similar in construction to the vane pump in that it has a single rotor, 
+eccentric to the pump housing; but instead of vanes, this pump has radial pistons. The pistons are 
+held against the pump housing by centrifugal force, and the fluid is pumped by the reciprocating 
+action of the pistons in their bore. The fluid ports are in the center of the rotor. 
+
+The axial piston pump rotor consists of a round cylinder block with multiple cylinders, parallel to 
+the cylinder block axis. The cylinder block rotates at an angle to the axis of the drive shaft, and 
+the fluid is pumped by reciprocating action of the pistons in the cylinder block. 
+
+Revision 1.0 
+
+61 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Figure 15.—Positive displacement pumps. 
+
+62 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+6.2  Auxiliary Pump Component Description 
+
+6.2.1 
+
+Impellers 
+
+The pump impeller is a vital rotating component within a centrifugal pump, designed to transfer 
+energy from the motor to the fluid being pumped. It consists of a central hub with multiple vanes 
+or blades that extend outward, and as it spins, it accelerates the fluid from the center (known as 
+the eye) toward the outer edge. This motion converts mechanical energy into kinetic and pressure 
+energy, enabling the fluid to move through the pump system efficiently. 
+
+Impellers are typically constructed from materials such as stainless steel, bronze, cast iron, or 
+engineered plastics, with the choice depending on the chemical and physical properties of the 
+fluid being handled. Regardless of type, impellers are precision-balanced to minimize vibration 
+and wear on pump bearings and seals. 
+
+Despite their robust design, impellers are susceptible to several forms of damage. One of the 
+most common issues is cavitation, which occurs when vapor bubbles form and collapse near the 
+impeller eye due to low pressure, causing pitting and erosion of the vane surfaces. Corrosion is 
+another concern, especially when the impeller is exposed to aggressive or chemically reactive 
+fluids, leading to material degradation and structural failure. Erosion from abrasive particles in 
+the fluid can gradually wear down the impeller vanes, reducing hydraulic performance. 
+Mechanical stress from misalignment, excessive vibration, or improper installation can result in 
+cracking or deformation. Foreign objects are also a risk, particularly in systems lacking adequate 
+filtration, where debris can chip or break the vanes. Lastly, imbalance caused by uneven wear or 
+manufacturing defects can lead to excessive vibration, accelerating wear on the bearings and 
+seals. 
+
+6.2.2  Antifriction Bearings 
+
+Rolling elements allow the antifriction bearing to use the low coefficient of rolling friction, 
+rather than the sliding friction that fluid film bearings use to support a load. The most common 
+type of antifriction bearings are “ball” and “roller” bearings, referring to the shape of the 
+bearing’s rolling elements. These bearings also are classified as “radial,” “radial-thrust,” or 
+“thrust” bearings according to the type of load they are meant to support. 
+
+Beyond bearing types, antifriction bearings may also have different designs/constructions styles. 
+The bearing may be open, shielded, or sealed. 
+
+Open (non-shielded) bearings have no built-in seals or shields, leaving all internal components 
+exposed. They rely on the machine’s lubrication system and cannot prevent contaminants from 
+entering on their own. Open bearings are typically used in clean, well-lubricated environments, 
+such as inside gearboxes or machinery where the bearing is continuously bathed in oil. 
+
+Revision 1.0 
+
+63 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+Shielded bearings have metal shields on one or both sides, fixed in a groove on the outer ring 
+with a small gap that does not contact the inner ring. These shields help keep out larger particles 
+like dust and debris while allowing low-friction operation and retaining the lubricant within the 
+bearing. They are commonly used in moderately clean environments where some protection is 
+needed but low starting and running torque is a priority, such as in electric motors, fans, and 
+pumps. 
+
+Sealed bearings, on the other hand, have integrated seals (usually rubber or polymer) on one or 
+both sides, fully enclosing the inner workings. The seals make light contact with the inner ring, 
+creating a barrier that keeps lubricant in and contaminants out, providing better protection than 
+shields. Sealed bearings typically come pre-lubricated with grease and are effectively 
+maintenance-free. They are ideal for dirty or wet environments, or any application where 
+contamination protection is crucial and frequent servicing is not feasible. 
+
+An antifriction bearing is a delicate, precision-made piece of equipment, and great care should be 
+taken during installation. The bearing manufacturer will usually provide instructions and 
+precautions for installing a particular bearing, and these instructions should be followed closely. 
+Cleanliness is paramount when handling antifriction bearings. Any dust or dirt can act as an 
+abrasive and quickly wear the bearing’s rolling elements. Therefore, it is important to work with 
+clean tools and clean hands and to clean the bearing housings, covers, and shaft before 
+installation. The new bearing should not be cleaned or wiped before installation unless it is 
+recommended by the manufacturer. Bearings should be pressed onto shafts using adapters that 
+apply even pressure to the inner race only. Never hammer a bearing onto a shaft. 
+
+Once antifriction bearings are installed, they must be properly maintained to maximize their life 
+expectancy. In most cases the only maintenance for a bearing is renewing the lubrication. To 
+determine the maintenance frequency for unmonitored auxiliary pump bearings, start by referring 
+to the manufacturer's guidelines, which are based on extensive testing and real-world data. 
+Several factors can play important roles in the frequency of maintenance. 
+
+Bearing speed and loading can impact bearing life. Bearings operating at high speeds experience 
+increased friction and heat generation, leading to faster wear and tear and necessitating more 
+frequent maintenance. High-speed bearings often require specialized lubrication to handle the 
+increased thermal and mechanical stresses. In contrast, bearings in low-speed applications 
+generally experience less friction and heat, which can extend their maintenance intervals. 
+However, low-speed bearings still require regular checks to ensure proper lubrication and to 
+prevent issues like brinelling (indentations caused by static loads). Bearings under high load 
+require more frequent maintenance due to increased stress and wear, while those under low load 
+can be maintained less frequently but still need regular checks. 
+
+Environmental factors also play a crucial role. Bearings operating at high temperatures (above 
+125 degrees Celsius need more frequent maintenance due to reduced lubricant effectiveness and 
+accelerated wear and should use high-temperature lubricants. Extremely low temperatures can 
+thicken lubricants, increasing friction, so specialized low-temperature lubricants are 
+recommended. Moisture can cause rust and corrosion, reducing bearing life, so use water-
+
+64 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+resistant lubricants and effective sealing solutions. High humidity (above 70 percent relative 
+humidity) can lead to condensation inside bearing housings, causing rust and corrosion; use of 
+desiccant breathers can help to manage humidity levels and ensure good ventilation around the 
+pump. Dust and dirt can cause abrasive wear, so use high-quality seals and bearing protection 
+devices to prevent contaminants from entering. Exposure to chemicals can degrade lubricants 
+and corrode bearing surfaces, so select compatible materials and lubricants, and ensure proper 
+sealing. 
+
+Bearing noise (vibration) is a key indicators of bearing health. Unusual noises can indicate issues 
+such as misalignment or wear. The human ear can detect these noises, but when the noise gets to 
+this frequency, bearing damage has occurred. Adding vibration monitoring and analysis 
+equipment can help detect these anomalies early. Measuring and establishing equipment 
+baselines during equipment installation or replacement is required to understand the parameters 
+for a new healthy bearing. Regular measurement of vibration levels using sensors can detect 
+increases in vibration levels and should be compared to predefined thresholds that indicate the 
+need for maintenance. 
+
+Bearing operating temperature is another a key indicator of health. During bearing maintenance, 
+using an incorrect lubricant or a quantity not specified by the bearing manufacture can directly 
+degrade bearing temperatures. After bearing lubrication maintenance and upon equipment start 
+up, bearing temperatures will normally increase and level out after once the lubricant is 
+distributed evenly in the bearing. Establishing a baseline operating temperature for a bearing is 
+important to help with future trend analysis. 
+
+Trend analysis involves monitoring changes in baseline performance metrics, such as increased 
+vibration or temperature, to predict and prevent potential failures. Sudden increases in vibration 
+or unusual noises or temperature should prompt when maintenance is needed. 
+
+Using hours of operation, or environmental conditions to help determine when maintenance 
+should occur for a bearing might not support the bigger picture of running a facility. Certain 
+pieces of auxiliary equipment that rely on antifriction bearings might be support critical assets 
+(e.g. hydroelectric generator). A facility may justify extending maintenance intervals at a 
+detriment to the auxiliary equipment bearings to prevent having to take an outage on a critical 
+asset early. In these cases, a cost benefit analysis provides a justification that a complete 
+replacement of the auxiliary equipment outweighs the costs of an early outage on a critical asset. 
+In these cases, having spare equipment or parts on hand to speed up replacement is crucial. 
+
+To aid in developing a cost benefit analysis consider analyzing historical data, including past 
+maintenance logs, failure records, and performance/cost metrics, to identify patterns and 
+optimize maintenance schedules. 
+
+Revision 1.0 
+
+65 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+6.2.3 
+
+Shaft Seals 
+
+The shaft seal provides the interface between the pressurized pump water passage and 
+atmospheric pressure at the rotating shaft. Pump shaft seals usually fall into two main types: 
+compression packing or stuffing boxes, and mechanical seals. 
+
+6.2.3.1  Compression Packing 
+Compression packing is the most common method of controlling leakage past a pump shaft. The 
+standard packing or stuffing box will contain several rings of packing with a packing gland to 
+hold the packing in place and maintain the desired compression. Some leakage past the packing 
+is necessary to help cool, lubricate, and flush contaminates from the seals or packing. If 
+additional lubrication or cooling is required, a lantern ring may be installed along with an 
+external packing water source. 
+
+Over time, the packing gland may have to be adjusted to maintain design leakage. To prevent 
+burning the packing or scoring the shaft when these adjustments are made, most compression 
+packing contains a lubricant. As the packing is compressed, the lubricant is released to lubricate 
+the shaft until design leakage past the packing is reestablished. Eventually, the packing can be 
+compressed to a point where no lubricant remains, and replacement is required. Continued 
+operation with packing in this condition can severely damage the shaft. 
+
+When packing replacement is necessary, remove all the old packing. The lantern ring, if 
+equipped with one, must be removed along with all the packing below it. With the packing 
+removed, special attention should be given to cleaning and inspecting the packing box bore and 
+the shaft or shaft sleeve. To provide an adequate sealing surface for the new packing, a severely 
+worn shaft or shaft sleeve should be repaired or replaced. Likewise, severe pitting in the packing 
+box bore should be repaired. Sealing the packing against a rough packing box bore requires 
+excessive compression of the packing. This over compression of the packing will lead to 
+premature wear of the shaft or shaft sleeve. 
+
+Shaft runout at the packing box should be checked by manually rotating the shaft and measuring 
+the runout with a dial indicator. In most cases, total indicated runout should not exceed 0.003 
+inch. If the runout is excessive, the cause should be found and corrected. Bent shafts should be 
+replaced and misalignments corrected. 
+
+A number of different types of packing are available. When choosing new packing, ensure that it 
+is the correct size and type for the intended application. All the relevant conditions that the 
+packing will operate under, such as shaft size and rotational speed, must be considered. Installing 
+the wrong packing can result in excessive leakage, reduced service life, and damage to the shaft 
+or sleeve. 
+
+The new packing should be installed with the joints staggered to reduce unwanted leakage paths. 
+It is sometimes helpful to lubricate the packing prior to installation. The packing manufacturer 
+should be consulted for recommendations of a lubricant and for any special instructions that may 
+be required for the type of packing being used. There should be generous leakage upon the initial 
+
+66 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+startup after installing new packing. The packing gland should be tightened evenly and in small 
+steps (incrementally) to allow the packing to break in and establish the design leakage 
+specification. The temperature of the water leaking from the packing should be cool or 
+lukewarm, never hot. If the water is hot, loosen the packing gland until the temperature is 
+appropriate. 
+
+6.2.3.2  Mechanical Seals 
+Mechanical seals allow very little leakage and can be designed to operate at high pressures. 
+Properly installed mechanical seals will have a long service life and require little maintenance. 
+
+A mechanical seal on a small pump consists of a stationary and a rotating member with sealing 
+surfaces perpendicular to the shaft. The highly polished sealing surfaces are held together by a 
+combination of spring and fluid pressure and are lubricated by maintaining a thin film of the 
+fluid sealed between the surfaces. 
+
+There is a wide variety of mechanical seals available for small pump applications, each having 
+its own distinct installation procedure. Therefore, it is important to follow the seal 
+manufacturer’s installation instructions. The manufacturer also should provide information about 
+the allowable shaft runout and endplay for their particular seal. 
+
+Since mechanical seals are precisely made and rely on very tight tolerances to operate 
+successfully, great care must be taken during installation. Just a small amount of dirt or other 
+contaminants (such as oil from hands) on the polished sealing surfaces can allow leakage past the 
+seal and reduce the seal’s life. 
+
+Seal water is provided on most larger seals to help cool, lubricate, and flush contaminates from 
+the seals or packing. The seal water must be clear, clean water. Some type of filtration should be 
+installed if there is any silt or sand in the seal water supply, since contaminants can quickly 
+damage the seals. 
+
+Revision 1.0 
+
+67 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+6.2.4 
+
+Shaft Couplings 
+
+Couplings connect the shaft of a driver, such as a motor, to the shaft of a driven machine, such as 
+a pump (photograph 16). 
+
+Photograph 16.—Flexible Shaft Coupling. 
+
+The two types of couplings are flexible and rigid: 
+
+Flexible are designed to accommodate slight misalignment between shafts and, to some extent, 
+dampen vibration. The amount of allowable misalignment depends entirely on the design of the 
+particular coupling. Since there are a number of flexible coupling designs, tolerances for 
+misalignment should be obtained from the coupling manufacturer. The flexibility of the 
+couplings can be achieved by providing clearances between mating parts, as in gear and chain 
+couplings, or by using a flexible material in the coupling, as in flexible disk and compression 
+couplings. Horizontal pumps usually employ some sort of flexible coupling to connect the pump 
+to its driver. 
+
+Rigid couplings, which are less common in auxiliary equipment, require precise alignment and 
+most commonly are used in hydroelectric units. Flanged and threaded couplings are the most 
+widely used rigid couplings. Threaded couplings, used to connect the line shafts of vertical 
+turbine pumps are cylindrically shaped with internal threads matching the external threads on the 
+line shafts. The shafts to be coupled simply are screwed tightly into either end of the coupling. 
+
+68 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+6.3   Auxiliary  Pump Maintenance 
+
+6.3.1  Operational Inspections 
+
+[Verify pump is operating per design specifications.] 
+
+1)  Unmonitored: 
+
+a)   Record and trend pressures in accordance with system design specifications (e.g. suction, 
+
+discharge).  
+
+b)   Observe pump shaft, coupling, and bearings for  abnormal noise and vibration.  
+
+c)   Check bearing oil levels and flows  meet design specifications  (if  applicable). Maintain  
+
+the correct level  and flow  with oil meeting approved specifications.  
+
+d)   Visually observe shaft seal leakage is per design specifications.  
+
+i)   When leakage does not meet design  specifications, schedule corrective maintenance 
+
+to perform tasks in section 6.3.2.  
+
+e)   Verify shaft seals are not overheating.  
+
+2)   Monitored:  
+
+a)   A pump and motor assembly does not require a  routine inspection if monitoring 
+
+equipment is installed. A monitoring system should be capable of sensing, trending, and 
+alerting an operator when an abnormal condition exists or equipment performance trends  
+away from design specifications or baseline parameters established during equipment  
+commissioning. Examples of monitoring equipment could include, but are  not limited to, 
+triaxial accelerometers on the pump and motor housing, motor current sensing 
+equipment, bearing oil level/flow and oil analysis sensors, resistance temperature  
+detectors to monitor shaft seal/bearing temperatures, and pressure/flow  
+transducers/meters. If  all equipment components cannot be monitored, the  unmonitored 
+inspection tasks should be  performed on their designated frequency.  
+
+3)   When abnormal equipment conditions are identified, document, investigate, and determine  
+
+cause.  
+
+Revision 1.0 
+
+69 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+6.3.2   Maintenance Inspections  
+
+Perform corrective maintenance when shaft seal leakage is out of tolerance.  
+
+1)   Compression Packing  
+
+a)   While the pump is running, incrementally adjust the packing gland tightness, allow 15 to 
+
+30 minutes between adjustments until design leakage is established.  
+
+i)   Grease the packing box (if applicable).  
+
+ii)   If design leakage past the packing gland is unable  to be restored by adjusting the  
+
+packing gland tightness, complete sub task b.  
+
+b)   Replace packing and inspect packing gland assembly.  
+
+i)   Disassemble packing gland assembly.  
+
+ii)   Remove old packing and note the location of a lantern ring (if  applicable).  
+
+iii)  Clean packing box, gland assembly components, and shaft.  
+
+iv)   Inspect packing box, gland assembly components, and shaft for burrs, scoring, or  
+
+pitting; repair or replace if conditions are found.  
+
+v)   Inspect packing sleeve; repair or replace packing sleeve if excessive wear is found (if  
+
+applicable).  
+
+vi)   Install new packing:   
+
+(1)  Use a packing lubricant if directed by the packing manufacture.  
+
+(2)  Rotate adjacent rings  at least 90 degrees to stagger joints.  
+
+(3)  Install packing gland and packing gland nut finger tight. Do not compress  
+
+excessively.  
+
+vii) Return pump to service.  
+
+viii)  Run pump and incrementally adjust the packing gland tightness, allow 15 to 30 
+
+minutes between adjustments until design leakage  is established.  
+
+2)   Mechanical Seals  
+
+a)   Repair seal if  excessive leakage is occurring.  
+
+i)   Disassemble the mechanical seal components.  
+
+ii)   Clean seal components and shaft sleeve.  
+
+iii)  Inspect shaft sleeve for excessive wear, burrs, scoring, or pitting; repair or  replace if  
+
+conditions are found.  
+
+iv)   Replace segments or other components as  required.  
+
+v)   Return pump to service verify proper design leakage.  
+
+vi)   If seals have temperature monitoring, establish new baseline temperatures.  
+
+70 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+[Inspect and maintain pump and motor assembly.]  
+
+1)   Prior to an equipment outage, with the pump running at design capacity pe 
+
+rform the  
+
+following:  
+
+a)   Use an amperage meter to measure  and record amperage  readings of pump motor.  
+
+b)   Compare to previous readings and observe  any trends. A change in amperage draw  can 
+
+be an indicator of pump motor, impeller or piping degradation.  
+
+c)   Monitored equipment  – C  ompare results to the amperage monitoring equipment.  
+
+d)   If the comparison indicates a deviation from design tolerances,  create a corrective 
+
+maintenance  work order  to investigate and correct the condition.  
+
+2)   Inspect pump foundation concrete for  cracks, spalling, displacement, and level.  
+
+3)   Visually check pump for  leakage  from mechanical joints.  
+
+a)   If leakage is found, tighten fasteners to design torque.  
+
+b)   If leakage cannot be mitigated by tightening fasteners, schedule corrective  maintenance  
+
+to replace gasket(s).  
+
+4)   Visually check pump and motor assembly for missing/damaged fasteners.  
+
+a)   If paint  or  position markings are used, visually verify no m 
+
+arking misalignment.  
+
+b)   If fastener locking devices are used verify the device is not broken or loose.  
+
+c)   If loose fasteners  are found, tighten fasteners to design torque.  
+
+d)   If missing/damaged fasteners are found, schedule corrective maintenance replace 
+
+fasteners.  
+
+5)   If the following conditions are identified,  schedule corrective maintenance  to disassemble  
+
+and inspect the pump condition:  
+
+a)   Capacity,  pressure,  or  vibration  exceed  design tolerances.  
+
+b)   Indications  that other  problems  exist.  
+
+c)   Intervals determined by past maintenance  experience.  
+
+d)   When  alignment is suspected to be an issue, verify alignment using procedures in FIST 2-
+
+1, Alignment of Rotating Machinery.  
+
+[Maintain bearings.]  
+
+1)   Maintain oil lubricated bearings:  
+
+a)   Verify the external  reservoir is clean.  
+
+b)   Verify the  external lubricator is working and providing the correct rate. Adjust rate if out  
+
+of tolerance.  
+
+Revision 1.0 
+
+ 71 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+c)  If the bearing is not lubricated by an external reservoir that constantly renews the oil, 
+replace the oil. Replacing the oil may be substituted with an oil sampling and analysis 
+program if desired. 
+
+2)  Maintain unsealed bearings: 
+
+a)  Verify lubricant meets approved specifications. 
+
+b)  Remove bearing relief port plugs (if equipped). 
+
+c)  Verify injection fittings/ports are clean. 
+
+d)  Determine and add the correct quantity of lubricant. 
+
+e)  Operate the pump and monitor the bearing temperature until temperature stabilizes. 
+
+f)  Clean any lubricant discharged from the relief ports or exposed seals. 
+
+g)  Reinstall any bearing relief port plugs (if equipped). 
+
+3)  Maintain sealed bearings: 
+
+a)  Sealed bearings require no preventative maintenance, but regular operational inspections 
+
+will help determine when bearing replacement is needed. 
+
+b)  When abnormal noise and vibration exists or bearing analysis equipment shows a trend 
+
+toward or alert of a bearing failure, continue to monitor and schedule bearing replacement 
+at the earliest convenience. 
+
+[Inspect and maintain couplings.] 
+
+1)  Remove protective covers. 
+
+2)  Inspect the coupling for loose, missing or damaged fasteners. 
+
+3)  Inspect coupling for wear or damage. 
+
+4)  Inspect flexible coupling components for broken teeth, chips, cracks, and deterioration. 
+
+5)  If deficiencies are found, schedule corrective maintenance to repair. 
+
+6)  If abnormal wear or loose components are found, check rotating machine alignment. See 
+
+FIST 2-1, Alignment of Rotating Machinery, for alignment procedures. 
+
+7)  Lubricate flexible couplings with lubricant meeting approved specifications (if applicable). 
+
+8)  Reinstall protective covers. 
+
+[Test or replace relief valves on positive displacement pumps.] 
+
+1)  For pumps with safety relief valves designed to limit pressure below maximum allowable 
+
+working pressure for a fluid system. 
+
+a)  If testing is not desired (e.g., not cost effective, valve design known to have seat leakage 
+
+after testing), replace the relief valve with a new valve having the same pressure and flow 
+design specifications. 
+
+72 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+   
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+b)
+
+If testing is desired.
+
+i) Develop a procedure using manufacture guidance and system design information to
+
+test and adjust the relief valve.
+
+ii) Verify the relief valve setting does not exceed 10% of the system design
+
+specification.
+
+iii) If tested setting exceeds 10% of the system design specification perform one of the
+
+following.
+
+(1) If adjustment is desired, adjust in accordance with manufacture instructions and
+
+retest.
+
+(2) If adjustment is not desired, replace the valve with a new valve having the same
+
+pressure and flow design specifications.
+
+iv) Document tested relief valve setpoint.
+
+2) For pumps with regulating relief valves (i.e., regulates normal system pressure), no testing is
+
+required. Proper operation is verified during operational inspections.
+
+Revision 1.0 
+
+73 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+This page intentionally left blank. 
+
+74 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+7.0  Revision History 
+
+Revision 
+
+Date 
+
+Change Summary 
+
+1.0 
+
+01/21/2026 
+
+Major change. Added new section 6.0 for 
+auxiliary pump. This information was 
+previously located in FIST 4-1A. Information 
+was adjusted to be specific to auxiliary pumps 
+(previously had turbines and large pumps) 
+and now contains fundamentals, component 
+details, and maintenance tasks to support the 
+Reclamation Maintenance Improvement 
+Initiative. Originally, section 6.0 contained 
+information on mechanical drawings. All 
+drawing information is in the Information 
+Management Handbook. 
+
+Reclamation 
+Manual 
+
+(FIST 031) 
+Supersedes (FIST 
+020) 08/01/2022
+
+Revision 1.0 
+
+75 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 2-6 
+Maintenance of Auxiliary Mechanical Equipment 
+
+This page intentionally left blank. 
+
+76 
+
+Revision 1.0 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+

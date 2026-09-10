@@ -1,0 +1,38 @@
+{
+  "mode": "captured",
+  "model": "gpt-5.4",
+  "generated_at": "2026-09-03T15:02:00Z",
+  "sample_id": "test-0282",
+  "prompt_version": "m3-multimodal-v1",
+  "visible_features": [
+    "Single frontal pediatric chest radiograph thumbnail in grayscale with very low resolution and blur.",
+    "Cardiomediastinal silhouette appears centered; heart size is not obviously enlarged on this thumbnail.",
+    "Lung fields are symmetrically aerated overall without a clear focal unilateral air-space opacity visible at this scale.",
+    "No obvious pleural effusion or pneumothorax is visible on the thumbnail.",
+    "Bony thorax is only partially seen; no gross acute osseous abnormality is evident on this limited view."
+  ],
+  "preliminary_findings": [
+    "Markedly limited assessment due to thumbnail size, blur, and lack of full diagnostic detail.",
+    "No clear focal lobar consolidation identified on this low-resolution image.",
+    "No obvious pleural effusion or pneumothorax is seen.",
+    "No gross cardiomediastinal enlargement is apparent, though cardiac size is difficult to assess reliably here."
+  ],
+  "possible_hypotheses": [
+    "No specific acute cardiopulmonary abnormality is evident on the thumbnail image.",
+    "If the apparent diffuse mild central hazy density is real rather than from blur or low resolution, it could reflect overlapping soft tissues or low-volume technique rather than a definite infiltrate."
+  ],
+  "uncertainties": [
+    "This is a de-identified educational thumbnail, not a diagnostic-quality radiograph.",
+    "Low resolution and image blur substantially limit evaluation of focal infiltrates, interstitial markings, hilar structures, and small pleural abnormalities.",
+    "Cardiac size, mediastinal contours, and subtle hyperinflation cannot be assessed confidently from this cropped low-detail view.",
+    "Absence of a visible abnormality on this thumbnail does not exclude pneumonia, bronchiolitis-related change, atelectasis, or other subtle pathology."
+  ],
+  "radiologist_checks": [
+    "Review the full-resolution original radiograph and confirm projection, rotation, and inspiratory effort.",
+    "Assess for subtle focal air-space opacity, especially retrocardiac and perihilar regions, that may be obscured on the thumbnail.",
+    "Verify heart size and mediastinal contours on the full image.",
+    "Check for small pleural effusion, pneumothorax, or linear or subsegmental atelectatic change.",
+    "Correlate with prior imaging and clinical history if available."
+  ],
+  "boundary": "Unverified educational output; not a diagnosis."
+}

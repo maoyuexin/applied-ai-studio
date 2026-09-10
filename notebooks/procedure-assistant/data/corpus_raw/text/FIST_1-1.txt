@@ -1,0 +1,4541 @@
+Facilities Instructions, Standards, and Techniques 
+Volume 1-1 
+
+Hazardous Energy Control 
+Program 
+
+U.S. Department of the Interior 
+Bureau of Reclamation 
+Power Resources Office 
+Denver, Colorado 
+
+August 2019 
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+REPORT DOCUMENTATION PAGE 
+
+Form Approved 
+OMB No. 0704-0188 
+
+Public reporting burden for this collection of information is estimated to average 1 hour per response, including the time for reviewing instructions, searching existing 
+data sources, gathering and maintaining the data needed, and completing and reviewing this collection of information.  Send comments regarding this burden estimate 
+or any other aspect of this collection of information, including suggestions for reducing this burden to Department of Defense, Washington Headquarters Services, 
+Directorate for Information Operations and Reports (0704-0188), 1215 Jefferson Davis Highway, Suite 1204, Arlington, VA  22202-4302.  Respondents should be 
+aware that notwithstanding any other provision of law, no person shall be subject to any penalty for failing to comply with a collection of information if it does not 
+display a currently valid OMB control number.  PLEASE DO NOT RETURN YOUR FORM TO THE ABOVE ADDRESS. 
+
+T1.  REPORT DATE (DD-MM-YYYY) 
+
+T2.  REPORT TYPE 
+
+August 15, 2019 
+
+Final 
+
+T4.  TITLE AND SUBTITLE 
+
+FIST 1-1, Hazardous Energy Control Program 
+
+T3.  DATES COVERED (From - To) 
+Implementation Date: 
+Upon publication. 
+
+5a.  CONTRACT NUMBER 
+
+5b.  GRANT NUMBER 
+
+5c.  PROGRAM ELEMENT NUMBER 
+
+6.  AUTHOR(S) 
+Minor Revision:   
+Joe Summers, David Arend, Talmadge Oxford, Mike Maroncelli, Mike Gulsvig, Marty Chavers, Mike 
+Pulskamp, Russell Anderson, Thomas Glover, Steve Melavic, Max Spiker 
+Original Team: 
+Brian Kitt, Stephen (Steve) E. Marquez, Michael J. Mckay, H. Deon Murphy, 
+Talmadge L. Oxford, Dale R. Rey, Allen K. Shomaker, Robert G. Skordas, Stacey B. Stanley, 
+James D. Stewart, Tom Tauscher, Bart D. Vanderhoof, Richard C. McDaniel (U.S. Army Corps of Engineers) 
+
+5d.  PROJECT NUMBER 
+
+5e.  TASK NUMBER 
+
+5f.  WORK UNIT NUMBER 
+
+7.  PERFORMING ORGANIZATION NAME(S) AND ADDRESS(ES) 
+Power Resources Office, Bureau of Reclamation 
+Denver Federal Center 
+P.O. Box 25007 
+Denver CO  80225-0007 
+
+9.  SPONSORING / MONITORING AGENCY NAME(S) AND ADDRESS(ES) 
+Power Resources Office 
+Bureau of Reclamation 
+Mail Code 86-51000 
+PO Box 25007 
+Denver CO  80225-0007 
+
+12.  DISTRIBUTION / AVAILABILITY STATEMENT 
+Available from the National Technical Information Service, Operations Division, 
+5285 Port Royal Road, Springfield, Virginia  22161 
+
+13.  SUPPLEMENTARY NOTES 
+
+8.  PERFORMING ORGANIZATION REPORT   
+     NUMBER 
+FIST 1-1 
+
+10.  SPONSOR/MONITOR’S ACRONYM(S) 
+
+PRO 
+
+11.  SPONSOR/MONITOR’S REPORT  
+       NUMBER(S) 
+
+14.  ABSTRACT 
+The Bureau of Reclamation owns, operates and maintains 53 hydroelectric powerplants and many switchyards, pumping plants, dams, canals, and associated 
+facilities that are important to electric power and water delivery systems.  This document establishes consistent procedures for the control of hazardous energy.  The 
+latter is intended to satisfy the requirements of OSHA 29 CFR 1910.147 and 29 CFR 1910.269. 
+
+15.  SUBJECT TERMS 
+Lockout, hazardous energy controls, clearance, Hot line order, special work permit, switching program forms, facility hazardous energy control program 
+
+16.  SECURITY CLASSIFICATION OF: 
+
+17.  LIMITATION  
+       OF ABSTRACT 
+
+18.  NUMBER  
+       OF PAGES 
+
+19a.  NAME OF RESPONSIBLE 
+PERSON 
+Power Resources Office 
+
+a.  REPORT 
+UL 
+
+b.  ABSTRACT 
+
+c.  THIS PAGE 
+
+UL 
+
+UL 
+
+UL 
+
+97 
+
+19b.  TELEPHONE NUMBER (include 
+area code) 
+(303) 445-2922 
+
+SS Standard Form 298 (Rev. 8/98) 
+P Prescribed by ANSI Std. 239-18 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Facilities, Instructions, Standards, and Techniques 
+Volume 1-1 
+
+Hazardous Energy Control 
+Program 
+
+U.S. Department of the Interior 
+Bureau of Reclamation 
+Power Resources Office 
+Denver, Colorado 
+
+August 2019 
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Mission Statements 
+
+The Department of the Interior (DOI) conserves and manages the Nation’s natural resources and 
+cultural heritage for the benefit and enjoyment of the American people, provides scientific and 
+other information about natural resources and natural hazards to address societal challenges and 
+create opportunities for the American people, and honors the Nation’s trust responsibilities or 
+special commitments to American Indians, Alaska Natives, and affiliated island communities to 
+help them prosper. 
+
+The mission of the Bureau of Reclamation is to manage, develop, and protect water and related 
+resources in an environmentally and economically sound manner in the interest of the American 
+public. 
+
+Disclaimer 
+
+This written material consists of general information for internal use only by Bureau of 
+Reclamation operations and maintenance staff.  Information contained in this document 
+regarding commercial products or firms may not be used for advertising or promotional purposes 
+and is not to be construed as an endorsement or depreciation of any product or firm by the 
+Bureau of Reclamation. 
+
+ii 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Table of Contents 
+Page 
+Codes and Standards ................................................................................................................. viii 
+
+Reclamation Standards and Documents .................................................................................. viii 
+
+Acronyms and Abbreviations ..................................................................................................... ix 
+
+Introduction ....................................................................................................................... 1 
+
+Purpose and Scope ........................................................................................................... 1 
+
+Reclamation Standard Practices ....................................................................................... 1 
+
+FIST Revision Requests ................................................................................................... 2 
+
+Philosophy........................................................................................................................ 2 
+
+Facility Hazardous Energy Control Program and Procedures ......................................... 3 
+
+Job Hazard Analysis ........................................................................................................ 4 
+
+Emergencies ..................................................................................................................... 4 
+
+Document Retention ........................................................................................................ 4 
+
+Air, Water, Hydraulic Systems ........................................................................................ 4 
+
+Responsibility and Authority ........................................................................................... 5 
+
+Responsible Official......................................................................................................... 5 
+
+Supervisors ....................................................................................................................... 5 
+
+Emergency Switching ...................................................................................................... 5 
+
+Employees ........................................................................................................................ 5 
+
+  Manager, Power Resources Office .................................................................................. 5 
+
+Training Program ............................................................................................................. 7 
+
+Purpose ............................................................................................................................. 7 
+
+Requirements ................................................................................................................... 7 
+
+Retraining ......................................................................................................................... 7 
+
+Documentation ................................................................................................................. 8 
+
+Facility Hazardous Energy Control Program Review .................................................. 9 
+
+Requirements ................................................................................................................... 9 
+
+Responsibility .................................................................................................................. 9 
+
+Lockout Devices, Tagout Devices, and Forms .............................................................. 11 
+
+Locks .............................................................................................................................. 11 
+
+Clearance Lockbox ........................................................................................................ 12 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+iii 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+  Multi-Lock Device ......................................................................................................... 12 
+
+Tags ................................................................................................................................ 13 
+
+Standard Forms .............................................................................................................. 14 
+
+Other Forms ................................................................................................................... 17 
+
+Station Log Entries ......................................................................................................... 18 
+
+Colors ............................................................................................................................. 18 
+
+Actions ........................................................................................................................... 18 
+
+Status of Actions ............................................................................................................ 18 
+
+Tracking HEC Records .................................................................................................. 19 
+
+Personal Lockout (Tagout) Records .............................................................................. 19 
+
+Special Condition Tag Records ..................................................................................... 19 
+
+Special Work Permit Records ........................................................................................ 19 
+
+Hazardous Energy Work Permit Records ...................................................................... 20 
+
+  Operational Configuration Management ..................................................................... 21 
+
+Purpose ........................................................................................................................... 21 
+
+Procedure for Switching to Change Configuration ........................................................ 21 
+
+Positive Controls in Public Access Areas ...................................................................... 21 
+
+Special Conditions ......................................................................................................... 21 
+
+Capacitor Banks ............................................................................................................. 22 
+
+Release Under Abnormal Conditions............................................................................ 23 
+
+Purpose ........................................................................................................................... 23 
+
+Procedure ....................................................................................................................... 23 
+
+  Personal Lockout (Tagout)............................................................................................. 24 
+
+  Use Restrictions ............................................................................................................. 24 
+
+  General ........................................................................................................................... 24 
+
+  Procedure ....................................................................................................................... 25 
+
+  Clearances ........................................................................................................................ 26 
+
+  Use ................................................................................................................................. 26 
+
+  Use of Personal Locks and Personal Tags ..................................................................... 26 
+
+  Procedure ....................................................................................................................... 26 
+
+  Request clearance.................................................................................................. 27 
+
+  Prepare and place clearance. ................................................................................. 27 
+
+iv 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+  Accept and issue clearance. .................................................................................. 29 
+
+  Working under a clearance. .................................................................................. 29 
+
+  Placement of Personal Protective Grounds ........................................................... 30 
+
+  Release and remove clearance. ............................................................................. 30 
+
+  Additional Requirements (Lockbox Option) ........................................................ 32 
+
+Identical Clearance......................................................................................................... 33 
+
+  Purpose. ................................................................................................................. 33 
+
+  Procedure. ............................................................................................................. 33 
+
+  Changing Job Supervisor. .............................................................................................. 34 
+
+  Clearances at Remote Sites ............................................................................................ 34 
+
+  Limits of the Clearance (Changing Scope) .................................................................... 34 
+
+  Testing Under a Clearance ............................................................................................. 35 
+
+  Hot Line Orders .............................................................................................................. 36 
+
+  Use ................................................................................................................................. 36 
+
+  Operating Under a Hot Line Order ................................................................................ 36 
+
+  Procedure ....................................................................................................................... 36 
+
+  Procedures for a line that has tripped out while under a hot line order. ............... 39 
+
+  Changing Job Supervisor for a hot line order. ...................................................... 39 
+
+  Change Scope of hot line order. ............................................................................ 40 
+
+Interconnected System Clearances and Hot Line Orders ........................................... 41 
+
+  Use ................................................................................................................................. 41 
+
+  Procedure ....................................................................................................................... 41 
+
+  Issue interconnected system clearance or hot line order. ...................................... 41 
+
+  Receive interconnected system clearance or hot line order. ................................. 41 
+
+  Release interconnected system clearance or hot line order. ................................. 42 
+
+  Hazardous Energy Work Permits ................................................................................. 43 
+
+  General ........................................................................................................................... 43 
+
+  Hazardous Energy Work Permit Exceptions ................................................................. 44 
+
+  Procedure ....................................................................................................................... 44 
+
+  Tagging of Equipment Operated by Supervisory Control .......................................... 46 
+
+  Special Work Permits (SWP) ......................................................................................... 47 
+
+  General ........................................................................................................................... 47 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+v 
+
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+  Procedure for Issuing Special Work Permits ................................................................. 47 
+
+  Placing and Removal of Personal Protective Ground(s)................................................ 48 
+
+  Procedure for Releasing Special Work Permits ............................................................. 48 
+
+  Changing Scope of Work Under a Special Work Permit .............................................. 49 
+
+  Change in Representative for a Special Work Permit ................................................... 49 
+
+  Reclamation Non-Facility Personnel ............................................................................. 50 
+
+  General ........................................................................................................................... 50 
+
+  Authorized Non-Reclamation Personnel ...................................................................... 51 
+
+  When a Formal Agreement Exists ................................................................................. 51 
+
+  When a Formal Agreement Does Not Exist .................................................................. 51 
+
+  Requirements ................................................................................................................. 51 
+
+Appendix A – Definitions ........................................................................................................... 52 
+
+Appendix B – Facility Hazardous Energy Control Program Example ................................. 58 
+
+Appendix C – Forms and Tags .................................................................................................. 59 
+
+Figure 1: Hazardous Energy Control Program (POM-210) ....................................................... 59 
+
+Figure 2: F-HECP Annual Review (POM-211)......................................................................... 60 
+
+Figure 3: Clearance Request (POM-212) .................................................................................. 61 
+
+Figure 4: Hazardous Energy Work Permit (POM-213) ............................................................. 62 
+
+Figure 5: Release Under Abnormal Conditions (POM-214) ..................................................... 63 
+
+Figure 6: Special Work Permit (POM-215) ............................................................................... 64 
+
+Figure 7: Switching Program Form (POM-216 ......................................................................... 67 
+
+Figure 8: Hazardous Energy Work Permit Record (POM-217) ................................................ 68 
+
+Figure 9: Personal Lock and Tag Record (POM-218) ............................................................... 69 
+
+Figure 10: Special Condition Tag Record (POM-219) .............................................................. 70 
+
+Figure 11: Special Work Permit Record (POM-220) ................................................................ 71 
+
+Figure 12: Authorized Employee Proficiency Checklist (POM-221) ........................................ 72 
+
+Figure 13: Job Supervisory Proficiency Checklist (POM-222) ................................................. 73 
+
+Figure 14: Switchman Proficiency Checklist (POM-223) ......................................................... 74 
+
+Figure 15: Operations Supervisor Proficiency Checklist (POM-224) ....................................... 75 
+
+Figure 16: FIST Revision Request Form (POM-226) ............................................................... 76 
+
+Figure 17: Personal Lock Label (POM-139) ............................................................................. 77 
+
+Figure 18: Clearance Lock Label (POM-140) ........................................................................... 78 
+
+vi 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Figure 19: Clearance Tag (POM-137) ....................................................................................... 79 
+
+Figure 20: Hot Line Tag (POM-135) ......................................................................................... 80 
+
+Figure 21: Personal Tag (POM-166) ......................................................................................... 81 
+
+Figure 22: Special Condition Tag (POM-138) .......................................................................... 82 
+
+Figure 23: Example Job Plan Details Report ............................................................................. 85 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+vii 
+
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Codes and Standards 
+29 CFR 1910.147, The control of hazardous energy (lockout/tagout) 
+29 CFR 1910.269, Electric Power Generation, Transmission, and Distribution 
+29 CFR 1910.333, Selection and use of safe work practices 
+NFPA 70E, Standard for Electrical Safety in the Workplace 
+
+Reclamation Standards and Documents 
+FAC P04, Hydroelectric Power 
+FAC P14, Power Operations and Maintenance (PO&M) Technical Standards. 
+FAC 04-14, Power Facilities Technical Documents. 
+ADM 07-01, Programmatic Internal Control Program Management. 
+RCD 03-03, Request for Deviation from a Reclamation Manual Requirement and Approval or 
+Disapproval of the Request. 
+
+viii 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+American National Standards Institute  
+American Society of Safety Engineers 
+Code of Federal Regulations 
+
+Employee Authorization List 
+Facilities Instructions, Standards, and Techniques 
+Facilities Instructions, Standards, and Techniques, Volume 1-1 
+Facility Hazardous Energy Control Program 
+Hazardous Energy Control 
+Hazardous Energy Control Program 
+Hazardous Energy Work Permit 
+Job Hazard Analysis 
+North American Reliability corporation 
+National Fire Protection Association 
+Operations and Maintenance 
+Occupational Safety and Health Administration 
+Power Operations and Maintenance 
+Power Resources Office 
+Personal Protective Clothing and Equipment 
+
+Acronyms and Abbreviations 
+ANSI   
+ASSE   
+CFR 
+DOI Talent  Department of Interior (Talent) 
+EAL 
+FIST 
+FIST 1-1 
+F-HECP 
+HEC 
+HECP   
+HEWP  
+JHA 
+NERC  
+NFPA   
+O&M   
+OSHA  
+PO&M  
+PRO 
+PPE 
+Reclamation  Bureau of Reclamation 
+RM D&S 
+RO 
+RSHS   
+SCADA 
+SOP 
+SPF 
+SWP 
+TSC 
+
+Reclamation Manual Directives and Standards 
+Responsible Official 
+Reclamation Safety and Health Standards 
+Supervisory Control and Data Acquisition 
+Standing Operating Procedure 
+Switching Program Form 
+Special Work Permit 
+Technical Service Center 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ix 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+This page intentionally left blank. 
+
+x 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+ Introduction 
+
+The Bureau of Reclamation operates and maintains hydroelectric powerplants, switchyards, 
+pumping plants, water delivery equipment and associated facilities in the 17 western United 
+States.  These facilities house complex electrical and mechanical equipment that must be kept 
+operational because they are critical to the electric power and water delivery systems relied on by 
+many.  FIST manuals provide criteria and procedures that should be utilized by the offices 
+involved in managing Reclamation facilities and assets. 
+
+This document establishes standard technical practices to ensure the safe, reliable, economic and 
+efficient operations and maintenance of Federal facilities by keeping related assets in good 
+condition and ultimately protecting Federal investments.  These technical practices provide a 
+sufficient level of detail to ensure consistent application while providing flexibility for the use of 
+innovative techniques and approaches.  These instructions are to be utilized by transferred 
+facilities and other entities as appropriate.  These instructions are intended to promote uniformity 
+in the manner that assets are managed, documented, and coordinated.  This document was 
+developed with input from staff in Reclamation’s Denver, regional, and area offices. 
+
+  Purpose and Scope 
+
+FIST 1-1 establishes an HECP to provide for the physical safety of employees and the public 
+who work on or near any equipment (or system) that produces, uses, or stores hazardous energy. 
+The HECP provides consistent procedures for controlling hazardous energy and maintaining 
+operational control of a facility’s configuration.  It establishes minimum standards and 
+performance requirements for the control of hazardous energy at all Reclamation operated or 
+maintained facilities. All Reclamation facilities must comply with the procedures described 
+herein. 
+
+  Reclamation Standard Practices 
+
+Reference Reclamation Manual Policy FAC P14, Power Operations and Maintenance (PO&M) 
+Technical Standards, for requirements regarding responsibilities with respect to text designations 
+within this Technical Document. 
+
+There may be multiple ways to accomplish tasks outlined in this document, and facilities may 
+exercise discretion as to how certain tasks will be accomplished based on equipment 
+configurations and available resources. Reclamation’s regions, PRO, and TSC agree that certain 
+practices are required to be consistent across all Reclamation facilities. 
+
+Refer to the Reclamation Manual Directive and Standard FAC 04-14, Power Facilities Technical 
+Documents, for more details concerning technical documents. 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+1 
+
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+{The entirety of this document, unless otherwise noted, is to be considered as red bold and 
+bracketed.} 
+
+  FIST Revision Requests 
+
+The FIST Revision Request Form (POM 226) is used to request changes to a FIST document.  
+The request will include a summary of the recommended changes and a basis for the revision or 
+new FIST.  These forms will be submitted to the Manager, PRO.  The PRO Manager will keep a 
+list of Revision Requests for each FIST and include these in the next scheduled revision unless it 
+is important enough to prioritize the change sooner. 
+
+  Philosophy 
+
+Safe work practices take precedence over immediate job production. All switching operations 
+must be guided and tested by the following fundamental principles: 
+
+1)  Start with the correct procedure and follow it exactly. 
+2)  The six basic steps of switching: 
+
+a.  Carry the SPF with you while switching; 
+b.  Touch or point to the device identification nameplate to verify correct device; 
+c.  Recheck the SPF for correct device and sequence; 
+d.  Verify anticipated device position; 
+e.  Perform requested action on the device; and 
+f.  Verify desired device position. 
+
+3)  Clearance Tags, Hot Line Tags, or Personal Tags are to be considered the same as locks.  
+
+Tags must not be used on devices capable of receiving a lock. 
+
+4)  Violating a Clearance Lock, Clearance Tag, Hot Line Tag, Personal Lock, or Personal 
+
+Tag can kill somebody. 
+
+5)  Equipment must not be operated, moved, or removed when Clearance Tags, Hot Line 
+
+Tags, Personal Tags, Clearance Locks, or Personal Locks are in place. 
+
+6)  NO EMPLOYEE WILL BE REQUIRED TO WORK ON A JOB OR PIECE OF 
+
+EQUIPMENT THAT THEY CONSIDER UNSAFE.  The employee is responsible for 
+requesting additional protection deemed necessary. 
+
+7)  Energy isolation devices capable of being locked must be locked when using hazardous 
+
+energy control procedures. 
+
+8)  Equipment must be considered energized until appropriate tests have been performed to 
+
+verify the equipment is de-energized. 
+
+2 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+  Facility Hazardous Energy Control Program and Procedures 
+
+Each area office or facility must use this FIST 1-1 to develop facility specific programs.  The F-
+HECP must be comprised of a copy of FIST 1-1 in its entirety, with the specific facility’s 
+requirements integrated and identified by highlighting and/or underlining.  See Appendix B – 
+Facility Hazardous Energy Control Program Example for a sample of this integration. 
+In situations where Reclamation employees are required to perform work at transferred works or 
+other agencies where the FIST 1-1 is not utilized, Reclamation personnel must ensure that they 
+are provided information and trained on the local program.  In the absence of a local program, 
+the Job Supervisor must follow the guidance implemented by FIST 1-1.  If an employee does not 
+feel that the work can be performed safely under an approved procedure, the work must not be 
+performed. 
+
+1)  The F-HECP must: 
+
+a.  At a minimum, be as restrictive as the FIST 1-1 requirements; 
+b.  Incorporate specific hazardous energy control procedures for the facility; 
+c.  Identify the Responsible Official (RO); 
+d.  Be reviewed and updated at least annually; 
+e.  Be annually approved and signed by the RO; 
+f.  Be readily available at each facility; 
+g.  Be made available to each employee; and 
+h.  List facility specific abbreviations and terms.  
+
+2)  A current Reclamation Employee Authorization List (EAL) must: 
+
+a.  Be maintained at each facility; 
+b.  Identify the employees and the HEC roles they are authorized to perform: 
+
+i.  Authorized Employees; 
+ii.  Switchmen; 
+iii.  Job Supervisor; and 
+iv.  Operations Supervisors. 
+
+c.  Be reviewed and signed by the RO at least annually. 
+
+3)  An EAL must be maintained and reviewed as required in the F-HECP to identify: 
+
+a.  Reclamation non-Facility personnel and the HEC roles they are authorized to 
+
+perform; 
+
+b.  Authorized Non-Reclamation personnel and the HEC roles they are authorized to 
+
+perform; and 
+
+c.  Contractor’s Workplace representatives. 
+
+4)  The EAL should be provided to the appropriate non-Reclamation organizations listing 
+personnel who are authorized to request, issue, or receive interconnected system 
+clearances or hot line orders. 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+3 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+  Job Hazard Analysis 
+
+A hazard assessment must be performed to identify all hazards specific to the work or tasks to be 
+performed.  Refer to RSHS Section 4, Work Planning.  Analysis must include electrical shock 
+and arc flash hazard considerations.  See FIST Volume 5-14 for more information concerning arc 
+flash hazards. 
+
+A hazard assessment would determine when a JHA must be developed and the identification of 
+any hazardous energy control procedures necessary to ensure the safety of personnel and 
+facilities.  All hazards identified by a hazard assessment shall be addressed and mitigation 
+techniques identified on the JHA. 
+
+  Emergencies 
+
+The F-HECP may be suspended as necessary to permit proper handling of an emergency as 
+defined in Appendix A, Definitions.  However, in handling such emergencies, safety of 
+personnel must be given paramount consideration. 
+
+  Document Retention 
+
+Upon completion of the work, HEC procedures and supporting documentation, including JHAs, 
+job plans, clearance/hot line requests, HEWP, Release Under Abnormal Conditions, SWP, SPF, 
+etc., must be kept for a minimum of 7 years.  If another program requires retention of the same 
+document, such as mandatory reliability compliance or unexpected event reporting, the longer 
+retention requirement prevails for that document.  Records may be retained in any format (e.g., 
+electronic or hard copy) that can be identified and disposed of when the retention period is met. 
+
+  Air, Water, Hydraulic Systems 
+
+There are not any generally accepted industry pressure levels for air, water, and hydraulic 
+systems.  Each facility in their F-HECP must define, in Section 11.1.5, the threshold where the 
+energy level in an air, water, or hydraulic system becomes subject to: 
+
+1)  Personal Lockout and Tagout; and 
+2)  Clearance. 
+
+4 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+ Responsibility and Authority 
+
+  Responsible Official 
+
+The RO at each facility or Area Office must ensure that the requirements of the F-HECP are: 
+
+1)  Properly applied; 
+2)  Complied with; and 
+3)  Understood by all employees. 
+
+  Supervisors 
+
+Supervisors must ensure that all personnel under their jurisdiction receive the appropriate level 
+of instruction concerning the F-HECP and its application. 
+
+  Emergency Switching 
+
+An Operations Supervisor is responsible for directing emergency switching.  If emergency 
+switching is required and a Switchman is not available, any person may perform switching if 
+deemed qualified by the Operations Supervisor. 
+
+  Employees 
+
+Employees must not work under an HEC procedure until: 
+
+1)  Trained; 
+2)  Tested; 
+3)  Authorized by the RO; and 
+4)  Issued Personal Locks. 
+
+It is the responsibility of each employee to act within their authority and immediately report any 
+violations of the F-HECP or any HEC procedures to their supervisor. 
+
+Additional employee F-HECP responsibilities are described in subsequent sections of this 
+document. 
+
+  Manager, Power Resources Office 
+
+The Manager, PRO, is responsible for the following: 
+
+1)  Providing technical support; 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+5 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+2)  Providing standardized materials to be used by the facilities for training and examination; 
+
+F-HECP specific information must be provided by the Area Office or facility. 
+
+3)  Collecting data from F-HECP reviews, Review of Power Operations and Maintenance1 
+
+recommendations, and Unexpected Event Reporting2 documentation including: 
+
+a.  Effectiveness of training program (examination, presentation, trainer, etc.); 
+b.  HECP related recommendations; and 
+c.  HECP related incident investigation findings; 
+
+4)  Reviewing Reclamation FIST 1-1; 
+5)  Providing feedback and report to regional directors; and 
+6)  Reviewing and taking appropriate action on suggested revisions, comments, and 
+
+concerns. 
+
+1 See FIST Volume 6 5, Power Review of Operations and Maintenance Program. 
+2 See FIST Volume 6 3, Unexpected Event Reporting. 
+
+6 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+                                                 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+ Training Program 
+
+  Purpose 
+
+Ensure that all Reclamation employees involved with the F-HECP have an understanding that is 
+appropriate for their level of hazardous energy exposure. 
+
+  Requirements 
+
+The RO must ensure that facility-specific information is developed and included with the 
+standardized training materials.  The following training is required annually for Authorized 
+Employees and Incidental Employees: 
+1)  Authorized Employees: 
+
+a.  Prior to being authorized to work under an HEC Procedure, employees must 
+
+receive a minimum of four hours of F-HECP training. 
+
+b.  Employees must complete an examination, with a minimum score of 80% to 
+
+demonstrate adequate working knowledge of the F-HECP.  Examinations must 
+include the questions provided by the PRO and additional F-HECP related 
+questions. 
+
+c.  Employees passing the examination will be recommended to the RO for 
+
+placement on the EAL. 
+
+d.  Employees may be subject to examination at any time on F-HECP. 
+
+Note:  Optional Proficiency Checksheets are available in Appendix C – Forms and Tags for 
+Authorized Employees, Job Supervisors, Switchmen, and Operations Supervisors. 
+
+2)  Incidental Employees must receive awareness training. 
+
+  Retraining 
+
+Additional training must be provided annually or if: 
+
+1)  There is a change in: 
+
+a.  An employee’s classification; 
+b.  Assignment of duties; 
+c.  Equipment; 
+d.  Systems or processes that present a new energy control hazard; or 
+e.  The F-HECP; 
+
+2)  There is reason to suspect deficiencies or inadequacies in the employee’s knowledge of 
+
+the F-HECP or use of energy control procedures; 
+
+3)  An employee does not complete the annual training.; or 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+7 
+
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+4)  An employee fails the examination. 
+
+  Documentation 
+
+The RO is responsible for documenting all training (including any retraining) in the U.S. 
+Department of Interior training tracking system.  DOI Talent is the current U.S. Department of 
+Interior training tracking system. 
+
+8 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+ Facility Hazardous Energy Control 
+
+Program Review 
+
+  Requirements 
+
+1)  The RO must ensure that the F-HECP review is conducted at least annually, to ensure: 
+
+a.  Proper implementation; 
+b.  Proper documentation; 
+c.  Employees are familiar with their responsibilities; 
+d.  Employees maintain proficiency; 
+e.  Training requirements are met; and 
+f.  Corrective action plans are prepared and completed to address any identified 
+
+deficiencies; 
+
+2)  These reviews must include: 
+
+a.  A random sampling of the HEC procedures (including JHAs, job plans, etc.),  
+b.  Program deficiencies, such as: 
+
+i.  Incidents, 
+ii.  HECP errors, 
+iii.  Status of previously noted incidents, and 
+iv.  Other applicable information; 
+
+c.  Employee interviews; 
+d.  Training program documentation; 
+e.  Confirmation that the EAL is current; 
+f.  F-HECP review and revision has been completed; 
+g.  An assessment of the legibility of the tags; and 
+h.  An evaluation of progress toward having lockable energy isolation devices so that 
+
+use of Personal and Clearance Tags can be eliminated. 
+
+3)  The review must be documented on the “F-HECP – Annual Review Form” (POM-211).  
+Reserved power facilities must send a copy to the PRO Manager, Area Manager, and 
+Regional Power Manager.  A sample job plan for the review is provided in Appendix C. 
+
+  Responsibility 
+
+The RO must designate an authorized employee(s) to conduct the review of the F-HECP.  The 
+designated employee(s) must not have been involved in developing the HEC procedures being 
+reviewed.  The designated employee(s) must be able to determine: 
+
+1)  Whether the steps in the HEC procedures are being followed; 
+2)  Whether the employees involved know their responsibilities under the HEC procedures; 
+3)  Whether the HEC procedures are adequate to provide the necessary protection; and 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+9 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+4)  Whether changes, if any, are needed. 
+
+10 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+ Lockout Devices, Tagout Devices, and 
+
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Forms 
+
+  Locks 
+
+1)  General. 
+
+Each facility must provide uniquely designated locks as described in its F-HECP.  Locks 
+must be substantial enough to prevent removal without the use of excessive force or 
+unusual techniques, such as the use of bolt cutters or other metal cutting tools.  
+
+2)  The locks must be defined in the F-HECP and standardized within the facility in at least 
+
+one of the following criteria: 
+
+a.  Color; 
+b.  Shape; 
+c.  Size; or 
+d.  Specific markings. 
+
+3)  Personal locks. 
+
+a.  Personal locks must: 
+
+i.  Be used by Authorized Employees; 
+ii.  Be for personal protection only; 
+iii.  Not be used for any other purpose; 
+iv.  Indicate the identity of the person who applied them; 
+v.  Be used on energy isolation devices that are capable of being locked out, 
+
+or lock boxes; and 
+
+vi.  Be a uniquely keyed lock or set of locks with a single key controlled by 
+
+the Authorized Employee.  If combination locks are used for personal 
+locks, the combination must be known only by the Authorized Employee.  
+Spare keys must not be created or used. 
+
+b.  Personal locks must also be labeled (POM 139) with: 
+
+i.  DANGER, 
+ii.  HANDS OFF, 
+iii.  DO NOT OPERATE, 
+iv.  EMPLOYEE’S NAME. 
+
+Note:  Lock labels with sleeves and tags are available from publishing services at (303)-445-
+2066, or publishingservices@usbr.gov.  The labels and tags can also be ordered online on the 
+WEBCDR site (https://print). 
+
+4)  Clearance locks. 
+
+a.  Clearance locks must:  
+
+i.  Be used by authorized switchmen; 
+ii.  Be used for clearance purposes only; 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+11 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+iii.  Establish the limits of the clearance; 
+iv.  Be used on each energy isolation device that is capable of being locked 
+
+out; 
+
+v.  Have the key uniquely identified with its associated clearance lockset, on 
+
+an easily readable label; and 
+
+vi.  Not have spare keys created or used. 
+b.  Clearance locks must be labeled (POM-140) with:  
+
+i.  DANGER, 
+ii.  DO NOT OPERATE, 
+iii.  PEOPLE WORKING, 
+iv.  CLEARANCE. 
+
+c.  Combination locks must not be used as clearance locks. 
+
+5)  Operations Locks.  
+
+a.  Operations Locks must: 
+
+i.  Be used by Switchmen; 
+ii.  Be used for Operational Configuration Management as directed in SPF, 
+
+SOP, job plan or JHA; 
+
+iii.  Not be used on an isolation device as part of an HEC procedure; 
+iv.  Be used and recorded as described in the F-HECP; and 
+v.  Be identified in the F-HECP. 
+
+  Clearance Lockbox 
+
+A clearance lockbox must: 
+
+1)  Be described in the F-HECP, including how the clearance will be associated with the 
+
+lockbox; 
+
+2)  Be used to capture the key(s) associated with a clearance; 
+3)  Allow the key(s) to be visually identifiable; and 
+4)  Be the only place associated with a clearance where a personal lock is placed to control 
+all forms of hazardous energy associated with the scope of work to be performed. 
+
+  Multi-Lock Device 
+
+A device that allows multiple locks to be placed on an energy isolation device.  Use of a multi-
+lock device is recommended on all lockable energy isolation devices and lock boxes. 
+
+12 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+  Tags 
+
+Energy isolation devices for machinery or equipment installed after January 2, 1990, must be 
+capable of receiving a lock.  Equipment that currently does not have provisions to accept a lock 
+must be retrofitted to enable placing a lock if practicable. 
+
+1)  General: 
+
+a.  Standardized: 
+
+Tags must be standard Reclamation wide.  Tags are shown in appendix C.  Tags 
+are available from publishing services at 303-445-2066.  Tags are available by the 
+box, in units of 50. 
+
+b.  Tag Attachment: 
+
+Tags, including their means of attachment, will be substantial enough to prevent 
+inadvertent or accidental removal.  The means of attachment must be non-
+reusable, attachable by hand, self-locking, and non-releasable with a minimum 
+unlocking strength of 50 pounds. It must also have the general design and basic 
+characteristics of being at least equivalent to a one piece, all environment tolerant 
+nylon cable tie. 
+c.  Tag Numbering: 
+
+Clearances and Hot Line Tags will be uniquely numbered by the facility.  The 
+number will be permanently attached or engraved on the tag. 
+
+d.  Tag Replacement: 
+
+Tags that become damaged or illegible must be replaced immediately. 
+
+2)  Personal Tags (POM 166): 
+
+Each facility must define the use of Personal Tags in its F-HECP.  A Personal Tag may 
+be used in conjunction with a Personal Lock for informational purposes. 
+
+a.  Personal Tags must:  
+
+i.  Be used by Authorized Employees; 
+ii.  Be for personal protection only; 
+iii.  Be used on energy isolation devices that are incapable of being locked out; 
+
+and 
+
+iv.  Be completely filled out prior to placement. 
+
+3)  Clearance Tags (POM 137): 
+
+a.  Clearance Tags must: 
+
+i.  Be used by Switchmen; 
+ii.  Establish the limits of the clearance; and  
+iii.  Be used on energy isolation devices that are incapable of being locked out. 
+
+4)  Special Condition Tags (POM 138): 
+
+These tags are used to designate special conditions affecting Equipment. Special Condition 
+Tag must be numbered and completely filled out prior to placement. 
+
+5)  Hot Line Tags (POM 135): 
+
+These tags are used in connection with hot line orders to prevent reenergizing equipment. 
+
+a.  Hot Line Tags must:  
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+13 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+i.  Be used by Switchmen; and 
+ii.  Be applied to the appropriate circuit breaker control switches. 
+
+  Standard Forms 
+
+Required forms listed below are shown in Appendix C. They are available on the Reclamation 
+intranet site at: 
+https://teamssp.bor.doi.net/printanddup/forms/POM%20Forms/Forms/AllItems.aspx    
+
+1)  General 
+
+The following forms have been standardized and must be used:  
+
+a.  F-HECP Title Page (POM 210) 
+b.  F-HECP – Annual Review (POM 211) 
+c.  Clearance Request (POM 212) 
+d.  Hazardous Energy Work Permit (POM 213) 
+e.  Release Under Abnormal Conditions (POM 214) 
+f.  Special Work Permit (POM 215) 
+g.  Switching Program Form (SPF) (POM 216) 
+h.  Personal Lock Label (POM 139) 
+i.  Clearance Lock Label (POM-140) 
+j.  Personal Tag (POM 166) 
+k.  Clearance Tag (POM-137) 
+l.  Special Condition Tags (POM 138) 
+m.  Hot Line Tags (POM 135) 
+
+2)  F-HECP Title Page 
+
+This form is to be used as the title page for the F-HECP, documenting annual approval by 
+the RO. 
+
+3)  F-HECP – Annual Review 
+
+This form is used to document the annual F-HECP review. 
+
+4)  Clearance Request 
+
+This form is used to request a clearance on equipment (or a system).  As there are not to 
+be any standing HEC procedures, there must be documentation of the initiation of a 
+request.  This form is also to be used to request Hot Line Orders. 
+
+5)  Hazardous Energy Work Permit (HEWP) 
+
+This form is used to document the process for work on systems that have not been 
+isolated from all forms of hazardous energy. 
+
+6)  Release Under Abnormal Conditions 
+
+This form documents the removal of an Authorized Employee’s Personal Lock (Tag) or 
+release of their clearance. 
+7)  Special Work Permit (SWP) 
+
+14 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Formally documents the coordination between Reclamation and contractor personnel to 
+authorize work by the contractor’s forces on or near Reclamation facilities when 
+Hazardous Energy Control Procedures are required.  This form includes: 
+
+a.  Contractor name;  
+b.  Special Work Permit number; 
+c.  Clearance or hot line order number.  If a personal lockout is used instead of a 
+
+clearance, the lockout procedure must be attached to the SWP; 
+
+d.  A detailed written description of the purpose and scope of the work to be 
+
+accomplished and if feasible, drawings identifying the limits of the clearance; 
+
+e.  Personal protective ground(s) required; 
+f.  A statement that the Contractor’s Workplace Representative, Reclamation 
+
+Representative and Authorized Reclamation Employee: 
+
+i.  Discussed the work to be performed;  
+ii.  Reviewed the details of the hazardous energy control procedures to be 
+
+utilized for adequacy; and  
+
+iii.  Verified understanding regarding placement of:  
+
+1.  Shorts; 
+2.  Jumpers; and 
+3.  Personal protective ground(s). 
+
+iv.  Conditions of the working area. 
+
+g.  Signature blocks for each of the parties to acknowledge the conditions of the 
+
+Special Work Permit; 
+
+h.  A release statement to be signed by the Contractor’s Workplace Representative, 
+Reclamation Representative and Authorized Reclamation Employee certifying: 
+
+i.  All contractor work associated with this Special Work Permit is complete;  
+ii.  Verification of removal of, or an accounting for all: 
+
+1.  Shorts;  
+2.  Jumpers; and 
+3.  Personal protective ground(s).  
+
+iii.  All contractor personnel and equipment are in the clear.  
+
+8)  Switching Program Form (SPF) 
+
+a.  Purpose 
+
+The SPF is used to formalize and document each step in the process of placing 
+and releasing clearances, hot line orders, and performing switching (for 
+operational configuration management). 
+
+b.  Numbering 
+
+Each SPF must be given a unique number.  The necessary coding for the year and 
+facility must be described in the F-HECP.  One series of consecutive numbers 
+may be used for all programs, or a separate series of consecutive numbers may be 
+used for clearances, hot line orders, and switching. 
+
+c.  Use 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+15 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Note:  No modifications may be made to this form.  It is acceptable to add extra 
+page(s) as needed to record additional information.  Use of these additional 
+pages should be defined in the F-HECP. 
+
+i.  The SPF must be prepared as identified under the appropriate section of 
+
+the F-HECP. 
+
+ii.  The SPF will not be valid for switching until signed and dated by the 
+
+preparer and a person performing a second check. 
+
+iii.  Previously prepared SPFs may be used for reference only. 
+iv.  The SPF (or a copy) must be carried by the Switchman during switching. 
+v.  The SPF is used to record in detail the exact operation and the locking or 
+
+tagging information required. 
+
+vi.  Each operation must be listed in the precise sequence to be performed, 
+
+including those operations or steps not requiring a lock or tag. 
+
+vii.  The SPF must adhere to the following: 
+
+1.  Only one operation per step on the SPF.  
+
+a.  Checking one device in the desired position and locking or 
+
+tagging it must be considered one step. 
+
+b.  Operating one device and locking or tagging it in the 
+
+desired position must be considered one step. 
+
+c.  A communication action must be numbered as one step on 
+
+the SPF: 
+
+2.  The equipment description, for a switching step, must be specific 
+
+enough to identify the device; 
+
+3.  The SPF must identify the locations of the locks and tags for a hot 
+
+line order or clearance; 
+
+4.  Be legibly generated in indelible ink; and 
+5.  Contain no erasures. 
+
+viii.  Corrections or changes to the SPF must be: 
+
+1.  At the discretion of the preparer; 
+2.  Documented; 
+3.  Initialed by the preparer; and 
+4.  Second checked and initialed by another qualified person. 
+ix.  When the SPF cannot be provided to the Switchman, the F-HECP must 
+
+define the process to be used to meet the requirements established by this 
+document. 
+
+x.  The initial placement and final removal of all personal protective 
+
+ground(s) must be documented on the cover page of the SPF.  It is not 
+required to track temporary removal of personal protective grounds for 
+testing purposes.  Documentation must include: 
+
+1.  The personal protective ground identification number(s); 
+2.  Date and time; 
+
+16 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+3.  The name of the employee who placed or removed the personal 
+
+protective ground(s); and 
+
+4.  The initial placement location of the personal protective ground(s) 
+
+and final removal of personal protective grounds. 
+
+Note:  When personal protective grounds are required to perform work per FIST 5-1, Personal 
+Protective Grounding for Electric Power Facilities and Power Lines, and temporary removal is 
+necessary to perform testing, only the initial installation and final removal must be documented 
+on the SPF.  If the grounds are relocated to a different location, then they must be documented 
+as a new line item on the SPF. 
+
+  Other Forms 
+
+1)  Examples of these forms are shown in Appendix C.  They are also available on 
+
+Reclamation’s Forms site. 
+
+a.  General.  The following forms have been standardized and may be used in this 
+
+program: 
+
+i.  FIST Revision Request (POM 226) 
+ii.  Hazardous Energy Work Permit Record (POM 217) 
+iii.  Personal Lockout and Tagout Record (POM 218) 
+iv.  Special Condition Tag Record (POM 219) 
+v.  Special Work Permit Record (POM 220) 
+vi.  Proficiency Checksheets: 
+
+1.  Authorized Employee (POM 221) 
+2.  Job Supervisor (POM 222) 
+3.  Switchman (POM 223) 
+4.  Operations Supervisor (POM 224) 
+
+vii.  FIST Revision Request (POM-226).  This standard form is used to suggest 
+
+2)  Use of the following forms will be described in the F-HECP: 
+
+or request a revision or change to a FIST volume. 
+
+a.  Hazardous Energy Work Permit Record (POM-217).  This form is used to 
+
+document the authorization and expiration of Hazardous Energy Work Permits; 
+b.  Personal Lockout and Tagout Record (POM-218).  This form is used to document 
+the placement and removal of locks and tags under Personal Lockout and Tagout; 
+
+c.  Special Condition Tag Record (POM-219).  This form is used to document the 
+
+placement and removal of special condition tags; 
+
+d.  Special Work Permit Record (POM-220).  This form is used to document the 
+
+issue and release of special work permits; and 
+
+e.  Proficiency Checksheets (POM-221, POM-222, POM-223, POM-224).  These 
+
+example forms are used to evaluate the proficiency of employees by the 
+supervisor prior to making a recommendation to the RO; 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+17 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+ Station Log Entries 
+
+All station log entries related to HEC procedures must be typed, legibly handwritten, or stamped 
+in ink.  Such entries must be made as soon as practicable after the action has been accomplished.  
+In addition to the documentation provided by the SPF, entries in the dispatch center, control 
+center, or station log must be made as follows: 
+
+  Colors 
+
+Red must be used for issuing clearances (and hot line orders). 
+Green must be used for releasing of clearances (and hot line orders). 
+
+  Actions 
+
+After a clearance or hot line order has been issued or released, or special condition or operational 
+configuration management switching has been completed, the following must be logged: 
+
+1)  Clearance or Hot Line Order: 
+
+a.  Date; 
+b.  Time; 
+c.  Type of action (placed or removed); 
+d.  Number assigned;  
+e.  Issued to or released by; and 
+f.  Equipment covered by action. 
+
+2)  Special condition or operational configuration management switching: 
+
+a.  Date; 
+b.  Time; 
+c.  Type of action (placed or removed); 
+d.  Number assigned;  
+e.  Issued to or released by; and 
+f.  Equipment covered by action. 
+
+  Status of Actions 
+
+Each facility must develop a systematic method of keeping appropriate personnel informed 
+concerning the status of clearances, hot line orders, operation configuration management 
+switching, and special conditions.  A readily accessible file of F-HECP forms or records will be 
+maintained for current clearances, hot line orders, special conditions, and special work permits. 
+
+18 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+ Tracking HEC Records 
+
+Section 1.8, Document Retention, covers retention requirements for HEC procedures and 
+supporting documentation.  The F-HECP will describe the location of all supporting 
+documentation. 
+
+  Personal Lockout (Tagout) Records 
+
+1)  Placement and removal of all personal locks and tags must be recorded.  Personal locks 
+
+placed on clearance lockboxes are exempt. 
+
+2)  Each facility will describe in the F-HECP what equipment (or system) does not require 
+
+coordination with operations. 
+
+3)  The F-HECP will describe the location of records and how the records will be reviewed 
+
+to ensure accuracy. 
+
+4)  The information to be recorded at a minimum is the following: 
+
+a.  Date and time placed; 
+b.  Date and time removed; 
+c.  Name of person placing and removing the device; and 
+d.  Device location and equipment. 
+
+  Special Condition Tag Records 
+
+1)  Placement and removal of all special condition tags must be recorded. 
+2)  The F-HECP will describe the location of records and how the records will be reviewed 
+
+to ensure accuracy. 
+
+3)  The information to be recorded at a minimum is the following: 
+
+a.  Tag number; 
+b.  Original date and time placed; 
+c.  Name of person placing and removing the tag; 
+d.  Device location and equipment; 
+e.  Date and time removed; 
+f.  Current review date and reviewer; and 
+g.  Remarks. 
+
+  Special Work Permit Records 
+
+1)  Issuance and release of all SWPs must be recorded in the station log. 
+2)  The F-HECP will describe the location of records and how the records will be reviewed 
+
+to ensure accuracy. 
+
+3)  The information to be recorded at a minimum is the following: 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+19 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+a.  SWP number; 
+b.  Date and time issued; 
+c.  Issue to; 
+d.  Device location and equipment; and 
+e.  Date and time released. 
+
+  Hazardous Energy Work Permit Records 
+
+1)  Authorization and expiration of all HEWPs must be recorded. 
+2)  The F-HECP will describe the location of records and how the records will be reviewed 
+
+to ensure accuracy. 
+
+3)  The information to be recorded at a minimum is the following: 
+
+a.  HEWP number; 
+b.  Date and time authorized; 
+c.  Person issued to;  
+d.  Device location and equipment; and 
+e.  Expiration date and time. 
+
+20 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+ Operational Configuration Management 
+
+  Purpose 
+
+Operational configuration management is performed by changing the position and status of 
+electrical, mechanical, hydraulic, etc., systems and devices. 
+
+1)  Operational configuration management includes changes for: 
+
+a.  Emergencies; 
+b.  Maintenance; 
+c.  Testing; 
+d.  Changes in operating conditions; and 
+e.  Restoration to normal operating conditions. 
+
+2)  HEC procedures are considered operational configuration management procedures. 
+
+  Procedure for Switching to Change Configuration 
+
+1)  Configuration changes directed by the Operations Supervisor must be conducted using 
+
+three-part communications. 
+
+2)  All configuration changes must be documented by a written step by step procedure such 
+
+as: 
+
+a.  SPF; 
+b.  Standing Operating Procedure; 
+c.  Job plan; or 
+d.  JHA. 
+
+3)  All configuration changes must be approved and recorded in the station logbook.  The log 
+records included in this publication are considered extensions of the station logbook. 
+
+  Positive Controls in Public Access Areas 
+
+Locks, or other positive controls, must be installed on the energy isolation devices or equipment 
+in areas with: 
+
+1)  Non-restricted access or 
+2)  Public access. 
+
+  Special Conditions 
+
+1)  Purpose. 
+
+The special condition procedure is used to provide TEMPORARY special operating or 
+limiting instructions.  Although a special condition tag may serve as temporary protection 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+21 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+for equipment, IT MUST NEVER BE USED FOR PERSONNEL PROTECTION.  A 
+special condition tag must not be used for permanent instructions.  Permanent 
+instructions should be given on permanent instruction plates or by other acceptable 
+means.  If a special condition tag is used for an extended period, the condition for which 
+it is providing temporary special operating or limiting instructions must be reviewed 
+annually.  Following the review, if the condition is to continue without permanent 
+instructions, the tag must be replaced. The replacement special condition tag must be 
+updated to reflect current date, equipment, operating conditions, instructions, and include 
+in the remarks the date the original special condition tag was placed.   
+
+2)  Responsibility and authority. 
+
+An employee who observes any equipment that is damaged or in a condition that may 
+limit its operation or compromise its integrity must immediately report the condition to 
+the Operations Supervisor or another supervisor.  The Operations Supervisor must 
+determine if a special condition exists, provide any necessary instructions, and assign a 
+unique identifying number to each special condition tag.  The numbering format must be 
+identified in the F-HECP.  Where provided, display screen SCADA points also must 
+reflect the special condition tag. 
+
+3)  Use.  
+
+Placement and removal of special condition tags must be logged in the station logbook.  
+A record will be maintained as described in the F-HECP.  A sample special condition tag 
+record sheet is provided in Appendix C (POM 219). 
+
+  Capacitor Banks 
+
+1)  At least 5 minutes must elapse between the de-energizing of a capacitor bank and the 
+
+closing of its ground switch. 
+
+2)  A capacitor bank must remain de-energized for at least 5 minutes before it is re-
+
+energized. 
+
+3)  An additional 5 minutes must be allowed after the ground switch is closed before issuing 
+
+the clearance permitting personal protective ground(s) to be installed. 
+4)  The time required in (3) above must be explicitly expressed on the SPF. 
+
+22 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+ Release Under Abnormal Conditions 
+
+  Purpose 
+
+This section describes the process used to document the removal of an Authorized Employee’s 
+personal lock or tag; or the Job Supervisors release of their clearance in their absence.  The 
+Release Under Abnormal Conditions form (POM-214) must be used to document the release. 
+
+  Procedure 
+
+Each personal lock or tag must be removed by the Authorized Employee who placed it.  Each 
+clearance must be released by the Authorized Employee who holds it.  When this Authorized 
+Employee is not available to remove/release it, the Authorized Employee’s supervisor, in 
+consultation with the Operations Supervisor, must remove the personal lock, tag or clearance in 
+the following manner: 
+
+1)  Document the removal utilizing the Release Under Abnormal Conditions form (POM-
+
+214); 
+
+2)  The Authorized Employee's supervisor must verify that the Employee who placed the 
+
+personal lock is not at the facility; 
+
+3)  The Authorized Employee's supervisor must make reasonable efforts to inform the 
+
+Authorized Employee that their personal lock, tag, clearance will be removed/released; 
+4)  The Authorized Employee’s supervisor must take responsibility for the personal lock or 
+
+tag; 
+
+5)  If applicable, a new job supervisor must request and accept an identical clearance prior to 
+
+release of the original clearance; 
+
+6)  The Authorized Employee's supervisor must authorize the removal/release of the 
+
+personal lock, tag, clearance; 
+
+7)  The Authorized Employee's supervisor must direct the removal of the personal lock or 
+
+tag; and 
+
+8)  The Authorized Employee's supervisor must inform the Employee upon their return to 
+the facility and prior to commencing work that their personal lock, tag, clearance has 
+been removed/released. 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+23 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+  Personal Lockout (Tagout) 
+
+  Use Restrictions 
+
+Personal lockout (tagout) must NOT be used when the protection requires a clearance.  An 
+employee must NOT work under the protection of another employee’s personal lock (tag). 
+
+For contractor work that requires the use of hazardous energy controls, but does not meet the 
+requirements of Section 11, the F-HECP must document the process for contractors to follow 
+that will establish energy isolation and control of equipment and/or systems.  Documentation of 
+the Personal Lockout on the Special Work Permit (Section 16) is required. 
+
+  General 
+
+1)  Equipment that can be removed from service and restored to service without a clearance 
+must have an approved JHA that includes, or has attached, a procedure identifying where 
+the personal lock(s) or tag(s) are to be placed. 
+
+2)  Placement and removal of any personal lock(s) or tag(s) must be: 
+
+a.  Coordinated with operations;  
+b.  Second checked by a second Authorized Employee as defined in the F-HECP; 
+c.  Documented; and 
+d.  Recorded. 
+
+3)  Up to four personal locks (tags) may be used by an Authorized Employee on the energy 
+
+isolation devices for equipment (or system). 
+
+4)  When a personal tag (POM-166) is used, the following requirements apply: 
+
+a.  The personal tag must be attached directly to the energy isolation device 
+
+whenever possible; 
+
+b.  Where a personal tag cannot be affixed directly to the energy isolation device, the 
+personal tag must be located as close as safely possible to the energy isolation 
+device, in a position that will be immediately obvious to anyone attempting to 
+operate the energy isolation device; and 
+
+c.  Additional means must be employed to provide a level of personal protection 
+
+equivalent to that provided by a lock.  Examples include: 
+
+i.  Placing the personal tag in a manner that inhibits operation of the energy 
+
+isolation device; 
+
+ii.  Removing fuses or an isolating circuit mechanism; 
+iii.  Opening an extra disconnecting device; 
+iv.  Removing a valve handle; or 
+v.  Blocking a controlling switch. 
+
+24 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+  Procedure 
+
+1)  The placement and removal of a personal lock (tag) must be: 
+
+a.  Installed at the energy isolation device after the device has been placed in the 
+
+required condition; and 
+
+b.  Affixed to the energy isolation device in a manner that will maintain the device in 
+
+the safe position. 
+
+2)  Appropriate checks must be performed to verify de energization and release of stored 
+
+energy. 
+
+3)  Upon completion of the servicing or maintenance, the equipment (or system) is restored 
+
+by: 
+
+a.  Ensuring that nonessential items have been removed from the work area; 
+b.  Ensuring that machine or equipment components are operationally intact; 
+c.  Removing personal locks or tags; and 
+d.  Performing any required tests necessary to ensure full operational capability. 
+
+4)  The F-HECP will describe configuration management approval procedures when 
+
+equipment or systems cannot be returned to full service. 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+25 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+  Clearances 
+
+  Use 
+
+A clearance procedure is a formalized and documented hazardous energy control process which 
+allows Authorized Employees to safely perform their assigned tasks.  Clearances establish the 
+hazardous energy controls to mitigate exposure to hazards for the scope of work that the 
+employee will be performing.  While a clearance is mainly for protection of personnel, it may 
+also provide protection for equipment.  The F-HECP must designate when a clearance is 
+required.  At a minimum, a clearance is required for:   
+
+1)  Electrical circuits 600 volts or greater; 
+2)  Spaces protected by a CO2 system; 
+3)  Water passages and waterways (as defined in Appendix A); 
+4)  Work where personnel are exposed to a pinch or crush hazard such as turbine runners, 
+
+generator rotors, wicket gates, wicket gate linkages, gates and servo systems; 
+
+5)  High pressure systems (see Section 1.9):   
+
+a.  air;  
+b.  water; and 
+c.  oil. 
+
+6)  Equipment (or system) that requires more than four energy isolation devices; 
+7)  Contractor work involving isolation of hazardous energy when the above requirements 
+apply.   The procedure for working with contractors is identified in Section 16, Special 
+Work Permits. 
+
+  Use of Personal Locks and Personal Tags 
+
+1)  Personal locks and personal tags must not be used on the energy isolation devices that 
+
+establish the limits of the clearance. 
+
+2)  For a clearance, Authorized Employees must affix a personal lock to the clearance 
+
+lockbox after obtaining permission from the appropriate Job Supervisor before work 
+begins. 
+
+3)  An employee must NOT work under the protection of another employee’s personal lock 
+
+(tag). 
+
+  Procedure 
+
+A clearance procedure establishes the energy isolation and control of equipment and/or systems 
+for employee protection by allowing employees to place a single personal lock on a clearance 
+lockbox.   The process identifies system restoration and procedures to be used when equipment 
+
+26 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+or systems cannot be returned to full service.  The requirements identified in Section 5.5.8 must 
+be followed when filling out and developing a SPF (POM-216). 
+
+When a new clearance can use one or more energy isolation devices from an existing clearance, 
+there is an option to utilize the existing clearance’s lockbox as a key control device to capture 
+those energy isolation devices.  When the option to utilize an existing clearance’s lockbox is 
+exercised, Section 11.3.7, Additional Requirements must be followed. 
+
+  Request clearance.   
+
+1)  The Job Supervisor must: 
+
+a.  Determine if the facility requirements indicate the necessity of a clearance by 
+
+preparation of a JHA; 
+
+b.  Ensure, by the use of drawings, standing operating procedures, technical papers, 
+or other technical references that the equipment to be placed under clearance will 
+be effectively isolated for the requested scope of the work to be performed.  This 
+includes identifying corrective measures necessary to prevent re-accumulation of 
+stored energy to a hazardous level.  The scope of work must be sufficiently 
+defined that personnel can adequately determine the limits of the clearance; and 
+
+c.  Submit the clearance request (POM-212) to the Operations Supervisor.   
+
+Note:  Specific requirements for submitting requests and timelines will be identified in the F-
+HECP. 
+
+  Prepare and place clearance. 
+
+1)  The Operations Supervisor, upon receipt of a clearance request, must: 
+
+a.  Determine that the equipment (or system) affected by the clearance request can be 
+
+scheduled for an outage; 
+
+b.  Verify, by the use of drawings, standing operating procedures, technical papers, 
+
+or other technical references, that the equipment to be placed under clearance will 
+be effectively isolated for the requested scope of the work to be performed.  This 
+includes identifying corrective measures necessary to prevent re-accumulation of 
+stored energy to a hazardous level; 
+
+c.  Coordinate, as necessary, with appropriate agencies and other entities for isolation 
+
+of systems that are to be cleared;  
+
+d.  Prepare a SPF for placement.  (The SPF for removal can be prepared 
+
+concurrently.) Previously prepared clearances may be used as a reference; 
+e.  Ensure that the SPF identifies each of the energy isolation devices and the 
+
+placement of each lock/tag;  
+
+f.  Sign and date the SPF;  
+g.  Ensure a second Operations Supervisor second checks the prepared SPF and signs 
+
+and dates the SPF; 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+27 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+h.  Conduct a job briefing and complete a JHA with the Switchman to identify 
+
+hazards associated with the switching; and 
+
+i.  Direct the Switchman to perform the switching utilizing the JHA and the SPF. 
+
+2)  Switchman must: 
+
+a.  Follow the six basic steps of switching when performing operations in the 
+
+sequence on the SPF; 
+
+b.  Accomplish switching by using the six basic steps of switching; 
+c.  Stop the switching procedure and contact the Operations Supervisor for resolution 
+
+if any of the following conditions are encountered: 
+i.  The instruction is not clearly understood; 
+ii.  The instruction is believed to be incorrect; 
+iii.  At any point in the switching, an unexpected operation of equipment or 
+
+other action occurs; 
+
+iv.  A device is found in a position other than indicated on the SPF; or 
+v.  A dangerous condition could result by performing a switching step. 
+
+d.  Verify the effectiveness of each energy isolation device’s clearance lock (tag). 
+
+i.  The clearance lock (tag) must be attached directly to each energy isolation 
+
+device whenever possible. 
+
+ii.  Where a clearance tag cannot be affixed directly to the energy isolation 
+
+device, the clearance tag must be located as close as safely possible to the 
+energy isolating device, in a position that will be immediately obvious to 
+anyone attempting to operate the device. 
+
+iii.  When locks cannot be utilized, or tags are utilized, additional means must 
+be employed to provide a level of personal protection equivalent to that 
+provided by a lock.  Examples include: 
+
+1.  Placing the clearance tag in a manner that inhibits operation of the 
+
+energy isolation device; 
+
+2.  Removing fuses or an isolating circuit mechanism; 
+3.  Opening an extra disconnecting device; 
+4.  Removing a valve handle; or 
+5.  Blocking a controlling switch. 
+
+e.  Record on the SPF: 
+
+i.  The time at which each step is completed; 
+ii.  Lock or tag number placed; and 
+iii.  The switchman’s initials. 
+
+f.  Use an Operations Lock to secure the key for Clearance Lock(s) in a Clearance 
+
+Lockbox.  This establishes and maintains the operational configuration 
+management control by Operations. The Switchman’s personal lock may be used 
+for this purpose if established in the F-HECP; and 
+
+g.  Report to the Operations Supervisor that switching is complete. 
+
+3)  The Operations Supervisor must: 
+
+a.  Record the clearance placement action in the station log; and 
+
+28 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+b.  Notify the Job Supervisor that the clearance has been placed. 
+
+  Accept and issue clearance. 
+
+1)  The Job Supervisor must: 
+
+a.  Obtain a copy of the SPF from the Operations Supervisor; 
+b.  Place their personal lock on the clearance lockbox to secure the clearance key(s); 
+
+This provides exclusive control for the Job Supervisor; 
+
+c.  Verify the position of each energy isolation device; 
+d.  Verify the placement of each clearance lock and tag; 
+e.  Verify the effectiveness of each clearance lock (tag); 
+f.  Make appropriate tests to verify isolation and de energization of the equipment (or 
+
+system); 
+
+g.  Verify that stored energy has not re accumulated in the equipment (or system); 
+h.  Contact the Operations Supervisor for resolution if any of the following are 
+
+encountered: 
+
+i.  A device is found in a position other than that indicated on the SPF; or 
+ii.  A dangerous condition exists. 
+
+i. 
+
+Inform the Operations Supervisor that the clearance is adequate, and assume full 
+responsibility for the clearance; and 
+
+j.  Sign the SPF, documenting acceptance of the clearance; 
+
+2)  The Operations Supervisor must: 
+
+a.  Sign and date the SPF, issuing the clearance to the Job Supervisor; and 
+b.  Log issuing the clearance in the station log. 
+
+  Working under a clearance. 
+
+1)  The Job Supervisor must: 
+
+a.  Verify, as appropriate, that stored energy has not re accumulated to a hazardous 
+
+level in the equipment (or system); 
+
+b.  Grant, as appropriate, permission to Authorized Employees to work under their 
+
+clearance, including: 
+
+i.  Reviewing and signing the JHA; 
+ii.  Verifying that the energy isolation devices that establish the limits of the 
+clearance are understood and the work can be safely performed; and 
+iii.  Verifying that the Authorized Employees understand their responsibility to 
+
+maintain awareness of the clearance status while working; 
+
+c.  Keep the Operations Supervisor informed as to the status of the work; 
+d.  Promptly notify each Authorized Employee working under the clearance of any 
+
+changes in condition or status of the equipment. 
+
+2)  The Authorized Employee must: 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+29 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+a.  Obtain permission from the Job Supervisor to work under their clearance, 
+
+including: 
+
+i.  Reviewing the JHA; 
+ii.  Placing their personal lock on the clearance lockbox to secure the 
+
+clearance key(s).  This provides exclusive control for the Authorized 
+Employee; 
+
+iii.  Verifying that they understand the energy isolation devices that establish 
+
+the limits of the clearance; 
+
+iv.  Visually verify the position of each energy isolation device; 
+v.  Verify the placement of each clearance lock and tag; 
+vi.  Maintaining awareness of the clearance status while working. 
+
+b.  Contact the Job Supervisor for resolution if any of the following are encountered: 
+
+i.  A device is found in a position other than that indicated on the SPF; or  
+ii.  A dangerous condition exists.  
+
+c.  Request from the Job Supervisor any additional necessary protection. 
+
+  Placement of Personal Protective Grounds 
+
+Note:  When personal protective grounds are required to perform work per FIST 5-1, and 
+temporary removal is necessary to perform testing, only the initial installation and final removal 
+must be documented on the SPF.  If the grounds are relocated to a different location, then they 
+must be documented as a new line item on the SPF.   
+
+1)  When personal protective grounds are required per FIST 5-1, Personal Protective 
+
+Grounding for Electric Power Facilities and Power Lines, the Job Supervisor must: 
+a.  Ensure a written procedure is used for personal protective grounding; 
+b.  Direct a Qualified Electrical Employee to place the personal protective ground(s); 
+c.  Ensure placement of grounds is recorded on the SPF cover page and includes: 
+
+i.  The personal protective ground identification number(s); 
+ii.  Who placed the personal protective ground(s);  
+iii.  Date and time of placement; and 
+iv.  Initial location of the placement of the Personal Protective Grounds. 
+
+Note:  The complexities of equipment (or system) maintenance may require a Job 
+Supervisor to have personal protective grounds removed without releasing the clearance. 
+
+  Release and remove clearance. 
+
+Upon completion of their work,  
+
+1)  Authorized Employees must: 
+
+a.  Remove all equipment, tools, and material used from the work area; 
+
+30 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+b.  With concurrence of the Job Supervisor, ensure that personal protective grounds 
+have been removed using an approved procedure and ensure the removal is 
+documented on the SPF (as required); 
+
+c.  Remove their personal lock from the clearance lockbox; 
+d.  Notify the Job Supervisor that the work area is clear of their equipment, tools, and 
+
+material; and  
+
+e.  Remove their lock from the clearance lockbox. 
+
+Upon completion of all work,  
+
+1)  The Job Supervisor must: 
+
+a.  Notify all involved Authorized Employees of the intent to release the clearance; 
+b.  Inspect the work area(s) to ensure that: 
+
+i.  Nonessential items have been removed from the equipment; 
+ii.  The components are operationally intact; and 
+iii.  All personnel are in the clear. 
+
+c.  When personal protective grounds were used, ensure all personal protective 
+
+grounds have been removed and properly recorded on the SPF cover page and 
+include: 
+
+i.  Who removed the personal protective ground(s); and 
+ii.  Date and time of removal. 
+
+d.  Notify the Operations Supervisor that all work is complete, including all tool and 
+
+equipment removal; 
+
+e.  Remove their personal lock from the clearance lockbox; 
+f.  Sign the SPF, documenting release of the clearance to the Operations Supervisor. 
+
+Note:  It is understood that the complexities of equipment maintenance may require a Job 
+Supervisor to release a clearance when the equipment is not ready for return to normal service.  
+In these situations, the conditions must be identified and reported to the Operations Supervisor. 
+
+2)  The Operations Supervisor must: 
+
+a.  Log the date and time of release of the clearance on the SPF cover page; 
+b.  Record the release of the clearance in the station log; 
+c.  Prepare a SPF for removal, if not previously completed; 
+d.  Ensure that the SPF for removal identifies each of the energy isolation devices, 
+
+the removal of each lock/tag and positioning of the device as required; 
+
+e.  Sign and date the SPF;  
+f.  Ensure a second Operations Supervisor second checks the prepared removal SPF, 
+
+signs and dates; 
+
+g.  Conduct a job briefing and review the JHA with the Switchman to identify 
+
+hazards associated with the switching; 
+
+h.  Coordinate with appropriate agencies and other entities for system restoration, as 
+
+necessary; and 
+
+i.  Direct the Switchman to perform the switching utilizing the JHA and the SPF. 
+
+3)  The Switchman must: 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+31 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+a.  Remove the operations lock from the lockbox (if used in the step to secure the 
+clearance key during Job Supervisor isolation device checks) and obtain the 
+key(s) for the clearance lock(s); 
+
+b.  Perform switching by using the six basic steps of switching in the sequence listed 
+
+on the SPF;  
+
+c.  Stop the switching procedure and contact the Operations Supervisor for resolution 
+
+if any of the following conditions are encountered: 
+i.  The instruction is not clearly understood; 
+ii.  The instruction is believed to be incorrect; 
+iii.  At any point in the operations, an unexpected relay, breaker, or other 
+
+action occurs; 
+
+iv.  A device is found in a position other than indicated on the SPF; or 
+v.  Performing a step could create a dangerous condition. 
+
+d.  Record, on the SPF: 
+
+i.  The number of the lock or tag removed; 
+ii.  The time at which each step is completed; and 
+iii.  The Switchman’s initials. 
+
+e.  Report to the Operations Supervisor upon completion of switching. 
+
+4)  The Operations Supervisor must record the clearance removal action in the station log. 
+
+  Additional Requirements (Lockbox Option) 
+
+When a new clearance utilizes an existing clearance’s lockbox as key control, the following 
+requirements must be met in addition to Section 11.3.1 – 11.3.6, and described in the F-HECP.  
+The additional steps below are written for a single existing clearance with its lockbox and 
+isolation devices, but the process may include multiple existing clearances. 
+
+Prepare and place clearance: 
+
+1)  The Operations Supervisor must: 
+
+a.  Identify which energy isolation devices can be used from an existing clearance; 
+b.  Obtain permission from the Job Supervisor of the existing clearance to place a 
+
+clearance lock on their clearance lockbox; and 
+
+c.  Develop a SPF that identifies: 
+
+i.  Existing clearance number, clearance title, and the key numbers captured 
+
+in the existing clearance; and 
+
+ii.  All associated energy isolation devices under the existing clearance that 
+the new clearance will use, including the anticipated energy isolation 
+device position and lock set number. 
+
+2)  The Switchman must place a clearance lock on the existing clearance lockbox and record 
+
+the lock number. 
+
+3)  The new clearance must utilize its own lock box to capture keys. 
+
+Accept and issue clearance: 
+
+32 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+The Job Supervisor for the new clearance must verify each energy isolation device identified on 
+the new clearance including those captured by the existing clearance lockbox. 
+
+NOTE:  If the Job Supervisor has previously verified the isolation devices associated with the 
+existing clearance and is presently locked on to that clearance, then they do not have to verify 
+those devices again.  They must verify each energy isolation device on the new clearance that 
+was not part of the existing clearance. 
+
+The Authorized Employee must verify each energy isolation device identified on the new 
+clearance including those captured by the existing clearance lockbox. 
+
+NOTE: If an Authorized Employee has previously verified the isolation devices associated with 
+the existing clearance and is presently locked on to that clearance, then they do not have to 
+verify those devices again.  They must verify each energy isolation device on the new clearance 
+that was not part of the existing clearance. 
+
+  Identical Clearance 
+
+  Purpose.   
+
+This is the process to issue two or more concurrent clearances on the same equipment requiring 
+the same energy isolation devices that establish the limits of the clearance and exactly the same 
+clearance lock(s) and tag(s) application. 
+
+  Procedure. 
+
+The Job Supervisors and Operations Supervisors involved with an identical clearance must 
+follow the clearance procedure defined in the F-HECP. 
+
+1)  Job Supervisors have the responsibility to discuss and coordinate the work to be 
+
+performed. 
+
+2)  All Job Supervisors must assume full responsibility for their clearance. 
+3)  The SPF must be marked distinctly to indicate an identical clearance.  The same 
+
+clearance number must be assigned a different suffix letter (A, B, C, etc.) or suffix 
+number (1, 2, 3, etc.) to identify each additional clearance. 
+
+4)  No additional clearance lock or tag devices can be placed, and no protection is to be 
+
+removed from the equipment until ALL clearances have been released. 
+
+5)  Identical clearances may be released in any order. 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+33 
+
+ 
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+  Changing Job Supervisor. 
+
+When the Job Supervisor leaves the facility for an extended period, a new Job Supervisor must 
+be assigned.  When another Job Supervisor is assigned responsibility for the work being 
+performed, the new Job Supervisor must follow the process for requesting and accepting an 
+identical clearance prior to the original Job Supervisor releasing the original Clearance.   
+
+The F-HECP must designate the time constraints for leaving the facility that require a new Job 
+Supervisor be assigned. 
+
+  Clearances at Remote Sites 
+
+Clearances at remote sites, where communication with the Operations Supervisor is not possible, 
+will be conducted as described in the F-HECP.  Such procedures must meet the requirements 
+within this document. 
+
+  Limits of the Clearance (Changing Scope) 
+
+The limits of a clearance cannot be changed; however, the scope of the work may change such 
+that it requires a change in the energy isolation devices.  
+
+The Job Supervisor must request a new clearance. This change can be accomplished in one of 
+two ways. 
+
+1)  Preferred process: 
+
+a.  Prepare and place the new clearance; 
+b.  Accept and issue the new clearance; and 
+c.  Release and remove the original clearance. 
+
+2)  Alternative process:  
+
+a.  Prepare a SPF for placement of the new clearance, listing each clearance lock 
+
+(tag) being transferred and any new energy isolation devices; 
+
+b.  Prepare a SPF for removal of the original clearance, listing each clearance lock 
+(tag) being transferred and each clearance lock (tag) that is to be removed; 
+
+c.  Release the original clearance; 
+d.  Complete switching for placement, verifying that the transferred clearance lock(s) 
+
+or tag(s) is in place; 
+
+e.  Complete switching for removal, leaving the transferred clearance lock(s) or 
+
+tag(s) in place; and 
+
+f.  Complete the “accept and issue clearance” procedure above. 
+
+Note:  It is understood that the complexities of equipment maintenance may require a 
+Job Supervisor to release a clearance when the equipment is not ready for return to 
+
+34 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+normal service.  In these situations, the conditions must be identified and reported to 
+the Operations Supervisor. 
+
+  Testing Under a Clearance 
+
+Checks and tests on an energy isolation device at the limits of a clearance are not permitted on an 
+energy isolation device secured with a clearance lock (tag). 
+
+Checks and tests on equipment (or systems) protected by a clearance are permitted when: 
+
+1)  A JHA has been prepared; 
+2)  A written test procedure has been prepared; 
+3)  A job briefing is performed with all authorized employees; 
+4)  All administrative controls including barriers or signs have been implemented to identify 
+
+and protect against the induced hazardous energy; and 
+
+5)  All work activity affected by the induced hazardous energy has been suspended. 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+35 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+  Hot Line Orders 
+
+  Use 
+
+A hot line order permits work to be done on or near energized electrical equipment for 
+transmission and/or distribution lines. 
+
+The electrical equipment identified in a hot line order is to be considered energized or “hot.”  Hot 
+line orders are established by removing from service all automatic reclosing features capable of 
+energizing the equipment by tagging these features and by placing a hot line tag on the 
+appropriate control switches of all circuit breakers connected to the equipment, locally and by 
+means of supervisory control.  An operations lock may be used in conjunction with a hot line tag.  
+
+A hot line order must NOT be issued where work is being performed on the line’s: 
+
+1)  Protective relays; 
+2)  Control circuits; and 
+3)  Communication equipment. 
+
+Work must NOT be performed on the following systems, which would compromise the tripping 
+of any circuit breakers involved in the hot line order: 
+
+1)  Protective relays; 
+2)  Control circuits; and 
+3)  Communication equipment. 
+
+Use of the operations lock must be as described in the F-HECP. 
+
+  Operating Under a Hot Line Order 
+
+1)  Contact must be made with the Job Supervisor before closing breakers that could re-
+
+energize the equipment. 
+
+2)  The Operations Supervisor and the Job Supervisor must maintain communication. 
+3)  The Job Supervisor holding a hot line order must remain at the worksite at all times while 
+
+work is being performed. 
+
+  Procedure 
+
+1)  Request hot line order:   
+
+a.  The Job Supervisor must: 
+
+i.  Determine if the facility requirements indicate the necessity of a hot line 
+
+order, including preparation or review of the JHA; 
+
+36 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+ii.  Ensure, by the use of drawings, SOPs, technical papers, or other technical 
+references, that a hot line order will be effective for performing the work 
+on the equipment; and 
+
+iii.  Submit the outage request to the Operations Supervisor. 
+
+Note:  Specific requirements for submitting requests and timelines will be identified in the 
+F-HECP. 
+
+2)  Prepare and place hot line order: 
+
+a.  The Operations Supervisor must, upon receipt of a clearance request: 
+
+i.  Determine that the equipment (or system) affected by the clearance 
+
+request can be scheduled for a hot line order; 
+
+ii.  Verify, by the use of drawings, SOPs, technical papers, or other technical 
+references, that a hot line order will be effective for performing the scope 
+of work; 
+
+iii.  Coordinate the lines that are to be placed under the hot line order with 
+
+appropriate agencies and other entities;   
+
+iv.  Prepare a SPF for placement. (The SPF for removal can be prepared 
+concurrently.)  Previously prepared hot line orders may be used as a 
+reference. 
+
+v.  Ensure the SPF is checked, signed and dated by another Operations 
+
+Supervisor.   
+b.  The Operations Supervisor must: 
+
+i.  Conduct a job briefing with the authorized Switchmen to include a review 
+of hazards, work procedures, personal protective clothing and equipment 
+(PPE) requirements, special precautions, etc. Any questions regarding the 
+completeness or correctness of the SPF must be resolved before 
+proceeding. 
+
+ii.  Direct the Switchman to perform the switching. 
+
+c.  The Switchman must: 
+
+i.  Perform operations in the sequence listed on the SPF; 
+ii.  Accomplish switching by using the six basic steps of switching; 
+iii.  Stop switching procedure and contact the Operations Supervisor for 
+resolution if any of the following conditions are encountered: 
+
+1.  The instruction is not clearly understood; 
+2.  The instruction is believed to be incorrect; 
+3.  At any point in the operations, an unexpected relay, breaker, or 
+
+other action occurs;  
+
+4.  A device is found in a position other than indicated on the SPF. 
+
+iv.  Record on the SPF: 
+
+1.  The time at which each step is completed; 
+2.  The number of the tag placed; and 
+3.  The Switchman’s initials. 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+37 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+v.  Report to the Operations Supervisor upon completion of switching. 
+
+d.  The Operations Supervisor must: 
+
+i.  Record the hot line order placement action in the station log; and 
+ii.  Notify the Job Supervisor that the hot line order has been placed. 
+
+3)  To accept and issue a hot line order: 
+a.  The Job Supervisor must: 
+
+i.  Obtain a copy of the SPF from the Operations Supervisor; 
+ii.  Verify that the automatic reclosing features are turned off; 
+iii.  Verify the placement of all hot line tags; 
+iv.  Contact the Operations Supervisor for resolution if a device is found in a 
+
+position other than that indicated on the SPF; 
+
+v.  Inform the Operations Supervisor that: 
+
+1.  The hot line order is adequate; and 
+2.  Responsibility for the hot line order will be accepted. 
+vi.  Sign the SPF, documenting acceptance of the hot line order. 
+
+b.  The Operations Supervisor must: 
+
+i.  Sign and date the SPF, documenting issuance of the hot line order to the 
+
+Job Supervisor; 
+
+ii.  Log issuing the hot line order in the station log. 
+
+4)  To release and remove a hot line order: 
+a.  The Job Supervisor must: 
+
+i.  Notify all Authorized Employees of the intent to release the hot line order. 
+ii.  Inspect the work area(s) to ensure that: 
+
+1.  Nonessential items have been removed from the equipment; 
+2.  The components are operationally intact, and 
+3.  All personnel are in the clear. 
+
+iii.  Notify the Operations Supervisor of the status of the equipment; and 
+iv.  Release the hot line order to the Operations Supervisor by signing and 
+
+dating the SPF. 
+b.  The Operations Supervisor must: 
+
+i.  Record the release of the hot line order in the station log; 
+ii.  Prepare a SPF for removal if not already complete; 
+iii.  Ensure the SPF is second checked by a second Operations Supervisor; 
+iv.  Coordinate with appropriate agencies and other entities for system 
+
+restoration;   
+
+v.  Conduct a job briefing with the Switchman, to include a review of 
+
+hazards, work procedures, requirements for PPE, special precautions, etc.  
+Any questions regarding the completeness or correctness of the SPF must 
+be resolved before proceeding; and 
+
+vi.  Direct the Switchman to perform the switching. 
+
+c.  The Switchman must: 
+
+i.  Perform operations in the sequence listed on the SPF; 
+
+38 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+ii.  Accomplish switching by using the six basic steps of switching;   
+iii.  Stop switching procedure and contact the Operations Supervisor for 
+resolution if any of the following conditions are encountered: 
+
+1.  The instruction is not clearly understood; 
+2.  The instruction is believed to be incorrect; 
+3.  At any point in the operations, an unexpected relay activation, 
+
+breaker trips, or other unexpected action occurs; 
+
+4.  A device is found in a position other than indicated on the SPF. 
+
+iv.  Record on the SPF: 
+
+1.  The time at which each step is completed; 
+2.  The number of the removed tag; and 
+3.  The Switchman’s initials. 
+
+v.  Report to the Operations Supervisor upon completion of switching. 
+
+d.  The Operations Supervisor must record the hot line order removal action in the 
+
+station log. 
+
+  Procedures for a line that has tripped out while under a hot line order. 
+
+1)  The Operations Supervisor must contact the Job Supervisor holding the hot line order to 
+
+determine if it is safe to re-energize the line. 
+
+2)  The Job Supervisor must: 
+
+a.  Immediately order all personnel and equipment clear of the line; 
+b.  Ascertain if the line within his work area can be safely re-energized; and 
+c.  Contact the Operations Supervisor; 
+
+3)  The Operations Supervisor must direct the Switchman to close the circuit breakers. 
+4)  The Switchman must: 
+
+a.  Remove the hot line tag from the control switch and operate the control switch to 
+
+close the circuit breaker. 
+
+b.  After the circuit breaker has been reclosed, replace the hot line tag on the control 
+
+switch if the hot line tag is to be continued. 
+
+5)  The Operations Supervisor must: 
+
+a.  Record the pertinent information on the trip and closure in the station log. 
+b.  Inform the Job Supervisor that the circuit breakers have been closed and that the 
+
+line is energized. 
+
+  Changing Job Supervisor for a hot line order.   
+
+When the Job Supervisor leaves the worksite while the work is in progress, a new Job Supervisor 
+must be assigned, or the work must stop.  The F-HECP will describe the process for changing the 
+Job Supervisor. 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+39 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+  Change Scope of hot line order.   
+
+If it becomes necessary to alter the hot line order, the Operations Supervisor must notify the Job 
+Supervisor, who will then request a new hot line order identifying the changes. 
+
+40 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Interconnected System Clearances and 
+
+Hot Line Orders 
+
+  Use 
+
+Interconnected system clearances or hot line orders provide for the protection of personnel at 
+points of interconnection between Reclamation and non-Reclamation facilities. 
+
+An interconnected system clearance or hot line order is a statement with documentation from one 
+Operations Supervisor to another that switching has been performed on one system as a partial or 
+complete requirement for a clearance or hot line order on another system, in accordance with the 
+appropriate operating agreements. 
+
+  Procedure 
+
+  Issue interconnected system clearance or hot line order. 
+
+1)  The non-Reclamation Operations Supervisor will request the appropriate required 
+
+protection on the Reclamation system. 
+
+Note:  Each facility must use the uniform line identifiers or defined equipment identifiers 
+when communicating and coordinating with outside agencies. 
+
+2)  The Reclamation Operations Supervisor must: 
+
+a.  Place the clearance or hot line order in accordance with the established procedures 
+
+on the requested equipment. 
+
+b.  Use three-part communication to state clearly to the non-Reclamation Operations 
+Supervisor exactly what protection has been provided.  The non-Reclamation 
+Operations Supervisor must restate the exact protection provided and state that he 
+is satisfied that the protection meets the requirements.  The Reclamation 
+Operations Supervisor must confirm the protection provided.  If the restatement is 
+incorrect, the process will be repeated until the protection provided is correctly 
+understood. 
+
+c.  Issue the interconnected system clearance or hot line order to the non-
+
+Reclamation Operations Supervisor.   
+
+d.  Document this action on the SPF and in the station log. 
+
+  Receive interconnected system clearance or hot line order. 
+
+1)  The Reclamation Operations Supervisor will request the appropriate protection on the 
+
+non-Reclamation system. 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+41 
+
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+2)  The non-Reclamation Operations Supervisor will: 
+
+a.  Place the clearance or hot line order in accordance with their established 
+
+procedures on the requested equipment. 
+
+b.  Use three-part communication to state clearly to the Reclamation Operations 
+
+Supervisor exactly what protection has been provided. 
+
+3)  The Reclamation Operations Supervisor must restate the exact protection provided and 
+
+state that he is satisfied that the protection meets the requirements. 
+
+4)  The non-Reclamation Operations Supervisor must confirm the protection provided.  If the 
+restatement is incorrect, the process will be repeated until the protection provided is 
+correctly understood. 
+
+5)  The Reclamation Operations Supervisor will: 
+
+a.  Accept the interconnected system clearance or hot line order from the non-
+
+Reclamation Operations Supervisor;  
+b.  Document this action on the SPF; and  
+c.  Make the appropriate entry in the station log. 
+
+  Release interconnected system clearance or hot line order. 
+
+The release of the interconnected system clearance or hot line order will be initiated by the 
+appropriate Operations Supervisor. 
+
+1)  Three-part communication must be used; 
+2)  Release actions must be documented on the SPF and in the station log; and 
+3)  When appropriate, remove the clearance or hot line order in accordance with the 
+
+established procedures on the requested equipment. 
+
+42 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+  Hazardous Energy Work Permits 
+
+  General 
+
+1)  All work should be performed on systems that have been isolated from all forms of 
+
+hazardous energy.  Certain jobs do not allow for this isolation.  In these situations, every 
+effort must be made to: 
+
+a.  minimize the hazards;  
+b.  add engineering controls;  
+c.  add administrative controls (signage, training, safety meetings, boundaries); and  
+d.  use PPE.   
+
+All employees need to be aware of the hazards that remain. 
+
+2)  Hazards may be any source of electrical, mechanical, hydraulic, pneumatic, chemical, 
+thermal, nuclear, stored, or other form of energy that could cause injury to personnel if 
+not de-energized.  Possible sources include, but are not limited to: 
+
+a.  Electrical panels or equipment with available arc flash energy over 1.2 calories 
+
+per centimeter squared (cm2); 
+
+b.  Rotating equipment; 
+c.  Compressed air systems; 
+d.  Tensioned springs; 
+e.  Pressurized hydraulic systems; 
+f.  Active waterways; 
+g.  High pressure water systems; 
+h.  Servo motor or wicket gate arms; 
+i.  Chlorine and other chemical systems; 
+j.  Loads suspended from crane or other lifting devices; 
+k.  Falling objects (rocks or equipment); 
+l. 
+Ionizing radiation such as x-rays; 
+m.  Non-ionizing radiation such as laser and microwave radio frequency energy; 
+n.  Station service battery banks; and 
+o.  Heated water or steam. 
+
+3)  The RO must be aware of all forms of hazardous energy within the work area and 
+
+mitigate the potential for injury.  The RO may authorize energized work by completing 
+an HEWP where it can be demonstrated that: 
+
+a.  De energization introduces additional or increased hazards. Some examples may 
+
+include but not limited to: 
+
+i.  De-energizing an electrical panel may result in loss of power to the life 
+
+support equipment; 
+
+ii.  Loss of Power to a continuously running sump pump may result in 
+
+flooding; or 
+
+iii.  Emergency Alarm system in an occupied building may deactivate; or 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+43 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+b.  The task to be performed is infeasible in a de-energized state due to equipment 
+design or operational limitations.  An example may be performing a diagnostic 
+test or trouble shooting where equipment operation is required; or 
+
+c.  The hazards are mitigated to an acceptable level by other control measures 
+
+specified on the HEWP.   Electrical hazards are identified in FIST 5-14, Electrical 
+Safety Program.  Hazards such as a broken shear pin replacement with the unit 
+operational, must document how personnel will be kept clear of pinch and crush 
+hazards. 
+
+Note: Inconvenient and infeasible are two different terms and must not be used 
+interchangeably. As an example, if there is a need for climbing up and down a portable 
+and tall ladder to operate a switch to de-energize a circuit, it could be inconvenient but 
+certainly not infeasible. Inconvenience must not be used to justify energized work.  
+
+Note: Potential loss of lighting is not typically considered a justification for energized 
+work.  
+
+  Hazardous Energy Work Permit Exceptions 
+
+1)  For the following exceptions, an HEWP is not required if a Qualified Employee is 
+
+provided with and uses appropriate safe work procedures, and PPE is used as required: 
+a.  Testing, troubleshooting, or voltage measurement, if no other unidentified 
+
+electrical hazards exist that the employee might be exposed to. 
+
+b.  Thermography and visual inspections if the restricted approach boundary is not 
+
+crossed. 
+
+c.  Access to and egress from an area with energized electrical equipment if no 
+
+electrical work is performed and the restricted approach boundary is not crossed. 
+
+d.  General housekeeping and miscellaneous nonelectrical tasks if the restricted 
+
+approach boundary is not crossed. 
+
+2)  Work that falls under the exceptions listed above is permitted without an HEWP, 
+
+provided: 
+
+a.  A JHA is prepared to identify safe work practices, hazards involved, mitigation 
+
+techniques applied, and proper PPE; and 
+
+b.  A job plan (procedure) is prepared with sufficient detail to allow work crews to 
+
+perform the work safely. 
+
+  Procedure 
+
+1)  The supervisor or foreman must: 
+
+a.  Determine if the facility requirements indicate the necessity of an HEWP.  This 
+
+step includes preparation or review of the JHA and job plan; 
+
+44 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+b.  Ensure, by the use of drawings, SOPs, technical papers, or other technical 
+
+references that the procedure utilizing the HEWP will be effective for the work to 
+be performed; 
+
+c.  Prepare the HEWP (POM-213); and 
+d.  Submit the HEWP for review and concurrence by the individual(s) identified in 
+the F-HECP, by title, who perform the stated duties.  These are identified in the 
+signature block on the HEWP.  The approval must include personnel who perform 
+the following responsibilities, at a minimum: 
+
+i.  Qualified Employee:  Will provide input for developing a detailed job plan 
+
+to be used in performing the scope of work identified; 
+
+ii.  Statement that the requested work can be performed safely in accordance 
+
+with Reclamation technical standards; and 
+
+iii.  Statement that the job plan includes all safe work practices to be 
+
+employed, necessary personnel, and all protective equipment to safely 
+perform the work. 
+
+2)  RO or designee:   
+
+a.  will make the final decision at the facility level, that the work must be 
+
+accomplished in an energized state; 
+
+b.  all mitigation techniques have been evaluated for the hazards; and 
+c.  the work can be accomplished safely with minimal risk to the employee.  
+
+3)  The HEWP will state an expiration date not to exceed one year from the date signed. 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+45 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+  Tagging of Equipment Operated by 
+
+Supervisory Control 
+
+When a clearance, hot line order, or special condition is issued on equipment that is operated by 
+a supervisory control system (SCADA / ICS) that includes a display screen(s): 
+
+1)  The status of such equipment must be indicated by means of an appropriate symbol 
+
+displayed on all display screens that serve as supervisory control points; 
+
+2)  Each SPF involving supervisory controlled equipment must reference the placement of 
+
+supervisory control information tags on the display screen; 
+
+3)  A clearance tag or hot line tag on the display screen is for information only and MUST 
+
+NOT BE RELIED UPON TO PROTECT PEOPLE; 
+
+4)  If a hot line order and a clearance are to be in place simultaneously, and the supervisory 
+control with a display screen cannot indicate both the clearance tag and a hot line tag 
+associated with one device at the same time, the hot line tag must take precedence over 
+the clearance tag.  If either action is removed, the appropriate remaining tag indication 
+must continue to be displayed; and 
+
+5)  Special conditions related to unit operating conditions or where notifications to the 
+
+transmission system operator are required will be indicated on the display screen when 
+possible. 
+
+46 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+  Special Work Permits (SWP) 
+
+This section addresses Special Work Permits where the work requires hazardous energy control 
+procedures to be established under the F-HECP.  RSHS Section 15 describes the requirements to 
+authorize Contractors or Authorized Non-Reclamation personnel (Section 18) to conduct work 
+on or near equipment in a Reclamation facility.   
+
+For SWPs, the term Contractor will also apply to Authorized Non-Reclamation personnel when a 
+contractual instrument does not exist. 
+
+  General 
+
+1)  Contractors performing work at Reclamation operated and maintained facilities must 
+
+comply with the F-HECP. 
+
+2)  A SWP (POM-215) documents the coordination between Reclamation and a contractor to 
+
+authorize work when a hazardous energy control procedure is required. 
+
+3)  FIST 1-1 identifies the minimum requirements for the HECP.  The F-HECP must 
+designate additional local requirements for hazardous energy control procedures 
+associated with contractor work.  The Reclamation Representative and the Authorized 
+Reclamation Employee may be the same individual as allowed by the F-HECP and based 
+on the scope of work. 
+
+4)  Facilities will define a process within their F-HECP to designate the Reclamation 
+
+Representative and the Authorized Reclamation Employee based on the scope of work or 
+contract requirements. 
+
+5)  The Contractor’s Workplace Representative must be trained on Reclamation’s F-HECP 
+and authorized by the RO and placed on the EAL.  This will allow the Contractor’s 
+Workplace Representative to place their lock for the hazardous energy control procedure 
+utilized. 
+
+6)  Reclamation Representative must be familiar with the contractor’s HECP per RSHS 
+
+Section 15. 
+
+  Procedure for Issuing Special Work Permits 
+
+1)  The Contractor’s Workplace Representative will identify to the Reclamation 
+
+Representative the need for equipment isolation.  The Contractor’s Workplace 
+Representative must review the plan for accomplishing the work with the Reclamation 
+Representative in such detail as necessary for the Reclamation Representative to 
+determine the hazardous energy isolation. 
+
+2)  The Reclamation Representative will communicate the need for equipment isolation to 
+
+the Reclamation Authorized Employee. 
+
+3)  The Reclamation Representative will prepare a SWP. 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+47 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+4)  The hazardous energy control procedure described in this document must be followed. 
+5)  The Reclamation Representative and the Contractor’s Workplace Representative must 
+
+inspect the worksite to verify the adequacy of the protection provided. 
+
+6)  The Contractor’s Workplace Representative must place a lock on the Reclamation 
+
+hazardous energy control lockbox or in the case of a personal lockout the Contractor’s 
+Workplace Representative’s lock(s) will be placed on the isolation devices.  The 
+Contractor’s Workplace Representative’s key will be secured in accordance with the 
+contractor’s HECP. 
+
+7)  A unique number for each special work permit will be assigned.  A special work permit 
+
+will be issued for each hazardous energy control procedure. 
+
+8)  The SWP will be signed by the parties.  No work will be done until an SWP has been 
+
+signed.  No work will be done in an area not specifically covered by the SWP. 
+
+9)  The F-HECP will state where the signed original SWP will be maintained. Copies will be 
+provided to the Reclamation Representative and Contractor’s Workplace Representative. 
+
+  Placing and Removal of Personal Protective Ground(s) 
+
+1)  If, in the opinion of the Reclamation Representative and Reclamation Authorized 
+
+Employee, a contractor is sufficiently knowledgeable in and adequately equipped for the 
+application of personal protective grounding, the contractor’s Qualified Electrical 
+Employee may place and remove personal protective grounds at the work site in 
+accordance with applicable safety standards and FIST Volume 5-1, under the observation 
+of an Authorized Reclamation Employee.  The Contractor’s Workplace Representative 
+will coordinate the placement or removal of all contractor’s personal protective grounds 
+with the appropriate Reclamation personnel. 
+
+2)  If, in the opinion of Reclamation Representative and the Authorized Reclamation 
+
+Employee, a contractor is not sufficiently knowledgeable in or adequately equipped for 
+the application of personal protective grounding, the contractor is not allowed to place 
+and remove personal protective grounds.  A Reclamation Authorized Employee must 
+direct a Qualified Electrical Employee to place or remove all required personal protective 
+grounds.  The Authorized Reclamation Employee must document the placement or 
+removal of all personal protective grounds placed to protect the contractor.   
+
+  Procedure for Releasing Special Work Permits 
+
+1)  Upon completion of all work, the Contractor’s Workplace Representative must: 
+
+a.  Notify the Reclamation Representative that: 
+
+i.  All personnel are clear; 
+ii.  All materials have been removed; 
+iii.  The work is complete; and 
+iv.  All personal protective grounds are removed. 
+
+48 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+b.  Sign the SWP, releasing it to the Reclamation Representative. 
+
+2)  The Reclamation Representative must verify: 
+
+a.  The work is complete; 
+b.  All workmen are clear;  
+c.  All materials have been removed from the work site; and 
+d.  All personal protective grounds have been removed. 
+
+3)  The Reclamation Representative must notify the Authorized Reclamation Employee that 
+
+the work is complete and sign the release of the SWP. 
+
+4)  The Authorized Reclamation Employee verify that the work is complete and sign the 
+
+release of the SWP. 
+
+  Changing Scope of Work Under a Special Work Permit 
+
+Should it be necessary to make changes to the scope of work under the SWP (change in 
+protection needed, etc.), a new SWP must be issued and the existing SWP released. 
+
+  Change in Representative for a Special Work Permit 
+
+In the event that an original representative (Contract’s Workplace Representative, Reclamation 
+Representative, or Authorized Reclamation Employee) is not available to release the existing 
+SWP, the new representative must sign the release of the existing SWP.  The new SWP must be 
+issued before the existing SWP is released. 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+49 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+  Reclamation Non-Facility Personnel 
+
+Reclamation non-facility personnel provide services throughout Reclamation at various types of 
+facilities.  These personnel must be trained to the level necessary under the FIST 1-1 and F-
+HECP requirements for each facility where work is performed. 
+
+  General 
+
+1)  Reclamation non-facility personnel who perform work at Reclamation facilities must 
+
+comply with the F-HECP for each facility where work is performed. 
+
+2)  The F-HECP defines the qualification levels for personnel to perform work.  The F-
+
+HECP must designate any additional local facility requirements for Reclamation non-
+facility personnel work. 
+Note: Field offices will not accept responsibility for lack of qualifications and training 
+from non-facility personnel prior to arrival for addition to the EAL. 
+
+3)  HECP Authorized employee training must be completed by Reclamation non-facility 
+
+personnel. The training must be documented in DOI Talent and a copy of the transcript 
+must be provided to the facility where work will be performed.  The supervisor of the 
+employee is responsible for ensuring the training is completed and documented prior to 
+the employee performing any work. 
+
+4)  Reclamation non-facility personnel will review the facility’s F-HECP upon arrival at the 
+facility, making them aware of any special requirements that may apply to the scope of 
+work they will be performing.  This will allow the Reclamation non-facility personnel to 
+be placed on the EAL. 
+
+50 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+  Authorized Non-Reclamation Personnel 
+
+  When a Formal Agreement Exists 
+
+Non-Reclamation personnel may be authorized to perform tasks as described in the terms of a 
+formal agreement, such as a memorandum of agreement or memorandum of understanding. 
+
+Procurement or construction (Federal Acquisition Regulations) contracts are generally not 
+included in this section.  Examples of formal agreements include, but are not limited to: 
+1)  The Master Agreement dated March 26, 1980, between the Western Area Power 
+
+Administration (Western) and Water and Power Resources Service (Reclamation); and 
+
+2)  Operating agreements associated with the Master Agreement, for example: 
+a.  Joint Operating Agreement (Lower Colorado Region); and 
+b.  Coordinated Operations and Maintenance Agreement (Mid Pacific Region). 
+
+  When a Formal Agreement Does Not Exist 
+
+When a formal agreement does not exist, all work must be performed under the requirements of 
+an SWP. 
+
+  Requirements 
+
+1)  The non-Reclamation organization will transmit, in writing, to the RO or their designated 
+representative a list of those individuals deemed to be authorized employees and the 
+functions they are to perform including: 
+
+a.  Requesting or accepting clearances; 
+b.  Requesting or accepting hot line orders; and 
+c.  Switching. 
+
+2)  Reclamation must annually train, examine, and authorize employees on the F-HECP and 
+
+must document this training. 
+
+3)  Non-Reclamation authorized employees will be listed on a non-Reclamation EAL and 
+
+maintained as required in the F-HECP. 
+
+4)  The RO or their designated representative will transmit the non-Reclamation EAL in 
+
+writing to the non-Reclamation organization. 
+
+5)  All work must be coordinated with the Reclamation Operations Supervisor.  
+6)  The Reclamation Operations Supervisor must be notified before removing equipment 
+
+from service and before returning it to service. 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+51 
+
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Appendix A – Definitions 
+Approved:  Acceptable to the authority having jurisdiction. 
+
+Arc Flash Hazard:  A source of possible injury or damage to health associated with the release 
+of energy caused by an electric arc. 
+
+Informational Note No 1: The likelihood of occurrence of an arc flash incident increases when 
+energized electrical conductors or circuit parts are exposed or when they are within equipment 
+in a guarded or enclosed condition, provided a person is interacting with the equipment in such 
+a manner that could cause an electric arc.  An arc flash incident is not likely to occur under 
+normal operating conditions when enclosed energized equipment has been properly installed 
+and maintained. 
+
+Informational Note No 2: See NFPA 70E Table 130.5(C) for examples of tasks that increase the 
+likelihood of an arc flash incident occurring. 
+
+Authorized employee:   An employee who works under hazardous energy controls in order to 
+perform servicing or maintenance on machinery or equipment.  Also, an employee who works in 
+or enters areas where the hazardous energy must be controlled to perform work safely.    An 
+Authorized Employee must be authorized by the RO prior to performing any work under a 
+hazardous energy control procedure and placed on the Employee Authorization List (EAL). 
+
+Authorized Non-Reclamation Personnel:  Non-Reclamation personnel who are trained and 
+authorized under the F-HECP to perform specific tasks as described in the terms of a formal 
+agreement not including procurement or construction contracts (Federal Acquisition 
+Regulations).  Examples of formal agreements include, but are not limited to, memoranda of 
+understanding, memoranda of agreement, etc.  These personnel will be placed on the facility 
+non-Reclamation EAL. 
+
+Authorized Reclamation Employee: For role related responsibilities in the SWP process, the 
+Authorized Reclamation Employee is the facility employee who is authorized to determine the 
+appropriate hazardous energy control procedures required for the scope of work requested by the 
+Contractor’s Workplace Representative.  The employee will have designation in the EAL to the 
+Job Supervisor level as a minimum.   
+
+Capable of being locked out:  An energy isolating device is capable of being locked out if it has 
+a locking mechanism built into it or if it has a hasp or other means of attachment to which, or 
+through which, a lock can be affixed that will prevent its position from being changed.  Other 
+energy isolating devices are capable of being locked out if changes in their position can be 
+prevented without the need to dismantle, rebuild, or replace them or to permanently alter their 
+energy control capability.  Devices that accept bolted blank flanges and bolted slip blinds are 
+considered to be capable of being locked out. 
+
+52 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Clearance:  A statement with signed documentation from the Operations Supervisor to the Job 
+Supervisor declaring that the equipment (or system) to be worked on has been isolated from each 
+source of hazardous energy. 
+
+Contractor:  As used in special work permits, will include construction and/or maintenance 
+personnel of a non-Reclamation organization where a contractual instrument under Federal 
+Acquisition Regulations exists, or a service is being provided within the established credit card 
+regulations. 
+
+Contractor’s Workplace Representative:   As used in special work permits, the Contractor’s 
+Workplace Representative is the onsite representative for the Contractor.  The Contractor’s 
+Workplace Representative must be trained on Reclamation’s F-HECP and authorized by the RO.  
+This will allow the Contractor’s Workplace Representative to place their lock for the hazardous 
+energy control procedure. 
+
+De-energized: in a zero-energy state. 
+
+1)  Electrical – Free from any electrical connection to a source of voltage and from electric 
+charge; not having a potential different from that of the earth. 
+
+2)  All other forms of energy – Disconnected from all energy sources and not containing residual 
+or stored energy. 
+
+DOI Talent:  The Web based application mandated by the Department of the Interior for 
+tracking all training records. 
+
+Emergency:  A situation in which: 
+
+1)  Facilities are in a condition as to be a hazard to: 
+
+a.  The public; 
+
+b.  Reclamation personnel; or 
+
+c.  Reclamation power or water system equipment. 
+
+2)  There is a power outage to customers that could be hazardous to life or property. 
+
+Employee Authorization List (EAL):  A current list identifying each Authorized Employee at a 
+facility and HECP responsibilities. 
+
+Energized: 
+
+1)  Electrical – Electrically connected to a source of voltage, or a source of voltage. 
+
+2)  All other forms of energy – Connected to an energy supply or containing residual or 
+
+stored energy. 
+
+Energy Isolation Device:  A physical device that prevents the transmission or release of energy.  
+Includes, but is not limited to, manually operated circuit breakers, disconnect switches, slide 
+gates, line valves, blocks, or similar devices capable of blocking or isolating energy.  The term 
+does not include push buttons, selector switches, or other control devices. 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+53 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Energy Source:  Any supply of electrical, mechanical, hydraulic, pneumatic, chemical, thermal, 
+nuclear, stored, or other energy. 
+
+Equipment (or System):  Any machine, device, or apparatus, either electrical or mechanical, 
+used in relation to electric power and waterway control.  This includes electrical circuits, 
+transmission lines, piping, transmission, spillways, irrigation outlets, conservation facilities, 
+pump stations, etc. 
+
+Exclusive Control:  Continuously being in a position to prevent (exclude) other individuals 
+from re-energizing the machine or equipment during a servicing or maintenance activity; for 
+example, placement of a lock by an employee provides that employee exclusive control until the 
+lock is removed. 
+
+Facility Hazardous Energy Control Program (F-HECP):  A program for a facility or a group 
+of facilities that implements the guidance compiled in a single document consisting of a copy of 
+FIST 1-1 along with specific facility requirements. 
+
+Group Lockout: An energy control procedure that provides a group of authorized employees 
+with the same level of protection as a personal lockout device. Reclamation does not utilize 
+group lockout. Clearances are the only complex group lockout utilized in the HECP. 
+
+Hazard Assessment:  An assessment of the workplace and work activities to identify if hazards 
+are present or are likely to be present.  If there is potential exposure to any chemical, physical, or 
+biological agent which may have a detrimental effect a health hazard assessment may be 
+required. 
+
+Hazardous Energy:  Any energy source that may cause injury or death.  Any energy, including 
+mechanical (e.g., power transmission apparatus, counterbalances, springs, pressure, gravity), 
+pneumatic, hydraulic, electrical, water, chemical, nuclear, and thermal (e.g., high or low 
+temperature) energy that could cause injury to employees.  Danger is only present when energy 
+may be released in quantities or at rates that could injure employees.  Hazardous chemical 
+energy, for the purposes of this standard, includes chemicals (e.g., flammable and combustible 
+liquids, flammable gases, acids, and alkaline chemicals) that may thermally produce burn injury 
+through high or low temperature, or are sufficient enough to displace oxygen and incapacitate 
+employees.  
+
+Hazardous Energy Control (HEC) Procedures:  Procedures for the control of all hazardous 
+energy, which are to be used only one time.  Each procedure must be approved before being 
+used.  Previously prepared procedures may be used for reference only.  Procedures for the 
+control of hazardous energy must include: 
+
+1)  The intended use of the procedure; 
+
+2)  Individual responsibilities; 
+
+3)  Specific procedural steps for shutting down, isolating, blocking, and securing equipment 
+
+(or systems) to control hazardous energy; 
+
+54 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+4)  Specific procedural steps for the placement and removal of locks (tags); and 
+
+5)  The requirements for testing the effectiveness of the energy control measures. 
+
+Hazardous Energy Control Program (HECP):  Reclamation’s mandatory written program 
+establishing consistent and coordinated procedures and operating criteria for the safe and reliable 
+operation and maintenance of Federal facilities for which Reclamation is responsible.  This 
+Reclamation program is contained in FIST 1-1. 
+
+Hazardous Energy Work Permit (HEWP): The overall purpose of an HEWP is to ensure that 
+the hazards of working on or near exposed live parts receive adequate consideration. It also 
+informs both managers and workers who work on energized equipment that work is going to be 
+performed in the facility. 
+
+Hot Line Order:  A written statement with supporting documentation from an Operations 
+Supervisor to a Job Supervisor that the automatic reclosing is turned off and that the equipment 
+covered by the hot line order will not be intentionally re-energized until contact has been made 
+with the Job Supervisor holding the hot line order.  A hot line order may also be referred to as a 
+terminal hold by non-Reclamation offices and personnel. 
+
+Incidental Employee:  Any person who may be in an area where hazardous energy control 
+procedures may be used, but they are not operating or interacting with machines under hazardous 
+energy controls; Must receive instruction regarding the hazardous energy control procedures and 
+the prohibition against removing a lockout or tagout device, and prohibitions against attempting 
+to restart, reenergize, or operate the machinery.  Must be aware that altering, removing or 
+tampering with Hazardous Energy Control devices could kill somebody.  Incidental Employees 
+do not perform any work that requires Hazardous Energy Controls to be put into place and are 
+not issued personal locks.   
+
+Interconnected System:  A group of lines and associated equipment for the movement or 
+transfer of electric energy between points of supply and points at which electric energy is 
+transformed for delivery to customers or is delivered to other electric systems. 
+
+Interconnected System Clearance or Hot Line Order:  A written statement with 
+documentation from one Operations Supervisor to another that switching has been performed on 
+one system as a partial or complete requirement for a clearance or hot line order on another 
+system, in accordance with the appropriate operating agreements. 
+
+Note:  If other terms are used by non-Reclamation entities, those terms must be noted here in the 
+F-HECP. 
+
+Isolation:  An activity that physically prevents the transmission or release of energy. 
+
+Job Briefing:  A discussion conducted by the Job Supervisor with the Authorized Employees, 
+involved in the work to be performed, before they start each job, or when the scope of work 
+changes.  The job briefing must cover at least the following subjects:  hazards associated with the 
+job, work procedures involved, special precautions, energy source controls, and personal 
+protective equipment requirements normally found within the context of the JHA. 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+55 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Job Hazard Analysis (JHA): Written identification of potential hazards present or likely to be 
+present in a workplace and their associated mitigation techniques. The responsible supervisor, 
+consulting with a safety or health professional if needed, assesses the workplace and work 
+activities and determine the mitigation techniques.  
+
+Note: As work is performed under a JHA, reassess the JHA to ensure that hazards have been 
+addressed and adequate hazards controls have been implemented. Job site monitoring and 
+observation of work activities must be a basis for assessment and revision. Where controls are 
+determined to be insufficient, halt work until adequate controls can be developed. 
+
+Job Supervisor:  An employee who has been authorized by the RO to request, accept, and 
+release clearances and hot line orders, and to initiate and implement HEWPs.  Job Supervisors 
+must have the knowledge and skills necessary for the safe application, use, and removal of 
+hazardous energy control procedures.  This term designates an HECP function.  A Job 
+Supervisor is not associated with the management or supervision of personnel.    Note: 
+Supervisor (as used in this context) does not have the same legal meaning as contained in the 
+Federal Service Labor Management Relations Statute (FSLMRS).  This can include wage board 
+and/or bargaining board employees. 
+
+Limits (of an HECP procedure):  A safe work area established by the hazardous energy 
+controls to allow each Job Supervisor to maintain exclusive control over all the hazardous energy 
+isolation devices for the scope of work to be performed.  
+
+Note:  Equipment that remains energized, or that can be energized, is not a part of the limits of 
+the clearance. 
+
+Lockout:  The placement of HECP locks on an energy isolation device in accordance with an 
+established procedure, indicating that the energy isolation device must not be operated. 
+
+Lockout Device:  A lockable device used to hold an energy isolation device in the safe position. 
+
+Operational Configuration Management:  The process of managing deviations from normal 
+operating conditions and the process for tracking and restoring to those normal operating 
+conditions.  It includes any procedure that changes the status of equipment (or system). 
+
+Operations Log: Documented records created, maintained, and used by operations personnel to 
+describe and record operating information and events that aid in evaluating present and past unit 
+or plant status.  An operations log may be a bound paper book or in electronic format. Also 
+known as Station Log. 
+
+Operations Supervisor:  An employee who has been authorized by the RO to prepare and direct 
+switching, and to issue, receive, and release clearances, hot line orders, interconnected system 
+clearances, and interconnected system hot line orders.  This term designates a HECP function.  
+Note: Supervisor (as used in this context) does not have the same legal meaning as contained in 
+the Federal Service Labor Management Relations Statute (FSLMRS).  This can include wage 
+board and/or bargaining board employees. 
+
+56 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Reclamation Non-facility Personnel:  Any Reclamation personnel who are not permanent 
+employees at the facility.  Examples are TSC employees, dive teams, rope teams, regional office 
+personnel, etc. 
+
+Reclamation Representative:  A person who is designated at the facility to perform HECP 
+functions to support contractor work and sign SWPs.  The person must be capable of determining 
+the correct HEC procedures to be used and followed for the work to be performed. 
+
+Responsible Official (RO):  The manager who is responsible for the administration of the F-
+HECP. 
+
+Special Condition:  An unusual or temporary condition pertaining to equipment (or system). 
+
+Special Work Permit (SWP):  A statement with signed documentation of the coordination 
+between Reclamation and a contractor to authorize work when an HEC Procedure is required. 
+
+Station Log: Documented records created, maintained, and used by operations personnel to 
+describe and record operating information and events that aid in evaluating present and past unit 
+or plant status.  A station log may be a bound paper book or in electronic format. Also known as 
+Operations Log. 
+
+Stored Energy:  Hazardous energy (electrical, mechanical, hydraulic, chemical, etc.) that 
+remains in an isolated device such as that found in a charged capacitor, a loaded spring, chemical 
+solutions, pressurized vessels, piping, etc. 
+
+Switching (for operational configuration management):  Switching performed to manage 
+changes of the status of equipment (or system). 
+
+Switchman:  An employee who has been authorized by the RO to perform switching (for 
+operational configuration management). 
+
+Tagout:  The placement of an HECP tag on an energy isolation device in accordance with an 
+established procedure, indicating that the energy isolation device must not be operated. 
+
+Three Part Communications:  An exchange of information that is clear, concise, and definitive, 
+and ensures that the recipient repeats the information back correctly; and the transmitting party 
+acknowledges the response as correct or repeats the original statement until any 
+misunderstandings are resolved. 
+
+Water Passages and Waterways:  Spillways, canals, scroll cases, draft tubes, tunnels, 
+penstocks, gate chambers and designated areas below gates, where the inadvertent opening of the 
+isolation device could release hazardous energy and could engulf or injure personnel.   
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+57 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Appendix B – Facility Hazardous Energy 
+Control Program Example 
+Personal Lockout (Tagout) 
+
+10.1 
+Personal lockout (tagout) must NOT be used when the protection requires a clearance.  An 
+employee must NOT work under the protection of another employee’s lock (tag). 
+
+10.2 General 
+
+NOTE: Personal Tags are not authorized at Plant 1 
+
+1)  Equipment that can be removed from service and restored to service without a clearance must 
+have an approved JHA that includes, or has attached, a procedure identifying where the personal 
+lock(s) or tag(s) are to be placed. 
+
+2)  Placement and removal of any personal lock(s) or tag(s) must be: 
+
+a)  Coordinated with operations;  
+b)  Approved by an Authorized Employee; 
+c)  Documented; and 
+d)  Recorded. 
+
+3) Only one Personal Lock (Tag) may be used by an Authorized Employee on the energy 
+isolation devices for the equipment (or system). 
+
+4)  When a personal tag is used, the following requirements apply: 
+
+a)  The personal tag must be attached directly to the energy isolation device whenever 
+possible; 
+b)  Where a personal tag cannot be attached directly to the energy isolation device, the 
+personal tag must be located as close as safely possible to the energy isolation device, in 
+a position that will be immediately obvious to anyone attempting to operate the energy 
+isolation device. 
+
+58 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Appendix C – Forms and Tags  
+
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Figure 1: Hazardous Energy Control Program (POM-210) 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+59 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Figure 2: F-HECP Annual Review (POM-211) 
+
+60 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Figure 3: Clearance Request (POM-212) 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+61 
+
+ 
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Figure 4: Hazardous Energy Work Permit (POM-213) 
+
+62 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Figure 5: Release Under Abnormal Conditions (POM-214) 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+63 
+
+ 
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Figure 6: Special Work Permit (POM-215) 
+
+64 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+65 
+
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+66 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Figure 7: Switching Program Form (POM-216) 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+67 
+
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Figure 8: Hazardous Energy Work Permit Record (POM-217) 
+
+68 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Figure 9: Personal Lock and Tag Record (POM-218) 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+69 
+
+ 
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Figure 10: Special Condition Tag Record (POM-219) 
+
+70 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Figure 11: Special Work Permit Record (POM-220) 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+71 
+
+ 
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Figure 12: Authorized Employee Proficiency Checklist (POM-221) 
+
+72 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Figure 13: Job Supervisory Proficiency Checklist (POM-222) 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+73 
+
+ 
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Figure 14: Switchman Proficiency Checklist (POM-223) 
+
+74 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Figure 15: Operations Supervisor Proficiency Checklist (POM-224) 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+75 
+
+ 
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Figure 16: FIST Revision Request Form (POM-226) 
+
+76 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Figure 17: Personal Lock Label (POM-139) 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+77 
+
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Figure 18: Clearance Lock Label (POM-140) 
+
+78 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Figure 19: Clearance Tag (POM-137) 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+79 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Figure 20: Hot Line Tag (POM-135) 
+
+80 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Figure 21: Personal Tag (POM-166) 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+81 
+
+ 
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Figure 22: Special Condition Tag (POM-138) 
+
+82 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+83 
+
+ 
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+84 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+ 
+ 
+ 
+ 
+ 
+FIST Volume 1-1 
+Hazardous Energy Control Program 
+
+Figure 23: Example Job Plan Details Report 
+
+(FIST 002) 01/31/2013 
+NEW RELEASE 
+(Minor revisions approved 08/08/2018, 08/15/2019) 
+
+85 
+
+ 
+ 
+ 
+ 
+

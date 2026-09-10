@@ -1,0 +1,31 @@
+qid,bucket,question,gold_citations,gold_value,match_mode,note
+M01,M,"Before we repair a conveyor drive, what does the surface mine rule require?",30 CFR 56.14105,,any,twin exists at 30 CFR 57.14105
+M02,M,"At a surface mine, do fork-lifts need falling object protection?",30 CFR 56.14106,,any,twin exists at 30 CFR 57.14106
+M03,M,Which moving machine parts have to be guarded at a surface mine?,30 CFR 56.14107,,any,twin exists at 30 CFR 57.14107
+M04,M,Does an overhead drive belt need a guard at a surface mine?,30 CFR 56.14108,,any,twin exists at 30 CFR 57.14108
+M05,M,A conveyor runs right beside a walkway at our surface pit. What is required?,30 CFR 56.14109,,any,twin exists at 30 CFR 57.14109
+M06,M,Screens and crushers throw material near our operators. What protection is required?,30 CFR 56.14110,,any,twin exists at 30 CFR 57.14110
+M07,M,How strong does a machine guard have to be at a surface mine?,30 CFR 56.14112,,any,twin exists at 30 CFR 57.14112
+M08,M,Do inclined conveyors need backstops at a surface mine?,30 CFR 56.14113,,any,twin exists at 30 CFR 57.14113
+M09,M,What air valve is required on pneumatic-powered equipment at a surface mine?,30 CFR 56.14114,,any,twin exists at 30 CFR 57.14114
+M10,M,What does a stationary grinding machine need at a surface mine?,30 CFR 56.14115,,any,twin exists at 30 CFR 57.14115
+M11,M,Can a hand-held grinder have its trigger locked on at a surface mine?,30 CFR 56.14116,,any,twin exists at 30 CFR 57.14116
+M12,M,Do we have to sound a warning before starting the crusher at a surface mine?,30 CFR 56.14200,,any,twin exists at 30 CFR 57.14200
+M13,M,What must the operator do before starting a conveyor at a surface mine?,30 CFR 56.14201,,any,twin exists at 30 CFR 57.14201
+M14,M,Can belt dressing be applied while the belt is running at a surface mine?,30 CFR 56.14203,,any,twin exists at 30 CFR 57.14203
+M15,M,Can machinery be greased while it is running at a surface mine?,30 CFR 56.14204,,any,twin exists at 30 CFR 57.14204
+M16,M,Can we run equipment past the manufacturer's rated capacity at a surface mine?,30 CFR 56.14205,,any,twin exists at 30 CFR 57.14205
+M17,M,How must buckets and booms be positioned when tramming between work areas at a surface mine?,30 CFR 56.14206,,any,twin exists at 30 CFR 57.14206
+M18,M,How is mobile equipment supposed to be parked when left unattended at a surface mine?,30 CFR 56.14207,,any,twin exists at 30 CFR 57.14207
+M19,M,What warning devices are needed for parked mobile equipment at a surface mine?,30 CFR 56.14208,,any,twin exists at 30 CFR 57.14208
+M20,M,What is required to tow mobile equipment safely at a surface mine?,30 CFR 56.14209,,any,twin exists at 30 CFR 57.14209
+M21,M,Can a loaded bucket be swung over an operator's cab at a surface mine?,30 CFR 56.14210,,any,twin exists at 30 CFR 57.14210
+M22,M,How do chains and drive belts get put onto moving pulleys at a surface mine?,30 CFR 56.14212,,any,twin exists at 30 CFR 57.14212
+M23,M,Does welding have to be shielded and ventilated at a surface mine?,30 CFR 56.14213,,any,twin exists at 30 CFR 57.14213
+M24,M,When does a train have to sound a warning at a surface mine?,30 CFR 56.14214,,any,twin exists at 30 CFR 57.14214
+M25,M,What has to happen before cars are coupled by hand at a surface mine?,30 CFR 56.14215,,any,twin exists at 30 CFR 57.14215
+M26,M,What is the required vertical clearance above stair steps at a surface mine?,30 CFR 56.11010,,any,twin exists at 30 CFR 57.11010
+M27,M,When do fixed ladders need backguards or cages at a surface mine?,30 CFR 56.11026,,any,twin exists at 30 CFR 57.11026
+M28,M,What protection is required around openings near travelways at a surface mine?,30 CFR 56.11012,,any,twin exists at 30 CFR 57.11012
+M29,M,What is required for walkways alongside elevated conveyor belts at a surface mine?,30 CFR 56.11009,,any,twin exists at 30 CFR 57.11009
+M30,M,What condition must handrails on elevated walkways be kept in at a surface mine?,30 CFR 56.11002,,any,twin exists at 30 CFR 57.11002

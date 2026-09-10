@@ -34,8 +34,14 @@ app.get("/api/catalog/industries", (_request, response) => {
 app.get("/api/catalog/use-cases", (request, response) => {
   const industry = typeof request.query.industry === "string" ? request.query.industry : undefined;
   const search = typeof request.query.search === "string" ? request.query.search : undefined;
-  const items = catalog.list({ industry, search }).slice(0, 20);
-  response.json({ items, total: items.length, source: "public-synthetic" });
+  // No silent truncation. A hardcoded cap of 20 quietly hid the 21st card - the
+  // newest module's demo - from the catalog, and nothing failed: the page simply
+  // rendered one fewer tile. Callers that want a page can ask for one.
+  const requested = Number.parseInt(String(request.query.limit ?? ""), 10);
+  const limit = Number.isFinite(requested) && requested > 0 ? requested : undefined;
+  const all = catalog.list({ industry, search });
+  const items = limit ? all.slice(0, limit) : all;
+  response.json({ items, total: all.length, returned: items.length, source: "public-teaching" });
 });
 
 app.get("/api/catalog/use-cases/:id", (request, response) => {

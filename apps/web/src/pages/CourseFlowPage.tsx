@@ -162,11 +162,15 @@ export default function CourseFlowPage({ courseCaseId }: { courseCaseId: string 
 
   const selectedDecision = courseCase.decisions.find((decision) => decision.id === selectedDecisionId)
     ?? courseCase.decisions[0];
-  const isRetailWorkflow = courseCase.id === "retail-online-order";
+  const catalogTarget = courseCase.id === "retail-online-order"
+    ? "/showcase?industry=retail"
+    : courseCase.id === "healthcare-pediatric-xray-prioritization"
+      ? "/showcase?industry=healthcare"
+      : "/showcase";
 
   return (
     <div className="page course-flow-page">
-      <button className="page-back-button" type="button" onClick={() => navigate(isRetailWorkflow ? "/showcase?industry=retail" : "/showcase")}>
+      <button className="page-back-button" type="button" onClick={() => navigate(catalogTarget)}>
         <ArrowLeft size={15} aria-hidden="true" /> Back to Industry Workflows
       </button>
       <header className="page-header course-header">
@@ -250,7 +254,7 @@ export default function CourseFlowPage({ courseCaseId }: { courseCaseId: string 
           </div>
         </div>
 
-        <aside className="decision-inspector" aria-live="polite">
+        <aside id="workflow-decision-inspector" className="decision-inspector" aria-live="polite">
           {phase === "map" ? <MapInspector decision={selectedDecision} /> : null}
           {phase === "judge" ? <JudgeInspector decision={selectedDecision} /> : null}
           {phase === "design" ? <DesignInspector decision={selectedDecision} courseCaseId={courseCase.id} /> : null}

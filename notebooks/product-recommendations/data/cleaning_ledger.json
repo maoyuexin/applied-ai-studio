@@ -1,0 +1,51 @@
+{
+  "dataset": "Online Retail II",
+  "uci_id": 502,
+  "license": "CC BY 4.0",
+  "citation": "Chen, D. (2019). Online Retail II. UCI Machine Learning Repository. https://doi.org/10.24432/C5CG6D",
+  "source_file": "online_retail_II.xlsx",
+  "source_bytes": 45622278,
+  "source_sha256": "bcbe73b35f5b7babf197fb0cb983a11f5d9ff929078d4aa53d171b1f2df2e980",
+  "raw_rows": 1067371,
+  "clean_rows": 1003424,
+  "committed_rows": 992123,
+  "committed_grain": "one product on one invoice",
+  "products": 4904,
+  "baskets": 39523,
+  "registered_customers": 5852,
+  "guest_rows": 226039,
+  "first_invoice": "2009-12-01 07:45:00",
+  "last_invoice": "2011-12-09 12:50:00",
+  "steps": [
+    {
+      "step": "raw invoice lines in the workbook",
+      "removed": 0,
+      "remaining": 1067371
+    },
+    {
+      "step": "credit notes (Invoice starts with \"C\") - returns, not purchases",
+      "removed": 19494,
+      "remaining": 1047877
+    },
+    {
+      "step": "non-positive quantity or price - adjustments, not purchases",
+      "removed": 6207,
+      "remaining": 1041670
+    },
+    {
+      "step": "rows with no product description",
+      "removed": 0,
+      "remaining": 1041670
+    },
+    {
+      "step": "non-product stock codes (postage, bank charges, samples, test rows)",
+      "removed": 4582,
+      "remaining": 1037088
+    },
+    {
+      "step": "exact duplicate rows",
+      "removed": 33664,
+      "remaining": 1003424
+    }
+  ]
+}
