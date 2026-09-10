@@ -812,147 +812,290 @@ md(r"""
 ---
 # 4 - Validation and Operating Policy
 
-**Main idea: the model estimates risk. A business rule chooses which accounts a person
-should review.** An analyst then decides what to do.
+**Question:** A score is a number between 0 and 1. Who gets reviewed?
 
-First follow one made-up account through three questions: What does the score mean?
-How much could be lost? Should we review it? Then apply the same rule to real accounts.
+**What you should expect to see:** a check that the probabilities mean what they say, a
+decision rule written down **before** any tuning, the one parameter we cannot look up,
+a fairness experiment, and finally a single scoring of accounts the model has never seen.
 
-The example's numbers are supplied for the exercise. They are not measured bank costs
-or a real account's model output. Later, we compare feature choices and check the
-finished model on separate test accounts.
+**Why this stage exists in a real workflow:** the model does not decide anything. A written
+policy does, and it is the policy that gets reviewed by risk committees, audited, and
+defended. This is where a score becomes an action with a cost attached.
+
+**Output passed to Stage 5:** a frozen model, a frozen policy, and honest numbers measured
+on untouched accounts.
 """)
 
 md(r"""
-## 4.1 What does the model's score tell us?
+## 4.1 Do the probabilities mean what they say?
 
-Imagine an account with an estimated **30% chance of missing next month's payment**.
+Before a probability can be multiplied by money, it has to be **honest**. If the model says
+`0.30` for a group of accounts, roughly 30% of them should actually default. If it says 30%
+and 60% default, every cost calculation built on it is wrong.
 
-- This is an estimate, not a certainty about this person.
-- If the estimates are reliable, about **30 out of 100 similar accounts** would miss
-  payment, and about 70 would not.
-- The score alone does not say whether someone should review the account.
+**Term - calibration:** the agreement between predicted probabilities and observed
+outcomes. AUC does not check this at all - a model can rank perfectly while stating
+probabilities that are all far too low.
 
-Before using real scores this way, we must check them against real outcomes. Those
-technical checks remain in the supporting calculations; this example does not prove
-that the model's probabilities are reliable.
+**How to check it:** sort the validation accounts into ten bins by predicted probability
+(0.0-0.1, 0.1-0.2, and so on). In each bin, compare the average predicted probability with
+the share that actually defaulted. This is a **reliability table**.
 """)
 
 code(r"""
 # ===============================================================
-# 4.1 A MADE-UP ACCOUNT FOR THE EXERCISE
+# 4.1 RELIABILITY: PREDICTED VS OBSERVED, TEN BINS
 # ===============================================================
-example_probability = 0.30
-print(f"Classroom example: {example_probability:.0%} estimated chance of missing payment.")
+calibration_table = metrics.reliability_table(y_val, boosted.val_probabilities)
+print(calibration_table.to_string(index=False))
+print(f"\nBrier score (lower is better): {metrics.ranking_metrics(y_val, boosted.val_probabilities)['brier']:.4f}")
+charts.reliability_curve(calibration_table).show()
 """)
 
 md(r"""
-## 4.2 How much money could be lost?
+### How to read this plot
 
-The same made-up account owes **`NT$100,000`**, below its credit limit.
-Assume the bank eventually loses **half** of that balance if the account defaults
-and recovers the other half. The possible loss **if default happens** is `NT$50,000`.
+- **Question:** when the model says 30%, do about 30% of those accounts actually default?
+- **Marks and axes:** each dot is one probability bin. Horizontal position is what the
+  model predicted on average in that bin; vertical position is what actually happened.
+  Marker size is how many accounts fell in the bin. The grey diagonal is perfect honesty:
+  predicted equals observed.
+- **Denominator:** each dot's vertical value is a share *of the accounts in that bin only*
+  - the 0.7-0.8 dot is 234 validation accounts, 67.5% of which defaulted.
+- **What to notice:** the dots track the diagonal closely wherever there is data. The model
+  says 6.6% and 7.4% default; it says 24.4% and 26.8% default; it says 44.7% and 44.1%
+  default. Two mid-range bins are a few points off in each direction. The top-right dot is
+  a **single account** - it sits at 100% because that one account defaulted, and it should
+  be ignored.
+- **Term - Brier score:** the average squared gap between predicted probability and actual
+  outcome, across all accounts. `0.1396` here. It is a single-number summary of the same
+  thing this plot shows; lower is better, and it is only meaningful compared with another
+  model on the same data.
+- **Why it matters:** because the next section multiplies these probabilities by real money.
+  Honest probabilities are the licence to do that arithmetic at all.
+- **Boundary:** calibration is a **group** property, not a per-account one. "27% of accounts
+  in this bin defaulted" says nothing about which 27%. No individual account is 27%
+  defaulted.
 
-The **50% loss assumption is not the 30% chance of default**. One describes how much
-could be lost; the other describes how likely default is. The 50% is supplied for this
-exercise, not learned from the data.
+We tested a calibration wrapper (isotonic regression) and it improved the Brier score by
+`0.0009` - not visibly better on the table above. We use the **raw probabilities**, which
+keeps the deployed object one estimator and means SHAP explains exactly the model that made
+the decision.
+""")
 
-Small detail for the real accounts: use the September balance owed, but no more than
-the credit limit and no less than zero. This classroom calculation does not change
-the actual bill or cancel any debt.
+md(r"""
+## 4.2 The decision rule, written down before any tuning
+
+Here is the rule, and it is written before we look at a single result.
+
+> **Review an account when the money we expect to lose on it is larger than the cost of
+> reviewing it.**
+
+In arithmetic:
+
+```text
+probability of default  x  money at risk  x  share lost if it defaults   >   cost of one review
+```
+
+Four quantities, and it is worth being precise about where each comes from:
+
+| Quantity | Value here | Where it comes from |
+|---|---|---|
+| Probability of default | The model's score | Measured, and calibrated in 4.1 |
+| Money at risk (exposure) | September bill, capped at the credit limit | Observed in the data |
+| Share lost if it defaults | `0.5` | **Synthetic classroom assumption** |
+| Cost of one review | To be chosen in 4.3 | **Synthetic classroom assumption** |
+
+**Term - exposure:** the money that would actually be at stake if this account went bad.
+Not the credit limit - an unused limit costs nothing. We use the September statement
+balance, capped at the limit.
+
+**Term - loss given default (LGD):** the share of the exposed balance the bank does not
+recover after a default. Real LGD comes from years of recovery data. `0.5` here is a round
+classroom number.
+
+**Why the rule needs two ingredients.** A 90% chance of losing `NT$800` is not worth an
+analyst's afternoon. A 15% chance of losing `NT$400,000` is. Ranking by score alone would
+get both of those backwards, and that is the whole lesson of this stage: **in finance the
+model's output is an input to an economic decision, never the decision itself.**
 """)
 
 code(r"""
 # ===============================================================
-# 4.2 THE LOSS IF OUR EXAMPLE ACCOUNT DEFAULTS
-# ===============================================================
-example_balance = 100_000
-example_loss_share = 0.5
-example_loss_if_default = example_balance * example_loss_share
-pd.DataFrame({
-    "Information": ["Balance owed", "Assumed share lost", "Loss if default happens"],
-    "Classroom example": [f"NT${example_balance:,.0f}", f"{example_loss_share:.0%}",
-                          f"NT${example_loss_if_default:,.0f}"],
-})
-""")
-
-md(r"""
-## 4.3 Should this account go to an analyst?
-
-Combine the chance of default with the possible loss:
-
-**30% chance x `NT$50,000` possible loss = `NT$15,000` estimated loss.**
-
-That is an average risk estimate, not a prediction that this person will lose exactly
-`NT$15,000`. Now assume **one review costs `NT$10,000`**. This is another supplied
-exercise assumption, not a measured bank cost.
-
-Our classroom rule is: **send the account for review when estimated loss is greater
-than the review cost**. Here, `NT$15,000` is greater than `NT$10,000`, so review it.
-
-This simplified rule assumes review leads to an action that prevents the modeled loss.
-Real reviews do not guarantee that. A real bank must check whether its actions help,
-measure its costs, and consider how many reviews its staff can handle.
-""")
-
-code(r"""
-# ===============================================================
-# 4.3 APPLY THE CLASSROOM RULE TO THE SAME EXAMPLE
-# ===============================================================
-example_review_cost = 10_000
-example_expected_loss = example_probability * example_loss_if_default
-example_needs_review = example_expected_loss > example_review_cost
-print(f"Estimated loss: NT${example_expected_loss:,.0f}")
-print(f"Assumed review cost: NT${example_review_cost:,.0f}")
-print("Decision:", "Send to an analyst" if example_needs_review else "Keep in normal monitoring")
-""")
-
-md(r"""
-**Try one change:** if a review cost `NT$20,000`, would this account still qualify?
-No: `NT$15,000` is below that cost. The model's score stayed the same; the business
-assumption changed the decision. This question does not change our saved policy.
-
-**Review is not a punishment or a credit decision.** It means an analyst looks at the
-account and decides what, if anything, to do next.
-""")
-
-md(r"""
-## 4.4 What happens when we apply the rule?
-
-Now leave the made-up example. Use the real model scores and balances for the
-**6,000 validation accounts**, the separate group used to check our choices before
-the final test. Keep the 50% loss assumption and `NT$10,000` review cost fixed.
-
-The table compares who the rule selects with what happened the following month.
-Each cell counts accounts, not money. These are historical outcomes, not evidence
-that anyone actually reviewed these accounts or prevented a loss.
-""")
-
-code(r"""
-# ===============================================================
-# 4.4 THE REVIEW QUEUE AND THE RECORDED OUTCOMES
+# 4.2 WHERE EVERY VALIDATION ACCOUNT SITS ON RISK x MONEY
 # ===============================================================
 expo_val = metrics.exposure(val_df)
-val_flags = metrics.policy_flags(boosted.val_probabilities, expo_val, config.REVIEW_COST_NT)
-val_confusion = metrics.confusion(val_flags, y_val)
-metrics.confusion_table(val_confusion).T.rename(index={
-    "Flagged for review": "Selected for review", "Not flagged": "Not selected",
-})
+charts.risk_exposure_plane(boosted.val_probabilities, expo_val, config.REVIEW_COST_NT).show()
 """)
 
 md(r"""
-### Read the table as a worklist
+### How to read this plot
 
-- **780 accounts enter the queue:** 325 later missed payment and 455 paid.
-- **1,002 accounts missed payment without being selected.** The rule misses real problems.
-- **4,218 accounts were not selected and paid.**
+- **Question:** what does the rule actually select, seen from above?
+- **Marks and axes:** the horizontal axis is money at risk if the account defaults; the
+  vertical axis is the model's probability. Each cell is a small rectangle of that plane,
+  shaded by **how many validation accounts fall in it** - darker means more accounts. The
+  green curve is the rule's boundary; everything up and to the right of it gets flagged.
+- **Denominator:** the shading is a count of accounts, not a rate. All 6,000 validation
+  accounts are somewhere on this plane.
+- **What to notice:** most accounts pile into the bottom-left - low probability, modest
+  balance - and are nowhere near the boundary. The curve is a hyperbola, not a horizontal
+  line: at `NT$50,000` of exposure it takes a probability around 0.40 to be flagged, while
+  at `NT$400,000` a probability of 0.05 is enough. Two accounts with the same score land on
+  opposite sides of it.
+- **Term - operating policy:** the written rule that converts a model score into a workflow
+  action. It is a separate object from the model, and it can be changed without retraining.
+- **Why it matters:** this is the picture to keep when someone asks "what score gets you
+  reviewed?" There is no such score. There is a curve, and where you sit on it depends on
+  how much money is at stake.
+- **Boundary:** exposure is capped at `NT$400,000` **for display only** so the dense region
+  stays readable; the rule itself uses the uncapped value. And being above the line means
+  *an analyst will look*, not that the account will default - the vertical axis makes that
+  plain, since most flagged accounts sit well below 0.5.
+""")
 
-This table is a **confusion matrix**: it puts a decision next to the recorded outcome.
-It shows a tradeoff, not proof that the rule is safe or good enough for a real bank.
+md(r"""
+## 4.3 The one number we cannot look up
 
-**Check your understanding:** Why might a risky account stay outside the queue?
-Its estimated loss may be below the review cost. Why does an analyst make the final
-decision? The score is uncertain, and a number alone does not tell us which action will help.
+Three of the four quantities are settled. The fourth - **what one review costs** - is a
+business input, not a data-science one, and reasonable people give very different answers:
+
+- An analyst's hour, fully burdened: perhaps `NT$1,000`.
+- An hour, plus the phone call, plus the case notes, plus the compliance check on anything
+  the analyst does next, plus the share of the team's time that gets spent on accounts that
+  were fine: closer to `NT$10,000`.
+
+Rather than assert one, we **sweep** it: hold the model and the rule fixed, vary the review
+cost, and watch what happens to the queue. Note the direction of the effect - a *higher*
+assumed review cost makes the rule *more* selective, because the expected loss has to clear
+a higher bar.
+""")
+
+code(r"""
+# ===============================================================
+# 4.3 SWEEP THE ASSUMED REVIEW COST (VALIDATION ONLY)
+# ===============================================================
+sweep = metrics.policy_sweep(boosted.val_probabilities, y_val, expo_val)
+print(sweep.to_string(index=False))
+charts.policy_sweep_chart(sweep, config.REVIEW_COST_NT).show()
+""")
+
+md(r"""
+### How to read this plot
+
+- **Question:** how does the assumed cost of one review change the size and the value of
+  the queue?
+- **Marks and axes:** both panels share a horizontal axis - the assumed cost of one review,
+  from `NT$1,000` to `NT$20,000`. The top panel is the share of validation accounts flagged;
+  the bottom is net savings in millions. The green dashed line marks the value we are about
+  to freeze.
+- **Denominator:** the top panel is a share of **all 6,000 validation accounts**. The bottom
+  panel is a total, not a rate: prevented losses on flagged accounts that actually
+  defaulted, minus the review cost paid on every flagged account.
+- **What to notice, and this is the surprising one:** at `NT$1,000` per review, the
+  economically optimal rule flags **57.1% of the book** - 3,425 of 6,000 accounts - and
+  produces the *highest* net savings on the chart, `NT$26.7 million`. **If reviews are
+  cheap, review broadly.** The arithmetic is not being clever; it is telling us that at
+  `NT$1,000` a review pays for itself on a fairly ordinary account.
+- **Term - net savings:** prevented losses minus review costs, measured against reviewing
+  nobody. Every number in the bottom panel rests on the synthetic LGD of `0.5` and on the
+  assumption that a review prevents the loss entirely.
+- **Why it matters:** the model did not change between the left and right edges of this
+  chart. **The business assumption changed, and the workload moved by a factor of ten.**
+  When someone asks why the queue is the size it is, the honest answer is usually a number
+  in a policy document, not a model.
+- **Boundary:** "optimal" here means optimal *under these assumptions*. A team of six
+  analysts cannot review 3,425 accounts a month, and this chart knows nothing about that.
+  Capacity is a real constraint that the expected-cost rule does not contain.
+
+**Freezing the parameter: `NT$10,000` per review.** That is the fully loaded figure -
+analyst time, customer outreach, case notes, and the compliance work on whatever the
+analyst decides. At that value the rule flags **13.0%** of validation accounts, a queue a
+real team could staff, and returns `NT$11.9 million` in net savings. From here on, nothing
+about the model or the policy changes.
+""")
+
+md(r"""
+## 4.4 What the frozen policy does, and what it is worth comparing to
+
+A single number is not evidence. Three comparison lines make it one.
+""")
+
+code(r"""
+# ===============================================================
+# 4.4 THE FROZEN POLICY ON VALIDATION, AGAINST THREE BASELINES
+# ===============================================================
+val_flags = metrics.policy_flags(boosted.val_probabilities, expo_val, config.REVIEW_COST_NT)
+val_policy = metrics.policy_eval(boosted.val_probabilities, y_val, expo_val, config.REVIEW_COST_NT)
+val_confusion = metrics.confusion(val_flags, y_val)
+val_review_everybody = metrics.review_everybody_savings(y_val, expo_val, config.REVIEW_COST_NT)
+
+# Fixed-capacity alternative: just review the top 10% by score, ignoring exposure.
+top_k = int(0.10 * len(y_val))
+capacity_flags = np.zeros(len(y_val), bool)
+capacity_flags[np.argsort(-boosted.val_probabilities)[:top_k]] = True
+capacity_savings = round(float(
+    (y_val[capacity_flags] * expo_val[capacity_flags] * config.LOSS_GIVEN_DEFAULT
+     - config.REVIEW_COST_NT).sum()))
+
+# Money as NT$1,234 or -NT$1,234, never the confusing NT$-1,234.
+def nt(amount: float) -> str:
+    return f"{'-' if amount < 0 else ''}NT${abs(amount):,.0f}"
+
+print(f"Expected-cost rule : {val_policy['flagged']:,} flagged ({val_policy['flagged_share']:.1%}), "
+      f"net savings {nt(val_policy['net_savings_NT'])}")
+print(f"Review nobody      : 0 flagged, net savings {nt(0)}")
+print(f"Review everybody   : {len(y_val):,} flagged (100.0%), net savings {nt(val_review_everybody)}")
+print(f"Top 10% by score   : {top_k:,} flagged (10.0%), net savings {nt(capacity_savings)}")
+""")
+
+md(r"""
+**Review nobody** is the do-nothing line, worth `NT$0` by definition.
+
+**Review everybody** loses `NT$29.2 million`. Six thousand reviews at `NT$10,000` cost far
+more than the losses they prevent. This is the line that shows why prioritization is the
+product: the bank is not short of accounts to look at, it is short of reviews to spend.
+
+**Top 10% by score** is the obvious alternative policy - forget the money, just take the
+riskiest accounts. It is *more precise* (67.0% of those flagged do default, versus 41.7%)
+and it earns **less than half** the savings, `NT$5.7 million` versus `NT$11.9 million`,
+because it spends reviews on high-risk accounts that owe very little. **Precision is not
+the objective. Money prevented is.**
+""")
+
+code(r"""
+# ===============================================================
+# 4.4b VALIDATION CONFUSION AT THE FROZEN POLICY
+# ===============================================================
+metrics.confusion_table(val_confusion)
+""")
+
+md(r"""
+Read the four counts as a workload plan, using the **validation split's 6,000 accounts** as
+the denominator:
+
+- **325** accounts flagged that did miss the payment. These are the reviews that could pay
+  for themselves.
+- **455** accounts flagged that paid anyway. **Term - false positive:** a flag on an account
+  whose outcome turned out fine. This is not a malfunction. It is 455 customers who get a
+  phone call they did not need, and 455 reviews the team spends.
+- **1,002** accounts that missed the payment and were never flagged. **Term - false
+  negative:** the miss. This is by far the largest error, and it is the price of a queue
+  small enough to staff.
+- **4,218** correctly left alone.
+
+Two rates read off those counts, each with its own denominator:
+
+- **Precision = 325 / 780 = 41.7%.** Of the accounts we flag, the share that actually
+  default. This is what an analyst experiences: roughly two in five reviews find a real
+  problem.
+- **Recall = 325 / 1,327 = 24.5%.** Of the accounts that default, the share we flagged.
+  Three quarters of defaults are missed.
+
+**24.5% recall would be a failure for a smoke alarm and is fine here**, because the policy
+was never asked to catch every default. It was asked to spend a limited number of reviews
+where they prevent the most money - and the `NT$11.9 million` line is the answer to the
+question that was actually asked.
 """)
 
 md(r"""
@@ -978,15 +1121,15 @@ with_protected = models.fit_gradient_boosting_with_protected(
     X_train, y_train, X_val, train_df, val_df
 )
 without_protected = models.fit_gradient_boosting(X_train, y_train, X_val)
-feature_comparison = {
+fairness = {
   "auc_without": metrics.ranking_metrics(y_val, without_protected.val_probabilities)["auc"],
     "auc_with": metrics.ranking_metrics(y_val, with_protected.val_probabilities)["auc"],
 }
 pd.DataFrame([
   {"Model": "Before: with SEX, MARRIAGE, AGE", "Input features": 10,
-  "Validation AUC": feature_comparison["auc_with"]},
+   "Validation AUC": fairness["auc_with"]},
   {"Model": "After: demographics removed, retrained", "Input features": 7,
-  "Validation AUC": feature_comparison["auc_without"]},
+   "Validation AUC": fairness["auc_without"]},
 ]).style.format({"Validation AUC": "{:.4f}"}).hide(axis="index")
 """)
 
@@ -994,12 +1137,18 @@ md(r"""
 **Result: AUC goes from `0.7670` to `0.7655`, a decrease of `0.0015`.** Removing the
 three columns changed ranking performance very little in this run. We keep the model
 without them. This result is specific to this dataset, not a guarantee for another one.
-
-This compares ranking performance only, not how each group is treated.
 """)
 
 md(r"""
-## 4.6 Final check on 6,000 unseen accounts
+## 4.6 One limit to that result
+
+**Removing columns does not prove fairness.** Other inputs can still reflect differences
+between groups. This comparison measures the performance change only. Detailed group
+checks stay in the exported governance data; they are not another table to work through here.
+""")
+
+md(r"""
+## 4.7 Final check on 6,000 unseen accounts
 
 Now ask a different question: **how does our chosen model work on accounts we did not
 use to make any choices?**
@@ -1012,7 +1161,7 @@ steps travel with the model into the app.
 
 code(r"""
 # ===============================================================
-# 4.6 FIT THE DEPLOYABLE PIPELINE AND SCORE THE TEST SPLIT ONCE
+# 4.7 FIT THE DEPLOYABLE PIPELINE AND SCORE THE TEST SPLIT ONCE
 # ===============================================================
 y_test = test_df[config.TARGET].to_numpy()
 pipeline, fit_seconds = models.fit_final_pipeline(train_df, y_train)
@@ -1034,7 +1183,7 @@ print(f"Of all defaults, flagged         : {test_policy['recall']:.1%}")
 
 code(r"""
 # ===============================================================
-# 4.6b WHERE THE 6,000 TEST ACCOUNTS LANDED
+# 4.7b WHERE THE 6,000 TEST ACCOUNTS LANDED
 # ===============================================================
 charts.confusion_heatmap(test_confusion, "test").show()
 """)
@@ -1071,8 +1220,8 @@ results; that is not a reason to retune on the test accounts.
 
 The model is frozen, the policy is frozen, and on 6,000 accounts nobody tuned against, the
 system flags **12.68%** of the book, finds a real problem in **48.2%** of the reviews it
-asks for, and is worth **`NT$14,623,904`** under stated assumptions. The model uses
-the seven inputs without the three demographic columns.
+asks for, and is worth **`NT$14,623,904`** under stated assumptions. Removing the three
+demographic columns changed AUC very little; it did not prove fairness.
 """)
 
 
@@ -1354,8 +1503,8 @@ wrong, and it is the single most common misunderstanding of a probabilistic syst
   **The model was right about C.** The policy flagged it anyway, on purpose, because of the
   balance. Score and decision are different objects, and here they disagreed.
 
-Probability estimates are checked across many accounts, using the reliability table
-saved with the evidence in 5.7. Section 4.6 separately checks the review decisions. **A single
+The only place a probability can be judged is in aggregate - which is precisely what the
+reliability table in 4.1 and the 6,000-account confusion matrix in 4.7 are for. **A single
 account's outcome can never confirm or refute a single account's score.**
 
 This is also why the outcome column is the last thing shown, in its own cell, after the
@@ -1382,22 +1531,14 @@ stops matching the numbers it was approved on.
 
 The manifest also carries `audit_sex` and `audit_age_band`. Those are **withheld columns
 the model never saw**, exported so the application's governance screen can rerun the
-group checks. The next cell calculates those checks for the handoff
+group checks mentioned in 4.6. The next cell calculates those checks for the handoff
 without adding more tables to the lesson. They are audit data, never model inputs.
-
-It also keeps the detailed probability check, review-cost comparison, and modeled
-savings in `evaluation.json` for the app's evidence view. Those calculations are
-supporting material, not extra tables students must interpret in sections 4.1-4.4.
 """)
 
 code(r"""
 # ===============================================================
 # 5.7 BUILD THE MANIFEST, ASSEMBLE THE EVIDENCE, EXPORT
 # ===============================================================
-calibration_table = metrics.reliability_table(y_val, boosted.val_probabilities)
-sweep = metrics.policy_sweep(boosted.val_probabilities, y_val, expo_val)
-val_policy = metrics.policy_eval(boosted.val_probabilities, y_val, expo_val, config.REVIEW_COST_NT)
-val_review_everybody = metrics.review_everybody_savings(y_val, expo_val, config.REVIEW_COST_NT)
 audit_sex = metrics.slice_audit(
   val_df, boosted.val_probabilities, val_flags, val_df["SEX"].map(config.SEX_LABELS), "sex")
 audit_age = metrics.slice_audit(
@@ -1406,7 +1547,7 @@ manifest = handoff.build_manifest(test_df, X_test, p_test, test_flags, test_expl
 evidence = handoff.assemble_evidence(
     splits, leaderboard, calibration_table, sweep,
     val_policy, val_confusion, val_review_everybody,
-    feature_comparison, audit_sex, audit_age,
+    fairness, audit_sex, audit_age,
     test_metrics, test_policy, test_confusion, test_review_everybody,
 )
 sizes = handoff.export(pipeline, evidence, manifest)
@@ -1486,10 +1627,10 @@ a notice. Every one of those belongs to a person, and every one of them stays th
 
 1. **Score, decision, and outcome are three different things.** Account C had a low score,
    a flag, and a clean outcome - all three at once, and all three correct.
-2. **The business rule sets the workload.** In our classroom example, a higher assumed
-  review cost changes the decision without changing the model's score.
+2. **The policy, not the model, sets the workload.** Changing one assumed cost moved the
+   queue from 13% to 57% of the book without touching the model.
 3. **Removing the three demographic columns changed AUC by `0.0015` here.** That small
-  difference is a result for this dataset, not a rule for every model.
+  performance change is not proof of fairness.
 4. **A model that cannot explain itself cannot be used in lending**, whatever its AUC.
 5. **The artifact that gets deployed has to be the artifact that was measured**, and the
    only way to know is to reload it and check.

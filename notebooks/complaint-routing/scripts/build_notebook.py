@@ -7,7 +7,6 @@ outputs match the code that produced them.
 
 from __future__ import annotations
 
-from hashlib import sha256
 from pathlib import Path
 
 import nbformat as nbf
@@ -515,54 +514,69 @@ text_prep.length_profile(splits)
 """)
 
 md(r"""
-## 2.6 Word clouds: which words stand out?
+## 2.6 Turning one sentence into numbers
 
-**The story: a canceled flight and a missing refund.** The consumer says the credit-card
-company received the refund but did not return it. These clouds use that real training
-complaint, selected because the problem is easy to recognize, not to evaluate the model.
+A model cannot add up English. Something has to convert a paragraph into a row of numbers,
+and *what* it converts to is the central choice of this lab.
 
-- **TF (term frequency):** words used more often in this complaint appear larger.
-- **IDF (inverse document frequency):** asks how unusual a term is across the training
-  complaints. Common terms get less emphasis than rarer terms with the same count.
-- **TF-IDF:** combines frequency here with rarity across the collection.
+The deployed model uses **TF-IDF**, which stands for term frequency-inverse document
+frequency. Two ideas, one per half of the name:
 
-Look for **refund**, **flight**, **airline**, and **credit card**. The second cloud uses
-TF-IDF weights: words that describe the issue can stand out differently from frequent words.
+- **Term frequency:** how often a word or 2-word phrase appears in *this* complaint. A
+  complaint that says "mortgage" five times is more about mortgages than one that says it
+  once.
+- **Inverse document frequency:** how rare that word is across *all* complaints. "The"
+  appears everywhere and carries nothing. "Escrow" appears in few complaints and carries a
+  great deal. IDF divides by how common a word is, so rare words get large weights and
+  common words get small ones.
+
+Multiply the two, and every word in a complaint gets a number: high when the word is
+frequent here and rare elsewhere.
+
+Below, three one-sentence complaints are turned into numbers so that every value can be
+checked by eye. Watch what happens to "my", which appears in all three, versus "credit
+card", which appears in one.
 """)
 
 code(r"""
 # ===============================================================
-# 2.10 ONE REAL COMPLAINT, TWO WAYS TO SIZE ITS WORDS
+# 2.10 A WORKED TF-IDF EXAMPLE ON THREE TINY COMPLAINTS
 # ===============================================================
-word_clouds = charts.tfidf_word_clouds(train)
-print(f"Real complaint #{word_clouds.layout.meta['complaint_id']} | {word_clouds.layout.meta['team']}")
-print(f"IDF uses {word_clouds.layout.meta['training_complaints']:,} training complaints.")
+for i, sentence in enumerate(text_prep.WORKED_EXAMPLE_CORPUS, start=1):
+    print(f"{i}. [{text_prep.WORKED_EXAMPLE_TEAMS[i - 1]:16s}] {sentence}")
+print("\nComplaint 1 as numbers (only its non-zero columns are shown):")
+text_prep.worked_example()
 """)
 
 md(r"""
-**Read the size, not the location or color.** Both clouds use the same selected terms,
-including two-word phrases. Larger words have higher values within that cloud; sizes
-are approximate because the words must fit together.
+Read the table against the sentences. "my" sits in all three complaints, so its weight is
+the lowest in the table. "credit", "card", and the phrase "credit card" sit in complaint 1
+only, so they carry the most weight - and they are exactly the words a human would use to
+route it to the credit-card team.
 
-Filler words, numbers, and `XXXX` redactions are hidden **only in this picture**.
-This is not a model-confidence score or proof of the correct team. The classifier and
-its preprocessing are unchanged.
+Two consequences follow, and both matter later:
+
+- **Word order is gone.** "the bank charged me" and "me charged the bank" produce identical
+  numbers. TF-IDF is a bag of words and 2-word phrases, nothing more.
+- **The row is mostly zeros.** Every complaint gets a column for every word in the whole
+  vocabulary, and almost all of them are absent from any one complaint.
 """)
 
 code(r"""
 # ===============================================================
-# 2.11 FREQUENCY CLOUD AND TF-IDF CLOUD
+# 2.11 HOW WIDE THAT ROW GETS
 # ===============================================================
-word_clouds.show()
+text_prep.worked_example_shape().style.format({"Share of the row that is zero": "{:.1%}"}).hide(axis="index")
 """)
 
 md(r"""
 ### Stage 2 conclusion
 
-We removed exact copies before splitting and mapped product labels to eight teams.
-TF-IDF gives each complaint a row of word weights. Missing terms have zero weight.
-Two-word phrases preserve some neighboring-word order, but not full sentence meaning.
-Next, the classifier learns how these weights relate to teams.
+The data is honest now, and we know what it costs: exact duplicates removed before the
+split (41.5% of the window), credit reporting capped at 1.5x the runner-up, one ambiguous
+category dropped, and product labels consolidated into eight teams. Complaints are short
+and right-skewed, and TF-IDF is the agreed way of turning them into numbers - carrying word
+identity and rarity, and discarding order.
 """)
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -949,34 +963,29 @@ recognises it as someone else's within a paragraph.
 """)
 
 md(r"""
-## 4.3 Coverage: how much routing does the model handle?
+## 4.3 The rule, stated before the sweep
 
-**Coverage is the share of incoming complaints routed automatically. It is not recall.**
+A model that must answer every complaint has to guess on the ones it cannot read. It is
+better to let it decline.
 
-The model suggests a team and a confidence score. At or above our cutoff it sends the
-complaint to that team. Below the cutoff, a human triage desk chooses the team.
-**A person still handles every complaint after routing.**
+Every prediction comes with **confidence**: the largest of the eight team probabilities.
+The rule, written down before looking at any numbers:
 
-Count the tiles in this made-up example. Each tile is one complaint.
-""")
+> **Auto-route** the complaint to the predicted team when confidence is at or above a
+> threshold. Below the threshold, send it to a **human triage queue**, where a clerk reads
+> it and assigns the team by hand.
 
-code(r"""
-charts.coverage_recall_example().show()
-""")
+The threshold is chosen on the **validation split only**, against a target set in advance:
+**at least 90% of auto-routed complaints must reach the right team**, at the highest
+coverage that clears it. Nothing about the test split informs this choice.
 
-md(r"""
-- **Coverage:** 16 automatic routes / 20 incoming complaints = **80%**.
-  The other 4 need a person to choose their team. Wrong automatic routes still count.
-- **Recall for Mortgages:** of the 5 complaints that belong to Mortgages, the model
-  labels 3 correctly. Recall = 3 / 5 = **60%**. The other 2 are labeled Credit cards.
+Two rates, again with different denominators, and they must never be mixed:
 
-Recall here checks the model's team labels before the confidence cutoff, just like our
-per-team table. Changing the cutoff changes coverage, not those already-computed labels.
-**100% coverage is possible even when many labels are wrong.**
+- **Coverage** = auto-routed complaints / all complaints in the split.
+- **Accuracy among auto-routed** = correct auto-routes / auto-routed complaints.
 
-To choose the cutoff, we use validation data only. Our target is at least 90% correct
-among automatic routes, then the largest coverage meeting that target. Test data do
-not choose the cutoff. Next we check whether lower-confidence answers are more often wrong.
+For a threshold to help at all, the model's confidence has to be informative - low when it
+is about to be wrong. That is testable.
 """)
 
 code(r"""
@@ -989,13 +998,28 @@ charts.confidence_distribution(
 """)
 
 md(r"""
-### Read this plot
+### How to read this plot
 
-- Left to right: the model's confidence. Taller bars mean more complaints.
-- Blue bars: correct team labels. Red bars: wrong labels. Red is more common at low
-  confidence, but some confident answers are still wrong.
-- The line at **0.55** separates human triage on the left from automatic routing on
-  the right. The next table checks whether confidence values match observed accuracy.
+- **Question:** do the model's wrong answers come with lower confidence than its right ones?
+  If not, no threshold can help.
+- **Marks and axes:** the horizontal axis is confidence, the model's highest team
+  probability, in bins of 0.025. Bar height counts validation complaints in each bin. Blue
+  bars are complaints the model routed correctly, red bars are complaints it got wrong; the
+  two are drawn overlaid, and the labelled annotations state which side of the green line is
+  which.
+- **Denominator:** all 8,728 validation complaints, divided between the two colours - not
+  two separate percentages.
+- **What to notice:** the blue mass piles up near 1.0 while the red mass sits low and thins
+  out to the right. Wrong answers are concentrated exactly where confidence is weakest,
+  which is what makes a cut-off worth having. Red does not vanish to the right of the line -
+  some confident answers are still wrong, and stage 5 walks through one of them.
+- **Term:** **confidence** here is only the largest predicted probability. It is a number
+  the model produces, not a promise it is right.
+- **Why it matters:** the green line at 0.55 is the workflow. Everything left of it becomes
+  a person's reading queue; everything right of it moves without review.
+- **Boundary:** this shows confidence *ranks* errors well. It does not show the
+  probabilities are calibrated - that a 0.70 complaint is right 70% of the time. The table
+  below tests that separately.
 """)
 
 code(r"""
@@ -1033,15 +1057,29 @@ charts.threshold_sweep_chart(sweep, config.CONFIDENCE_THRESHOLD).show()
 """)
 
 md(r"""
-### Read this plot
+### How to read this plot
 
-- Left to right: a stricter confidence cutoff. Orange is **coverage** (left scale);
-  blue is **accuracy among automatic routes** (right scale, starting at 80%).
-- A stricter cutoff sends fewer complaints automatically. The ones that remain are
-  more often correct in this validation run. The human triage queue gets larger.
-- At **0.55**, 6,737 / 8,728 = **77.2% coverage**. The other 1,991 need human triage.
-  Accuracy among those 6,737 automatic routes is **90.2%**. Different question,
-  different denominator. We have not measured the triage clerks' accuracy.
+- **Question:** what does each extra point of accuracy on the auto-routed stream cost in
+  complaints a person has to read?
+- **Marks and axes:** the horizontal axis is the candidate threshold. The solid orange line
+  is coverage, read on the left axis. The dotted blue line is accuracy among the
+  auto-routed, read on the right axis - note the right axis starts at 80%, not 0%, so that
+  the accuracy curve is legible. The dashed green line marks the frozen choice; the dotted
+  grey line is the 90% rule set before we looked.
+- **Denominator:** the two lines divide by different things, which is the whole lesson.
+  Coverage divides by all 8,728 validation complaints. Accuracy divides only by the
+  complaints auto-routed at that threshold - a shrinking group as the line moves right.
+- **What to notice:** the curves move in opposite directions everywhere. At 0.30 the model
+  handles 97.1% of complaints and gets 84.2% of them right; at 0.90 it handles 32.3% and
+  gets 97.8% right. 0.55 is the leftmost point that clears the 90% rule.
+- **Term:** **coverage** is the share of work the automation takes. Its complement, the
+  triage share, is the human workload the policy creates.
+- **Why it matters:** the threshold is a staffing decision as much as a modelling one. At
+  0.55, 22.8% of complaints go to a person - 1,991 of these 8,728 - and that queue has to be
+  resourced or the policy fails in practice.
+- **Boundary:** the accuracy curve describes only auto-routed complaints. It says nothing
+  about how well the triage clerks route the rest, and nothing about complaints the model
+  gets right for the wrong reason.
 """)
 
 md(r"""
@@ -1097,19 +1135,16 @@ test_policy = metrics.policy_eval(y_test, test_predictions, test_confidence)
 print(f"test complaints              : {len(y_test):,}")
 print(f"accuracy                     : {test_scores['accuracy']:.4f}")
 print(f"macro-F1                     : {test_scores['macro_f1']:.4f}")
-print(f"Coverage: {test_policy['auto_routed']:,} auto-routed / {test_policy['complaints']:,} total"
-  f" = {test_policy['coverage']:.1%}")
+print(f"coverage (auto-routed share) : {test_policy['coverage']:.4f}")
 print(f"accuracy among auto-routed   : {test_policy['accuracy_among_auto_routed']:.4f}")
 print(f"sent to human triage         : {test_policy['triage_rows']:,} "
       f"({test_policy['triage_share']:.1%})")
 """)
 
 md(r"""
-**Read the test result:** 6,833 / 8,728 = **78.3% coverage**. That leaves 1,895 complaints
-for human triage. Coverage counts all automatic routes, including wrong ones.
-
-Of the 6,833 automatic routes, **89.7%** match the recorded team. That is their accuracy,
-not coverage or recall. Recall for each team appears in the next table.
+Validation said 90.2% accuracy among auto-routed at 77.2% coverage; test says 89.7% at
+78.3%. The two agree closely, which is the evidence that the threshold was chosen on a
+pattern rather than on validation-split noise.
 """)
 
 code(r"""
@@ -1641,15 +1676,11 @@ notebook["metadata"] = {
 if __name__ == "__main__":
     if OUTPUT.exists():
         previous = nbf.read(OUTPUT, as_version=4)
-        previous_cells = {(cell.cell_type, cell.source): cell for cell in previous.cells}
+        previous_cells = {cell.id: cell for cell in previous.cells}
         for index, cell in enumerate(notebook.cells):
-          saved = previous_cells.get((cell.cell_type, cell.source))
-          if saved is not None:
+            saved = previous_cells.get(cell.id)
+            if saved and saved.cell_type == cell.cell_type and saved.source == cell.source:
                 notebook.cells[index] = saved
-          else:
-            digest = sha256(f"{cell.cell_type}:{cell.source}".encode()).hexdigest()[:12]
-            cell.id = f"complaint-build-{digest}"
-            cell.metadata["id"] = cell.id
     nbf.validate(notebook)
     identifiers = [cell["metadata"]["id"] for cell in notebook["cells"]]
     assert len(identifiers) == len(set(identifiers)), "duplicate cell id"

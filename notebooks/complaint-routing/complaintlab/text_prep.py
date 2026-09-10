@@ -4,7 +4,7 @@ Two representations appear in this lab:
 
 - **TF-IDF**, which counts words and 2-word phrases and weights each one by how
   rare it is across complaints. One complaint becomes a very wide, mostly-zero
-    row of weights. Word pairs preserve local adjacency, not full sentence order.
+  row of counts. Nothing about word order survives.
 - **Sentence embeddings**, which run the complaint through a small transformer
   and read out one fixed-length vector of 384 numbers.
 
@@ -14,11 +14,9 @@ small enough to read in the notebook.
 
 from __future__ import annotations
 
-from collections import Counter
-
 import numpy as np
 import pandas as pd
-from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS, TfidfVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 from . import config
 
@@ -31,7 +29,6 @@ WORKED_EXAMPLE_CORPUS = [
 ]
 WORKED_EXAMPLE_TEAMS = ["Credit cards", "Debt collection", "Credit reporting"]
 WORKED_EXAMPLE_SENTENCE = WORKED_EXAMPLE_CORPUS[0]
-WORD_CLOUD_COMPLAINT_ID = 10158370
 
 
 def build_vectorizer(min_df: int | None = None) -> TfidfVectorizer:
@@ -85,43 +82,6 @@ def worked_example_shape() -> pd.DataFrame:
             }
         ]
     )
-
-
-def word_cloud_weights(train: pd.DataFrame) -> pd.DataFrame:
-    """Compare counts and TF-IDF for the fixed canceled-flight refund complaint."""
-    candidates = train.loc[train["complaint_id"].astype(str) == str(WORD_CLOUD_COMPLAINT_ID)]
-    if len(candidates) != 1:
-        raise ValueError(f"Expected one training complaint with ID {WORD_CLOUD_COMPLAINT_ID}.")
-    example = candidates.iloc[0]
-    vectorizer = build_vectorizer()
-    vectorizer.fit(train[config.TEXT_COLUMN])
-    counts = Counter(vectorizer.build_analyzer()(example[config.TEXT_COLUMN]))
-    weights = vectorizer.transform([example[config.TEXT_COLUMN]]).toarray()[0]
-    terms = [
-        term for term in counts
-        if term in vectorizer.vocabulary_
-        and all(token.isalpha() and token not in ENGLISH_STOP_WORDS and set(token) != {"x"}
-                for token in term.split())
-    ]
-    frame = pd.DataFrame([
-        {
-            "term": term,
-            "count": counts[term],
-            "idf": float(vectorizer.idf_[vectorizer.vocabulary_[term]]),
-            "weight": float(weights[vectorizer.vocabulary_[term]]),
-        }
-        for term in terms
-    ])
-    if frame.empty:
-        raise ValueError("No displayable terms remain for the word clouds.")
-    frequent = frame.sort_values(["count", "term"], ascending=[False, True]).head(40)
-    weighted = frame.sort_values(["weight", "term"], ascending=[False, True]).head(40)
-    selected = frame.loc[frame["term"].isin(set(frequent["term"]) | set(weighted["term"]))]
-    selected = selected.sort_values("term").reset_index(drop=True)
-    selected.attrs.update(complaint_id=int(example["complaint_id"]),
-                          narrative=example[config.TEXT_COLUMN], team=example[config.TARGET],
-                          training_complaints=len(train))
-    return selected
 
 
 def vocabulary_profile(vectorizer: TfidfVectorizer, narratives: pd.Series) -> pd.DataFrame:

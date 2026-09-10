@@ -1,0 +1,18 @@
+{
+  "name": "Expected-cost review policy",
+  "rule": "flag for review when p(default) x exposure x LGD > review_cost",
+  "parameters": {
+    "loss_given_default": 0.5,
+    "review_cost_NT": 10000,
+    "currency": "NT$ (New Taiwan dollars)",
+    "note": "All dollar parameters are synthetic classroom assumptions, not measured bank costs."
+  },
+  "exposure": "BILL_AMT1 clipped to [0, LIMIT_BAL]",
+  "selected_on": "validation split only; the test split was scored once after freezing",
+  "routes": {
+    "priority_review": "A credit analyst reviews the account and chooses the intervention.",
+    "standard_monitoring": "No review this month; the account stays in ordinary monitoring."
+  },
+  "fallback": "An account with missing fields or codes outside the documented ranges is excluded from scoring and logged for manual data review. It is never silently scored.",
+  "boundary": "A score is not a default determination; the analyst decides. The model never contacts a customer, never changes a limit, and never labels anyone a defaulter."
+}

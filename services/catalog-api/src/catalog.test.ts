@@ -74,6 +74,26 @@ describe("CatalogStore seed contracts", () => {
     expect(courseCase?.featuredDecisionId).toBe("classification");
   });
 
+  it.each([
+    "financial-credit-risk",
+    "financial-complaint-routing",
+    "manufacturing-predictive-maintenance",
+    "manufacturing-procedure-assistant",
+    "retail-demand-forecasting",
+    "retail-product-recommendations",
+  ])(
+    "exposes the %s workflow and demo",
+    async (caseId) => {
+      const catalog = await CatalogStore.load();
+      const card = catalog.list().find((item) => item.id === `${caseId}-lab`);
+      expect(card?.demoStatus).toBe("available");
+      expect(card?.courseCaseId).toBe(caseId);
+      expect(catalog.getCourseCase(caseId)?.stages.map((stage) => stage.id)).toEqual([
+        "input", "process", "decision", "action", "outcome",
+      ]);
+    },
+  );
+
   it("links every retained workflow to a comprehensive scenario", async () => {
     const catalog = await CatalogStore.load();
     const labs = catalog.list().filter((item) => item.courseCaseId);

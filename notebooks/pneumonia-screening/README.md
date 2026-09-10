@@ -1,8 +1,8 @@
 # From chest X-ray pixels to a review queue
 
-Teaching notebook for **ITAI 2372 - Module 3**. It follows the same five-stage CNN build
-as the Session 2 fraud case, places the image-model score inside a bounded healthcare
-workflow, and then adds a separate multimodal-LLM capability experiment.
+Teaching notebook for **ITAI 2372 - Module 3**. It follows the same five-stage structure
+as the Session 2 fraud case, then places the image-model score inside a bounded healthcare
+workflow.
 
 | | Stage | What happens |
 |---|---|---|
@@ -12,25 +12,18 @@ workflow, and then adds a separate multimodal-LLM capability experiment.
 | 4 | **Model Validation** | Select a cutoff on validation data, then evaluate untouched test data |
 | 5 | **Model Prediction** | Create the queue, influence overlay, and app artifacts |
 
-After the measured build is complete, optional **Stage 6** sends one fixed packaged
-priority-review example to a vision-capable model. The LLM does not receive the CNN score,
-cutoff, route, or dataset label. Its generated interpretation attempt is compared with the
-limited evidence available in this binary-label dataset.
-
 ## Safety boundary
 
 This is an educational workflow demonstration, not a diagnostic system. It accepts no
-arbitrary image upload. The CNN ranks packaged benchmark examples for **priority review**
-or **standard review**. The optional multimodal section produces unverified language about
-one packaged thumbnail and does not alter that route. A radiologist still interprets every
-study, and a clinician retains authority over diagnosis and treatment.
+arbitrary image upload. The model ranks packaged benchmark examples for **priority review**
+or **standard review**. A radiologist still interprets every study, and a clinician retains
+authority over diagnosis and treatment.
 
 ## Run it
 
 In a Codespace, open `01_pneumonia_build.ipynb`, select `.venv/bin/python`, and run all
 cells. The source archive is committed, so the notebook does not download data during
-class. Stage 6 defaults to a captured response, so it also runs without network access or
-Copilot authentication.
+class.
 
 Locally, from the repository root:
 
@@ -40,11 +33,6 @@ npm run setup:notebook
 
 Then open the notebook with the `.venv` interpreter. The latest validated CPU run takes
 about three minutes, including training, artifact export, and reload verification.
-
-To try the optional live multimodal call, sign in to GitHub Copilot, confirm that the
-selected model supports vision, and set `LIVE_MULTIMODAL_DEMO = True` in Stage 6. The
-notebook sends only the fixed packaged course image. If the live request fails, it labels
-the failure and uses the captured response for the same image and prompt.
 
 To regenerate the notebook source or prepare the app artifacts without changing notebook
 outputs:
@@ -60,7 +48,7 @@ node scripts/venv-python.mjs notebooks/pneumonia-screening/scripts/prepare_app_a
 01_pneumonia_build.ipynb   Executed teaching notebook
 pneumonialab/              Shared data, model, metrics, charts, and handoff logic
 data/                      Checksum-verified PneumoniaMNIST 128 archive
-artifacts/                 Validated model/app contract plus the captured LLM response
+artifacts/                 Validated model and app contract used by the service
 backup/                    Standalone offline HTML
 scripts/                   Notebook, artifact, and backup builders
 ```
@@ -70,10 +58,6 @@ The final notebook cells export `model.pt`, `model_card.json`, `operating_policy
 The validated bundle is versioned so Codespaces uses the same `0.748` cutoff and predictions
 shown in the executed notebook. Run `npm run prepare:pneumonia` only when intentionally
 rebuilding and revalidating that bundle.
-
-`artifacts/multimodal_demo_response.json` is separate from the CNN deployment bundle. It
-records the model, prompt version, sample ID, time, and exact generated sections used by the
-captured classroom fallback. The pneumonia API and app do not load it.
 
 ## Data provenance
 

@@ -8,6 +8,7 @@ exact files the notebook commits evidence for.
 
 from __future__ import annotations
 
+import argparse
 import sys
 from pathlib import Path
 
@@ -19,6 +20,14 @@ from creditlab import config, data, explain, features, handoff, metrics, models 
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--force", action="store_true", help="Retrain and replace the validated artifact bundle.")
+    options = parser.parse_args()
+    required = ("model.joblib", "model_card.json", "operating_policy.json", "evaluation.json", "sample_manifest.parquet")
+    if not options.force and all((config.ARTIFACT_DIR / name).is_file() for name in required):
+        identity = handoff.verify()
+        print(f"Using validated credit artifacts: {identity['status']}; {identity['route_changes']} route changes.")
+        return
     print("Loading committed accounts.parquet and splitting 60/20/20 (seed 42)...")
     accounts = data.load_accounts()
     splits = data.split_accounts(accounts)

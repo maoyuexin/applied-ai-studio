@@ -8,15 +8,12 @@ each one repeats its message in a label, a text mark, or an axis.
 
 from __future__ import annotations
 
-import base64
-from io import BytesIO
-
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-from . import config, metrics, text_prep
+from . import config
 
 
 def _layout(figure: go.Figure, title: str, height: int = 440) -> go.Figure:
@@ -65,96 +62,6 @@ def narrative_volume() -> go.Figure:
 
 
 # ── Stage 2 ─────────────────────────────────────────────────────────────────
-
-def tfidf_word_clouds(train: pd.DataFrame) -> go.Figure:
-    """Embed two dense, reproducible word-cloud PNGs with a common vocabulary."""
-    from matplotlib.font_manager import findfont
-    from wordcloud import WordCloud
-
-    words = text_prep.word_cloud_weights(train)
-    palette = ["#8C1529", "#A73540", "#303D49", "#4C6471", "#326C6A"]
-    colors = {term: palette[index % len(palette)] for index, term in enumerate(words["term"])}
-    figure = make_subplots(
-        rows=2, cols=1, vertical_spacing=0.12,
-        subplot_titles=("TF: frequent words stand out", "TF-IDF: distinctive words gain weight"),
-    )
-    for panel, column in enumerate(("count", "weight"), start=1):
-        frequencies = dict(zip(words["term"], words[column]))
-        cloud = WordCloud(
-            width=1000, height=450, background_color="white", max_words=len(frequencies),
-            random_state=42, relative_scaling=1.0, prefer_horizontal=0.9,
-            min_font_size=12, max_font_size=135, margin=3, repeat=False,
-            font_path=findfont("DejaVu Sans"),
-            color_func=lambda word, **kwargs: colors[word],
-        ).generate_from_frequencies(frequencies)
-        buffer = BytesIO()
-        cloud.to_image().save(buffer, format="PNG")
-        source = "data:image/png;base64," + base64.b64encode(buffer.getvalue()).decode("ascii")
-        figure.add_trace(go.Image(source=source, hoverinfo="skip", name=column), row=panel, col=1)
-        figure.update_xaxes(visible=False, fixedrange=True, row=panel, col=1)
-        figure.update_yaxes(visible=False, fixedrange=True, row=panel, col=1)
-    figure.update_annotations(font_size=16)
-    figure = _layout(figure, "A missing refund: two word clouds", height=790)
-    figure.update_layout(
-        margin=dict(l=15, r=15, t=85, b=40), dragmode=False,
-        meta={"complaint_id": words.attrs["complaint_id"],
-              "team": words.attrs["team"],
-              "training_complaints": words.attrs["training_complaints"],
-              "terms": words.to_dict("records")},
-    )
-    return figure
-
-
-def coverage_example_data() -> pd.DataFrame:
-    """Twenty invented predictions used only for the coverage/recall lesson."""
-    return pd.DataFrame({
-        "team": ["Mortgages"] * 5 + ["Credit cards"] * 15,
-        "prediction": ["Mortgages"] * 3 + ["Credit cards"] * 17,
-        "confidence": [0.9] * 16 + [0.3] * 4,
-    })
-
-
-def coverage_recall_example() -> go.Figure:
-    """Count automation over all rows, then recall over one true team only."""
-    sample = coverage_example_data()
-    policy = metrics.policy_eval(sample["team"], sample["prediction"], sample["confidence"])
-    auto = sample["confidence"] >= config.CONFIDENCE_THRESHOLD
-    mortgages = sample.loc[sample["team"] == "Mortgages"]
-    correct = mortgages["prediction"] == "Mortgages"
-    recall = metrics.per_team_table(sample["team"], sample["prediction"])
-    mortgage_recall = float(recall.loc[recall["Team"] == "Mortgages", "Recall"].iloc[0])
-    figure = make_subplots(
-        rows=2, cols=1, row_heights=[0.68, 0.32], vertical_spacing=0.23,
-        subplot_titles=(
-            f"Coverage: {policy['auto_routed']} / {len(sample)} = {policy['coverage']:.0%}",
-            f"Mortgage recall: {int(correct.sum())} / {len(mortgages)} = {mortgage_recall:.0%}",
-        ),
-    )
-    figure.add_trace(go.Scatter(
-        x=[index % 5 for index in range(len(sample))],
-        y=[3 - index // 5 for index in range(len(sample))],
-        mode="markers+text", text=np.where(auto, "A", "H"),
-        textfont=dict(size=16, color="white"),
-        marker=dict(symbol="square", size=35, color=np.where(auto, config.COLOR_PRIMARY, "#8A5700")),
-        customdata=np.where(auto, "Automatic route", "Human chooses the route"),
-        hovertemplate="%{customdata}<extra></extra>", showlegend=False,
-    ), row=1, col=1)
-    figure.add_trace(go.Scatter(
-        x=list(range(len(mortgages))), y=[0] * len(mortgages), mode="markers+text",
-        text=np.where(correct, "M", "C"), textfont=dict(size=16, color="white"),
-        marker=dict(symbol="square", size=35, color=np.where(correct, "#287451", "#B13F48")),
-        customdata=mortgages["prediction"].to_numpy(),
-        hovertemplate="Belongs to Mortgages<br>Model label: %{customdata}<extra></extra>", showlegend=False,
-    ), row=2, col=1)
-    figure.update_xaxes(visible=False, range=[-0.7, 4.7], fixedrange=True)
-    figure.update_yaxes(visible=False, range=[-0.5, 3.6], fixedrange=True, row=1, col=1)
-    figure.update_yaxes(visible=False, range=[-0.8, 0.8], fixedrange=True, row=2, col=1)
-    figure.add_annotation(x=0.5, y=0.4, xref="paper", yref="paper", showarrow=False,
-                          text="A = automatic (16) | H = human triage (4)", font=dict(size=12))
-    figure.add_annotation(x=0.5, y=-0.08, xref="paper", yref="paper", showarrow=False,
-                          text="All five belong to Mortgages.<br>M = labeled Mortgages; C = labeled Credit cards", font=dict(size=12))
-    return _layout(figure, "20 made-up complaints; two questions", height=610)
-
 
 def team_distribution(counts: pd.DataFrame) -> go.Figure:
     """Stacked bar per team: how the committed sample divides across splits."""

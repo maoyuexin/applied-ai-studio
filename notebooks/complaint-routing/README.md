@@ -33,55 +33,15 @@ Locally, from the repository root:
 
 ```bash
 npm run setup:notebook
-node scripts/venv-python.mjs -m pip install -r notebooks/complaint-routing/requirements-visuals.txt
 ```
-
-The second command installs `wordcloud==1.9.4` for generating the word-cloud images.
-Run it once in an existing Codespace too. Viewing the saved notebook or HTML needs no
-new package installation; the PNG images are embedded.
 
 Then open the notebook with the `.venv` interpreter. A full run takes about **40 seconds**
 on CPU, including training, the representation comparison, artifact export, and the reload
 check.
 
-## Simple teaching visuals
-
-Section 2.6 shows two dense word clouds for real training complaint **10158370**,
-labeled Credit cards. The consumer describes a canceled flight and a refund that the
-card company has not returned. This fixed example was selected for an understandable
-issue, not for a model-performance comparison. The first cloud sizes terms by count; the second
-uses TF-IDF weights fitted on the 40,729 training complaints with the existing vectorizer
-settings. No validation or test text is used. Both show the union of the top 40 count
-terms and top 40 weighted terms (50 distinct terms in this example). `refund` leads
-the counts; `airline`, `flight`, and `card company` receive strong TF-IDF weights.
-
-The display hides filler words, numbers, and `XXXX` redactions only; the classifier's
-preprocessing is unchanged. `WordCloud.generate_from_frequencies` packs the terms into
-PNG images with seed 42. Text size is approximate, since layout also affects it; position
-and color have no data meaning. These are not classifier confidence scores or reasons.
-The source values are retained in the Plotly figure's metadata for inspection, not printed
-over the cloud. No model or LLM artifacts are altered when generating this illustration.
-
-Section 4.3 contrasts **coverage** with **recall** using 20 invented complaints:
-16 automatic routes / 20 arrivals = 80% coverage, whereas 3 correctly labeled mortgage
-complaints / 5 actual mortgage complaints = 60% recall. The example uses the existing
-policy and metric functions. Recall is computed on model labels before the confidence
-cutoff, just like the per-team table. Changing only the cutoff changes coverage, not
-those fixed labels. All complaints still receive human handling after the routing step.
-
-The frozen test output prints the actual arithmetic: 6,833 / 8,728 = 78.3% coverage,
-with 1,895 sent to human triage. The 89.7% accuracy among automatic routes answers a
-different question. No trained models, policies, data splits, or LLM captures changed.
-
-Run the visual checks with:
-
-```bash
-node scripts/venv-python.mjs -m pytest notebooks/complaint-routing/tests/test_teaching_visuals.py -q
-```
-
 ## Optional LLM comparison
 
-The notebook now has **109 cells, 51 code cells, and 11 charts**. Stage 6 is separate
+The notebook now has **107 cells, 50 code cells, and 9 charts**. Stage 6 is separate
 from the deployed TF-IDF classifier and 0.55 policy. It compares `gpt-5.4` with that
 classifier on 32 fixed test complaints, four per recorded team. Both receive the full
 narrative; the LLM receives team definitions but no known label or baseline answer.
@@ -152,7 +112,7 @@ complaintlab/              Shared config, data, text prep, models, metrics, char
   explain.py               routing words, team probabilities, the per-complaint card
   handoff.py               the five artifacts a service consumes, and the reload check
 data/                      Committed parquet: 3 complaint splits + 2 embedding files
-artifacts/                 Written by the notebook, gitignored
+artifacts/                 Validated bundle included in the release; notebook reruns replace it
 backup/                    Standalone offline HTML
 scripts/                   Dataset, embedding, notebook, artifact, and backup builders
 ```
@@ -218,6 +178,10 @@ The lab teaches it as a representation trade, not an upgrade — and the deploye
 one that can show a triage clerk which words caused each route.
 
 ## What the notebook exports
+
+The five validated artifacts are included in this release. `npm run prepare:complaints`
+verifies and reuses them. Pass `-- --force` only when intentionally retraining. A full
+notebook run also rebuilds them; the optional LLM section never changes these files.
 
 ```text
 artifacts/

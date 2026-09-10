@@ -12,6 +12,7 @@ the committed parquets.
 
 from __future__ import annotations
 
+import argparse
 import sys
 import time
 from pathlib import Path
@@ -26,6 +27,14 @@ from complaintlab import config, data, handoff, metrics, models  # noqa: E402
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--force", action="store_true", help="Retrain and replace the validated artifact bundle.")
+    options = parser.parse_args()
+    required = ("model.joblib", "model_card.json", "operating_policy.json", "evaluation.json", "sample_manifest.parquet")
+    if not options.force and all((config.ARTIFACT_DIR / name).is_file() for name in required):
+        identity = handoff.verify(data.load_splits()["test"])
+        print(f"Using validated complaint artifacts: {identity['status']}; {identity['reload_slice']}.")
+        return
     started = time.perf_counter()
     print("Loading the committed 70/15/15 complaint splits...")
     splits = data.load_splits()

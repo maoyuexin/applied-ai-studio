@@ -151,6 +151,28 @@ npm run prepare:recommendations || echo "    (skipped: prepare:recommendations c
 echo "==> Reclaiming disk (pip cache)"
 node scripts/venv-python.mjs -m pip cache purge || true
 
+echo "==> Installing the Chest X-ray Prioritization service"
+npm run setup:pneumonia
+
+if [[ -s notebooks/pneumonia-screening/artifacts/model.pt \
+   && -s notebooks/pneumonia-screening/artifacts/model_card.json \
+   && -s notebooks/pneumonia-screening/artifacts/operating_policy.json \
+   && -s notebooks/pneumonia-screening/artifacts/evaluation.json \
+   && -s notebooks/pneumonia-screening/artifacts/sample_manifest.parquet ]]; then
+  echo "==> Using the validated Chest X-ray artifacts included with the course"
+else
+  echo "==> Rebuilding missing Chest X-ray artifacts"
+  npm run prepare:pneumonia
+fi
+
+echo "==> Installing the Module 4 Credit Risk and Complaint Routing services"
+npm run setup:credit
+npm run setup:complaints
+
+echo "==> Verifying the validated Module 4 model bundles"
+npm run prepare:credit
+npm run prepare:complaints
+
 cat <<'BANNER'
 
 ==================================================================

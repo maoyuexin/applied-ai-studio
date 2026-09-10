@@ -64,17 +64,10 @@ Generation preserves saved cells whose source is unchanged. Re-execute edited ce
 and their affected dependents before publishing; matching source alone does not prove
 an output is still valid after an upstream change.
 
-The current notebook has **79 cells, 29 code cells, and 8 figures**. Section 1.2 shows
-five real rows before the monthly account example. Sections 4.1-4.4 follow one explicitly
-made-up account: understand a 30% risk estimate, assume half of a `NT$100,000` balance
-is lost after default, compare `NT$15,000` estimated loss with a `NT$10,000` review cost,
-then inspect the real 6,000-account validation confusion matrix. These supplied assumptions
-are not measured costs or a real account's prediction. Detailed calibration and cost-sweep
-calculations are retained in the Stage 5 evidence handoff, not displayed in that lesson.
-
-Section 4.5 compares the same model
-before and after removing `SEX`, `MARRIAGE`, and `AGE` and retraining, with one sentence
-limiting the conclusion to ranking performance. Section 4.6 checks the chosen model on unseen accounts. Detailed group
+The current notebook has **84 cells, 30 code cells, and 11 figures**. Section 1.2 shows
+five real rows before the monthly account example. Section 4.5 compares the same model
+before and after removing `SEX`, `MARRIAGE`, and `AGE` and retraining. Section 4.6 is
+a short fairness caveat; 4.7 checks the chosen model on unseen accounts. Detailed group
 checks are calculated in the Stage 5 handoff for the app, not displayed as teaching tables.
 
 ## The notebook versus the standalone HTML
@@ -152,6 +145,10 @@ Nothing measured here transfers to US consumers in 2026, and the model card says
   classroom assumptions** in New Taiwan dollars, not measured bank costs.
 
 ## The frozen decisions
+
+The five validated artifacts are included in this release. `npm run prepare:credit`
+verifies and reuses them. Pass `-- --force` to that npm command only when intentionally
+retraining. Running the notebook end to end also rebuilds the bundle.
 
 Set by the Module 4 technical spike and reproduced exactly by the notebook:
 

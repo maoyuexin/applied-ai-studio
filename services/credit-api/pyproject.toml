@@ -5,13 +5,13 @@ description = "Credit-account review prioritization service backed by the credit
 requires-python = ">=3.11"
 dependencies = [
   "fastapi>=0.116,<1",
-  "joblib>=1.4,<2",
-  "numpy>=2,<3",
-  "pandas>=2.2,<3",
+  "joblib==1.5.3",
+  "numpy==2.4.6",
+  "pandas==2.3.3",
   "pyarrow>=17,<22",
   "pydantic-settings>=2.10,<3",
-  "scikit-learn>=1.9,<2",
-  "shap>=0.48,<1",
+  "scikit-learn==1.9.0",
+  "shap==0.51.0",
   "uvicorn[standard]>=0.35,<1",
 ]
 

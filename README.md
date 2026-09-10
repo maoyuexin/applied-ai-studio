@@ -3,28 +3,29 @@
 Applied AI Studio is a locally hosted workbench for analyzing business workflows,
 judging where AI fits, and inspecting how AI outputs influence operational
 decisions. It combines reusable industry workflows with an executable Online
-Order application, a transaction-fraud lab, and a pediatric chest X-ray
-prioritization lab backed by public teaching data.
+Order application, a transaction-fraud lab, a pediatric chest X-ray
+prioritization lab, and two finance labs backed by public teaching data.
 
 > **Students — start here.** You do not need to install anything. See
 > [docs/student-quickstart.md](docs/student-quickstart.md) to run this in your
 > browser with GitHub Codespaces.
 
-The repository contains no customer data, API keys, model credentials, or
+The repository contains no private customer data, API keys, model credentials, or
 database files. GitHub Copilot features use the current user's authenticated
 Copilot CLI session; authentication material remains outside the project.
 
 ## Highlights
 
-- Six detailed industry workflows: Online Order, Maintenance Triage, Customer
-  Identity Review, Resident Service Intake, Fleet Routing, and
-  Referral-to-Appointment Coordination.
+- Ten detailed industry workflows, including Online Order, Card Transaction,
+  Pediatric Chest X-ray Prioritization, Credit Risk, and Complaint Routing.
 - Map → Judge AI Fit → Design What Survives analysis method.
 - Deterministic AI-fit scoring with a gated solution blueprint.
 - Executable Online Order storefront, customer tracking, merchant operations,
   and scenario controls.
 - Five-stage fraud and chest X-ray notebooks with artifact-backed FastAPI and
   React workbenches.
+- Module 4 credit-risk and complaint-routing notebooks, offline HTML, validated
+  model bundles, and an optional captured LLM classification comparison.
 - FastAPI, SQLAlchemy, Alembic, and SQLite order vertical.
 - Persisted rule, classification, optimization, and prediction decisions.
 - Explainable AI impact: signals, probabilities, thresholds, workflow branches,
@@ -85,8 +86,10 @@ Copilot authentication.
 
 ### 1. Clone and install JavaScript dependencies
 
+The `main` branch includes the Module 4 notebooks, demos, and workflows:
+
 ```bash
-git clone https://github.com/maoyuexin/applied-ai-studio.git
+git clone --branch main https://github.com/maoyuexin/applied-ai-studio.git
 cd applied-ai-studio
 npm ci
 ```
@@ -103,16 +106,16 @@ npm run setup:fraud
 npm run prepare:fraud
 npm run setup:pneumonia
 npm run setup:credit
-npm run prepare:credit
 npm run setup:complaints
+npm run prepare:credit
 npm run prepare:complaints
 npm run setup:pdm
-npm run prepare:pdm
 npm run setup:procedures
-npm run prepare:procedures
 npm run setup:forecast
-npm run prepare:forecast
 npm run setup:recommendations
+npm run prepare:pdm
+npm run prepare:procedures
+npm run prepare:forecast
 npm run prepare:recommendations
 ```
 
@@ -126,16 +129,16 @@ npm run setup:fraud
 npm run prepare:fraud
 npm run setup:pneumonia
 npm run setup:credit
-npm run prepare:credit
 npm run setup:complaints
+npm run prepare:credit
 npm run prepare:complaints
 npm run setup:pdm
-npm run prepare:pdm
 npm run setup:procedures
-npm run prepare:procedures
 npm run setup:forecast
-npm run prepare:forecast
 npm run setup:recommendations
+npm run prepare:pdm
+npm run prepare:procedures
+npm run prepare:forecast
 npm run prepare:recommendations
 ```
 
@@ -158,7 +161,7 @@ Open <http://127.0.0.1:5173>.
 | Online Order API | <http://127.0.0.1:4330/health> |
 | Fraud Detection API | <http://127.0.0.1:4340/health> |
 | Chest X-ray Prioritization API | <http://127.0.0.1:4350/health> |
-| Credit Risk Review API | <http://127.0.0.1:4360/health> |
+| Credit Risk API | <http://127.0.0.1:4360/health> |
 | Complaint Routing API | <http://127.0.0.1:4370/health> |
 | Predictive Maintenance API | <http://127.0.0.1:4380/health> |
 | Procedure Assistant API | <http://127.0.0.1:4390/health> |
@@ -167,11 +170,17 @@ Open <http://127.0.0.1:5173>.
 
 The Online Order demo is available directly at
 <http://127.0.0.1:5173/online-order?view=customer>.
-The model labs are available at <http://127.0.0.1:5173/fraud>,
-<http://127.0.0.1:5173/pneumonia>, <http://127.0.0.1:5173/credit>, and
-<http://127.0.0.1:5173/complaints>,
-<http://127.0.0.1:5173/maintenance>, and <http://127.0.0.1:5173/procedures>,
-<http://127.0.0.1:5173/forecast>, and <http://127.0.0.1:5173/recommendations>.
+The model labs are available at <http://127.0.0.1:5173/fraud> and
+<http://127.0.0.1:5173/pneumonia>.
+
+Module 4 demos are at <http://127.0.0.1:5173/credit> and
+<http://127.0.0.1:5173/complaints>. Both catalog cards also expose their complete
+workflows. See [Module 4: notebooks and demos](docs/module-4.md) for the notebook
+links, offline reports, and Codespaces instructions.
+
+Modules 5 and 6 add four more labs on the same pattern. Module 5 covers predictive maintenance on real compressor telemetry (<http://127.0.0.1:5173/maintenance>) and a grounded procedure assistant that cites public safety regulation and refuses when the answer is not in its library (<http://127.0.0.1:5173/procedures>). Module 6 covers demand forecasting with prediction intervals feeding a reorder rule (<http://127.0.0.1:5173/forecast>) and product recommendations evaluated on what a shopper has never bought (<http://127.0.0.1:5173/recommendations>). Every card exposes its complete workflow alongside the demo.
+
+The large datasets for these labs are published as GitHub Release assets rather than committed; `scripts/fetch-lab-data.mjs` downloads them once during Codespace creation, and `scripts/lab-data-manifest.json` records each file's checksum, licence and how to rebuild it from its original public source.
 
 ## GitHub Copilot Setup
 
@@ -225,7 +234,7 @@ Common settings:
 ## Useful Commands
 
 ```bash
-# Start all six resources
+# Start all eight resources
 npm run dev
 
 # Start only the Online Order API
@@ -240,24 +249,6 @@ npm run test:orders
 # Rebuild and test the chest X-ray model service
 npm run prepare:pneumonia
 npm run test:pneumonia
-
-# Rebuild and test the finance model services
-npm run prepare:credit
-npm run test:credit
-npm run prepare:complaints
-npm run test:complaints
-
-# Rebuild and test the manufacturing model services
-npm run prepare:pdm
-npm run test:pdm
-npm run prepare:procedures
-npm run test:procedures
-
-# Rebuild and test the retail model services
-npm run prepare:forecast
-npm run test:forecast
-npm run prepare:recommendations
-npm run test:recommendations
 
 # Audit JavaScript dependencies at high severity
 npm audit --audit-level=high
@@ -320,22 +311,19 @@ services/agent-api/      Sandboxed GitHub Copilot SDK gateway
 services/order-api/      FastAPI, SQLAlchemy, Alembic, SQLite order vertical
 services/fraud-api/      Artifact-backed transaction scoring and review queue
 services/pneumonia-api/  Artifact-backed image scoring and review prioritization
-services/credit-api/     Artifact-backed credit risk scoring, reason codes, review queue
-services/complaint-api/  Artifact-backed complaint routing, team queues, and model card
-services/maintenance-api/ Artifact-backed compressor fault detection, alert workload, model card
-services/procedures-api/ Artifact-backed procedure retrieval, citations, and refusal policy
-services/forecast-api/   Artifact-backed weekly demand forecasting, order policy, model card
-services/recommend-api/  Artifact-backed product ranking, both evaluation protocols, model card
 notebooks/               Executed five-stage teaching notebooks and offline HTML
 packages/contracts/      Shared Zod schemas and TypeScript contracts
-data/seed/               Public synthetic scenarios
+data/seed/               Public teaching scenarios
 docs/                    Architecture, ADRs, examples, and delivery plan
 scripts/                 Cross-platform local tooling
 ```
 
 ## Current Scope
 
-Online Order implements the deterministic happy path with synthetic rule,
-classification, optimization, and prediction decisions. The Fraud Detection and
-Pediatric Chest X-ray Prioritization labs load measured notebook artifacts. Both
-are educational workflow demonstrations, not production or clinical systems.
+Online Order currently implements the deterministic happy path with synthetic
+rule, classification, optimization, and prediction decisions. Exception
+scenarios such as manual fraud review, oversold inventory, carrier delay, and
+human remedy authorization are planned next. Algorithm training plans and metric
+targets shown in that workflow are proposed designs, not claims of production
+model performance. The fraud and pneumonia labs are educational, artifact-backed
+demonstrations using public teaching data; neither is a production decision system.

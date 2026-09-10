@@ -12,13 +12,6 @@ dependencies = [
   "pyarrow>=17,<22",
   "pydantic-settings>=2.10,<3",
   "scikit-learn>=1.5,<2",
-  # Install this from the CPU wheel index, not PyPI:
-  #   pip install --index-url https://download.pytorch.org/whl/cpu "torch>=2.4,<3"
-  # On Linux the default PyPI wheel is the CUDA build and drags in ~3 GB of
-  # NVIDIA libraries (cuda-toolkit, cudnn, cublas, nccl, triton, ...). Nothing
-  # here uses a GPU, and that download filled the disk in a 32 GB Codespace,
-  # failing container creation with "No space left on device". `npm run
-  # setup:torch-cpu` does this, and setup:notebook runs it first.
   "torch>=2.4,<3",
   "uvicorn[standard]>=0.35,<1",
 ]

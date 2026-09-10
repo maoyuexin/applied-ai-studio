@@ -1,4 +1,4 @@
-"""Build the five-stage CNN notebook and optional multimodal capability section."""
+"""Build 01_pneumonia_build.ipynb in the five Session 2 teaching stages."""
 
 from __future__ import annotations
 
@@ -79,9 +79,8 @@ import warnings
 import numpy as np
 import pandas as pd
 import plotly.io as pio
-from IPython.display import HTML
 
-from pneumonialab import charts, config, data, evaluation, explain, handoff, metrics, models, multimodal
+from pneumonialab import charts, config, data, evaluation, explain, handoff, metrics, models
 
 warnings.filterwarnings("ignore")
 pd.set_option("display.max_columns", 30)
@@ -1050,173 +1049,6 @@ md(r"""
 | **5 - Model Prediction** | The score became a bounded queue action with reproducible artifacts | Product team, radiologists, clinicians, safety owners |
 
 **The model is one component. The healthcare system is the thing we have to design.**
-""")
-
-md(r"""
----
-# 6 - Multimodal LLM: What Else Might AI Attempt?
-
-The CNN experiment is complete. Nothing below changes its score, cutoff, queue route,
-measured performance, or exported artifacts.
-
-We will now give one fixed packaged **priority-review example** to a separate
-vision-capable large language model. The LLM receives the image and a fixed prompt. It does
-**not** receive the CNN score, cutoff, queue route, or dataset label.
-
-> **This is an interpretation attempt, not a diagnosis.** We will inspect the generated
-> language, reveal the existing evidence afterward, and ask what the available data can and
-> cannot validate.
-""")
-
-md(r"""
-## 6.1 Four levels of multimodal capability
-
-A **multimodal model** can receive more than one kind of input, such as an image and text,
-and generate an output such as an answer or draft report.
-
-| Capability | Feasibility | Meaning in this demonstration |
-|---|---|---|
-| **Describe visible image features** | Feasible today, with errors | The model may describe shapes, density, and patterns, but can omit or invent details. |
-| **Draft preliminary radiology findings** | Feasible with specialized models and human verification | A draft still requires a radiologist to inspect, edit, and sign it. |
-| **Suggest a diagnostic hypothesis** | Technically possible, but needs substantial validation | A hypothesis is a possibility for professional review, not a confirmed diagnosis. |
-| **Make an autonomous diagnosis or treatment decision** | Not appropriate here | That requires complete patient evidence, validated performance, regulation, and accountable clinicians. |
-
-**Can generate a diagnostic hypothesis** is a technical capability claim.
-**Can safely diagnose this patient** is a much stronger clinical performance and authority
-claim. This notebook demonstrates only the first kind of claim.
-""")
-
-code(r"""
-# ===============================================================
-# 6.2 SELECT ONE FIXED PRIORITY EXAMPLE - KEEP THE LLM BLIND
-# ===============================================================
-multimodal_index = multimodal.select_priority_example(test_scores, threshold)
-assert multimodal_index == 282, "The frozen demonstration sample changed; recapture before teaching."
-multimodal_sample_id = f"test-{multimodal_index:04d}"
-multimodal_image = multimodal.prepare_display_image(test.images[multimodal_index])
-
-print(f"Packaged image: {multimodal_sample_id}")
-print("Selected from the priority queue; score, route, and label are withheld from the LLM.")
-HTML(multimodal.image_html(
-    multimodal_image,
-    "Low-resolution grayscale pediatric chest X-ray thumbnail selected from the priority queue",
-))
-""")
-
-md(r"""
-### Read the input limitation before the generated result
-
-The source for this display is a **128 x 128 teaching image**, not a diagnostic-quality
-DICOM study. We enlarged it to 512 x 512 with nearest-neighbor display scaling so it is
-easier to see on screen.
-
-Enlargement repeats existing pixels. It does not recreate clinical detail that was removed.
-Weak, vague, or incorrect output may reflect the image, the model, the prompt, or all three.
-""")
-
-md(r"""
-## 6.3 What the multimodal LLM receives
-
-```text
-You are examining a de-identified educational pediatric chest X-ray thumbnail.
-
-1. Describe visible image features conservatively.
-2. Draft possible preliminary radiology findings.
-3. List possible diagnostic hypotheses only when supported by a visible feature.
-4. State uncertainty and the limitations caused by this low-resolution image.
-5. State what a radiologist would need to verify.
-
-Do not provide treatment advice. Do not claim a confirmed diagnosis.
-Return only the requested structured fields.
-```
-
-| Information sent | Information withheld |
-|---|---|
-| Enlarged PNG made from the packaged image | CNN ranking score |
-| Fixed instructions above | Cutoff and queue route |
-| Pediatric, educational, and low-resolution context | Dataset label |
-| No patient identifiers | Symptoms, vitals, labs, history, and prior studies |
-""")
-
-code(r"""
-# ===============================================================
-# 6.4 RUN LIVE OR USE THE CAPTURED CLASSROOM FALLBACK
-# ===============================================================
-LIVE_MULTIMODAL_DEMO = False
-multimodal_result = await multimodal.analyze_with_fallback(
-    multimodal_image,
-    sample_id=multimodal_sample_id,
-    live=LIVE_MULTIMODAL_DEMO,
-)
-
-pd.DataFrame({
-    "Run detail": ["Mode", "Model", "Generated", "Prompt version", "Boundary"],
-    "Value": [multimodal_result.get("mode"), multimodal_result.get("model"),
-              multimodal_result.get("generated_at"), multimodal_result.get("prompt_version"),
-              multimodal_result.get("boundary")],
-}).style.hide(axis="index")
-""")
-
-code(r"""
-# ===============================================================
-# 6.5 SHOW THE GENERATED RESPONSE WITHOUT POLISHING IT
-# ===============================================================
-print("AI-GENERATED INTERPRETATION ATTEMPT - UNVERIFIED RESEARCH DEMONSTRATION")
-pd.DataFrame(multimodal.result_rows(multimodal_result)).style.hide(axis="index")
-""")
-
-md(r"""
-## 6.6 Reveal the existing evidence only after generation
-
-Now compare the generated language with the evidence already produced by the unchanged CNN
-pipeline. The source label can tell us whether the binary class agrees. It cannot validate
-the LLM's detailed anatomy, finding descriptions, or locations.
-""")
-
-code(r"""
-# ===============================================================
-# 6.6 REVEAL SCORE, ROUTE, AND DATASET LABEL
-# ===============================================================
-multimodal_score = float(test_scores[multimodal_index])
-multimodal_action = "Priority review" if multimodal_score >= threshold else "Standard review"
-multimodal_label = config.CLASS_NAMES[int(test.labels[multimodal_index])]
-
-print(f"sample          : {multimodal_sample_id}")
-print(f"dataset label   : {multimodal_label}")
-print(f"model score     : {multimodal_score:.7f}")
-print(f"policy cutoff   : {threshold:.7f}")
-print(f"workflow action : {multimodal_action}")
-
-pd.DataFrame([
-    ["Did the LLM agree with the binary class?", "Binary dataset label", "We can note agreement or disagreement"],
-    ["Are its detailed findings correct?", "No reference report", "Not verifiable in this notebook"],
-    ["Is a claimed location correct?", "No box or mask", "Not verifiable in this notebook"],
-    ["Did it acknowledge low resolution?", "Generated text", "Directly observable"],
-    ["Did it avoid certainty and treatment advice?", "Generated text", "Directly observable"],
-    ["Is it ready for clinical use?", "No clinical validation", "No"],
-], columns=["Question", "Evidence available here", "Conclusion allowed"]).style.hide(axis="index")
-""")
-
-md(r"""
-## 6.7 Generation is not validation
-
-This example is especially useful because the CNN routed it to priority review while its
-retrospective dataset label is normal. The multimodal response says that no clear focal
-consolidation is visible, but it also says subtle pneumonia cannot be excluded from the
-thumbnail. Neither output independently settles what the original radiograph showed.
-
-To move from this capability demonstration toward a clinical evaluation, we would need:
-
-1. diagnostic-quality, de-identified images rather than 128 x 128 teaching images;
-2. a radiology-specific multimodal model evaluated for pediatric chest X-rays;
-3. paired radiologist reports or finding annotations;
-4. external-site and subgroup testing;
-5. measures for omissions, unsupported findings, sensitivity, specificity, and human edits;
-6. radiologist verification; and
-7. an appropriate regulatory pathway before clinical use.
-
-> **The CNN prioritized the image. The multimodal LLM attempted to interpret it. Producing
-> convincing medical language demonstrates capability, not clinical reliability.**
 """)
 
 notebook["cells"] = cells

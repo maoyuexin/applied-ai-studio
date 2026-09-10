@@ -48,6 +48,7 @@ def main() -> None:
         "",
         html,
     )
+    html = re.sub(r"[ \t]+(?=\r?\n)", "", html)
     OUTPUT.write_text(html, encoding="utf-8")
 
     remote_scripts = re.findall(r'<script[^>]*src="(https?://[^"]+)"', html)

@@ -2,16 +2,14 @@
 
 ## What is ready
 
-- Executed five-stage CNN notebook plus optional multimodal Stage 6: `01_pneumonia_build.ipynb`
+- Executed five-stage notebook: `01_pneumonia_build.ipynb`
 - Offline fallback: `backup/01_pneumonia_build.html`
-- Captured multimodal response: `artifacts/multimodal_demo_response.json`
 - Checksum-verified committed data: `data/pneumoniamnist_128.npz`
 - Artifact-backed service: `services/pneumonia-api`
 - Applied AI Studio route: `http://127.0.0.1:5173/pneumonia`
 
 The build accepts no arbitrary image uploads and needs no API key, clinical data access,
-Kaggle account, or cloud model credential. The optional live Stage 6 call uses the signed-in
-GitHub Copilot user; captured mode needs no authentication.
+Kaggle account, or cloud model credential.
 
 ## Fresh Codespace
 
@@ -52,32 +50,13 @@ The notebook follows the same visible structure as Session 2:
 4. Model Validation and Operating Policy
 5. Model Prediction and Handoff
 
-After those five measured stages finish, Stage 6 demonstrates what a multimodal LLM may
-attempt with one fixed priority-review thumbnail. It is a separate capability experiment,
-not part of the CNN pipeline or app.
-
 For the most reliable live class:
 
 1. Open the executed notebook before class and verify the figures are present.
 2. Explain Stages 1 and 2 from saved output.
 3. Run the compact training cell; the validated CPU run is about 2.3 minutes.
 4. Run the remaining validation and handoff cells.
-5. In Stage 6, keep `LIVE_MULTIMODAL_DEMO = False` for the reliable captured response.
-6. Read the generated language before revealing the CNN score, route, and dataset label.
-7. If notebook execution fails, open the offline HTML and continue without changing the lesson.
-
-### Optional live multimodal run
-
-Before class, verify GitHub Copilot authentication and run Stage 6 once with
-`LIVE_MULTIMODAL_DEMO = True`. The selected model must report vision support. The helper
-uses an isolated one-turn session with no tools or memory. If the request fails, the cell
-shows captured mode and continues.
-
-Use this voiceover whether the result looks strong or weak:
-
-> The model generated plausible image-based medical language. Our binary label cannot
-> validate its detailed findings or locations. Generation capability is not clinical
-> reliability, and the radiologist remains the accountable interpreter.
+5. If notebook execution fails, open the offline HTML and continue without changing the lesson.
 
 ## Business workflow demonstration
 

@@ -24,7 +24,7 @@ scored on exactly these 8,728 rows, so the only thing that differs between them
 is the representation.
 
 STORAGE
-=======
+-------
 
 384 columns named ``dim_000`` ... ``dim_383``, stored as float16 next to the
 complaint id. float16 keeps about three decimal digits, which is far more than
