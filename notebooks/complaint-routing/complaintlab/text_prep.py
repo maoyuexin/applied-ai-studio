@@ -29,6 +29,7 @@ WORKED_EXAMPLE_CORPUS = [
 ]
 WORKED_EXAMPLE_TEAMS = ["Credit cards", "Debt collection", "Credit reporting"]
 WORKED_EXAMPLE_SENTENCE = WORKED_EXAMPLE_CORPUS[0]
+WORD_CLOUD_COMPLAINT_ID = 10158370
 
 
 def build_vectorizer(min_df: int | None = None) -> TfidfVectorizer:
@@ -62,9 +63,45 @@ def worked_example() -> pd.DataFrame:
             "TF-IDF weight in complaint 1": row[present].round(3),
         }
     )
-    return frame.sort_values("TF-IDF weight in complaint 1", ascending=False).reset_index(
-        drop=True
-    )
+    return frame.sort_values(
+        ["In how many of the 3 complaints", "Word or 2-word phrase"],
+        ascending=[False, True],
+    ).reset_index(drop=True)
+
+
+def word_cloud_weights(train: pd.DataFrame) -> pd.DataFrame:
+    """Return actual counts and training-fitted weights for the refund example."""
+    from collections import Counter
+    from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
+
+    selected = train.loc[train["complaint_id"].astype(str) == str(WORD_CLOUD_COMPLAINT_ID)]
+    if len(selected) != 1:
+        raise ValueError(f"Expected one training complaint with ID {WORD_CLOUD_COMPLAINT_ID}.")
+    complaint = selected.iloc[0]
+    vectorizer = build_vectorizer()
+    vectorizer.fit(train[config.TEXT_COLUMN])
+    weights = vectorizer.transform([complaint[config.TEXT_COLUMN]]).toarray()[0]
+    terms = vectorizer.get_feature_names_out()
+    counts = Counter(vectorizer.build_analyzer()(complaint[config.TEXT_COLUMN]))
+    words = pd.DataFrame([
+        {"term": term, "count": counts[term], "weight": float(weights[position])}
+        for position, term in enumerate(terms)
+        if weights[position] > 0 and all(
+            token.isalpha() and token not in ENGLISH_STOP_WORDS and set(token) != {"x"}
+            for token in term.split()
+        )
+    ])
+    by_count = words.sort_values(["count", "term"], ascending=[False, True]).head(40)
+    by_weight = words.sort_values(["weight", "term"], ascending=[False, True]).head(40)
+    selected_terms = set(by_count["term"]) | set(by_weight["term"])
+    words = words.loc[words["term"].isin(selected_terms)].sort_values("term").reset_index(drop=True)
+    words.attrs.update({
+        "complaint_id": WORD_CLOUD_COMPLAINT_ID,
+        "narrative": complaint[config.TEXT_COLUMN],
+        "team": complaint[config.TARGET],
+        "training_complaints": len(train),
+    })
+    return words
 
 
 def worked_example_shape() -> pd.DataFrame:

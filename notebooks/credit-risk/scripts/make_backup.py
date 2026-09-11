@@ -33,6 +33,10 @@ REQUIRE_URL = "https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.
 def main() -> None:
     if not NOTEBOOK.exists():
         raise SystemExit(f"{NOTEBOOK} does not exist. Build and execute the notebook first.")
+    subprocess.run(
+        [sys.executable, str(PROJECT_DIR / "scripts/validate_teaching_notebook.py"), str(NOTEBOOK)],
+        check=True,
+    )
     BACKUP_DIR.mkdir(parents=True, exist_ok=True)
 
     subprocess.run(

@@ -21,9 +21,26 @@ The Industry Workflows catalog has a Workflow button and a Demo button for each 
 GitHub may not render Plotly outputs in its notebook preview. Open the notebook in
 Codespaces or open the downloaded HTML locally to use its interactive figures.
 
-The credit notebook includes five real data rows and the simplified remove-columns,
-retrain, compare lesson. The complaint notebook includes two complete narratives and
-optional Section 6 comparing an LLM with TF-IDF on 32 fixed test complaints.
+The credit notebook includes five real data rows, a simple score-to-review walkthrough,
+and the remove-columns/retrain/compare lesson. The NT$10,000 teaching value is a
+classroom review-queue cutoff, not a measured price of human review. Model scores,
+queue results, and the deployed artifacts are unchanged.
+
+The complaint notebook includes a single preparation flow, the count-sorted TF-IDF
+example, both refund word clouds, a three-question routing lesson, and visual
+walkthroughs of three real complaints. The examples keep their code under expandable
+"Python code" disclosures in the offline HTML. The optional Section 6 compares an
+LLM with TF-IDF on 32 fixed test complaints; its captured runs remain unchanged.
+
+## Slides
+
+- [Editable PowerPoint](module-4/slides/M4_Deck_AI_in_Finance.pptx)
+- [PDF reference](module-4/slides/M4_Deck_AI_in_Finance.pdf)
+
+These are the latest saved course deck files, copied without rebuilding the PowerPoint
+so its manual edits are preserved. The PowerPoint contains 31 slides, with slides 14,
+25, and 26 hidden; the saved PDF contains 28 pages. The notebooks contain the latest detailed teaching
+explanations; the deck has not been rewritten to duplicate every notebook change.
 
 ## Reproducible Defaults
 
@@ -55,6 +72,10 @@ latency, usage, label-quality limits, and why this does not establish superiorit
 The LLM is not connected to the demo's routing policy or deployed model.
 
 ## Checks
+
+`npm run setup:notebook` installs the word-cloud rendering dependency as well as the
+other notebook tools. Saved HTML reports need no installation or network access.
+The Module 4 test commands include the notebook regression and visual-output tests.
 
 ```bash
 npm run prepare:credit

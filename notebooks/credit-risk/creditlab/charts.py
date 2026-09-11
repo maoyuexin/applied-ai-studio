@@ -149,17 +149,27 @@ def roc_curves(y_val: np.ndarray, candidates: dict[str, np.ndarray]) -> go.Figur
         figure.add_scatter(
             x=fpr, y=tpr, mode="lines", name=f"{name} (AUC {auc:.3f})",
             line=dict(color=color, width=3),
-            hovertemplate="false-alarm rate %{x:.2f}<br>caught defaulters %{y:.2f}<extra></extra>",
+            hovertemplate=("Of accounts that paid: %{x:.1%} flagged"
+                           "<br>Of accounts that missed payment: %{y:.1%} flagged<extra></extra>"),
         )
     figure.add_scatter(
-        x=[0, 1], y=[0, 1], mode="lines", name="No skill (AUC 0.500)",
+        x=[0, 1], y=[0, 1], mode="lines", name="Random guessing (AUC 0.500)",
         line=dict(color=config.COLOR_MUTED, width=2, dash="dash"),
         hoverinfo="skip",
     )
-    figure.update_xaxes(title="Share of paying accounts wrongly ranked risky (false-alarm rate)",
+    figure.update_xaxes(title="False alarms<br>among accounts that paid", tickformat=".0%",
                         range=[0, 1])
-    figure.update_yaxes(title="Share of defaulters ranked above the cut", range=[0, 1.02])
-    return _layout(figure, "Ranking skill on validation accounts, before any policy exists", height=480)
+    figure.update_yaxes(title="Missed-payment accounts caught", tickformat=".0%", range=[0, 1.02])
+    figure.add_annotation(
+        x=0.03, y=0.96, text="Better: up and left", showarrow=False,
+        xanchor="left", font=dict(size=14, color="#20242B"), bgcolor="white",
+    )
+    _layout(figure, "More problems caught, fewer false alarms", height=550)
+    figure.update_layout(
+        margin=dict(l=75, r=25, t=70, b=130),
+        legend=dict(orientation="h", x=0, y=-0.3, xanchor="left", yanchor="top"),
+    )
+    return figure
 
 
 # ── Stage 4 ─────────────────────────────────────────────────────────────────

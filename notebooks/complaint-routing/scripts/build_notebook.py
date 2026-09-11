@@ -7,6 +7,7 @@ outputs match the code that produced them.
 
 from __future__ import annotations
 
+from hashlib import sha256
 from pathlib import Path
 
 import nbformat as nbf
@@ -98,8 +99,9 @@ import numpy as np
 import pandas as pd
 import plotly.io as pio
 from plotly.offline import init_notebook_mode
+from IPython.display import display
 
-from complaintlab import charts, config, data, explain, handoff, metrics, models, text_prep
+from complaintlab import charts, config, data, explain, handoff, metrics, models, presentation, text_prep
 
 warnings.filterwarnings("ignore")
 pd.set_option("display.max_columns", 30)
@@ -258,9 +260,8 @@ md(r"""
 **Question:** what is actually in these complaints, and how does a paragraph of English
 become something a model can add up?
 
-**What to expect in this stage:** the team imbalance and the cap we applied to it; the
-duplicate-letter discovery that changed how this dataset was built; the label
-consolidation table; how long a complaint is; and one sentence turned into numbers by hand.
+**What to expect in this stage:** the team mix; a short flow showing how we prepared
+the data before splitting; complaint length; and one sentence turned into numbers.
 
 **Why this stage exists:** the two biggest decisions in this whole lab - deduping and
 capping - came out of looking at the data, not out of modelling. Both were invisible until
@@ -308,7 +309,7 @@ counts.style.format({"share of sample": "{:.1%}"}).hide(axis="index")
 
 code(r"""
 # ===============================================================
-# 2.2 TEAM DISTRIBUTION ACROSS THE THREE SPLITS
+# 2.1b TEAM DISTRIBUTION ACROSS THE THREE SPLITS
 # ===============================================================
 charts.team_distribution(counts).show()
 """)
@@ -339,136 +340,62 @@ md(r"""
 """)
 
 md(r"""
-## 2.2 The discovery that changed how this dataset was built
+## 2.2 Prepare the data before splitting
 
-While counting complaints per team, one number refused to make sense: credit reporting had
-1.9 million complaints in the window, but far fewer distinct paragraphs.
+**About 42 out of every 100 rows repeated text already in the data.** Removing those
+extra copies is called **deduplication**: keep one copy of each identical complaint text.
 
-They were the same letter, filed over and over.
+The files we loaded were already prepared in this order:
 
-Credit-repair services file template dispute letters on behalf of thousands of consumers.
-The paragraph below appeared **27,496 times** in the 2023+ window, word for word, under
-27,496 different complaint IDs. Here are two of those filings - different consumers,
-different states, nine days apart.
-""")
-
-code(r"""
-# ===============================================================
-# 2.3 ONE TEMPLATE LETTER, FILED TWICE (OF 27,496 TIMES)
-# ===============================================================
-duplicate = config.DUPLICATE_EXAMPLE
-print(f"This exact narrative was filed {duplicate['copies_in_window']:,} times in the window.\n")
-print(duplicate["narrative"][:430], "...\n")
-data.duplicate_example_table()
-""")
-
-code(r"""
-# ===============================================================
-# 2.4 HOW MUCH OF THE WINDOW IS COPIES
-# ===============================================================
-data.dedupe_summary()
-""")
-
-code(r"""
-# ===============================================================
-# 2.5 WHICH TEAMS THE TEMPLATES LIVE IN
-# ===============================================================
-charts.duplicate_share_by_team().show()
-""")
-
-md(r"""
-### How to read this plot
-
-- **Question:** is the duplicate-letter problem spread evenly across the eight teams, or
-  concentrated somewhere?
-- **Marks and axes:** one bar per team, tallest first. Height is the share of that team's
-  rows in the 2023+ window that repeated a narrative already seen earlier in the file. Red
-  bars are above 20%, grey bars below; the printed percentage on each bar carries the same
-  information, so colour is only a highlight. The dashed green line is the all-teams figure,
-  41.5%.
-- **Denominator:** each bar divides by *that team's* row count in the window - 1,896,931 for
-  credit reporting, 46,569 for mortgages - not by the 2.6 million total. Hovering shows the
-  team's own denominator.
-- **What to notice:** credit reporting is 52.4% duplicates, money transfers 26.3%, debt
-  collection 23.5%. Mortgages is 0.08% - 36 rows out of 46,569. The problem lives where
-  credit-repair services operate.
-- **Term:** an **exact duplicate** here means two rows whose narrative strings are
-  identical character for character. Near-duplicates - the same template with a typo or a
-  different name - are not counted in these bars.
-- **Why it matters:** duplicates are why the split had to be drawn *after* deduping. The
-  next cell shows what it cost when they were not.
-- **Boundary:** a duplicate is not fraud and not a bad complaint. A consumer who used a
-  credit-repair service still has a real dispute. This chart measures repeated text, and
-  nothing about the merits of any filing.
-""")
-
-md(r"""
-## 2.3 What skipping the dedupe cost
-
-The first build of this dataset split the complaints first and deduped never. Because
-27,496 copies of one letter were scattered at random across train, validation, and test,
-the model met the test set's exact sentences thousands of times during training.
-
-**Data leakage** means information from the evaluation data reaches the model during
-training. The model does not need to generalise if it can memorise - and memorising a
-letter it has seen 19,000 times is trivial.
-""")
-
-code(r"""
-# ===============================================================
-# 2.6 THE LEAKY BUILD, MEASURED
-# ===============================================================
-data.leakage_cost()
-""")
-
-md(r"""
-Two-point-four accuracy points is not a rounding error. It is the difference between a
-model that reads complaints and a model that recognises a form letter, and every number in
-the leaky report was wrong in the flattering direction.
-
-**The rule this notebook's data was built with:**
-
-```python
-window = window.drop_duplicates(subset="narrative", keep="first")   # BEFORE splitting
-train, validation, test = stratified_split(window)                  # only then
+```text
+Complaint text from 2023 onward
+             |
+             v
+Group product names into 8 team labels
+             |
+             v
+Keep one copy of each identical text
+             |
+             v
+Apply the team cap and select our sample
+             |
+             v
+Split into training / validation / test
 ```
 
-Order is the whole point. Deduping after the split leaves one copy in train and one in test,
-which is exactly the leak. The committed splits share **zero** narratives verbatim, and the
-loader in `complaintlab/data.py` refuses to load them if a complaint ID appears twice.
-
-One honesty note that survives the rule: near-duplicate templates - the same letter with a
-typo, a different name, an extra sentence - are still in the data. About 11% of test rows
-share a normalised 120-character opening with some training row. That is a real property of
-consumer-complaint text, and it was documented rather than scrubbed.
-""")
-
-md(r"""
-## 2.4 Label consolidation: how eight teams were made
-
-The team label is not a field in the source file. It was built from the CFPB's `Product`
-column, which the agency renamed and re-split several times.
-
-The same credit-reporting complaints appear under **two** product spellings because the
-category was renamed mid-2023, and credit cards appear under **three**. Consolidating them
-is a required ingestion step, not a convenience: left alone, the model would treat a
-renamed category as a different kind of complaint.
-
-One category was dropped entirely: **"Debt or credit management"** (5,545 complaints in the
-window). It is a small category the agency introduced in 2023, and its complaints read as a
-mix of the other eight, so no standing team owns it. Dropping it is a disclosed loss of
-0.2% of the window.
+**How much was repeated?** These recorded build counts cover the **2,634,602 rows
+mapped to our eight teams**, before sampling. They are not percentages of the final
+58,185-complaint classroom sample.
 """)
 
 code(r"""
 # ===============================================================
-# 2.7 CFPB PRODUCT LABELS COLLAPSED INTO EIGHT TEAMS
+# 2.2 EXACT REPEATS REMOVED BEFORE SAMPLING AND SPLITTING
 # ===============================================================
-data.label_consolidation_table(splits)
+duplicate_share = config.DEDUPE_ROWS_REMOVED / config.DEDUPE_ROWS_IN_WINDOW
+print(f"Rows before deduplication: {config.DEDUPE_ROWS_IN_WINDOW:,}")
+print(f"Extra copies removed:      {config.DEDUPE_ROWS_REMOVED:,} ({duplicate_share:.1%})")
+print(f"Different texts kept:      {config.DEDUPE_DISTINCT_NARRATIVES:,} ({1 - duplicate_share:.1%})")
 """)
 
 md(r"""
-## 2.5 How long is a complaint?
+**What if we skip this?** Imagine the same letter appears in both training and testing.
+The model has already practiced on the test wording, so its test score can look better
+than its ability to route a new complaint. This is **data leakage**, like practicing
+with questions that later appear on the exam. Remove copies **before** splitting;
+removing them separately inside each split can leave the same text on both sides.
+
+**Why group product names?** The agency changed some category names over time. We map
+related names to one classroom team, such as "Credit card" and "Prepaid card" to
+**Credit cards**. The small "Debt or credit management" category has no team in this
+exercise and is left out: 5,545 rows, about 0.2% of the original 2023+ text window.
+
+**Two limits:** slightly reworded copies can remain; identical wording does not mean a
+complaint is invalid. This step cleans the training data, not the real complaint queue.
+""")
+
+md(r"""
+## 2.3 How long is a complaint?
 
 Length matters twice in this lab. It decides how much evidence the word-count model has to
 work with, and it decides how much of a complaint the transformer in stage 3 can even read
@@ -477,7 +404,7 @@ before it stops.
 
 code(r"""
 # ===============================================================
-# 2.8 NARRATIVE LENGTH IN THE TRAINING SPLIT
+# 2.3 NARRATIVE LENGTH IN THE TRAINING SPLIT
 # ===============================================================
 charts.narrative_length(train).show()
 """)
@@ -508,13 +435,13 @@ md(r"""
 
 code(r"""
 # ===============================================================
-# 2.9 LENGTH, SPLIT BY SPLIT
+# 2.3b LENGTH, SPLIT BY SPLIT
 # ===============================================================
 text_prep.length_profile(splits)
 """)
 
 md(r"""
-## 2.6 Turning one sentence into numbers
+## 2.4 Turning one sentence into numbers
 
 A model cannot add up English. Something has to convert a paragraph into a row of numbers,
 and *what* it converts to is the central choice of this lab.
@@ -540,7 +467,7 @@ card", which appears in one.
 
 code(r"""
 # ===============================================================
-# 2.10 A WORKED TF-IDF EXAMPLE ON THREE TINY COMPLAINTS
+# 2.4 A WORKED TF-IDF EXAMPLE ON THREE TINY COMPLAINTS
 # ===============================================================
 for i, sentence in enumerate(text_prep.WORKED_EXAMPLE_CORPUS, start=1):
     print(f"{i}. [{text_prep.WORKED_EXAMPLE_TEAMS[i - 1]:16s}] {sentence}")
@@ -549,34 +476,64 @@ text_prep.worked_example()
 """)
 
 md(r"""
-Read the table against the sentences. "my" sits in all three complaints, so its weight is
-the lowest in the table. "credit", "card", and the phrase "credit card" sit in complaint 1
-only, so they carry the most weight - and they are exactly the words a human would use to
-route it to the credit-card team.
+Rows are sorted by **how many complaints contain the term, highest first**. This count
+is across the three complaints, not repetitions within complaint 1.
 
-Two consequences follow, and both matter later:
+"my" appears in all **three** complaints and has the lowest weight. "credit" and
+"my credit" appear in **two**, so their weights are higher. "card" and "credit card"
+appear in **one**, so their weights are higher still. **A higher complaint count does
+not mean a higher TF-IDF weight.**
 
-- **Word order is gone.** "the bank charged me" and "me charged the bank" produce identical
-  numbers. TF-IDF is a bag of words and 2-word phrases, nothing more.
-- **The row is mostly zeros.** Every complaint gets a column for every word in the whole
-  vocabulary, and almost all of them are absent from any one complaint.
+TF-IDF keeps words and neighboring two-word phrases, but it does not understand the
+whole sentence.
+""")
+
+md(r"""
+### Word clouds: which words stand out?
+
+**The story: a canceled flight and a missing refund.** The consumer says the credit-card
+company received the refund but did not return it. These clouds use that real training
+complaint, selected because the problem is easy to recognize, not to evaluate the model.
+
+- **Word frequency:** words used more often in this complaint appear larger.
+- **TF-IDF:** combines frequency here with rarity across the training complaints.
+
+Look for **refund**, **flight**, **airline**, and **credit card**. Compare what stands
+out when we count repeated words with what stands out after TF-IDF weighting.
 """)
 
 code(r"""
 # ===============================================================
-# 2.11 HOW WIDE THAT ROW GETS
+# 2.4b ONE REAL COMPLAINT, TWO WAYS TO SIZE ITS WORDS
 # ===============================================================
-text_prep.worked_example_shape().style.format({"Share of the row that is zero": "{:.1%}"}).hide(axis="index")
+word_clouds = charts.tfidf_word_clouds(train)
+print(f"Real complaint #{word_clouds.layout.meta['complaint_id']} | {word_clouds.layout.meta['team']}")
+print(f"IDF uses {word_clouds.layout.meta['training_complaints']:,} training complaints.")
+""")
+
+md(r"""
+**Read the size, not the location or color.** Both clouds use the same selected terms,
+including two-word phrases. Larger words have higher values within that cloud; sizes
+are approximate because the words must fit together.
+
+Filler words, numbers, and `XXXX` redactions are hidden **only in this picture**.
+This is not a model-confidence score or proof of the correct team. The classifier and
+its preprocessing are unchanged.
+""")
+
+code(r"""
+# ===============================================================
+# 2.4c FREQUENCY CLOUD AND TF-IDF CLOUD
+# ===============================================================
+word_clouds.show()
 """)
 
 md(r"""
 ### Stage 2 conclusion
 
-The data is honest now, and we know what it costs: exact duplicates removed before the
-split (41.5% of the window), credit reporting capped at 1.5x the runner-up, one ambiguous
-category dropped, and product labels consolidated into eight teams. Complaints are short
-and right-skewed, and TF-IDF is the agreed way of turning them into numbers - carrying word
-identity and rarity, and discarding order.
+We grouped labels into eight teams, removed repeated text **before splitting**, and
+selected the classroom sample. Near-duplicates can still remain. Next, TF-IDF turns
+complaint words and short phrases into numbers the model can use.
 """)
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -851,354 +808,156 @@ md(r"""
 ---
 # 4 - Validation and Operating Policy
 
-**Question:** where does this model fail, and what rule decides when a person has to step
-in?
+**Main idea: let the model suggest a team, but ask a clerk to choose when the score is low.**
 
-**What to expect in this stage:** each team's precision and recall read in plain words, the
-mistakes the model makes and whether they are reasonable, a rule stated before we look at
-any sweep, the sweep itself, the frozen threshold, and then one - and only one - scoring of
-the test split.
-
-**Why this stage exists:** a model is not a workflow. The workflow question is not "how
-accurate is it" but "when do we let it act alone, and who catches it when it is wrong".
-
-**What passes to stage 5:** a frozen model, a frozen threshold, and test-set numbers that
-nothing after this point is allowed to change.
+We will check three things: how well it finds each team's complaints, when routing goes
+to a person, and what happens on a separate test set. **A specialist still reads and
+handles every complaint**, including those whose team was chosen automatically.
 """)
 
 md(r"""
-## 4.1 Reading the model team by team
+## 4.1 How well does it find the right team?
 
-Two rates, and they have different denominators. Getting them the wrong way round is the
-most common mistake in this whole lab.
+First let the model choose a team for **every validation complaint**, before applying
+any confidence cutoff. Overall accuracy can hide a weak result for one team.
 
-- **Precision** for a team: of the complaints the model *sent* to that team, what share
-  actually belonged there. Denominator = complaints the model sent there. Low precision
-  means the team wastes time on other people's work.
-- **Recall** for a team: of the complaints that *actually belonged* to that team, what share
-  the model found. Denominator = complaints that truly belong to that team. Low recall means
-  the team's own complaints are sitting in someone else's queue.
-- **F1** is the harmonic mean of the two - a single number that stays low unless both are
-  decent.
+For each row below, ask: **of the complaints labeled for this team, how many did the
+model find?** That percentage is called **recall**. The labels come from the source
+product categories, not a new expert review of each letter.
 """)
 
 code(r"""
 # ===============================================================
-# 4.1 PER-TEAM RESULTS ON VALIDATION
+# 4.1 ONE SIMPLE CHECK FOR EACH TEAM
 # ===============================================================
 val_per_team = metrics.per_team_table(y_val, tfidf.val_predictions)
-val_per_team.style.format({
-    "Precision": "{:.3f}", "Recall": "{:.3f}", "F1": "{:.3f}",
-    "Complaints in the split": "{:,}",
-}).hide(axis="index")
-""")
-
-code(r"""
-# ===============================================================
-# 4.2 THE SAME TABLE AS A PICTURE
-# ===============================================================
-charts.per_team_precision_recall(val_per_team).show()
-""")
-
-md(r"""
-### How to read this plot
-
-- **Question:** which team is the model worst at serving, and is it worst at finding their
-  complaints or worst at keeping other teams' complaints out?
-- **Marks and axes:** one pair of horizontal bars per team, weakest recall at the bottom.
-  Blue is precision, orange is recall; both run 0% to 100% on the same axis, and both are
-  labelled in the hover.
-- **Denominator:** different for each bar of a pair, and that is the point. Precision
-  divides by what the model sent to the team; recall divides by what truly belonged to it.
-  The hover shows how many complaints truly belong to each team.
-- **What to notice:** Loans has the lowest recall at 64.4% - more than a third of real loan
-  complaints go somewhere else - while its precision is 78.3%, so the loan queue itself is
-  reasonably clean. Mortgages is the opposite kind of team: 93.8% precision, 85.2% recall.
-- **Term:** **support** is the number of complaints a team truly has in the split. Loans has
-  505 and Mortgages 440, so neither result is an artefact of a tiny sample.
-- **Why it matters:** a low-recall team is invisible to itself. Of 505 real loan complaints,
-  180 landed in someone else's queue - 61 in debt collection, 42 in credit cards, 39 in
-  credit reporting - and nobody sitting in the loans queue can see them. Only a measurement
-  like this surfaces them.
-- **Boundary:** these rates describe complaints written in 2023-2026 by consumers who
-  consented to publication. They do not predict how the model would perform on a bank's own
-  intake form, where consumers write to the bank rather than to a regulator.
-""")
-
-md(r"""
-## 4.2 Are the mistakes reasonable?
-
-A mistake between two teams that genuinely overlap is a different problem from a mistake
-between two unrelated teams. The first says the label boundary is blurry; the second says
-the model is not reading.
-""")
-
-code(r"""
-# ===============================================================
-# 4.3 THE LARGEST CONFUSIONS ON VALIDATION
-# ===============================================================
-metrics.top_confusions(y_val, tfidf.val_predictions).style.format({
-    "Complaints": "{:,}", "Share of that team's complaints": "{:.1%}",
+val_scores = metrics.classification_scores(y_val, tfidf.val_predictions)
+print(f"Right team overall: {val_scores['accuracy']:.1%} of {len(y_val):,} validation complaints.")
+val_per_team.loc[val_per_team["Team"].isin(config.TEAMS),
+                 ["Team", "Complaints in the split", "Recall"]].rename(columns={
+    "Complaints in the split": "Labeled for this team",
+    "Recall": "Correct team found",
+}).style.format({
+    "Labeled for this team": "{:,}", "Correct team found": "{:.1%}",
 }).hide(axis="index")
 """)
 
 md(r"""
-Every one of these is semantically honest:
+**Example: Loans.** Of 505 loan complaints, the model found 325 and sent 180 elsewhere:
+**64.4% found**, roughly 64 out of 100. This is a weakness even though overall accuracy
+is about 83%.
 
-- **Debt collection to credit reporting, and back (242 and 162).** A consumer writes about a
-  collection account that is damaging their credit report. Both teams are genuinely
-  implicated; the CFPB's own label picked one. This pair is the model's single biggest source
-  of error in both directions.
-- **Money transfers to bank accounts (143 - 22.1% of that team).** A payment-app balance
-  behaves like a bank balance, and consumers describe it in the same words: "my account", "my
-  funds", "frozen".
-- **Credit cards and bank accounts, both directions (84 and 81).** The card was issued by the
-  bank, and a debit card and a credit card sound identical when the story is about a disputed
-  charge. Section 5.2 walks through one of these.
-
-This is the difference between a model that has learned something and one that has not. The
-mistakes cluster exactly where the human boundary is blurry - which also means routing
-errors here are cheap to recover: the specialist who receives a misrouted complaint
-recognises it as someone else's within a paragraph.
+Some complaints involve overlapping topics, such as debt collection and credit reporting.
+That can help explain a wrong team choice, but it does not make the mistake harmless.
+The receiving specialist needs a way to redirect it.
 """)
 
 md(r"""
-## 4.3 The rule, stated before the sweep
+## 4.2 When should a clerk choose the team?
 
-A model that must answer every complaint has to guess on the ones it cannot read. It is
-better to let it decline.
+**Confidence** is the model's highest score among the eight teams. Our cutoff is **0.55
+(55%)**. It is a routing rule, not a claim that 55% of routes are correct.
 
-Every prediction comes with **confidence**: the largest of the eight team probabilities.
-The rule, written down before looking at any numbers:
+```text
+Complaint arrives
+  |
+  v
+Model suggests a team
+  |
+  v
+Confidence at least 0.55?
+  Yes: use suggested team
+   No: clerk chooses team
+  |
+  v
+Specialist handles complaint
+```
 
-> **Auto-route** the complaint to the predicted team when confidence is at or above a
-> threshold. Below the threshold, send it to a **human triage queue**, where a clerk reads
-> it and assigns the team by hand.
-
-The threshold is chosen on the **validation split only**, against a target set in advance:
-**at least 90% of auto-routed complaints must reach the right team**, at the highest
-coverage that clears it. Nothing about the test split informs this choice.
-
-Two rates, again with different denominators, and they must never be mixed:
-
-- **Coverage** = auto-routed complaints / all complaints in the split.
-- **Accuracy among auto-routed** = correct auto-routes / auto-routed complaints.
-
-For a threshold to help at all, the model's confidence has to be informative - low when it
-is about to be wrong. That is testable.
+**Three made-up scores:** the middle row shows that exactly 0.55 qualifies. A high score
+can still be wrong; a low score asks for help, not dismissal of the complaint.
 """)
 
 code(r"""
 # ===============================================================
-# 4.4 IS THE CONFIDENCE INFORMATIVE?
+# 4.2 THREE PRACTICE SCORES THROUGH THE SAME RULE
 # ===============================================================
-charts.confidence_distribution(
-    tfidf.val_confidence, y_val.to_numpy() == tfidf.val_predictions
-).show()
+practice_confidence = np.array([0.90, 0.55, 0.40])
+pd.DataFrame({
+    "Made-up confidence": [f"{score:.0%}" for score in practice_confidence],
+    "Who chooses the team?": metrics.routes(practice_confidence),
+}).replace({
+    config.ROUTE_AUTO: "Model sends to its suggested team",
+    config.ROUTE_TRIAGE: "Clerk reads and chooses a team",
+})
 """)
 
 md(r"""
-### How to read this plot
+**Why 0.55?** On validation, the goal was to auto-route as many complaints as possible
+while getting at least **90% of those routes right**. Among the tested cutoffs, 0.55
+met that goal with the highest automatic-routing share. At 0.50, accuracy among
+auto-routes was only 88.7%. The detailed comparison stays in the saved evidence.
 
-- **Question:** do the model's wrong answers come with lower confidence than its right ones?
-  If not, no threshold can help.
-- **Marks and axes:** the horizontal axis is confidence, the model's highest team
-  probability, in bins of 0.025. Bar height counts validation complaints in each bin. Blue
-  bars are complaints the model routed correctly, red bars are complaints it got wrong; the
-  two are drawn overlaid, and the labelled annotations state which side of the green line is
-  which.
-- **Denominator:** all 8,728 validation complaints, divided between the two colours - not
-  two separate percentages.
-- **What to notice:** the blue mass piles up near 1.0 while the red mass sits low and thins
-  out to the right. Wrong answers are concentrated exactly where confidence is weakest,
-  which is what makes a cut-off worth having. Red does not vanish to the right of the line -
-  some confident answers are still wrong, and stage 5 walks through one of them.
-- **Term:** **confidence** here is only the largest predicted probability. It is a number
-  the model produces, not a promise it is right.
-- **Why it matters:** the green line at 0.55 is the workflow. Everything left of it becomes
-  a person's reading queue; everything right of it moves without review.
-- **Boundary:** this shows confidence *ranks* errors well. It does not show the
-  probabilities are calibrated - that a 0.70 complaint is right 70% of the time. The table
-  below tests that separately.
+**Try one change:** raising the cutoff sends more complaints to the clerk; lowering it
+lets the model route more. Neither change retrains the model, and neither guarantees
+better results on future complaints. We keep 0.55 for the final test.
+""")
+
+md(r"""
+## 4.3 What happened on the final test?
+
+Freeze the model and cutoff, then score **8,728 separate test complaints**. Do not change
+the rule to improve the test result. Validation also has 8,728 complaints, but they are
+different rows.
+
+The table separates **how much routing is automatic** from **how often those automatic
+routes are right**. No score below measures the clerk's decisions or the final response
+to the consumer.
 """)
 
 code(r"""
 # ===============================================================
-# 4.5 IS THE CONFIDENCE HONEST? ACCURACY INSIDE CONFIDENCE BANDS
-# ===============================================================
-metrics.confidence_bands(y_val, tfidf.val_predictions, tfidf.val_confidence).style.format({
-    "Complaints": "{:,}", "Share of the split": "{:.1%}", "Accuracy in the band": "{:.1%}",
-}).hide(axis="index")
-""")
-
-md(r"""
-Accuracy climbs monotonically with the band, which is the property the policy depends on.
-Now, and only now, we sweep the threshold.
-""")
-
-code(r"""
-# ===============================================================
-# 4.6 THE THRESHOLD SWEEP, ON VALIDATION ONLY
-# ===============================================================
-sweep = metrics.threshold_sweep(y_val, tfidf.val_predictions, tfidf.val_confidence)
-sweep[["threshold", "auto_routed", "coverage", "accuracy_among_auto_routed",
-       "triage_rows", "triage_share"]].style.format({
-    "auto_routed": "{:,}", "coverage": "{:.1%}",
-    "accuracy_among_auto_routed": "{:.1%}",
-    "triage_rows": "{:,}", "triage_share": "{:.1%}",
-}).hide(axis="index")
-""")
-
-code(r"""
-# ===============================================================
-# 4.7 THE SAME TRADE-OFF AS A CURVE
-# ===============================================================
-charts.threshold_sweep_chart(sweep, config.CONFIDENCE_THRESHOLD).show()
-""")
-
-md(r"""
-### How to read this plot
-
-- **Question:** what does each extra point of accuracy on the auto-routed stream cost in
-  complaints a person has to read?
-- **Marks and axes:** the horizontal axis is the candidate threshold. The solid orange line
-  is coverage, read on the left axis. The dotted blue line is accuracy among the
-  auto-routed, read on the right axis - note the right axis starts at 80%, not 0%, so that
-  the accuracy curve is legible. The dashed green line marks the frozen choice; the dotted
-  grey line is the 90% rule set before we looked.
-- **Denominator:** the two lines divide by different things, which is the whole lesson.
-  Coverage divides by all 8,728 validation complaints. Accuracy divides only by the
-  complaints auto-routed at that threshold - a shrinking group as the line moves right.
-- **What to notice:** the curves move in opposite directions everywhere. At 0.30 the model
-  handles 97.1% of complaints and gets 84.2% of them right; at 0.90 it handles 32.3% and
-  gets 97.8% right. 0.55 is the leftmost point that clears the 90% rule.
-- **Term:** **coverage** is the share of work the automation takes. Its complement, the
-  triage share, is the human workload the policy creates.
-- **Why it matters:** the threshold is a staffing decision as much as a modelling one. At
-  0.55, 22.8% of complaints go to a person - 1,991 of these 8,728 - and that queue has to be
-  resourced or the policy fails in practice.
-- **Boundary:** the accuracy curve describes only auto-routed complaints. It says nothing
-  about how well the triage clerks route the rest, and nothing about complaints the model
-  gets right for the wrong reason.
-""")
-
-md(r"""
-## 4.4 Freezing the policy
-
-**Threshold: 0.55.** The smallest value that clears the 90% rule, at the highest coverage
-that satisfies it. In classroom words: *about 9 in 10 auto-routed complaints reach the right
-team, and roughly 1 in 5 complaints goes to a person.*
-
-0.50 was the defensible alternative - 88.7% accuracy at 82.6% coverage - and it was rejected
-because it misses the pre-committed 90% target, not because 0.55 scored better after the
-fact.
-
-The triage workload is a real staffing number, not a leftover. At this threshold the
-validation split sends 1,991 complaints to human triage. Those complaints are not delayed,
-dismissed, or deprioritised; they are simply routed by a person instead of by arithmetic.
-Worth noting where the value of that queue comes from: the model's accuracy on the
-complaints it declines is only 58%, so these really are the ones it should not be trusted
-with.
-""")
-
-code(r"""
-# ===============================================================
-# 4.8 THE FROZEN POLICY, ON VALIDATION
+# 4.3 THE FROZEN RULE ON VALIDATION AND TEST
 # ===============================================================
 val_policy = metrics.policy_eval(y_val, tfidf.val_predictions, tfidf.val_confidence)
-pd.DataFrame([val_policy]).T.rename(columns={0: "validation"})
-""")
-
-md(r"""
-## 4.5 Scoring the test split, once
-
-Everything is now frozen: the preprocessing, the model, and the threshold. The test split
-has not been looked at, tuned against, or peeked at during any of the above.
-
-It gets scored **once**. Whatever it says is the answer - there is no second attempt, because
-a second attempt turns the test split into another validation split.
-""")
-
-code(r"""
-# ===============================================================
-# 4.9 THE SINGLE FROZEN TEST SCORING
-# ===============================================================
 pipeline = tfidf.estimator
 test_probabilities = pipeline.predict_proba(X_test)
 classes = pipeline.named_steps["lr"].classes_
 test_predictions = classes[np.argmax(test_probabilities, axis=1)]
 test_confidence = test_probabilities.max(axis=1)
-
 test_scores = metrics.classification_scores(y_test, test_predictions)
 test_policy = metrics.policy_eval(y_test, test_predictions, test_confidence)
 
-print(f"test complaints              : {len(y_test):,}")
-print(f"accuracy                     : {test_scores['accuracy']:.4f}")
-print(f"macro-F1                     : {test_scores['macro_f1']:.4f}")
-print(f"coverage (auto-routed share) : {test_policy['coverage']:.4f}")
-print(f"accuracy among auto-routed   : {test_policy['accuracy_among_auto_routed']:.4f}")
-print(f"sent to human triage         : {test_policy['triage_rows']:,} "
-      f"({test_policy['triage_share']:.1%})")
+routing_summary = pd.DataFrame([{
+    "Check": label,
+    "Complaints checked": f"{result['complaints']:,}",
+    "Team chosen automatically": f"{result['auto_routed']:,} ({result['coverage']:.1%})",
+    "Clerk chooses the team": f"{result['triage_rows']:,} ({result['triage_share']:.1%})",
+    "Right team among automatic routes": f"{result['accuracy_among_auto_routed']:.1%}",
+} for label, result in [("Validation", val_policy), ("Test", test_policy)]]).set_index("Check").T
+print(f"If the model chose every test route: {test_scores['accuracy']:.1%} would match the recorded team.")
+routing_summary
 """)
 
 md(r"""
-Validation said 90.2% accuracy among auto-routed at 77.2% coverage; test says 89.7% at
-78.3%. The two agree closely, which is the evidence that the threshold was chosen on a
-pattern rather than on validation-split noise.
-""")
+### Read the result in everyday terms
 
-code(r"""
-# ===============================================================
-# 4.10 PER-TEAM RESULTS ON THE UNTOUCHED TEST SPLIT
-# ===============================================================
-test_per_team = metrics.per_team_table(y_test, test_predictions)
-test_per_team.style.format({
-    "Precision": "{:.3f}", "Recall": "{:.3f}", "F1": "{:.3f}",
-    "Complaints in the split": "{:,}",
-}).hide(axis="index")
-""")
+- **About 78 out of 100** test complaints get their team automatically. This share is
+  called **coverage**: 6,833 out of 8,728, not the percentage routed correctly.
+- **About 22 out of 100** go to a clerk for team selection: 1,895 complaints. The clerk
+  needs time to handle this queue; these complaints are not rejected.
+- **About 90 out of 100 automatic routes** match the recorded team. This uses a different
+  group: only the auto-routed complaints. Confident mistakes still remain.
 
-code(r"""
-# ===============================================================
-# 4.11 WHERE EVERY TEST COMPLAINT LANDED
-# ===============================================================
-test_confusion = metrics.confusion_frame(y_test, test_predictions)
-charts.confusion_heatmap(test_confusion, "8,728 test").show()
-""")
+**Did we meet the target?** Validation reached **90.2%**, but test reached **89.7%**,
+slightly below the 90% target. Similar numbers are not a guarantee. Report the shortfall
+without retuning on the test set; this classroom result is not production approval.
 
-md(r"""
-### How to read this plot
-
-- **Question:** when the model is wrong, which team does it send the complaint to instead?
-- **Marks and axes:** rows are the team the complaint actually belonged to; columns are the
-  team the model chose. Each cell prints its own count. The shading encodes **mistakes only** -
-  the correct diagonal is deliberately left unshaded so it cannot swamp the colour scale -
-  and every number is printed, so nothing depends on reading the colour.
-- **Denominator:** raw counts across all 8,728 test complaints. A row sums to that team's
-  true complaint count; a column sums to what the model sent there. Recall is read along a
-  row, precision down a column.
-- **What to notice:** the three darkest cells are debt collection to credit reporting (259),
-  money transfers to bank accounts (156), and credit reporting to debt collection (145). The
-  same overlaps validation showed. Meanwhile mortgages to money transfers is 5, and student
-  loans to money transfers is 0 - unrelated teams almost never collide.
-- **Term:** a **confusion matrix** is this table. Every classification metric in the notebook
-  can be recomputed from it by dividing a cell by its row (recall) or its column (precision).
-- **Why it matters:** it tells the office where to put a second pair of eyes. Debt collection
-  and credit reporting exchange about 400 complaints in both directions; that pair is worth a
-  shared review step, while mortgages needs none.
-- **Boundary:** a cell counts a disagreement with the CFPB's product label, which is itself a
-  human choice made by whoever categorised the complaint. Some of these "errors" are cases
-  where two labels were both defensible.
-""")
-
-md(r"""
 ### Stage 4 conclusion
 
-Frozen and measured once: **82.1% accuracy**, **0.810 macro-F1**, **78.3% coverage**, and
-**89.7% of auto-routed complaints reaching the right team**, with 1,895 complaints - 21.7% -
-going to human triage. The model's remaining mistakes sit on genuinely blurry boundaries,
-and the threshold turns the weakest predictions into a person's reading queue rather than a
-silent error.
+**Suggest a team -> check confidence -> auto-route or ask a clerk -> specialist handles
+the complaint.** Keep the 0.55 rule and these test results fixed for the walkthroughs.
+The full precision, recall, F1, threshold comparison, and test confusion counts remain
+in the app's supporting evidence, not extra tables to read here.
 """)
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -1248,23 +1007,21 @@ def pick(complaint_id):
     return test_scored.loc[test_scored["complaint_id"] == complaint_id].iloc[0]
 
 first = pick(config.WALKTHROUGH_IDS[0])
-print(first[config.TEXT_COLUMN][:1100])
+presentation.complaint_excerpt(first, 1, "Confident and correct", limit=1100)
 """)
 
 code(r"""
 # ===============================================================
 # 5.2 WHAT THE MODEL SAID ABOUT IT
 # ===============================================================
-explain.route_card(pipeline, first)
+presentation.routing_decision(pipeline, first)
 """)
 
 code(r"""
 # ===============================================================
 # 5.3 ALL EIGHT TEAM PROBABILITIES
 # ===============================================================
-explain.team_probabilities(pipeline, first[config.TEXT_COLUMN]).style.format(
-    {"Probability": "{:.4f}"}
-).hide(axis="index")
+presentation.probability_bars(pipeline, first[config.TEXT_COLUMN])
 """)
 
 code(r"""
@@ -1303,21 +1060,16 @@ code(r"""
 # 5.5 WALKTHROUGH 2 - BELOW THE THRESHOLD, SO A PERSON READS IT
 # ===============================================================
 second = pick(config.WALKTHROUGH_IDS[1])
-print(second[config.TEXT_COLUMN][:900])
-explain.route_card(pipeline, second)
+display(presentation.complaint_excerpt(second, 2, "A clerk chooses the team", limit=900))
+presentation.routing_decision(pipeline, second)
 """)
 
 code(r"""
 # ===============================================================
 # 5.6 WHY THE MODEL HESITATED
 # ===============================================================
-print("the little evidence it found:",
-      ", ".join(explain.routing_words(
-          pipeline, second[config.TEXT_COLUMN], second["predicted_team"]
-      )["Word or phrase"]))
-explain.team_probabilities(pipeline, second[config.TEXT_COLUMN]).style.format(
-    {"Probability": "{:.4f}"}
-).hide(axis="index")
+display(presentation.routing_word_bars(pipeline, second[config.TEXT_COLUMN], second["predicted_team"]))
+presentation.probability_bars(pipeline, second[config.TEXT_COLUMN])
 """)
 
 md(r"""
@@ -1347,15 +1099,16 @@ code(r"""
 # 5.7 WALKTHROUGH 3 - CONFIDENT AND WRONG
 # ===============================================================
 third = pick(config.MISROUTE_EXAMPLE_ID)
-print(third[config.TEXT_COLUMN][:1100])
-explain.route_card(pipeline, third)
+display(presentation.complaint_excerpt(third, 3, "Confident and wrong", limit=1100))
+presentation.routing_decision(pipeline, third)
 """)
 
 code(r"""
 # ===============================================================
 # 5.8 THE WORDS THAT CAUSED THE WRONG ROUTE
 # ===============================================================
-explain.routing_words(pipeline, third[config.TEXT_COLUMN], third["predicted_team"])
+display(presentation.probability_bars(pipeline, third[config.TEXT_COLUMN]))
+presentation.routing_word_bars(pipeline, third[config.TEXT_COLUMN], third["predicted_team"])
 """)
 
 md(r"""
@@ -1416,6 +1169,9 @@ code(r"""
 # ===============================================================
 # 5.9 ASSEMBLE THE EVIDENCE AND EXPORT
 # ===============================================================
+sweep = metrics.threshold_sweep(y_val, tfidf.val_predictions, tfidf.val_confidence)
+test_per_team = metrics.per_team_table(y_test, test_predictions)
+test_confusion = metrics.confusion_frame(y_test, test_predictions)
 reload_rows = handoff.reload_slice(test)
 reload_probabilities = pipeline.predict_proba(reload_rows[config.TEXT_COLUMN].tolist())
 reload_check = {
@@ -1674,20 +1430,21 @@ notebook["metadata"] = {
 }
 
 if __name__ == "__main__":
-    if OUTPUT.exists():
-        previous = nbf.read(OUTPUT, as_version=4)
-        previous_cells = {cell.id: cell for cell in previous.cells}
-        for index, cell in enumerate(notebook.cells):
-            saved = previous_cells.get(cell.id)
-            if saved and saved.cell_type == cell.cell_type and saved.source == cell.source:
-                notebook.cells[index] = saved
-    nbf.validate(notebook)
-    identifiers = [cell["metadata"]["id"] for cell in notebook["cells"]]
+    previous = nbf.read(OUTPUT, as_version=4).cells if OUTPUT.exists() else []
+    previous_cells = {(cell.cell_type, cell.source): cell for cell in previous}
+    for index, cell in enumerate(notebook.cells):
+        saved = previous_cells.get((cell.cell_type, cell.source))
+        if saved is not None:
+            notebook.cells[index] = saved
+        else:
+            digest = sha256(f"{cell.cell_type}:{cell.source}".encode()).hexdigest()[:12]
+            cell.id = f"complaint-build-{digest}"
+            cell.metadata["id"] = cell.id
+    identifiers = [cell.id for cell in notebook.cells]
     assert len(identifiers) == len(set(identifiers)), "duplicate cell id"
-    assert all(cell["metadata"].get("language") for cell in notebook["cells"]), "missing language"
-    with OUTPUT.open("w", encoding="utf-8") as handle:
-        nbf.write(notebook, handle)
-    markdown_cells = sum(1 for cell in notebook["cells"] if cell["cell_type"] == "markdown")
-    code_cells = len(notebook["cells"]) - markdown_cells
-    print(f"Wrote {OUTPUT.name}: {len(notebook['cells'])} cells "
-          f"({code_cells} code, {markdown_cells} markdown)")
+    assert all(cell.metadata.get("id") == cell.id for cell in notebook.cells), "mismatched cell id"
+    assert all(cell.metadata.get("language") for cell in notebook.cells), "missing language"
+    nbf.validate(notebook)
+    nbf.write(notebook, OUTPUT)
+    code_count = sum(cell.cell_type == "code" for cell in notebook.cells)
+    print(f"Wrote {OUTPUT.name}: {len(notebook.cells)} cells ({code_count} code)")
