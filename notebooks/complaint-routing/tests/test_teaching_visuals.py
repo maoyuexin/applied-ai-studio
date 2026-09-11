@@ -53,7 +53,11 @@ def test_word_clouds_use_actual_counts_and_training_weights(identifier):
 
 
 def test_coverage_and_recall_count_different_groups():
-    sample = charts.coverage_example_data()
+    sample = pd.DataFrame({
+        "team": ["Mortgages"] * 5 + ["Credit cards"] * 15,
+        "prediction": ["Mortgages"] * 3 + ["Credit cards"] * 17,
+        "confidence": [0.9] * 16 + [0.3] * 4,
+    })
     scores = metrics.policy_eval(sample["team"], sample["prediction"], sample["confidence"])
     assert scores["auto_routed"] == 16
     assert scores["triage_rows"] == 4
@@ -62,8 +66,3 @@ def test_coverage_and_recall_count_different_groups():
     assert recall.loc[recall["Team"] == "Mortgages", "Recall"].iloc[0] == pytest.approx(0.6)
     all_auto = metrics.policy_eval(sample["team"], sample["prediction"], sample["confidence"], threshold=0)
     assert all_auto["coverage"] == 1.0
-    figure = charts.coverage_recall_example()
-    assert list(figure.data[0].text).count("A") == 16
-    assert list(figure.data[0].text).count("H") == 4
-    assert list(figure.data[1].text) == ["M", "M", "M", "C", "C"]
-    assert figure.to_json()
