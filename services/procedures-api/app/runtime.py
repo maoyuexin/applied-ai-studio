@@ -729,7 +729,7 @@ class ProcedureRuntime:
                 research_tfidf_hit_at_1=float(phrasing["research_tfidf_hit1"]),
                 technician_tfidf_hit_at_1=float(phrasing["technician_tfidf_hit1"]),
                 technician_minilm_hit_at_1=float(phrasing["technician_minilm_hit1"]),
-                note=str(phrasing["note"]),
+                note=str(phrasing.get("note", "No additional note was recorded in this artifact.")),
                 lesson=PHRASING_LESSON,
             ),
             refusal=self._refusal(),

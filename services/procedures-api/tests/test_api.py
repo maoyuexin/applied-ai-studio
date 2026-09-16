@@ -151,6 +151,26 @@ def test_model_card_carries_the_frozen_evidence() -> None:
     asyncio.run(run())
 
 
+def test_model_card_accepts_artifacts_without_an_optional_phrasing_note(monkeypatch) -> None:
+    application = app_once()
+    runtime = application.state.runtime
+    expected = runtime.model_info().model_dump()
+    expected["evaluation"]["question_phrasing"]["note"] = (
+        "No additional note was recorded in this artifact."
+    )
+    monkeypatch.delitem(runtime.evaluation["retrieval"]["question_phrasing"], "note", raising=False)
+
+    async def run() -> None:
+        async with AsyncClient(
+            transport=ASGITransport(app=application), base_url="http://test"
+        ) as client:
+            response = await client.get("/api/procedures/model")
+            assert response.status_code == 200
+            assert response.json() == expected
+
+    asyncio.run(run())
+
+
 def test_questions_expose_the_refusals_and_the_discussion_case() -> None:
     async def run() -> None:
         async with AsyncClient(
