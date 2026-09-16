@@ -28,6 +28,9 @@ from .schemas import (
     ScoreRequest,
     ScoreResponse,
     TrainingWindowNotClean,
+    SimulatorFeatureReading,
+    SimulatorHour,
+    SimulatorResponse,
 )
 
 # model.joblib pickles a *reference* to pdmlab.detect.RobustZDetector, so the
@@ -327,6 +330,53 @@ class MaintenanceRuntime:
             )
         facts.sort(key=lambda fact: fact.distance_from_normal, reverse=True)
         return facts
+
+    # ── /api/maintenance/simulator ─────────────────────────────────────────
+
+    def simulator_window(self, window_id: str) -> SimulatorResponse:
+        matches = self.manifest[self.manifest["sample_id"] == window_id]
+        if matches.empty:
+            raise ValueError(f"Unknown packaged window '{window_id}'.")
+        row = matches.iloc[0]
+        start, end = pd.Timestamp(row["start"]), pd.Timestamp(row["end"])
+        window = self.score[(self.score.index >= start) & (self.score.index <= end)]
+        frames = []
+        for stamp, score in window.items():
+            event = next((name for name, onset, finish, _ in pdm.failure_windows()
+                          if stamp < finish and stamp + pd.Timedelta(hours=1) > onset), None)
+            readings = []
+            for name in pdm.MODEL_FEATURES:
+                value = float(self.matrix.loc[stamp, name])
+                typical = float(self.detector.median_[name])
+                readings.append(SimulatorFeatureReading(
+                    name=name,
+                    display_name=pdm.FEATURE_DISPLAY_NAMES[name],
+                    value=value,
+                    value_text=_format_value(name, value),
+                    typical_value=typical,
+                    typical_text=_format_value(name, typical),
+                    direction_that_means_trouble=PLAIN_DIRECTION[pdm.FEATURE_DIRECTION[name]],
+                ))
+            frames.append(SimulatorHour(
+                hour=str(stamp),
+                features=readings,
+                score=float(score),
+                alert=bool(score >= self.threshold),
+                reported_event=event is not None,
+                event_name=event,
+            ))
+        return SimulatorResponse(
+            window_id=str(row["sample_id"]),
+            label=str(row["label"]),
+            purpose=str(row["purpose"]),
+            model_type=str(self.card["model_type"]),
+            model_version=self.model_version,
+            threshold=self.threshold,
+            feature_count=len(pdm.MODEL_FEATURES),
+            hours=frames,
+            score_note=SCORE_NOTE,
+            authority_boundary=BOUNDARY_SHORT,
+        )
 
     # ── /api/maintenance/queue ──────────────────────────────────────────────
 

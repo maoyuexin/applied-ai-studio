@@ -7,7 +7,7 @@ written in English, routed to one of eight specialist queues.
 | | Stage | What happens |
 |---|---|---|
 | 1 | **Ingestion and Provenance** | Where the complaints come from, what one row means, what was sampled |
-| 2 | **EDA and Text Preparation** | Team imbalance, the duplicate-letter discovery, and TF-IDF by hand |
+| 2 | **EDA and Text Preparation** | Team mix, one preparation flow, and TF-IDF by hand |
 | 3 | **Model Training** | Baseline, the deployed model, and a matched comparison against a transformer |
 | 4 | **Validation and Operating Policy** | Per-team results, the confidence rule, one frozen test scoring |
 | 5 | **Prediction, Routing Words and Handoff** | Three complaints end to end, then the exported contract |
@@ -41,7 +41,7 @@ check.
 
 ## Optional LLM comparison
 
-The notebook now has **107 cells, 50 code cells, and 9 charts**. Stage 6 is separate
+The notebook now has **88 cells, 39 code cells, and 5 charts**. Stage 6 is separate
 from the deployed TF-IDF classifier and 0.55 policy. It compares `gpt-5.4` with that
 classifier on 32 fixed test complaints, four per recorded team. Both receive the full
 narrative; the LLM receives team definitions but no known label or baseline answer.
@@ -98,7 +98,70 @@ node scripts/venv-python.mjs notebooks/complaint-routing/scripts/build_notebook.
 node scripts/venv-python.mjs notebooks/complaint-routing/scripts/prepare_app_artifacts.py
 ```
 
+## Simple preparation lesson
+
+Section 2.2 combines deduplication and team-label preparation into one flow:
+group product names into eight teams, remove identical texts, apply the team cap and
+sample, then split into training, validation, and test.
+
+The short output reports **1,093,131 extra copies removed from 2,634,602 mapped rows
+(41.5%)**, leaving 1,541,471 distinct texts (58.5%). These are recorded counts from
+the original 2023+ build window, not percentages of the 58,185 sampled complaints.
+The lesson explains leakage in words and keeps the caveat that reworded copies can
+remain. The detailed source evidence stays in `complaintlab`; no data, model,
+threshold, or app artifact changes are needed for this teaching edit.
+
+Regeneration preserves unchanged cells and outputs even when sections move. The HTML
+exporter checks the combined section and its executed percentages before writing.
+After editing, run:
+
+```bash
+node scripts/venv-python.mjs -m pytest notebooks/complaint-routing/tests/test_teaching_notebook.py -q
+```
+
+This teaching update is local until explicitly published to GitHub.
+
+Section 2.4 keeps the three-sentence TF-IDF example, sorted by descending number of
+complaints containing each term, with alphabetical ties. The count is across complaints,
+not repetitions within one complaint. All term counts and weights are unchanged. The
+separate row-width/zero-share demonstration is omitted from the lesson.
+
+The approved **two word clouds** remain alongside that table in Section 2.4. They use
+training complaint 10158370 about a canceled flight and a missing refund: one cloud
+sizes terms by their counts, the other by actual training-fitted TF-IDF weights. Both
+use the same 50 display terms. Removing filler and redacted tokens is a display choice
+only; the classifier is unchanged. The two images share one figure and are embedded in
+the saved notebook/HTML for offline use. Regeneration uses `requirements-visuals.txt`;
+the export guard rejects a missing or unexecuted cloud comparison.
+
+## Simple routing lesson
+
+Section 4 follows three questions: **How well does it find the right team? When should
+a clerk choose the team? What happened on the final test?** It keeps one recall table
+with plain-language labels, a routing flow with three made-up confidence scores, and
+one validation-versus-test summary. Exactly 0.55 still auto-routes; below it, a clerk
+chooses the team. A specialist handles every complaint after routing.
+
+The test result remains 6,833 auto-routed complaints (78.3%), 1,895 for human triage
+(21.7%), and 89.7% correct among auto-routes. That last result is slightly below the
+90% target reached on validation (90.2%), not a guarantee of future performance.
+Coverage is the share routed automatically, not routing accuracy or recall.
+
+The four detailed Section 4 charts and repeated metric tables are removed from the
+main lesson. Full precision, recall, F1, threshold comparisons, and test confusion
+counts remain in the evidence handoff. Tests check the saved-model results and exact
+0.55 boundary; the export guard checks both simplified lessons. No model, data,
+threshold, or deployed artifact is changed by this presentation update.
+
 ## Package layout
+
+Section 5 presents the same three complaints as visual walkthroughs: readable excerpts,
+an explicit routing decision and confidence cutoff, a separate recorded-label result,
+and labeled bars for all eight team probabilities and supporting words. Original
+explanations and the first routing-word plot are retained. Source facts remain under
+"Source details"; the offline HTML keeps each example's code under "Python code".
+The rendering uses escaped text and embedded styles, without remote assets or scripts.
+It does not change prediction, routing, or explanation calculations.
 
 ```text
 01_complaint_build.ipynb   Executed teaching notebook
@@ -137,10 +200,9 @@ Three properties of this data are teaching material in their own right:
   must consent to publication. The model learned the language of that minority.
 - **Personal details were removed by the publisher**, not by us — the `XXXX` blocks visible
   in every narrative are the CFPB's redactions.
-- **41.5% of narratives in the window were exact duplicates.** Credit-repair services file
-  the same template letter for thousands of consumers; one letter appears 27,496 times. They
-  are removed *before* the split is drawn. The first build of this dataset skipped that step
-  and reported 84.3% test accuracy where the honest number was 81.9%.
+- **41.5% of mapped rows repeated an earlier row's exact text.** Extra copies were removed
+  *before* sampling and splitting. Otherwise the same text can appear in both training
+  and testing, making evaluation look better than performance on new complaints.
 
 Credit reporting was capped at 1.5× the second-largest team before sampling. In the real
 window it is 4.8× debt collection, and without the cap the smaller teams never get enough

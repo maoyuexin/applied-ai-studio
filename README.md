@@ -153,6 +153,11 @@ npm run dev
 
 Open <http://127.0.0.1:5173>.
 
+Run `npm run dev` from the repository root for the full application. Starting
+only the web workspace does not start its APIs: Industry Workflows requires
+the catalog API on port 4310, and the maintenance simulator requires port 4380.
+A missing API can appear as a proxy error even when the web page itself loads.
+
 | Resource | Default address |
 | --- | --- |
 | React web | <http://127.0.0.1:5173> |
@@ -178,7 +183,7 @@ Module 4 demos are at <http://127.0.0.1:5173/credit> and
 workflows. See [Module 4: notebooks and demos](docs/module-4.md) for the notebook
 links, offline reports, and Codespaces instructions.
 
-Modules 5 and 6 add four more labs on the same pattern. Module 5 covers predictive maintenance on real compressor telemetry (<http://127.0.0.1:5173/maintenance>) and a grounded procedure assistant that cites public safety regulation and refuses when the answer is not in its library (<http://127.0.0.1:5173/procedures>). Module 6 covers demand forecasting with prediction intervals feeding a reorder rule (<http://127.0.0.1:5173/forecast>) and product recommendations evaluated on what a shopper has never bought (<http://127.0.0.1:5173/recommendations>). Every card exposes its complete workflow alongside the demo.
+Modules 5 and 6 add four more labs on the same pattern. Module 5 covers predictive maintenance on real compressor telemetry (<http://127.0.0.1:5173/maintenance>) and a grounded procedure assistant that cites public safety regulation and refuses when the answer is not in its library (<http://127.0.0.1:5173/procedures>). The maintenance evidence page opens a dedicated telemetry simulator at <http://127.0.0.1:5173/maintenance-simulator>: six actual feature values arrive sequentially at a selectable interval, then the authoritative score, cutoff decision, alert signal, report label, KPIs, and score history update. Module 6 covers demand forecasting with prediction intervals feeding a reorder rule (<http://127.0.0.1:5173/forecast>) and product recommendations evaluated on what a shopper has never bought (<http://127.0.0.1:5173/recommendations>). Every card exposes its complete workflow alongside the demo.
 
 The large datasets for these labs are published as GitHub Release assets rather than committed; `scripts/fetch-lab-data.mjs` downloads them once during Codespace creation, and `scripts/lab-data-manifest.json` records each file's checksum, licence and how to rebuild it from its original public source.
 

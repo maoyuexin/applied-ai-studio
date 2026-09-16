@@ -13,6 +13,8 @@ Important entry points:
 - `src/pages/CourseFlowPage.tsx` — detailed workflow analysis
 - `src/pages/FitAnalyzerPage.tsx` — deterministic AI fit and solution design
 - `src/pages/OnlineOrderPage.tsx` — customer, merchant, and scenario workspaces
+- `src/pages/MaintenancePage.tsx` — predictive-maintenance evidence and workload views
+- `src/pages/MaintenanceSimulatorPage.tsx` — dedicated sequential telemetry simulator
 - `src/pages/AskStudioPage.tsx` — sandboxed Copilot assistant
 - `src/index.css` — shared application and responsive design system
 

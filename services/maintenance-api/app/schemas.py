@@ -225,6 +225,40 @@ class FeatureFact(BaseModel):
     sentence: str
 
 
+class SimulatorFeatureReading(BaseModel):
+    name: str
+    display_name: str
+    value: float
+    value_text: str
+    typical_value: float
+    typical_text: str
+    direction_that_means_trouble: str
+
+
+class SimulatorHour(BaseModel):
+    hour: str
+    features: list[SimulatorFeatureReading]
+    score: float
+    alert: bool
+    reported_event: bool
+    event_name: str | None
+
+
+class SimulatorResponse(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+
+    window_id: str
+    label: str
+    purpose: str
+    model_type: str
+    model_version: str
+    threshold: float
+    feature_count: int
+    hours: list[SimulatorHour]
+    score_note: str
+    authority_boundary: str
+
+
 class ScoreResponse(BaseModel):
     model_config = ConfigDict(protected_namespaces=())
 

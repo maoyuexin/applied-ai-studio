@@ -6,6 +6,7 @@ const AskStudioPage = lazy(() => import("./pages/AskStudioPage"));
 const ComplaintsPage = lazy(() => import("./pages/ComplaintsPage"));
 const CreditPage = lazy(() => import("./pages/CreditPage"));
 const MaintenancePage = lazy(() => import("./pages/MaintenancePage"));
+const MaintenanceSimulatorPage = lazy(() => import("./pages/MaintenanceSimulatorPage"));
 const DemoPlaceholderPage = lazy(() => import("./pages/DemoPlaceholderPage"));
 const FitAnalyzerPage = lazy(() => import("./pages/FitAnalyzerPage"));
 const ForecastPage = lazy(() => import("./pages/ForecastPage"));
@@ -26,11 +27,15 @@ const load = (page: React.ReactNode) => (
 export default function App() {
   const location = useLocationSnapshot();
   const pathname = location.split("?", 1)[0];
-  const validPath = ["/workflow", "/demo", "/showcase", "/fit", "/ask", "/online-order", "/fraud", "/pneumonia", "/credit", "/complaints", "/maintenance", "/procedures", "/forecast", "/recommendations"].includes(pathname);
+  const validPath = ["/workflow", "/demo", "/showcase", "/fit", "/ask", "/online-order", "/fraud", "/pneumonia", "/credit", "/complaints", "/maintenance", "/maintenance-simulator", "/procedures", "/forecast", "/recommendations"].includes(pathname);
 
   useEffect(() => {
     if (!validPath) navigate("/showcase", { replace: true });
   }, [validPath]);
+
+  if (pathname === "/maintenance-simulator") {
+    return load(<MaintenanceSimulatorPage />);
+  }
 
   const page = pathname === "/workflow"
     ? <WorkflowPage />

@@ -250,6 +250,43 @@ def test_a_threshold_override_changes_the_route_without_changing_the_score() -> 
     asyncio.run(run())
 
 
+def test_simulator_streams_six_real_features_before_each_authoritative_score() -> None:
+    async def run() -> None:
+        app = create_app()
+        runtime = app.state.runtime
+        async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
+            response = await client.get(
+                "/api/maintenance/simulator?window_id=S5_F4_real_warning"
+            )
+            assert response.status_code == 200
+            result = response.json()
+            assert result["model_type"] == "one_sided_robust_z"
+            assert result["threshold"] == 6.0
+            assert result["feature_count"] == 6
+            assert len(result["hours"]) == 23
+            assert "technician" in result["authority_boundary"].lower()
+            for hour in result["hours"]:
+                stamp = pd.Timestamp(hour["hour"])
+                assert [feature["name"] for feature in hour["features"]] == list(
+                    runtime.matrix.columns
+                )
+                assert len(hour["features"]) == 6
+                for feature in hour["features"]:
+                    assert feature["value"] == float(runtime.matrix.loc[stamp, feature["name"]])
+                    assert feature["value_text"]
+                    assert feature["typical_text"]
+                assert hour["score"] == float(runtime.score.loc[stamp])
+                assert hour["alert"] is (hour["score"] >= result["threshold"])
+            event_hours = [hour for hour in result["hours"] if hour["reported_event"]]
+            assert event_hours
+            assert {hour["event_name"] for hour in event_hours} == {"F4"}
+            assert (await client.get(
+                "/api/maintenance/simulator?window_id=unknown"
+            )).status_code == 422
+
+    asyncio.run(run())
+
+
 def test_queue_recomputes_the_alert_workload_at_two_thresholds() -> None:
     async def run() -> None:
         app = create_app()

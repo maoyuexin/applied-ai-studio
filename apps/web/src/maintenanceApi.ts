@@ -205,6 +205,38 @@ export interface MaintenanceWindowScore {
   model_version: string;
 }
 
+export interface MaintenanceSimulatorFeature {
+  name: string;
+  display_name: string;
+  value: number;
+  value_text: string;
+  typical_value: number;
+  typical_text: string;
+  direction_that_means_trouble: string;
+}
+
+export interface MaintenanceSimulatorHour {
+  hour: string;
+  features: MaintenanceSimulatorFeature[];
+  score: number;
+  alert: boolean;
+  reported_event: boolean;
+  event_name: string | null;
+}
+
+export interface MaintenanceSimulation {
+  window_id: string;
+  label: string;
+  purpose: string;
+  model_type: string;
+  model_version: string;
+  threshold: number;
+  feature_count: number;
+  hours: MaintenanceSimulatorHour[];
+  score_note: string;
+  authority_boundary: string;
+}
+
 export interface MaintenanceMonthlyLoad {
   month: string;
   clean_hours: number;
@@ -282,6 +314,12 @@ export function getMaintenanceModel(): Promise<MaintenanceModelInfo> {
 
 export function getMaintenanceSamples(limit = 8): Promise<MaintenanceSampleWindow[]> {
   return requestJson<MaintenanceSampleWindow[]>(`/api/maintenance/samples?limit=${limit}`);
+}
+
+export function getMaintenanceSimulation(windowId: string): Promise<MaintenanceSimulation> {
+  return requestJson<MaintenanceSimulation>(
+    `/api/maintenance/simulator?window_id=${encodeURIComponent(windowId)}`,
+  );
 }
 
 export function getMaintenanceQueue(threshold?: number): Promise<MaintenanceQueue> {

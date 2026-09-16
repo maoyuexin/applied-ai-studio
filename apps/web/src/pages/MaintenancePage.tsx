@@ -9,10 +9,12 @@ import {
   ClipboardList,
   Clock,
   Database,
+  ExternalLink,
   Gauge,
   Info,
   Layers3,
   RefreshCcw,
+  RadioTower,
   Scale,
   SlidersHorizontal,
   Wrench,
@@ -43,6 +45,10 @@ const pageStyles = `
 .mnt-header { min-height: 82px; margin-bottom: 14px; display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
 .mnt-header h1 { margin: 3px 0 6px; font-size: 29px; line-height: 1.2; }
 .mnt-header p { max-width: 920px; margin: 0; color: var(--text-secondary); font-size: 14px; line-height: 1.55; }
+.mnt-header-tools { display: grid; gap: 8px; justify-items: stretch; }
+.mnt-simulator-link { min-height: 44px; padding: 0 13px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid rgba(232, 145, 60, 0.58); border-radius: 5px; background: rgba(232, 145, 60, 0.1); color: var(--orange-bright); font-size: 12px; font-weight: 700; text-decoration: none; transition: 180ms ease; }
+.mnt-simulator-link:hover { background: rgba(232, 145, 60, 0.17); border-color: var(--orange); color: var(--text); }
+.mnt-simulator-link:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
 .mnt-runtime-status { min-width: 262px; padding: 11px 13px; display: flex; align-items: center; gap: 10px; border: 1px solid var(--border); border-radius: 5px; background: var(--surface); }
 .mnt-runtime-status > span { width: 9px; height: 9px; flex: 0 0 auto; border-radius: 50%; background: var(--amber); box-shadow: 0 0 0 4px rgba(240, 180, 41, 0.1); }
 .mnt-runtime-status > span.ready { background: var(--green); box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.1); }
@@ -255,6 +261,7 @@ const pageStyles = `
 
 @media (max-width: 760px) {
   .mnt-header { flex-direction: column; }
+  .mnt-header-tools { width: 100%; }
   .mnt-header h1 { font-size: 23px; }
   .mnt-runtime-status { width: 100%; }
   .mnt-boundary-line { grid-template-columns: 20px minmax(0, 1fr); }
@@ -602,15 +609,26 @@ export default function MaintenancePage() {
             a maintenance planner can decide which hours are worth a technician's time.
           </p>
         </div>
-        <div className="mnt-runtime-status">
-          <span className={model ? "ready" : ""} />
-          <div>
-            <strong>{model ? "Live model ready" : "Connecting"}</strong>
-            <small>
-              {model
-                ? `FastAPI - ${model.model_type} - version ${model.model_version}`
-                : "FastAPI - reading notebook artifacts"}
-            </small>
+        <div className="mnt-header-tools">
+          <a
+            className="mnt-simulator-link"
+            href="/maintenance-simulator"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <RadioTower size={16} aria-hidden="true" /> Open telemetry simulator
+            <ExternalLink size={14} aria-hidden="true" />
+          </a>
+          <div className="mnt-runtime-status">
+            <span className={model ? "ready" : ""} />
+            <div>
+              <strong>{model ? "Live model ready" : "Connecting"}</strong>
+              <small>
+                {model
+                  ? `FastAPI - ${model.model_type} - version ${model.model_version}`
+                  : "FastAPI - reading notebook artifacts"}
+              </small>
+            </div>
           </div>
         </div>
       </header>

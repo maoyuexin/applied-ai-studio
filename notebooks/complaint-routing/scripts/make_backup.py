@@ -26,7 +26,38 @@ OUTPUT = BACKUP_DIR / "01_complaint_build.html"
 REQUIRE_URL = "https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"
 
 
+def collapse_walkthrough_code(document: BeautifulSoup) -> int:
+    """Keep example code accessible without putting it ahead of the visual output."""
+    count = 0
+    for cell in document.select(".jp-CodeCell"):
+        source = cell.select_one(".jp-InputArea")
+        if source is None or cell.select_one("details.walkthrough-code"):
+            continue
+        if cell.select_one(".complaint-view") is None and "# 5.4 THE WORDS THAT CAUSED THE ROUTE" not in source.get_text():
+            continue
+        details = document.new_tag("details", attrs={"class": "walkthrough-code"})
+        summary = document.new_tag("summary")
+        summary.string = "Python code"
+        source.wrap(details)
+        details.insert(0, summary)
+        count += 1
+    if count and document.head is not None:
+        style = document.new_tag("style", id="walkthrough-code-style")
+        style.string = """
+        .walkthrough-code { margin: 0 0 10px; }
+        .walkthrough-code > summary { cursor: pointer; min-height: 44px; padding: 10px 12px;
+          color: #505761; font-size: 14px; border-bottom: 1px solid #d8dde2; }
+        .walkthrough-code > summary:focus-visible { outline: 3px solid #08766d; }
+        """
+        document.head.append(style)
+    return count
+
+
 def main() -> None:
+    subprocess.run(
+        [sys.executable, str(PROJECT_DIR / "scripts/validate_teaching_notebook.py"), str(NOTEBOOK)],
+        check=True,
+    )
     BACKUP_DIR.mkdir(parents=True, exist_ok=True)
     subprocess.run(
         [
@@ -67,8 +98,10 @@ def main() -> None:
         renderer = document.new_tag("script", id="offline-plotly-runtime")
         renderer.string = get_plotlyjs()
         document.head.insert(0, renderer)
-        html = str(document)
         print("Embedded Plotly renderer from the installed package.")
+    collapsed = collapse_walkthrough_code(document)
+    html = str(document)
+    print(f"Walkthrough code disclosures: {collapsed}")
     OUTPUT.write_text(html, encoding="utf-8")
 
     remote_scripts = re.findall(r'<script[^>]*src="(https?://[^"]+)"', html)

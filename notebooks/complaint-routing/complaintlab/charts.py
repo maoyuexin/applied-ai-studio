@@ -30,6 +30,46 @@ def _layout(figure: go.Figure, title: str, height: int = 440) -> go.Figure:
 
 # ── Stage 1 ─────────────────────────────────────────────────────────────────
 
+def tfidf_word_clouds(train: pd.DataFrame) -> go.Figure:
+    """Render the same refund terms using frequency and TF-IDF sizes."""
+    import base64
+    from hashlib import sha256
+    from io import BytesIO
+    from matplotlib import font_manager
+    from wordcloud import WordCloud
+    from . import text_prep
+
+    words = text_prep.word_cloud_weights(train)
+    colors = ["#B3261E", "#D1495B", "#20242B", "#087F8C"]
+
+    def term_color(word, **kwargs):
+        return colors[int(sha256(word.encode()).hexdigest()[:8], 16) % len(colors)]
+
+    figure = make_subplots(
+        rows=2, cols=1, vertical_spacing=0.10,
+        subplot_titles=["Word frequency: repeated words grow", "TF-IDF: frequency plus rarity"],
+    )
+    for row_number, column in enumerate(["count", "weight"], start=1):
+        frequencies = dict(zip(words["term"], words[column]))
+        cloud = WordCloud(
+            width=1000, height=450, background_color="white",
+            font_path=font_manager.findfont("DejaVu Sans"),
+            max_words=len(words), random_state=42, relative_scaling=1,
+            prefer_horizontal=0.9, max_font_size=135, min_font_size=12,
+            margin=3, repeat=False, collocations=False, color_func=term_color,
+        ).generate_from_frequencies(frequencies)
+        image = BytesIO()
+        cloud.to_image().save(image, format="PNG")
+        figure.add_trace(go.Image(source="data:image/png;base64," + base64.b64encode(image.getvalue()).decode()), row=row_number, col=1)
+        figure.update_xaxes(visible=False, fixedrange=True, row=row_number, col=1)
+        figure.update_yaxes(visible=False, fixedrange=True, row=row_number, col=1)
+    _layout(figure, "A missing refund: two word clouds", height=790)
+    figure.update_layout(
+        margin=dict(l=10, r=10, t=95, b=20),
+        meta={**words.attrs, "terms": words.to_dict("records")},
+    )
+    return figure
+
 def narrative_volume() -> go.Figure:
     """Narrative complaints per year in the source database (not the sample)."""
     years = list(config.SOURCE_NARRATIVE_ROWS_PER_YEAR)

@@ -12,6 +12,7 @@ from .schemas import (
     SampleWindow,
     ScoreRequest,
     ScoreResponse,
+    SimulatorResponse,
 )
 
 UNAVAILABLE = (
@@ -99,6 +100,16 @@ def create_app(
         current: MaintenanceRuntime = Depends(require_runtime),
     ) -> QueueResponse:
         return current.queue(threshold)
+
+    @application.get("/api/maintenance/simulator", response_model=SimulatorResponse)
+    def simulator(
+        window_id: str = Query(min_length=1, max_length=64),
+        current: MaintenanceRuntime = Depends(require_runtime),
+    ) -> SimulatorResponse:
+        try:
+            return current.simulator_window(window_id)
+        except ValueError as error:
+            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(error))
 
     return application
 

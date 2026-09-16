@@ -12,7 +12,7 @@ The five sections match the five stages used in Modules 2 and 3:
 | 1 | **Data Ingestion and Provenance** | Verify the source, the license, the checksum, and what one row means |
 | 2 | **EDA and Feature Preparation** | Find the signal, set the protected attributes aside, build 7 features |
 | 3 | **Model Training** | Baseline, logistic regression, gradient boosting on one identical split |
-| 4 | **Validation and Operating Policy** | Turn scores into a money rule, compare feature removal, score the test split once |
+| 4 | **Validation and Operating Policy** | Use estimated loss to select a queue, compare feature removal, check the test split |
 | 5 | **Prediction, Reason Codes and Handoff** | Walk real accounts end to end and export the measured system |
 
 ## The authority boundary
@@ -64,11 +64,32 @@ Generation preserves saved cells whose source is unchanged. Re-execute edited ce
 and their affected dependents before publishing; matching source alone does not prove
 an output is still valid after an upstream change.
 
-The current notebook has **84 cells, 30 code cells, and 11 figures**. Section 1.2 shows
-five real rows before the monthly account example. Section 4.5 compares the same model
-before and after removing `SEX`, `MARRIAGE`, and `AGE` and retraining. Section 4.6 is
-a short fairness caveat; 4.7 checks the chosen model on unseen accounts. Detailed group
-checks are calculated in the Stage 5 handoff for the app, not displayed as teaching tables.
+The current notebook has **79 cells, 29 code cells, and 8 figures**. Section 1.2 shows
+five real rows before the monthly account example. Sections 4.1-4.4 follow one made-up
+account: a 30% risk estimate, a supplied loss assumption, a review decision, then the
+real validation confusion matrix. Section 4.5 compares models with and without the
+three demographic columns; 4.6 checks the chosen model on unseen accounts. Detailed
+probability, cost, and group checks remain in the Stage 5 handoff for the app.
+
+The `NT$10,000` value is an **illustrative review-queue cutoff, not the price of a human
+review**. Sections 5.1-5.6 rebuild the same three accounts around four questions:
+probability, loss if default happens, estimated loss, and entry into the queue. The
+account IDs, scores, cutoff, and queue counts are unchanged. Neither queue selection
+nor a later missed payment proves that an intervention would have saved money.
+
+The exporter runs `scripts/validate_teaching_notebook.py` before writing HTML. It
+rejects the old Section 4 headings, the removed diagnostic charts in the main lesson,
+review-price wording in place of the cutoff explanation, and missing example outputs.
+Tests also compile every generated code cell and check all three examples against the
+saved model. Run the regression checks after editing:
+
+```bash
+node scripts/venv-python.mjs -m pytest notebooks/credit-risk/tests/test_teaching_notebook.py -q
+```
+
+This restored teaching revision is local; a GitHub checkout may still contain the
+older lesson until the revision is explicitly published. The displayed comparison
+also omits PR-AUC, and the ROC guide uses a plain-language out-of-100 example.
 
 ## The notebook versus the standalone HTML
 
@@ -171,8 +192,13 @@ Measured on the 6,000 test accounts, scored once after everything above was froz
 | Precision among flagged | 0.4823 |
 | Recall of defaulters | 0.2766 |
 | Confusion | TP 367, FP 394, FN 960, TN 4,279 |
-| Net savings vs reviewing nobody | `NT$14,623,904` |
 | Cost of excluding the protected attributes | 0.0015 AUC |
+
+The unchanged app evidence separately retains hypothetical net savings of `NT$14,623,904`.
+That simulation assumes `NT$10,000` per review and complete prevention of the modeled loss
+on reviewed accounts that default. Neither assumption is verified by this dataset; the
+amount is not measured financial benefit. The student lesson no longer uses it to justify
+the queue. The legacy parameter name `REVIEW_COST_NT` is retained for compatibility.
 
 ## Artifacts
 

@@ -22,6 +22,8 @@ import sys
 import urllib.request
 from pathlib import Path
 
+import nbformat
+
 PROJECT_DIR = Path(__file__).resolve().parents[1]
 NOTEBOOK = PROJECT_DIR / "01_pdm_build.ipynb"
 BACKUP_DIR = PROJECT_DIR / "backup"
@@ -29,12 +31,19 @@ OUTPUT = BACKUP_DIR / "01_pdm_build.html"
 
 REQUIRE_URL = "https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"
 
-EXPECTED_FIGURES = 11
+EXPECTED_FIGURES = 7
 
 
 def main() -> None:
     if not NOTEBOOK.exists():
         raise SystemExit(f"{NOTEBOOK} does not exist. Build and execute the notebook first.")
+    notebook = nbformat.read(NOTEBOOK, as_version=4)
+    nbformat.validate(notebook)
+    for cell in notebook.cells:
+        if cell.cell_type == "code" and (cell.execution_count is None or any(
+            output.output_type == "error" for output in cell.outputs
+        )):
+            raise SystemExit("Execute all notebook cells successfully before exporting.")
     BACKUP_DIR.mkdir(parents=True, exist_ok=True)
 
     subprocess.run(
@@ -59,6 +68,7 @@ def main() -> None:
         r'<script[^>]*src="https://cdnjs\.cloudflare\.com/ajax/libs/mathjax[^"]*"[^>]*>\s*</script>',
         "", html,
     )
+    html = re.sub(r"(?m)^[ \t]+$", "", html)
     OUTPUT.write_text(html, encoding="utf-8")
 
     remote = (

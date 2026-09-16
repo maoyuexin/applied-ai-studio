@@ -1,0 +1,89 @@
+{
+  "model": "gpt-5.4",
+  "captured_at": "2026-09-16T15:01:28.949045+00:00",
+  "system_sha256": "314b3426cb6b8b1ac37324a3a4ed25fbdc95abcd32414198ef2ea42f3c26cb51",
+  "sources_sha256": "007823cf1927d5f94b3fe32c2ffabe62ebcce632cfe5f9ef24cc759584b90b60",
+  "note": "Actual LLM responses, not hand-written answers. Demonstration examples, not a benchmark.",
+  "records": [
+    {
+      "prompt": "{\n  \"question\": \"How long must we keep a canceled confined-space entry permit?\",\n  \"passages\": [\n    {\n      \"citation\": \"29 CFR 1910.146(e)(6)\",\n      \"text\": \"(6) The employer shall retain each canceled entry permit for at least 1 year to facilitate the review of the permit-required confined space program required by paragraph (d)(14) of this section. Any problems encountered during an entry operation shall be noted on the pertinent permit so that appropriate revisions to the permit space program can be made.\"\n    },\n    {\n      \"citation\": \"29 CFR 1910.147(c)(6)(i)\",\n      \"text\": \"(6) Periodic inspection. (i) The employer shall conduct a periodic inspection of the energy control procedure at least annually to ensure that the procedure and the requirements of this standard are being followed.\"\n    }\n  ]\n}",
+      "prompt_sha256": "7597f500ab1bc87242779bfeba50e9411b7e3bccc91eeec19594b470b393efa4",
+      "response": {
+        "answerable": true,
+        "answer": "A canceled confined-space entry permit must be retained for at least 1 year.",
+        "citation": "29 CFR 1910.146(e)(6)",
+        "quote": "The employer shall retain each canceled entry permit for at least 1 year to facilitate the review of the permit-required confined space program required by paragraph (d)(14) of this section."
+      },
+      "raw_response": "{\"answerable\":true,\"answer\":\"A canceled confined-space entry permit must be retained for at least 1 year.\",\"citation\":\"29 CFR 1910.146(e)(6)\",\"quote\":\"The employer shall retain each canceled entry permit for at least 1 year to facilitate the review of the permit-required confined space program required by paragraph (d)(14) of this section.\"}",
+      "usage": {
+        "reported_model": "gpt-5.4",
+        "input_tokens": 3166,
+        "output_tokens": 134
+      }
+    },
+    {
+      "prompt": "{\n  \"question\": \"After we close a confined-space entry permit, how long should it stay on file?\",\n  \"passages\": [\n    {\n      \"citation\": \"29 CFR 1910.146(e)(6)\",\n      \"text\": \"(6) The employer shall retain each canceled entry permit for at least 1 year to facilitate the review of the permit-required confined space program required by paragraph (d)(14) of this section. Any problems encountered during an entry operation shall be noted on the pertinent permit so that appropriate revisions to the permit space program can be made.\"\n    },\n    {\n      \"citation\": \"29 CFR 1910.147(c)(6)(i)\",\n      \"text\": \"(6) Periodic inspection. (i) The employer shall conduct a periodic inspection of the energy control procedure at least annually to ensure that the procedure and the requirements of this standard are being followed.\"\n    }\n  ]\n}",
+      "prompt_sha256": "70e44552f82b0a41681338b0b16920f5e210e9fb4c700228eec63b4afa63315a",
+      "response": {
+        "answerable": true,
+        "answer": "Retain each canceled confined-space entry permit for at least 1 year.",
+        "citation": "29 CFR 1910.146(e)(6)",
+        "quote": "The employer shall retain each canceled entry permit for at least 1 year to facilitate the review of the permit-required confined space program required by paragraph (d)(14) of this section."
+      },
+      "raw_response": "{\"answerable\":true,\"answer\":\"Retain each canceled confined-space entry permit for at least 1 year.\",\"citation\":\"29 CFR 1910.146(e)(6)\",\"quote\":\"The employer shall retain each canceled entry permit for at least 1 year to facilitate the review of the permit-required confined space program required by paragraph (d)(14) of this section.\"}",
+      "usage": {
+        "reported_model": "gpt-5.4",
+        "input_tokens": 3171,
+        "output_tokens": 149
+      }
+    },
+    {
+      "prompt": "{\n  \"question\": \"How often must the energy control procedure receive a periodic inspection?\",\n  \"passages\": [\n    {\n      \"citation\": \"29 CFR 1910.147(c)(6)(i)\",\n      \"text\": \"(6) Periodic inspection. (i) The employer shall conduct a periodic inspection of the energy control procedure at least annually to ensure that the procedure and the requirements of this standard are being followed.\"\n    },\n    {\n      \"citation\": \"29 CFR 1910.178(l)(4)(iii)\",\n      \"text\": \"(iii) An evaluation of each powered industrial truck operator's performance shall be conducted at least once every three years.\"\n    }\n  ]\n}",
+      "prompt_sha256": "9feae15fafabd1436c1c21ebd0b692250b8c1b9d973d8e35a6a441b3160c44d8",
+      "response": {
+        "answerable": true,
+        "answer": "The energy control procedure must receive a periodic inspection **at least annually**.",
+        "citation": "29 CFR 1910.147(c)(6)(i)",
+        "quote": "The employer shall conduct a periodic inspection of the energy control procedure at least annually to ensure that the procedure and the requirements of this standard are being followed."
+      },
+      "raw_response": "{\"answerable\":true,\"answer\":\"The energy control procedure must receive a periodic inspection **at least annually**.\",\"citation\":\"29 CFR 1910.147(c)(6)(i)\",\"quote\":\"The employer shall conduct a periodic inspection of the energy control procedure at least annually to ensure that the procedure and the requirements of this standard are being followed.\"}",
+      "usage": {
+        "reported_model": "gpt-5.4",
+        "input_tokens": 3124,
+        "output_tokens": 139
+      }
+    },
+    {
+      "prompt": "{\n  \"question\": \"How often must a powered industrial truck operator's performance be evaluated?\",\n  \"passages\": [\n    {\n      \"citation\": \"29 CFR 1910.178(l)(4)(iii)\",\n      \"text\": \"(iii) An evaluation of each powered industrial truck operator's performance shall be conducted at least once every three years.\"\n    },\n    {\n      \"citation\": \"29 CFR 1910.147(c)(6)(i)\",\n      \"text\": \"(6) Periodic inspection. (i) The employer shall conduct a periodic inspection of the energy control procedure at least annually to ensure that the procedure and the requirements of this standard are being followed.\"\n    }\n  ]\n}",
+      "prompt_sha256": "3dd1b3c3b190a8fc889e865cf95bb728f6176ecbcf62d3a8e34dea497d5d0fb6",
+      "response": {
+        "answerable": true,
+        "answer": "At least once every three years.",
+        "citation": "29 CFR 1910.178(l)(4)(iii)",
+        "quote": "(iii) An evaluation of each powered industrial truck operator's performance shall be conducted at least once every three years."
+      },
+      "raw_response": "{\"answerable\":true,\"answer\":\"At least once every three years.\",\"citation\":\"29 CFR 1910.178(l)(4)(iii)\",\"quote\":\"(iii) An evaluation of each powered industrial truck operator's performance shall be conducted at least once every three years.\"}",
+      "usage": {
+        "reported_model": "gpt-5.4",
+        "input_tokens": 3125,
+        "output_tokens": 129
+      }
+    },
+    {
+      "prompt": "{\n  \"question\": \"How long must we keep invoices for replacement compressor parts?\",\n  \"passages\": [\n    {\n      \"citation\": \"29 CFR 1910.178(l)(4)(iii)\",\n      \"text\": \"(iii) An evaluation of each powered industrial truck operator's performance shall be conducted at least once every three years.\"\n    },\n    {\n      \"citation\": \"29 CFR 1910.147(c)(6)(i)\",\n      \"text\": \"(6) Periodic inspection. (i) The employer shall conduct a periodic inspection of the energy control procedure at least annually to ensure that the procedure and the requirements of this standard are being followed.\"\n    }\n  ]\n}",
+      "prompt_sha256": "28d0a58589585eb275a9ea337aa2dd3a1c8bb78bf91e779189f9995c33ebb554",
+      "response": {
+        "answerable": false,
+        "answer": "I cannot answer from these excerpts.",
+        "citation": "",
+        "quote": ""
+      },
+      "raw_response": "{\"answerable\":false,\"answer\":\"I cannot answer from these excerpts.\",\"citation\":\"\",\"quote\":\"\"}",
+      "usage": {
+        "reported_model": "gpt-5.4",
+        "input_tokens": 3123,
+        "output_tokens": 73
+      }
+    }
+  ]
+}
