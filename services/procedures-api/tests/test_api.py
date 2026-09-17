@@ -171,6 +171,28 @@ def test_model_card_accepts_artifacts_without_an_optional_phrasing_note(monkeypa
     asyncio.run(run())
 
 
+def test_model_card_preserves_evidence_from_flat_setup_artifacts(monkeypatch) -> None:
+    application = app_once()
+    runtime = application.state.runtime
+    expected = runtime.model_info().model_dump()
+    duplicate = expected["evaluation"]["duplicate_corpus"]
+    monkeypatch.setitem(runtime.evaluation["duplicate_corpus"], "collateral", {
+        "main_hit@5_before": duplicate["main_hit_at_5_before"],
+        "main_hit@5_after": duplicate["main_hit_at_5_after"],
+        "corpus_growth": duplicate["corpus_growth"],
+    })
+
+    async def run() -> None:
+        async with AsyncClient(
+            transport=ASGITransport(app=application), base_url="http://test"
+        ) as client:
+            response = await client.get("/api/procedures/model")
+            assert response.status_code == 200
+            assert response.json() == expected
+
+    asyncio.run(run())
+
+
 def test_questions_expose_the_refusals_and_the_discussion_case() -> None:
     async def run() -> None:
         async with AsyncClient(

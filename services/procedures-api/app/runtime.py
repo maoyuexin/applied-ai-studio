@@ -671,8 +671,14 @@ class ProcedureRuntime:
             tfidf_cite_hit_at_1_after=float(tfidf["cite_hit@1_after"]),
             tfidf_right_text_wrong_rule=float(tfidf["right_text_wrong_rule@1_after"]),
             corpus_growth=float(collateral["corpus_growth"]),
-            main_hit_at_5_before=float(collateral["before"]["main_hit@5"]),
-            main_hit_at_5_after=float(collateral["after"]["main_hit@5"]),
+            main_hit_at_5_before=float(
+                collateral["before"]["main_hit@5"] if "before" in collateral
+                else collateral["main_hit@5_before"]
+            ),
+            main_hit_at_5_after=float(
+                collateral["after"]["main_hit@5"] if "after" in collateral
+                else collateral["main_hit@5_after"]
+            ),
             lesson=DUPLICATE_LESSON,
         )
 

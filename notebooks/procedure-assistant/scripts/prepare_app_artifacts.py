@@ -99,9 +99,9 @@ def main() -> None:
         "tfidf": _pair(evaluate.duplicate_measure(tfidf, msha),
                        evaluate.duplicate_measure(duplicate_tfidf, msha)),
         "collateral": {
-            "main_hit@5_before": retrieval.overall(results[minilm.display])["hit@5"],
-            "main_hit@5_after": retrieval.overall(
-                retrieval.evaluate(duplicate_minilm, questions))["hit@5"],
+            "before": {"main_hit@5": retrieval.overall(results[minilm.display])["hit@5"]},
+            "after": {"main_hit@5": retrieval.overall(
+                retrieval.evaluate(duplicate_minilm, questions))["hit@5"]},
             "corpus_growth": round(len(all_chunks) / len(chunks) - 1, 3),
         },
     }
@@ -198,6 +198,9 @@ def _phrasing(results: dict) -> dict:
     minilm = retrieval.overall(results["MiniLM sentence embeddings"])
     return {
         "research_tfidf_hit1": config.SPIKE["research_tfidf_hit1_claim"],
+        "note": (
+            "The first number was measured on questions generated from the passage "
+            "text; the others on technician-phrased questions."),
         "research_note": (
             "Measured earlier on questions generated from the passage text. A "
             "question built by paraphrasing the passage hands a keyword matcher "
