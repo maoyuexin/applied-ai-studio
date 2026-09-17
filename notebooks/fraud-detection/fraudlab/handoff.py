@@ -26,6 +26,7 @@ from . import config, features
 SKOPS_TRUSTED_TYPES = [
     "imblearn.pipeline.Pipeline",
     "imblearn.under_sampling._prototype_selection._random_under_sampler.RandomUnderSampler",
+    "sklearn.tree._tree.Tree",
 ]
 
 # Everything the scorer needs, plus the fields a UI has to show a human. Derived

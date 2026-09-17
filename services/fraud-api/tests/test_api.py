@@ -5,6 +5,47 @@ from httpx import ASGITransport, AsyncClient
 from app.main import create_app
 
 
+def test_locally_trained_forest_exports_with_explicit_trusted_types(tmp_path, monkeypatch) -> None:
+    """Only the known types in our own trained pipeline may be deserialized."""
+    import mlflow.pyfunc
+    import numpy as np
+    import pandas as pd
+    from imblearn.pipeline import Pipeline
+    from imblearn.under_sampling import RandomUnderSampler
+    from sklearn.ensemble import RandomForestClassifier
+
+    from fraudlab import handoff
+
+    frame = pd.DataFrame({"amt": [1.0, 2.0, 3.0, 4.0, 10.0, 20.0], "is_fraud": [0, 0, 0, 0, 1, 1]})
+    matrix = frame[["amt"]]
+    model = Pipeline([
+        ("sampler", RandomUnderSampler(random_state=42)),
+        ("classifier", RandomForestClassifier(n_estimators=3, random_state=42)),
+    ]).fit(matrix, frame["is_fraud"])
+    monkeypatch.setattr(handoff.features, "feature_matrix", lambda rows: (rows[["amt"]], rows["is_fraud"]))
+
+    assert set(handoff.SKOPS_TRUSTED_TYPES) == {
+        "imblearn.pipeline.Pipeline",
+        "imblearn.under_sampling._prototype_selection._random_under_sampler.RandomUnderSampler",
+        "sklearn.tree._tree.Tree",
+    }
+    handoff.export(
+        model=model,
+        model_name="Random forest",
+        leaderboard=pd.DataFrame(),
+        bakeoff=pd.DataFrame(),
+        balancing_treatment="Random undersample",
+        result={"threshold": 0.5},
+        feature_columns=["amt"],
+        test_frame=frame,
+        selection_rationale="Locally trained export regression fixture",
+        artifact_dir=tmp_path,
+    )
+    assert (tmp_path / "mlflow_model" / "MLmodel").is_file()
+    restored = mlflow.pyfunc.load_model(tmp_path / "mlflow_model")
+    np.testing.assert_allclose(restored.predict(matrix), model.predict_proba(matrix), rtol=0, atol=1e-12)
+
+
 def test_model_samples_and_score_contract() -> None:
     async def run() -> None:
         app = create_app()
