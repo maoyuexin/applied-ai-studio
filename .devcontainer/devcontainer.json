@@ -4,10 +4,11 @@
 
   // Every feature is a download from ghcr.io at create time, and each one is a way the
   // build can fail. The GitHub CLI was here for convenience and nothing in this app uses
-  // it, so it is gone - two dependencies instead of three.
+  // it, so it is gone.
   "features": {
     "ghcr.io/devcontainers/features/node:1": { "version": "22" },
-    "ghcr.io/devcontainers/features/python:1": { "version": "3.11" }
+    "ghcr.io/devcontainers/features/python:1": { "version": "3.11" },
+    "ghcr.io/devcontainers/features/sshd:1": { "version": "latest" }
   },
 
   "postCreateCommand": "bash .devcontainer/post-create.sh",
