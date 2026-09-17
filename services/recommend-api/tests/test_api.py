@@ -26,6 +26,33 @@ def read_manifest() -> pd.DataFrame:
     return manifest
 
 
+def test_default_setup_verifies_without_rebuilding_artifacts(monkeypatch) -> None:
+    import hashlib
+    import runpy
+    import sys
+
+    from reclab import handoff, models
+
+    script = DEFAULT_ARTIFACT_DIR.parent / "scripts" / "prepare_app_artifacts.py"
+    namespace = runpy.run_path(str(script))
+    monkeypatch.setattr(sys, "argv", [str(script)])
+
+    def reject_rebuild(*args, **kwargs):
+        raise AssertionError("Default setup must not rebuild a validated bundle")
+
+    monkeypatch.setattr(models, "fit_all", reject_rebuild)
+    before = {
+        name: hashlib.sha256((DEFAULT_ARTIFACT_DIR / name).read_bytes()).hexdigest()
+        for name in handoff.ARTIFACT_ORDER
+    }
+    namespace["main"]()
+    after = {
+        name: hashlib.sha256((DEFAULT_ARTIFACT_DIR / name).read_bytes()).hexdigest()
+        for name in handoff.ARTIFACT_ORDER
+    }
+    assert after == before
+
+
 def test_health_reports_the_loaded_artifacts() -> None:
     async def run() -> None:
         app = create_app()

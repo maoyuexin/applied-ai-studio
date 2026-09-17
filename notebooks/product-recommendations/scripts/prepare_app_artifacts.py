@@ -15,6 +15,7 @@ interaction log is committed, the split is deterministic, and the seed is 42.
 
 from __future__ import annotations
 
+import argparse
 import sys
 import time
 from pathlib import Path
@@ -31,8 +32,21 @@ DAMPING_ALPHAS = [0.0, 0.25, 0.5]
 
 
 def main() -> None:
-    started = time.perf_counter()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--force", action="store_true",
+        help="Rebuild and replace the validated artifact bundle.",
+    )
+    options = parser.parse_args()
+    bundle_present = all(
+        (config.ARTIFACT_DIR / name).is_file() for name in handoff.ARTIFACT_ORDER
+    )
+    if bundle_present and not options.force:
+        identity = handoff.verify()
+        print(f"Using validated recommendation artifacts: {identity['status']}.")
+        return
 
+    started = time.perf_counter()
     print("Loading the committed interaction log...")
     frame = data.load_interactions()
     descriptions = data.load_descriptions()

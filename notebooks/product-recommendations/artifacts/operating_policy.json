@@ -1,0 +1,113 @@
+{
+ "slots": 10,
+ "module_title": "Recommended for you",
+ "ranking_model": "item_item_cosine_top15",
+ "eligibility": "products the customer has NEVER purchased in the training window",
+ "personalize_if": "the customer appears in the training matrix - at least 5 distinct products bought before the cut",
+ "statement": "10 slots, module titled \"Recommended for you\"\n\nfor each shopper:\n    if the shopper is in the training matrix\n       (the customer appears in the training matrix - at least 5 distinct products bought before the cut):\n        rank = item_item_cosine_top15 scored over\n               products the customer has NEVER purchased in the training window\n        remove anything on the merchandiser's exclusion list\n        fill 10 slots\n        if fewer than 10 products score above zero, backfill from the\n           fallback list and re-label the backfilled slots\n    else:\n        show the fallback list, labeled \"Popular right now\"\n        - NOT \"Recommended for you\"\n\nfallback = recent revenue, last 28 days of the training window, refreshed weekly\n\nProducts the shopper already owns are never eligible for these slots. They\nbelong to a separate \"Buy it again\" strip, which is a replenishment\nreminder and is never counted, measured or reported as personalization.\n\nmerchandisers own the exclusion list and the placement; the model only ranks products within the rules they set.",
+ "fallback": {
+  "rule": "recent revenue, last 28 days of the training window",
+  "window_days": 28,
+  "refresh": "weekly",
+  "label": "Popular right now",
+  "never_label_it": "Recommended for you",
+  "items": [
+   {
+    "slot": 1,
+    "stock_code": "22423",
+    "description": "REGENCY CAKESTAND 3 TIER",
+    "revenue_in_window": 7436.7
+   },
+   {
+    "slot": 2,
+    "stock_code": "85099B",
+    "description": "JUMBO BAG RED RETROSPOT",
+    "revenue_in_window": 7252.28
+   },
+   {
+    "slot": 3,
+    "stock_code": "47566",
+    "description": "PARTY BUNTING",
+    "revenue_in_window": 5003.05
+   },
+   {
+    "slot": 4,
+    "stock_code": "85123A",
+    "description": "WHITE HANGING HEART T-LIGHT HOLDER",
+    "revenue_in_window": 4887.75
+   },
+   {
+    "slot": 5,
+    "stock_code": "23298",
+    "description": "SPOTTY BUNTING",
+    "revenue_in_window": 4809.85
+   },
+   {
+    "slot": 6,
+    "stock_code": "23203",
+    "description": "JUMBO BAG VINTAGE DOILY",
+    "revenue_in_window": 4556.28
+   },
+   {
+    "slot": 7,
+    "stock_code": "23199",
+    "description": "JUMBO BAG APPLES",
+    "revenue_in_window": 4316.04
+   },
+   {
+    "slot": 8,
+    "stock_code": "23084",
+    "description": "RABBIT NIGHT LIGHT",
+    "revenue_in_window": 3556.0
+   },
+   {
+    "slot": 9,
+    "stock_code": "22386",
+    "description": "JUMBO BAG PINK POLKADOT",
+    "revenue_in_window": 3551.92
+   },
+   {
+    "slot": 10,
+    "stock_code": "84879",
+    "description": "ASSORTED COLOUR BIRD ORNAMENT",
+    "revenue_in_window": 3187.53
+   }
+  ]
+ },
+ "reorder_surface": {
+  "title": "Buy it again",
+  "rule": "products the shopper has already bought, most-ordered first",
+  "never": "counted, measured or reported as personalization, and never mixed into the recommendation slots"
+ },
+ "human_authority": "merchandisers own the exclusion list and the placement; the model only ranks products within the rules they set",
+ "service_must": [
+  "Label the fallback list \"Popular right now\" and never \"Recommended for you\".",
+  "Apply the merchandiser exclusion list before filling any slot.",
+  "Never place an already-bought product in a recommendation slot.",
+  "Re-label any slot backfilled from the fallback list.",
+  "Show nothing at all rather than a ranking built from a zero score vector."
+ ],
+ "measured_at_this_policy": {
+  "test_window_customers": 2893,
+  "personalized_customers": 2245,
+  "personalized_share": 0.7760110611821639,
+  "fallback_customers": 648,
+  "fallback_share": 0.22398893881783616,
+  "customers_needing_partial_backfill": 0,
+  "partial_backfill_share": 0.0,
+  "slots_total": 28930,
+  "slots_from_fallback": 6480,
+  "fallback_slot_share": 0.22398893881783616,
+  "guest_baskets_in_test": 306,
+  "guest_revenue_share_of_test": 0.1455119103193283,
+  "guest_fallback_share": 1.0
+ },
+ "boundary": "This system orders a list of products for one merchandising slot. Its hit rate is measured against what customers happened to buy next in one 13-week window of one retailer's history. That is not a revenue measurement and it is not a causal claim: the best model here reaches 3.53% of the revenue available on products new to the customer, against 2.81% for a list with no personalization in it at all, and even that gap is an upper bound because it credits the model for purchases the customer may have made anyway. A recommendation is not a statement about what the shopper needs. Merchandisers own placement and exclusions. Nothing here describes any real retailer's current operations.",
+ "prohibited_claims": [
+  "offline ranking scores are not evidence of revenue",
+  "a recommendation is not a statement about what the shopper needs",
+  "a hit rate measured on one 13-week window is not a business case",
+  "nothing here is a statement about any real retailer's operations",
+  "the 5%-conversion feedback-loop simulation is a labeled classroom assumption, not a measurement"
+ ]
+}

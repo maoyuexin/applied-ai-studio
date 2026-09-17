@@ -1,0 +1,91 @@
+{
+ "name": "Product recommendation - discovery ranking for one storefront slot",
+ "version": "Online Retail II split 2011-09-09",
+ "generated": "2026-09-03T17:28:46+00:00",
+ "deployed_model": {
+  "id": "item_item_cosine_top15",
+  "label": "Item-item CF (top-15)",
+  "how_it_works": "The same idea, but each product keeps only its 15 closest neighbours and forgets the rest.",
+  "neighbours_kept": 15,
+  "scoring": "one sparse matrix multiply: the customer's history row @ S",
+  "why_not_the_most_accurate_model": "TruncatedSVD (64) scores 0.0281 higher on discovery HR@10 and cannot say why a product is in the list. Item-item can name the product the customer already bought. It also covers more of the catalog and ships in 0.26 MB."
+ },
+ "what_it_does": "Given a customer who has bought at least 5 distinct products, it ranks products that customer has NEVER bought and fills 10 slots under the heading \"Recommended for you\".",
+ "what_it_does_not_do": [
+  "It does not decide what a shopper needs.",
+  "It does not measure revenue. Its scores are offline ranking scores.",
+  "It does not choose placement or exclusions - merchandisers do.",
+  "It does not fill the \"Buy it again\" strip, and reorders are never counted as personalization.",
+  "It does not serve customers with no history. They get a labeled generic list instead, and the label says so."
+ ],
+ "boundary": "This system orders a list of products for one merchandising slot. Its hit rate is measured against what customers happened to buy next in one 13-week window of one retailer's history. That is not a revenue measurement and it is not a causal claim: the best model here reaches 3.53% of the revenue available on products new to the customer, against 2.81% for a list with no personalization in it at all, and even that gap is an upper bound because it credits the model for purchases the customer may have made anyway. A recommendation is not a statement about what the shopper needs. Merchandisers own placement and exclusions. Nothing here describes any real retailer's current operations.",
+ "prohibited_claims": [
+  "offline ranking scores are not evidence of revenue",
+  "a recommendation is not a statement about what the shopper needs",
+  "a hit rate measured on one 13-week window is not a business case",
+  "nothing here is a statement about any real retailer's operations",
+  "the 5%-conversion feedback-loop simulation is a labeled classroom assumption, not a measurement"
+ ],
+ "intended_users": "Merchandising and analytics staff who own the storefront module and the exclusion list. Every list it produces is shown inside rules a person set.",
+ "data": {
+  "source": "Online Retail II",
+  "license": "CC BY 4.0",
+  "citation": "Chen, D. (2019). Online Retail II. UCI Machine Learning Repository. https://doi.org/10.24432/C5CG6D",
+  "population": "one UK-registered, non-store online retailer selling giftware, mostly to wholesale buyers, 2009-12-01 to 2011-12-09",
+  "products_in_the_catalog": 4443,
+  "customers_in_the_matrix": 4962,
+  "split": "2011-09-09",
+  "sparsity": 0.98228
+ },
+ "measured": {
+  "protocols_reported": [
+   "standard next-purchase",
+   "discovery"
+  ],
+  "standard_next_purchase": {
+   "Random 10": 0.0784,
+   "Popularity": 0.5713,
+   "Fallback: recent revenue 28d": 0.5526,
+   "Item-item CF (full matrix)": 0.6261,
+   "Item-item CF (top-15)": 0.6533,
+   "TruncatedSVD (64)": 0.7594,
+   "Reorder (already-bought)": 0.7995
+  },
+  "discovery": {
+   "Random 10": 0.0604,
+   "Popularity": 0.2947,
+   "Fallback: recent revenue 28d": 0.3007,
+   "Item-item CF (full matrix)": 0.3644,
+   "Item-item CF (top-15)": 0.4156,
+   "TruncatedSVD (64)": 0.4437,
+   "Reorder (already-bought)": 0.0217
+  },
+  "deployed_discovery_HR@10": 0.4156,
+  "deployed_discovery_coverage": 0.2577,
+  "deployed_share_of_new_product_revenue": 0.0353,
+  "no_personalization_share_of_new_product_revenue": 0.0281,
+  "customers_who_cannot_be_personalized": 0.22398893881783616
+ },
+ "known_limits": [
+  "The reorder baseline wins every accuracy metric on the standard protocol (0.7995 against 0.6533) and finishes below ten random products on discovery (0.0217 against 0.0604). Both numbers are real. They encode two different definitions of success, and a leaderboard without its protocol written on it is not a result.",
+  "The measured gain over a list with no personalization in it is 0.0353 against 0.0281 of available new-product revenue - and that is an upper bound, because it credits the model for purchases the customer may have made anyway.",
+  "Popularity reaches a respectable hit rate while recommending from a tiny slice of the catalog. Coverage and novelty must print beside every accuracy number or that is invisible.",
+  "Handed an empty history the model returns the zero vector, and the ten products that come back are an arbitrary tie-break. The policy sends those customers to the labeled fallback instead.",
+  "Guest checkouts carry no customer id at all. They are a different population from cold registered customers and the two shares must never be added together.",
+  "Everything here is measured on one 13-week test window of one UK giftware wholesaler's history in 2011. It is not a statement about any real retailer's current operations."
+ ],
+ "evaluation": {
+  "standard_customers_scored": 2244,
+  "discovery_customers_scored": 2168,
+  "metrics": [
+   "HR@10",
+   "Precision@10",
+   "Recall@10",
+   "NDCG@10",
+   "Coverage",
+   "Novelty",
+   "Mean pop rank"
+  ],
+  "reload_check": null
+ }
+}
