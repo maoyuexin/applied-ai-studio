@@ -1,4 +1,15 @@
-"""Build the five-stage anomaly notebook; do not replace the separate app model."""
+"""Build the five-stage anomaly notebook; do not replace the separate app model.
+
+Revised 2026-09-18 after the instructor's flow review for undergraduates with
+little data-science background. Changes against the 2026-09-16 walkthrough:
+a physics story opens the feature stage; the seven months are shown as one
+timeline with the four leaks marked; a raw-signal day comparison lets students
+see a leak before any feature exists; the baseline's internals and the
+scikit-learn parameter notes are cut; the review line is named once; a
+scorecard adds the practice-month and final-check results together; the cost
+check moves into validation and shows the final check only; the worked
+prediction scores the F4 warning hour; the app-artifact check is gone.
+"""
 from __future__ import annotations
 
 import hashlib
@@ -37,13 +48,13 @@ We built a fraud classifier from transaction records and a pneumonia-label class
 images. This time the data scientist faces a different problem: **we have lots of equipment
 readings but very few confirmed failures. How can we find unusual operation?**
 
-| Stage | What happens |
+| Stage | Question it answers |
 |---|---|
-| 1. Data Ingestion | Load, profile, inspect, and separate the time periods |
-| 2. EDA and Feature Engineering | Turn sensor minutes into meaningful hourly inputs |
-| 3. Model Training | Fit two anomaly detectors without failure labels and compare them |
-| 4. Model Validation | Freeze the cutoff, check later data, and inspect mistakes |
-| 5. Model Prediction | Score a new hour, explain the review request, and define the handoff |
+| 1. Data Ingestion | What data do we have, what can we trust, and how are the months split? |
+| 2. EDA and Feature Engineering | Which six numbers describe one hour, and why those six? |
+| 3. Model Training | Can a detector learn "normal" without failure labels? |
+| 4. Model Validation | Where do we draw the review line, and does it hold on later months? |
+| 5. Model Prediction | How does one new hour become a review request a person can act on? |
 
 ### The case
 A compressor supplies compressed air. Leaks can make it work harder and run hotter. A
@@ -56,13 +67,16 @@ ordinary fluctuation. We use a train compressor; factories face a similar equipm
 - **Four reported air-leak events**, not a reliable normal/fault label for every reading.
 - Public dataset, **CC BY 4.0**; no downloads during the notebook run.
 
+### Three names to keep straight
+- **Learn** (February-March, the *training* months): the detector learns what a normal hour looks like.
+- **Practice** (April-June, the *validation* months): we compare detectors and choose the review line.
+- **Final check** (July-September, the *test* months): the finished rule runs once, unchanged.
+
 > An **anomaly** is unusual relative to the pattern a detector learned. It might be a fault,
 > a workload change, or a sensor problem. **Anomaly does not mean confirmed failure.**
 > The model requests human review. It does not diagnose a leak, stop equipment, or certify safety.
 """)
 code("""
-import json
-import joblib
 import numpy as np
 import pandas as pd
 from IPython.display import display
@@ -72,7 +86,7 @@ from pdmlab import config, data, detect, features, metrics, policy, teaching
 
 init_notebook_mode(connected=False)
 pd.set_option("display.max_columns", 8)
-print("Local data ready. Models will learn from February-March; later periods stay separate.")
+print("Local data ready. The detector will learn from February-March; later months stay separate.")
 """)
 md("""
 ---
@@ -143,45 +157,71 @@ guide("Each bar counts clock hours in a coverage category.",
 md("""
 ## 1.4 First EDA: what does motor current look like?
 **Exploratory data analysis (EDA)** means inspecting the data before fitting the model.
-Use the training months here, not future test outcomes. Current gives us a readable first
+Use the learning months here, not later outcomes. Current gives us a readable first
 view of when the motor is off, idling, or working hard.
 """)
 code("""
 teaching.current_distribution(minutes).show()
 """)
-guide("Horizontal position is motor current; bar height counts recorded training minutes in that range. The dashed line is 4.75 A.",
+guide("Horizontal position is motor current; bar height counts recorded learning-month minutes in that range. The dashed line is 4.75 A.",
       "The readings cluster around low current, an idling range, and a higher working range. One low reading is not automatically a failure.",
       "We can summarize time spent working instead of asking a model to interpret every minute. The 4.75 A feature setting is specific to this dataset, not a safety limit.")
 md("""
-## 1.5 Separate training, validation, and test periods
-Keep the same separation used in the earlier notebooks, but split **by time**. Nearby hours
-resemble each other; shuffling them could let later operating patterns leak into training.
-
-| Period | Role | What it may influence |
-|---|---|---|
-| February-March | Training/reference | The patterns the detector learns |
-| April-June | Validation | Model comparison and the operating cutoff |
-| July-September | Test | Evaluation after choices are fixed |
-
-This is a reproducible replay of historical data, not a new prospective trial. We will not
-show test scores during model choice. The reference months may contain unreported problems.
+## 1.5 See one leak with your own eyes
+Before any feature or model, look at the raw readings. The left column is an ordinary
+February day. The right column is April 18, the first documented air leak. Same three
+sensors, same scale, one day each.
 """)
+code("""
+teaching.day_comparison(minutes).show()
+""")
+guide("Each row is one sensor; each column is one day. The x-axis is the hour of the day. Rows share a vertical scale, so the two days can be compared directly.",
+      "On the normal day the current jumps up and drops back all day: short working bursts with rest between them, oil around 57 C. On the leak day the current stays high all day, the oil runs about 74 C, and panel pressure sits low and never climbs back to 10 bar.",
+      "A leak does not look like a spike. It looks like a machine that never gets to stop. Every feature we build in Stage 2 is a way of writing that sentence as a number.")
+md("""
+## 1.6 Split the seven months: learn, practice, final check
+Keep the same separation used in the earlier notebooks, but split **by time**. Nearby hours
+resemble each other; shuffling them could let later operating patterns leak into learning.
+
+| Months | Plain name | Technical name | What it may influence |
+|---|---|---|---|
+| February-March | Learn | Training / reference | The patterns the detector learns |
+| April-June | Practice | Validation | Detector comparison and the review line |
+| July-September | Final check | Test | Evaluation after every choice is frozen |
+""")
+code("""
+teaching.period_timeline().show()
+""")
+guide("The bar is the seven-month record. Shading marks the three periods. Diamonds mark when each documented air leak was reported.",
+      "No leak was reported in the learning months. Three leaks fall in the practice months, so the detector comparison has something to check against. One leak, F4, falls in the final check.",
+      "The review line is chosen on the practice months and frozen before July. That is what makes July-September an honest check rather than another round of practice. The learning months may still contain unreported problems.")
 md("""
 **Stage 1 conclusion:** we have a time-indexed sensor table, a quality gate, four event
-reports, and three distinct periods. We do not have enough labels to treat every unreported
-hour as a confirmed normal training example.
+reports, and three time periods. We do not have enough labels to treat every unreported
+hour as a confirmed normal example, and we have seen with our own eyes what a leak does.
 
 ---
 # 2 - EDA and Feature Engineering
-**Question:** Which measurements should describe one hour to the anomaly detector?
+**Question:** Which measurements should describe one hour to the anomaly detector, and why those?
+
+### The physics first, then the features write themselves
+Understand what a leak does and the features follow. Each sentence below becomes a number.
+
+1. **Air escapes.** A leak develops somewhere in the compressed-air system.
+2. **Pressure falls faster.** The tank empties sooner than it should after each working burst.
+3. **The compressor restarts sooner.** It rests less between bursts and works for longer.
+4. **It runs hot.** A machine that never rests heats up and stays hot.
+
+| Sentence in the story | Numbers that measure it |
+|---|---|
+| Pressure falls faster | Pressure variation, Pressure change |
+| The compressor restarts sooner | Compressor working (%), Starts per hour, Rest per start |
+| It runs hot | Oil temperature |
 
 Like the fraud case, we create human-named features. Unlike the CNN, this model does not
 learn directly from pixels or the raw time series. **One model row will be one usable hour.**
-
-Choosing which source columns to transform is part of **feature engineering**. All stored
-columns are numeric; `COMP`, `LPS`, and `Oil_level` are averaged on/off signals. This version
-uses motor current, oil temperature, and TP3 pressure to create six understandable features.
-The other columns are not used by this model; they remain available for future experiments.
+This version uses three source columns, motor current, oil temperature, and TP3 pressure,
+to create six understandable features. The other columns remain available for future experiments.
 
 ## 2.1 Turn minute readings into six features
 """)
@@ -192,18 +232,18 @@ training = matrix.loc[(matrix.index >= config.TRAIN_START) & (matrix.index < con
 validation = matrix.loc[(matrix.index >= config.DEV_START) & (matrix.index < config.DEV_END)]
 test_matrix = matrix.loc[(matrix.index >= config.TEST_START) & (matrix.index < config.TEST_END)]
 print(f"{recorded_minutes:,} recorded minutes -> {len(matrix):,} usable hours -> {matrix.shape[1]} inputs")
-display(pd.DataFrame({"Period": ["Training", "Validation", "Test"],
+display(pd.DataFrame({"Period": ["Learn (training)", "Practice (validation)", "Final check (test)"],
                       "Usable hours": [len(training), len(validation), len(test_matrix)]}))
 """)
 md("""
-| Input feature | What it describes |
-|---|---|
-| Compressor working (%) | Percentage of recorded minutes spent working hard |
-| Starts per hour | Transitions into working hard, not total running time |
-| Rest per start | Nonworking time estimated from working share and starts |
-| Oil temperature | Average oil temperature during the hour |
-| Pressure variation | How much panel pressure varies during the hour |
-| Pressure change | Magnitude of average panel-pressure change during nonworking minutes |
+| Input feature | What it describes | Story step |
+|---|---|---|
+| Compressor working (%) | Percentage of recorded minutes spent working hard | Restarts sooner |
+| Starts per hour | Transitions into working hard, not total running time | Restarts sooner |
+| Rest per start | Nonworking time estimated from working share and starts | Restarts sooner |
+| Oil temperature | Average oil temperature during the hour | Runs hot |
+| Pressure variation | How much panel pressure varies during the hour | Pressure falls faster |
+| Pressure change | Size of the average panel-pressure change during nonworking minutes | Pressure falls faster |
 
 The last feature is named `pressure_fall_rate` in code, but the implementation takes an
 absolute change: it does not independently prove that pressure was falling. When no rest
@@ -233,25 +273,25 @@ feature_figure.show()
 display(feature_summary)
 """)
 guide("Each point is one minute's current. Both panels use the same scale; minutes above the dashed line count as working hard.",
-      "The February hour has 4/60 working minutes, or 6.7%; the April failure hour has 60/60, or 100%.",
+      "The February hour has 4/60 working minutes, or 6.7%; the April leak hour has 60/60, or 100%.",
       "That working pattern becomes one feature. Zero starts can occur during continuous operation, so starts alone do not tell us whether the motor is off.")
 md("""
 ## 2.3 Look at combinations, not one cutoff per sensor
 The pneumonia notebook plotted brightness against contrast. Here plot working share against
-temperature: **one point is one hour**. Show the training reference and the April event as
-an exploratory validation example. The six-dimensional model will see more than these two inputs.
+temperature: **one point is one hour**. Show the learning months and the April leak as
+an exploratory practice-month example. The six-dimensional model will see more than these two inputs.
 """)
 code("""
 teaching.feature_cloud(training, validation).show()
 """)
-guide("Each dot is one hour. Moving right means the compressor worked hard for a larger percentage of its recorded minutes; moving up means hotter oil. For a complete hour, 50% means 30 of 60 minutes. Symbols distinguish reference hours from reported-event hours.",
-      "Many reference hours gather in common operating regions. The April hours sit near continuous operation at high temperatures, but there can be overlap.",
-      "Anomaly detection asks whether a combination is unusual relative to the reference. These two axes do not establish a fault boundary, and the report labels are not supplied during fitting.")
+guide("Each dot is one hour. Moving right means the compressor worked hard for a larger percentage of its recorded minutes; moving up means hotter oil. For a complete hour, 50% means 30 of 60 minutes. Symbols distinguish learning-month hours from reported-leak hours.",
+      "Many learning-month hours gather in common operating regions. The April hours sit near continuous operation at high temperatures, but there can be overlap.",
+      "Anomaly detection asks whether a combination is unusual relative to what was learned. These two axes do not establish a fault boundary, and the report labels are not supplied during fitting.")
 md("""
 ### What EDA decided for us
 | Observation | Modeling decision |
 |---|---|
-| The motor moves between operating ranges | Summarize working share and starts |
+| A leak looks like a machine that never stops | Measure working share, starts, and rest |
 | Several measurements describe an hour | Fit a multivariable anomaly detector |
 | Missing hours are not normal observations | Keep a separate quality gate |
 | Labels are sparse and incomplete | Fit without failure labels; evaluate cautiously against reports |
@@ -265,45 +305,30 @@ calculated consistently in every period. Neither event dates nor future outcomes
 **Question:** Can a detector learn useful structure without examples labeled "failure"?
 
 Fit a simple baseline and a standard anomaly-detection algorithm on the **same six features
-and training hours**. Compare their validation results using the same review allowance.
+and learning-month hours**. Compare their practice-month results using the same review allowance.
 Unlike the CNN, neither model trains by repeatedly correcting a labeled prediction error.
 
-## 3.1 Fit a simple statistical baseline
-The **robust-score baseline** learns a median and a variation scale for each feature.
-It measures movement in configured trouble directions, then averages the contributions.
-This is itself an anomaly detector: training learns its reference values rather than an
-operator specifying every numeric limit. It also embeds human choices about which direction matters.
+## 3.1 Fit a simple baseline: a ruler
+The **robust-score baseline** is a ruler. For each of the six numbers it learns the usual
+middle and the usual spread from the learning months, then asks of every new hour: how far
+from the middle, in units of spread, in the direction that means trouble? Average the six
+answers and that is the score. It is an anomaly detector, and a person can check its arithmetic.
 """)
 code("""
 baseline = detect.RobustZDetector().fit(training)
 baseline_validation_scores = baseline.score(validation)
-display(pd.DataFrame({"Feature": list(teaching.FEATURE_LABELS.values()),
-                      "Learned middle": baseline.median_.round(3).to_numpy(),
-                      "Learned scale": baseline.scale_.round(3).to_numpy()}))
+print(f"Baseline learned a middle and a spread for {len(baseline.median_)} features from {len(training):,} learning-month hours.")
 """)
 md("""
-For temperature, the learned middle is about 58.48 C and scale about 4.17 C. An hour at
-74.27 C contributes about `(74.27 - 58.48) / 4.17 = 3.79` before averaging with other features.
-That is a relative unusualness measure, not a safe-temperature rating or a probability.
-
 ## 3.2 Train Isolation Forest
-**Isolation Forest** repeatedly partitions reference samples using randomly chosen features
-and split values. A point that is separated in relatively few splits is treated as more unusual;
-a point embedded among many similar examples tends to require more splits.
+**Isolation Forest** takes a different route to the same question. Picture the cloud of
+learning-month hours from Section 2.3. Draw random cuts across it. A point sitting alone,
+away from the crowd, gets separated by a few cuts; a point deep inside the crowd needs many.
+The forest repeats that with many random trees across all six features and averages how
+easily each hour was isolated. **No tree is ever told "this is a leak."**
 
-Imagine separating one isolated point from a crowded group on the feature plot. The real
-model repeats this across many trees and all six inputs. No tree is told "this is a leak."
-
-On the earlier two-feature plot, a point sitting away from the main cloud can often be
-separated with few cuts. A point surrounded by many similar hours takes more cuts. The
-forest averages that idea across many random trees and all six features.
-
-- **300 trees:** combine many random partitions rather than trusting one.
-- **Up to 256 training rows per tree:** small samples keep fitting practical.
-- **Fixed seed:** reproduce this classroom run.
-
-There is no CNN-style loss curve here: training constructs a forest, not gradient-based
-epochs. The evidence comes from how its scores behave on separate observations.
+There is no CNN-style training curve here: fitting builds the trees, and the evidence comes
+from how the scores behave on hours the forest has not seen.
 """)
 code("""
 forest = IsolationForest(n_estimators=300, max_samples=256,
@@ -311,25 +336,22 @@ forest = IsolationForest(n_estimators=300, max_samples=256,
 forest.fit(training)
 forest_training_scores = pd.Series(-forest.score_samples(training), index=training.index)
 forest_validation_scores = pd.Series(-forest.score_samples(validation), index=validation.index)
-print(f"Fitted {len(forest.estimators_)} trees on {len(training):,} reference hours, with no target column.")
+print(f"Fitted {len(forest.estimators_)} trees on {len(training):,} learning-month hours, with no target column.")
 """)
 md("""
-Scikit-learn's `score_samples` uses lower values for more unusual points. We negate it so
-**higher means more anomalous** throughout the notebook. These values are not probabilities.
-`contamination="auto"` does not tell us the real fault rate; we set our own review cutoff
-from validation scores rather than use the library's default binary prediction.
+We flip the sign of the library's score so that **higher means more unusual** for both
+detectors throughout the notebook. Neither score is a probability.
 
 ## 3.3 Compare the two detectors fairly
-The two models use different score scales, so cutoff 6 or cutoff 0.68 cannot mean the same
-thing for both. Give each approximately the **highest-scoring 2% of validation hours**.
-This is a classroom comparison allowance, not an estimated failure rate or real staffing commitment.
-Ties at the cutoff can slightly change the actual share.
+The two detectors use different score scales, so one number cannot serve as the line for
+both. Give each the same allowance instead: the **highest-scoring 2% of practice-month
+hours** are flagged. The score at that point is each detector's **review line** (the table
+calls it the comparison cutoff). This is a classroom allowance, not a failure rate or a staffing plan.
 
-Judge reported-event detection first, then false callouts. An event counts as detected if
-an alert occurs from 24 hours before its start through six hours after its end. For false
-callouts, omit the uncertain buffer from 72 hours before through 24 hours after each event.
-Group alert hours no more than six hours apart into one callout. These are evaluation rules,
-not recorded technician visits or confirmed diagnoses.
+Judge reported-event detection first, then extra callouts. A leak counts as flagged if any
+hour from 24 hours before its reported start through six hours after its end is flagged.
+Flagged hours no more than six hours apart are grouped into one callout, and callouts far
+from any report count as extra. These are evaluation rules, not technician visits or diagnoses.
 """)
 code("""
 comparison = teaching.compare_models({
@@ -342,32 +364,31 @@ assert selected_name == "Isolation Forest", "Review model choice if the comparis
 print("Continue with:", selected_name)
 """)
 md("""
-**Read the comparison:** both flag 36 validation hours. Isolation Forest finds three reported
-events versus two for the baseline, but creates seven false callouts versus zero. We continue
-with Isolation Forest because the stated priority is event detection; the extra review work
-is a real trade-off, not something to hide.
+**Read the comparison:** both flag 36 practice-month hours. Isolation Forest flags all three
+reported leaks versus two for the baseline, but creates seven extra callouts versus zero. We
+continue with Isolation Forest because the stated priority is finding leaks; the extra review
+work is a real trade-off, not something to hide.
 
 **Stage 3 conclusion:** Isolation Forest is the candidate for this worked example, not a
-universal winner. The baseline can behave differently at another allowance. Three validation
-events on one compressor are far too little evidence for a broad performance claim.
+universal winner. The baseline can behave differently at another allowance. Three practice-month
+leaks on one compressor are far too little evidence for a broad performance claim.
 
 ---
 # 4 - Model Validation
-**Question:** Which anomaly scores trigger review, and what happens on the later test period?
+**Question:** Which anomaly scores trigger review, and what happens on the final-check months?
 
 The fraud and image cases turned a model score into an action with a cutoff. We do the same,
-but **anomaly score is not failure probability**. A 2% validation review allowance does not
+but **anomaly score is not failure probability**. A 2% practice-month allowance does not
 guarantee that 2% of future hours will be flagged.
 
-## 4.1 Draw the cutoff for the selected detector
-Every validation hour receives an anomaly score. **Higher means more unusual.** A score by
-itself does not trigger anything until we draw a cutoff line. The model comparison already
-selected Isolation Forest and the 2% validation review allowance. Now turn that allowance
-into one fixed line:
+## 4.1 Freeze the review line for the selected detector
+Every practice-month hour has an anomaly score. **Higher means more unusual.** A score by
+itself does not trigger anything until a line is drawn. The comparison in 3.3 already gave
+Isolation Forest its 2% line. Now it is the one fixed rule:
 
 ```text
-score < cutoff   -> 0, no additional model flag
-score >= cutoff  -> 1, flag for human review
+score < line   -> 0, no model flag
+score >= line  -> 1, flag for human review
 ```
 """)
 code("""
@@ -376,38 +397,36 @@ cutoff_figure, cutoff_summary = teaching.score_cutoff_plot(forest_validation_sco
 cutoff_figure.show()
 display(cutoff_summary)
 """)
-guide("The x-axis is the actual date in the April-June validation period. The blue line gives one anomaly score for each usable hour. The dashed horizontal line is the cutoff. Red dots are hours at or above it.",
+guide("The x-axis is the actual date in the April-June practice months. The blue line gives one anomaly score for each usable hour. The dashed horizontal line is the review line. Red dots are hours at or above it.",
     "Any score above the line becomes model flag 1 and requests review. A score below it becomes flag 0. The table gives the exact rule and counts.",
     "The line converts a score into a review decision. It does not make the score a probability or prove a red point is faulty. Gaps mean that hour lacked a usable score.")
 md("""
-**Example:** score **0.70** is above cutoff **0.679284**, so it becomes flag 1 and requests
+**Example:** score **0.70** is above the line at **0.679284**, so it becomes flag 1 and requests
 review. Score **0.60** is below the line, so it becomes flag 0. Neither number is a percent.
-Choosing another review allowance would move the line. That requires a decision about
-maintenance capacity; the test data must not be used to move it.
+Choosing another allowance would move the line. That requires a decision about maintenance
+capacity, and the final-check months must never be used to move it.
 
-## 4.2 Check the final rule on later data
-We already used February-March to train the models and April-June to select Isolation Forest
-and its cutoff. Now apply that finished rule to **July-September** without changing it.
+## 4.2 Run the frozen rule on the final-check months
+February-March taught the detectors and April-June chose Isolation Forest and its line.
+Now apply that finished rule to **July-September** without changing anything.
 
-This later period is called the **test period**. It gives a more honest check because the
-model and cutoff were decided before these results were viewed. If we changed them after
-seeing this table, July-September would become another practice period rather than a final check.
-
-There is only one reported event in this period, so the result is limited evidence.
+This is the honest check, because the detector and the line were fixed before these results
+were viewed. If we changed them after seeing this table, July-September would become another
+round of practice. There is only one reported leak in this period, so the result is limited evidence.
 """)
 code("""
 test_scores = pd.Series(-forest.score_samples(test_matrix), index=test_matrix.index)
 test_result = metrics.evaluate(test_scores, cutoff, (config.TEST_START, config.TEST_END))
 display(pd.DataFrame([
-    ["Reported event detected", "Yes" if test_result["failures_detected"] else "No"],
+    ["Reported leak flagged", "Yes" if test_result["failures_detected"] else "No"],
     ["Hours flagged for review", f"{test_result['alert_hours']} of {test_result['scored_hours']}"],
-    ["Extra grouped alerts against reports", test_result["false_callouts"]],
-], columns=["Later-data check", "Result"]))
+    ["Extra callouts (no matching report)", test_result["false_callouts"]],
+], columns=["Final check", "Result"]))
 """)
 md("""
-**Read the result:** the finished rule detects the one reported event and flags 27 of 1,224
-usable hours. Four groups of alerts do not match a nearby event report. Because reports may
-be incomplete, those are unmatched alerts to investigate, not proven healthy-machine mistakes.
+**Read the result:** the frozen rule flags the one reported leak and flags 27 of 1,224
+usable hours. Four groups of flagged hours have no matching report. Because reports may
+be incomplete, those are extra callouts to investigate, not proven healthy-machine mistakes.
 
 Do not report overall accuracy: most hours have no event report, so a model that never flags
 anything would appear correct most of the time while missing the maintenance purpose.
@@ -417,18 +436,19 @@ The earlier classifiers used confusion matrices because they had a label for eac
 Here we can compare flags with report timing, but must not call every unreported hour a
 verified true negative. This four-box view is **agreement with reports, not diagnostic accuracy**.
 
-The first row counts usable hours overlapping the reported event. The second counts hours
-outside the uncertainty buffer. Other near-event hours are excluded, not quietly labeled normal.
+The top row counts hours inside the reported leak. The bottom row counts hours well away
+from it. Hours close to the leak, where a report might simply be late or early, are left out
+rather than quietly labeled normal.
 """)
 code("""
 agreement_figure, excluded_hours = teaching.hourly_agreement(
     test_scores, cutoff, (config.TEST_START, config.TEST_END))
 agreement_figure.show()
-print(f"Excluded ambiguous near-event hours: {excluded_hours}")
+print(f"Hours left out because they sit close to the reported leak: {excluded_hours}")
 """)
-guide("Columns are model flag/no flag; rows are hours overlapping a reported event or outside its uncertainty buffer. Numbers count hours, not separate failures.",
-      "A flag outside the buffer is a false alert against the available reports, but might still deserve investigation. No flag during an event is a missed event hour.",
-      "Do not calculate a reassuring fault-accuracy percentage from incomplete labels. The event-level check and the workload counts answer different questions.")
+guide("Columns are model flag/no flag; rows are hours inside the reported leak or well away from it. Numbers count hours, not separate leaks.",
+      "A flag well away from any report is an extra callout against the available reports, but might still deserve investigation. No flag during a leak is a missed leak hour.",
+      "Do not calculate a reassuring accuracy percentage from incomplete labels. The leak-level check and the workload counts answer different questions.")
 md("""
 ## 4.4 Does the alert help a person?
 Two practical questions matter after checking the model:
@@ -436,7 +456,7 @@ Two practical questions matter after checking the model:
 - **Is there time to respond?** An alert after the problem is over cannot help with that event.
 - **Is the extra work manageable?** Too many unnecessary inspections can make people ignore alerts.
 
-For the one reported test event, put the times in order:
+For the one reported leak in the final check, put the times in order:
 """)
 code("""
 timing = teaching.event_table(test_scores, cutoff, (config.TEST_START, config.TEST_END)).iloc[0]
@@ -444,18 +464,59 @@ flagged_hour = pd.Timestamp(timing["First flagged hour"])
 display(pd.DataFrame([
     ["First flagged hour begins", flagged_hour],
     ["That hour's score can be available", flagged_hour + pd.Timedelta(hours=1)],
-    ["Reported event begins", pd.Timestamp(timing["Reported onset"])],
+    ["Leak reported", pd.Timestamp(timing["Reported onset"])],
 ], columns=["What happened", "Date and time"]))
 print(f"Potential notice: {timing['Lead after hour ends (h)']:g} hours, before processing and response delays.")
 """)
 md("""
 **The lesson:** this example leaves **13.5 hours of potential notice** after the hour finishes,
 before communication or response delays. It does not prove that every failure can be forecast.
-The test also produced **four false callouts against the reports** over about two months.
+The final check also produced **four extra callouts** over about two months.
 A maintenance manager must decide whether that review workload is acceptable.
 
+## 4.5 The scorecard: add it all up
+The practice months held three leaks and the final check held one. Put the two checks
+together and read the result as two different questions: did the detector notice each leak
+at all, and did it notice before anyone wrote the leak down?
+""")
+code("""
+display(teaching.scorecard(forest_validation_scores, test_scores, cutoff))
+""")
+md("""
+**Read the scorecard:** all four leaks were flagged while they were happening. Only one, F4,
+was flagged before it was reported. For F1 and F2 the first flag came about seven hours after
+the report; for F3 the flagged hour is the hour the leak was reported, so its score exists
+after the report. Finding a leak and warning about a leak are different achievements, and
+this detector has strong evidence for the first and one example of the second.
+
+Remember which months are which: F1-F3 sit in the practice months, which were used to choose
+the detector and the line, so those three are partly self-fulfilling. F4 is the only leak in
+months the detector never saw during selection, which is why it is the number the deck treats as real evidence.
+
+## 4.6 Is finding the anomaly worth the review cost?
+The model's usefulness is not the same as its leak count. Here is a compact scenario
+calculation on the final-check months using **invented classroom costs**, not the operator's
+bills: 400 USD per visit, 1,200 USD per unaddressed fault hour, 22,000 USD interruption after
+12 hours, and four hours to respond. Intervention is assumed to shorten a fault, not prevent it.
+""")
+code("""
+final_window = (config.TEST_START, config.TEST_END)
+with_alerts = policy.policy_cost(test_scores, cutoff, final_window)
+no_alerts = policy.never_alert(final_window)
+display(pd.DataFrame([
+    ["Run the detector and review its flags", with_alerts["total_cost_usd"]],
+    ["Never alert", no_alerts["total_cost_usd"]],
+], columns=["Policy on the final-check months", "Assumed cost (USD)"]))
+""")
+md("""
+**Read both rows.** Under these assumptions the detector costs more on the final check than
+never alerting, because four extra callouts are priced and only one leak was there to shorten.
+That is the honest number and it stays visible. It depends on invented costs and a single leak,
+so it does not establish savings or losses; a real pilot would compare scheduled maintenance
+too, using measured visits, outcomes, and costs.
+
 Later, keep checking the number of alerts. A busier operating schedule or changed equipment
-can change the data pattern (**drift**). Investigate before changing the cutoff; more alerts
+can change the data pattern (**drift**). Investigate before changing the line; more alerts
 do not by themselves prove more faults.
 
 **Stage 4 takeaway:** an anomaly detector must give useful notice without overwhelming the
@@ -467,14 +528,14 @@ people who review its flags. Section 5.1 shows the predictions and reports on on
 
 ## 5.1 Compare predictions and reported anomalies over time
 Use the **same date-and-time axis** to connect the model's score, its prediction, and the
-maintenance evidence. This is the fixed Isolation Forest applied to the test period.
+maintenance evidence. This is the frozen Isolation Forest applied to the final-check months.
 
-The rule is **model flag = 1 when score >= cutoff**, otherwise 0. The cutoff is approximately
-**0.679284**, chosen from the validation scores. It is **not a standard-deviation threshold**
+The rule is **model flag = 1 when score >= line**, otherwise 0. The line is approximately
+**0.679284**, chosen from the practice-month scores. It is **not a standard-deviation threshold**
 and does not mean a 67.9% chance of failure. Missing scores produce no prediction, not zero.
 
-The first view includes both the July 8 high-score example and the July 15 reported event.
-"Full test" shows the entire test period. All panels stay aligned when you change the view.
+The first view includes both the July 8 high-score example and the July 15 reported leak.
+"Full test" shows the entire final-check period. All panels stay aligned when you change the view.
 """)
 code("""
 prediction_figure, prediction_table = teaching.prediction_timeline(
@@ -482,18 +543,18 @@ prediction_figure, prediction_table = teaching.prediction_timeline(
 prediction_figure.show()
 display(prediction_table.loc["2020-07-15 12:00":"2020-07-15 19:00"].round(4))
 """)
-guide("Top: anomaly score with the dashed cutoff. Middle: predicted flag (1) or no flag (0). Bottom: reported-event overlap (1) or no report for that hour (0). The faint green band is the exact reported event period.",
-      "When both lower panels are at 1, the model flags an hour overlapping a reported event. A model flag of 1 with report 0 is an unmatched flag for that hour: it could be advance warning, another problem, or a false alert. Report 1 with model 0 is a missed event hour.",
+guide("Top: anomaly score with the dashed review line. Middle: predicted flag (1) or no flag (0). Bottom: reported-leak overlap (1) or no report for that hour (0). The faint green band is the exact reported leak period.",
+      "When both lower panels are at 1, the model flags an hour overlapping a reported leak. A model flag of 1 with report 0 is an unmatched flag for that hour: it could be advance warning, another problem, or an extra callout. Report 1 with model 0 is a missed leak hour.",
       "The reports are incomplete labels, not proof of health everywhere they show 0. A gap in the score and prediction panels means no usable score, even if a report exists. This separates what the model predicted from what was documented.")
 md("""
 **Read the hourly table:** each row uses the same timestamp in all columns. Values are rounded
 for display, but the flag is calculated from the full-precision score. Report 1 means the
-hour overlaps an event: the July 15 event starts at 14:30, so the 14:00-14:59 row is marked 1.
+hour overlaps a leak: the July 15 leak starts at 14:30, so the 14:00-14:59 row is marked 1.
 The score for that hour is only available after 15:00. The report labels are added afterward
 for comparison; they are not model inputs. A blank/NaN score means no prediction was made.
 
 ### Three example predictions
-All examples below are from the test period, unseen during fitting and model choice.
+All examples below are from the final-check months, unseen during fitting and model choice.
 They were selected retrospectively to illustrate behavior, not to estimate accuracy.
 """)
 code("""
@@ -504,31 +565,34 @@ md("""
 Keep **score**, **policy decision**, and **observed evidence** separate, just as in the fraud
 and pneumonia examples. An unreported high-score hour is not automatically a healthy machine;
 an unflagged hour is not certified safe. The detector has found unusualness, not a cause.
+The July 8 hour is the question to leave with students: high score, no report. Advance warning
+of something never written down, another problem, or an extra callout? Only an inspection can say.
 
 ## 5.2 Score one hour through the complete pipeline
-Replay the highest-scoring test hour. Supply its recorded sensor minutes, compute the same
-features, score it with the fitted model, then apply the frozen cutoff. Include one previous
-minute so the pressure-change calculation has its usual context. No future hour is used.
+Replay the hour that gave the F4 warning: the 00:00 hour of July 15, the first flagged hour
+from Section 4.4. Supply its recorded sensor minutes, compute the same six features, score
+them with the fitted forest, then apply the frozen line. Include one previous minute so the
+pressure-change calculation has its usual context. No future hour is used.
 """)
 code("""
-incoming_hour = test_scores.idxmax()
+incoming_hour = flagged_hour
 incoming_minutes = minutes.loc[incoming_hour - pd.Timedelta(minutes=1):incoming_hour + pd.Timedelta(minutes=59)]
 incoming_features = features.model_matrix(features.hourly_features(incoming_minutes)).loc[[incoming_hour]]
 np.testing.assert_allclose(incoming_features, test_matrix.loc[[incoming_hour]], rtol=0, atol=1e-12)
 incoming_score = float(-forest.score_samples(incoming_features)[0])
 np.testing.assert_allclose(incoming_score, test_scores.loc[incoming_hour], rtol=0, atol=1e-12)
 print("Hour:", incoming_hour, "| Score available after:", incoming_hour + pd.Timedelta(hours=1))
-print(f"Anomaly score: {incoming_score:.6f}; cutoff: {cutoff:.6f}")
-print("Decision:", "Request human review" if incoming_score >= cutoff else "No extra model flag")
+print(f"Anomaly score: {incoming_score:.6f}; review line: {cutoff:.6f}")
+print("Decision:", "Request human review" if incoming_score >= cutoff else "No model flag")
 """)
 md("""
 ## 5.3 What looked different in this flagged hour?
 Isolation Forest combines all six measurements to produce the score. It does not return a
 probability or a simple statement that one measurement "caused" the flag. We can still show
-the technician what was measured in **real units** and compare it with typical training hours.
+the technician what was measured in **real units** and compare it with typical learning-month hours.
 
-The typical range below contains the middle half of training-hour values: after sorting the
-training values, 25% are below the range and 25% are above it. It is a descriptive reference,
+The typical range below contains the middle half of learning-month values: after sorting the
+values, 25% are below the range and 25% are above it. It is a descriptive reference,
 not an engineering safety limit.
 """)
 code("""
@@ -536,10 +600,12 @@ feature_review = teaching.feature_comparison(training, incoming_features.iloc[0]
 display(feature_review)
 """)
 md("""
-**Read the table:** this hour shows 66.7% compressor working time versus a typical training
-range of 5.0%-10.0%; six starts versus a typical two to three; only 3.3 minutes of rest per
-start versus 18.3-28.5; and 75.7 C oil temperature versus 56.3-62.3 C. Pressure variation
-is also higher, while pressure change is within its typical range.
+**Read the table:** at midnight, more than fourteen hours before anyone reported the leak,
+this hour shows 35% compressor working time versus a typical 5%-10%; seven starts versus a
+typical two to three; only 5.6 minutes of rest per start versus 18.3-28.5; 71.9 C oil
+temperature versus 56.3-62.3 C; and pressure changing about four times faster than usual while
+the machine rested. Read that against the story in Stage 2: pressure falling faster, restarting
+sooner, running hot. All three sentences are already visible in the numbers.
 
 **Key message:** several measurements look different at the same time, so the model requests
 review. That combination might come from a leak, heavier workload, a sensor problem, or another
@@ -558,65 +624,26 @@ assert usable_incomplete.empty
 print("Only ten minutes supplied: HOLD for data-quality review. No anomaly score produced.")
 """)
 md("""
-## 5.5 Is finding the anomaly worth the review cost?
-The model's usefulness is not the same as its event-detection count. Here is a compact
-scenario calculation using **invented classroom costs**, not the operator's bills:
-400 USD per visit, 1,200 USD per unaddressed fault hour, 22,000 USD interruption after
-12 hours, and four hours to respond. Intervention is assumed to shorten a fault, not prevent it.
-The calculation uses the selected forest and its cutoff, not the older app's detector.
-""")
-code("""
-later_matrix = matrix.loc[matrix.index >= config.DEV_START]
-later_scores = pd.Series(-forest.score_samples(later_matrix), index=later_matrix.index)
-cost_rows = []
-for label, window in [("Validation + test (retrospective)", (config.DEV_START, config.TEST_END)),
-                      ("Test period only", (config.TEST_START, config.TEST_END))]:
-    with_alerts = policy.policy_cost(later_scores, cutoff, window)
-    no_alerts = policy.never_alert(window)
-    cost_rows.append({"Period": label, "Detector (assumed USD)": with_alerts["total_cost_usd"],
-                      "No alerts (assumed USD)": no_alerts["total_cost_usd"]})
-display(pd.DataFrame(cost_rows))
-""")
-md("""
-Read both rows, not just whichever favors the detector. These estimates depend on assumptions
-about response and downtime, plus only four events. They do not establish annual savings.
-Scheduled maintenance is another alternative; a real pilot should compare it using measured
-visits, outcomes, and costs before any wider rollout.
-
-## 5.6 Hand off the measured model, not just a notebook
+## 5.5 Hand off the measured model, not just a notebook
 | What the application needs | Why |
 |---|---|
 | Fitted forest and exact feature order | Reproduce the learned scores |
 | Minute-to-hour preparation and quality gate | Give the model the same kind of inputs |
-| Frozen cutoff and review rule | Keep model output separate from action |
+| Frozen review line and rule | Keep model output separate from action |
 | Evaluation and limitations | State where evidence exists and where it does not |
 | Human review process | Confirm faults and record inspection outcomes |
 
-**This notebook now teaches Isolation Forest. The existing app still uses its earlier
-robust-score model and policy.** We have not replaced app artifacts or claimed its screens
-show this model. That change belongs to the next demo review. The check below verifies the
-original saved baseline remains intact while this notebook holds the new forest in memory.
-""")
-code("""
-saved_baseline = joblib.load(config.ARTIFACT_DIR / "model.joblib")
-np.testing.assert_allclose(saved_baseline.score(matrix), baseline.score(matrix), rtol=0, atol=0)
-teaching_result = {"model": selected_name, "cutoff": cutoff,
-                   "validation": comparison.to_dict("records"), "test": test_result}
-print("Verified: incoming-hour prediction matches batch scoring; original app baseline unchanged.")
-print("Teaching model and its evaluation are ready for the separate demo-design review.")
-""")
-md("""
 ### The five stages, and who must be involved
 | Stage | Evidence produced | People needed |
 |---|---|---|
 | Data Ingestion | Profile, missingness, time split | Data engineer and equipment specialist |
 | Feature Engineering | Consistent hourly measurements | Data scientist and maintenance planner |
-| Model Training | Fitted detectors and validation comparison | Data scientist |
-| Model Validation | Event checks, false reviews, timing | Data scientist and maintenance manager |
+| Model Training | Fitted detectors and practice-month comparison | Data scientist |
+| Model Validation | Leak checks, extra callouts, timing, scorecard | Data scientist and maintenance manager |
 | Model Prediction | Reviewable alert with measurements | Application engineer and technician |
 
-**What transfers from the earlier cases:** inspect data, build suitable inputs, train on
-earlier evidence, validate separately, and keep human authority explicit.
+**What transfers from the earlier cases:** inspect data, build suitable inputs, learn from
+earlier evidence, check separately, and keep human authority explicit.
 **What changes here:** we learn a reference pattern without failure labels during fitting;
 an anomaly flag is a request to investigate, never the answer to "is this machine broken?"
 """)

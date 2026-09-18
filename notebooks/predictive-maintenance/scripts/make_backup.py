@@ -31,7 +31,7 @@ OUTPUT = BACKUP_DIR / "01_pdm_build.html"
 
 REQUIRE_URL = "https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"
 
-EXPECTED_FIGURES = 7
+EXPECTED_FIGURES = 9
 
 
 def main() -> None:

@@ -140,3 +140,41 @@ def test_real_reference_comparison_and_test_evidence():
         assert all(trace.type == "scatter" for trace in figure.data)
     feature_review = teaching.feature_comparison(training, test.loc[test_scores.idxmax()])
     assert feature_review["Compared with typical"].tolist().count("Within typical range") == 1
+
+def test_period_timeline_marks_three_periods_and_four_leaks():
+    figure = teaching.period_timeline()
+    rects = [shape for shape in figure.layout.shapes if shape.type == "rect"]
+    assert len(rects) == 3
+    assert len(figure.data) == 1 and len(figure.data[0].x) == 4
+    assert list(figure.data[0].text) == ["F1", "F2", "F3", "F4"]
+    assert figure.layout.xaxis.type == "date"
+
+
+def test_day_comparison_shows_three_signals_for_two_days():
+    from pdmlab import data
+
+    figure = teaching.day_comparison(data.load_minutes())
+    assert len(figure.data) == 6
+    assert all(trace.type == "scatter" and trace.connectgaps is False for trace in figure.data)
+    assert all(0 <= min(trace.x) and max(trace.x) < 24 for trace in figure.data)
+    assert figure.layout.yaxis.title.text == "Motor current (A)"
+
+
+def test_scorecard_adds_practice_and_final_check_results():
+    from sklearn.ensemble import IsolationForest
+    from pdmlab import data, detect, features
+
+    matrix = features.model_matrix(features.hourly_features(data.load_minutes()))
+    training = detect.training_slice(matrix)
+    validation = matrix.loc[(matrix.index >= config.DEV_START) & (matrix.index < config.DEV_END)]
+    test = matrix.loc[(matrix.index >= config.TEST_START) & (matrix.index < config.TEST_END)]
+    forest = IsolationForest(n_estimators=300, max_samples=256, random_state=42, contamination="auto").fit(training)
+    validation_scores = pd.Series(-forest.score_samples(validation), index=validation.index)
+    test_scores = pd.Series(-forest.score_samples(test), index=test.index)
+    cutoff = float(teaching.compare_models({"Isolation Forest": validation_scores}).iloc[0]["Comparison cutoff"])
+    card = teaching.scorecard(validation_scores, test_scores, cutoff).set_index("What the evidence shows")["Result"]
+    assert card["Leaks flagged while they were happening"].startswith("4 of 4")
+    assert card["Leaks flagged before they were reported"].startswith("1 of 4 (F4)")
+    assert card["Hours flagged in the final check"].startswith("27 of 1,224")
+    assert card["Extra callouts in the final check"].startswith("4 groups")
+    assert card["Warning time for F4"].startswith("13.5 hours")

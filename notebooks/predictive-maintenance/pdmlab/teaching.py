@@ -368,3 +368,98 @@ def feature_context(training: pd.DataFrame, example: pd.Series):
     figure.update_xaxes(title_text="Distance (IQR units)")
     figure.update_layout(showlegend=False)
     return style(figure, "Check the flagged measurements", 430)
+
+# ── Added 2026-09-18 for the undergraduate flow review ──────────────────────
+# Three displays the walkthrough was missing: a picture of the seven months,
+# a leak seen in raw readings before any feature exists, and a scorecard that
+# adds the practice-month and final-check results into one honest sentence.
+
+PERIODS = (
+    ("Learn (training)", "TRAIN_START", "TRAIN_END", "#167D9A"),
+    ("Practice (validation)", "DEV_START", "DEV_END", "#B57712"),
+    ("Final check (test)", "TEST_START", "TEST_END", "#26834A"),
+)
+
+
+def period_timeline():
+    """The seven months as three periods, with the four documented leaks marked."""
+    figure = go.Figure()
+    for label, start_name, end_name, color in PERIODS:
+        start, end = getattr(config, start_name), getattr(config, end_name)
+        figure.add_vrect(x0=start, x1=end, fillcolor=color, opacity=0.16, line_width=0,
+                         annotation_text=label, annotation_position="top left",
+                         annotation_font_size=13, annotation_font_color=color)
+    events = config.failure_windows()
+    figure.add_trace(go.Scatter(
+        x=[start for _, start, _, _ in events], y=[0] * len(events), mode="markers+text",
+        text=[name for name, _, _, _ in events],
+        textposition=["bottom center", "bottom center", "top center", "bottom center"],
+        marker=dict(color="#C84B42", size=13, symbol="diamond"), name="Documented air leak",
+        hovertemplate="%{text}: reported %{x|%b %d, %H:%M}<extra></extra>"))
+    figure.update_xaxes(type="date", range=[config.TRAIN_START, config.TEST_END],
+                        tickformat="%b", dtick="M1", title_text="2020")
+    figure.update_yaxes(visible=False, range=[-1, 1])
+    return style(figure, "Seven months: learn, practice, final check", 300)
+
+
+def day_comparison(minutes: pd.DataFrame, normal_day: str = "2020-02-15",
+                   leak_day: str = "2020-04-18"):
+    """Three raw signals over one normal day and one day with a reported leak."""
+    signals = [("Motor_current", "Motor current (A)"),
+               ("Oil_temperature", "Oil temperature (C)"),
+               ("TP3", "Panel pressure (bar)")]
+    days = [(normal_day, "A normal day", "#167D9A"), (leak_day, "A day with a reported leak", "#C84B42")]
+    figure = make_subplots(rows=3, cols=2, shared_xaxes=True, shared_yaxes="rows",
+                           horizontal_spacing=0.06, vertical_spacing=0.09,
+                           subplot_titles=[f"{label} ({pd.Timestamp(day):%b %d})" for day, label, _ in days])
+    frames = {day: minutes.loc[day] for day, _, _ in days}
+    for column, (day, label, color) in enumerate(days, start=1):
+        readings = frames[day]
+        hours = (readings.index - readings.index[0]).total_seconds() / 3600
+        for row, (name, axis_title) in enumerate(signals, start=1):
+            figure.add_trace(go.Scatter(x=hours, y=readings[name], mode="lines", connectgaps=False,
+                                        line=dict(color=color, width=1.2), name=label, showlegend=False,
+                                        hovertemplate="hour %{x:.1f}: %{y:.2f}<extra></extra>"),
+                             row=row, col=column)
+    # One fixed vertical scale per sensor row, covering both days, so the two
+    # columns are directly comparable and never depend on autoscaling.
+    for row, (name, axis_title) in enumerate(signals, start=1):
+        values = pd.concat([frames[day][name] for day, _, _ in days])
+        low, high = float(values.min()), float(values.max())
+        padding = max((high - low) * 0.08, 0.1)
+        for column in (1, 2):
+            figure.update_yaxes(range=[low - padding, high + padding], row=row, col=column)
+        figure.update_yaxes(title_text=axis_title, row=row, col=1)
+    figure.update_xaxes(range=[0, 24], dtick=6)
+    figure.update_xaxes(title_text="Hour of the day", row=3, col=1)
+    figure.update_xaxes(title_text="Hour of the day", row=3, col=2)
+    figure.update_annotations(font_size=13)
+    return style(figure, "See a leak before any feature exists", 620)
+
+
+def scorecard(validation_scores: pd.Series, test_scores: pd.Series, cutoff: float) -> pd.DataFrame:
+    """Plain-language results across practice months and the final check."""
+    practice = event_table(validation_scores, cutoff, (config.DEV_START, config.DEV_END))
+    final = event_table(test_scores, cutoff, (config.TEST_START, config.TEST_END))
+    events = pd.concat([practice, final], ignore_index=True)
+    flagged = int(events["Detected"].sum())
+    ahead = events.loc[events["Detected"] & (events["Lead after hour ends (h)"].fillna(-1) > 0)]
+    result = metrics.evaluate(test_scores, cutoff, (config.TEST_START, config.TEST_END))
+    share = 100 * result["alert_hours"] / result["scored_hours"]
+    ahead_text = f"{len(ahead)} of {len(events)}"
+    if len(ahead):
+        ahead_text += " (" + ", ".join(ahead["Event"]) + ")"
+    rows = [
+        ("Leaks flagged while they were happening",
+         f"{flagged} of {len(events)} ({int(practice['Detected'].sum())} in the practice months, "
+         f"{int(final['Detected'].sum())} in the final check)"),
+        ("Leaks flagged before they were reported", ahead_text),
+        ("Hours flagged in the final check",
+         f"{result['alert_hours']} of {result['scored_hours']:,} ({share:.1f}%)"),
+        ("Extra callouts in the final check",
+         f"{result['false_callouts']} groups of flagged hours with no matching report"),
+    ]
+    for _, row in ahead.iterrows():
+        rows.append((f"Warning time for {row['Event']}",
+                     f"{row['Lead after hour ends (h)']:g} hours after the flagged hour's score exists"))
+    return pd.DataFrame(rows, columns=["What the evidence shows", "Result"])

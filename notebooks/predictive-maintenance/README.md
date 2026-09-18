@@ -2,6 +2,33 @@
 
 ITAI 2372 Module 5, Case 1. Instructor-led demonstration; students rerun later in Codespaces.
 
+## Flow review for non-data-scientists (2026-09-18)
+
+After the instructor reviewed the walkthrough against the deck, the notebook was rebuilt for
+students with little data-science background. It now has **63 cells, 26 code cells, and nine
+plots**. What changed in the flow:
+
+- **1.5 See one leak with your own eyes:** a new raw-signal figure (`teaching.day_comparison`)
+  puts a normal February day beside April 18, the first documented leak: motor current, oil
+  temperature, and panel pressure on one fixed scale per row.
+- **1.6 Split the seven months:** the time split now has a picture (`teaching.period_timeline`):
+  learn (Feb-Mar), practice (Apr-Jun), final check (Jul-Sep), with F1-F4 marked. Plain names
+  are used in every header, with training / validation / test given once in parentheses.
+- **Stage 2 opens with the physics story** (air escapes, pressure falls faster, restarts sooner,
+  runs hot) and maps each of the six features to a sentence in it.
+- **Stage 3 is shallower:** the baseline is described as a ruler, its learned middle/scale table
+  and hand arithmetic are gone, and the scikit-learn parameter notes are cut to one sentence.
+  The 2% line is named once, the review line, and 4.1 freezes it rather than drawing it anew.
+- **4.5 Scorecard** (`teaching.scorecard`) adds practice-month and final-check results into one
+  table: 4 of 4 leaks flagged while happening, 1 of 4 (F4) flagged before it was reported,
+  27 of 1,224 hours, 4 extra callouts, 13.5 hours of warning.
+- **4.6 cost check** moved from Stage 5 into validation and shows the final-check months only
+  (6,800 USD versus 5,400 USD); the retrospective practice-plus-test row is gone.
+- **5.2 scores the F4 warning hour** (2020-07-15 00:00, score 0.714061) instead of the highest
+  test hour; July 8 stays in the three-example table as the open question.
+- The app-artifact identity check at the end is removed from the teaching path; the notebook
+  ends on the handoff and people tables. `make_backup.py` now expects nine figures.
+
 ## Undergraduate walkthrough (2026-09-16)
 
 The instructor requested the teaching style of the Module 2 fraud and Module 3 pneumonia
@@ -118,7 +145,7 @@ node scripts/venv-python.mjs notebooks/predictive-maintenance/scripts/make_backu
 ```
 
 The builder preserves outputs only for unchanged source cells. The exporter requires every
-code cell to be executed successfully and all seven charts to be present.
+code cell to be executed successfully and all nine charts to be present.
 
 Focused checks from the repository root:
 
