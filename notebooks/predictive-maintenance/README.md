@@ -29,6 +29,22 @@ plots**. What changed in the flow:
 - The app-artifact identity check at the end is removed from the teaching path; the notebook
   ends on the handoff and people tables. `make_backup.py` now expects nine figures.
 
+## Standalone classroom simulator (2026-09-18)
+
+`backup/02_pdm_simulator.html` is a single offline file: no server, no network, no installed
+library. Copy it to any laptop and open it in a browser. It is built by
+`scripts/build_simulator.py`, which fits the notebook's Isolation Forest, recomputes the
+0.679284 review line, and embeds eight packaged windows of real hours as JSON. Each hour
+replays its readings minute by minute; when the hour ends the six numbers (notebook labels,
+with the learning-month typical range and higher / lower / within) and the score appear,
+and the line decides "ask a person to look" or "no model flag". Hours the quality gate
+dropped stay in the replay as holds. The F4 window shows a recorder gap, the 00:00 flag,
+and a warning counter that runs to the 14:30 report. Nothing is scored live; both this file
+and the web app replay saved hours.
+
+The web app at `/maintenance` and `/maintenance-simulator` still serves the earlier
+robust-score model with the 6.0 work-order line from `artifacts/`. It has not been migrated.
+
 ## Undergraduate walkthrough (2026-09-16)
 
 The instructor requested the teaching style of the Module 2 fraud and Module 3 pneumonia

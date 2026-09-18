@@ -178,3 +178,23 @@ def test_scorecard_adds_practice_and_final_check_results():
     assert card["Hours flagged in the final check"].startswith("27 of 1,224")
     assert card["Extra callouts in the final check"].startswith("4 groups")
     assert card["Warning time for F4"].startswith("13.5 hours")
+
+
+def test_standalone_simulator_payload_matches_the_notebook():
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(
+        "build_simulator", Path(__file__).resolve().parents[1] / "scripts" / "build_simulator.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    payload = module.build_payload()
+    assert payload["cutoff"] == pytest.approx(0.6792839227835988)
+    windows = {window["id"]: window for window in payload["windows"]}
+    assert len(windows) == 8
+    f4 = windows["S5_F4_warning"]
+    first_flag = next(hour["hour"] for hour in f4["hours"] if hour["flag"])
+    assert first_flag == "2020-07-15 00:00" and f4["reported_at"] == "2020-07-15 14:30"
+    assert any(hour["hold"] and hour["minutes"] == 0 for hour in f4["hours"])
+    assert all(hour["score"] is None for hour in f4["hours"] if hour["hold"])
+    assert not any(hour["flag"] for hour in windows["S1_learning_days"]["hours"])
+    assert [feature["label"] for feature in payload["features"]][:2] == ["Compressor working", "Starts per hour"]
