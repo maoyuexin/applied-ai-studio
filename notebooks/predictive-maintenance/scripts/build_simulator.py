@@ -188,6 +188,9 @@ button:disabled{opacity:.5;cursor:default}
 .features{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
 .feat{border:1px solid var(--rule);border-radius:8px;padding:10px 12px;background:var(--card2);min-height:112px;opacity:.35;transition:opacity .25s}
 .feat.shown{opacity:1}
+.scored-head{margin-top:16px!important;padding-top:12px;border-top:1px solid var(--rule)}
+.fresh{animation:fresh 1.2s ease-out}
+@keyframes fresh{0%{box-shadow:0 0 0 3px rgba(34,211,238,.55)}100%{box-shadow:0 0 0 3px rgba(34,211,238,0)}}
 .feat .name{font-weight:700;font-size:13px}
 .feat .what{color:var(--faint);font-size:11px;margin-bottom:6px}
 .feat .val{font-size:20px;font-variant-numeric:tabular-nums}
@@ -230,8 +233,8 @@ footer b{color:var(--text)}
 <section class="controls">
   <div><label for="win">Saved window</label><select id="win"></select></div>
   <div><label for="speed">Replay speed</label><select id="speed">
-    <option value="12">Fast · 0.7 s per hour</option><option value="30" selected>Normal · 1.8 s per hour</option>
-    <option value="70">Slow · 4 s per hour</option><option value="140">Study · 8 s per hour</option></select></div>
+    <option value="12">Fast · 1.5 s per hour</option><option value="30" selected>Normal · 3.6 s per hour</option>
+    <option value="70">Slow · 8 s per hour</option><option value="140">Study · 17 s per hour</option></select></div>
   <div class="actions"><button class="primary" id="run">Run</button><button id="step" title="Finish this hour, or move to the next">Step</button><button id="reset">Reset</button></div>
 </section>
 
@@ -246,10 +249,12 @@ footer b{color:var(--text)}
 
 <section class="grid">
   <div class="panel">
-    <h2>This hour</h2>
+    <h2>Now receiving</h2>
     <div class="sub" id="hour-title">Pick a window and press Run.</div>
     <div class="ticker" id="ticker"></div>
     <div class="ticker-note" id="ticker-note"></div>
+    <h2 class="scored-head" id="scored-title">Last scored hour</h2>
+    <div class="sub" id="scored-sub">Nothing scored yet.</div>
     <div class="features" id="features"></div>
     <div class="outcome wait" id="outcome"><div class="big">Waiting for readings</div><p>The six numbers and the score exist only after the hour ends.</p></div>
   </div>
@@ -270,7 +275,7 @@ footer b{color:var(--text)}
 const DATA = JSON.parse(document.getElementById('data').textContent);
 const $ = id => document.getElementById(id);
 const stepClass = {"restarts sooner":"amber","runs hot":"indigo","pressure falls faster":"blue"};
-let win = null, hourIdx = 0, minute = 0, phase = 'tick', timer = null, running = false, speed = 30;
+let win = null, hourIdx = 0, minute = 0, phase = 'tick', timer = null, running = false, speed = 30, lastShown = '';
 
 const fmtHour = s => { const [d,t] = s.split(' '); const [,m,day] = d.split('-'); const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; return `${M[+m-1]} ${+day}, ${t}`; };
 const toMs = s => Date.parse(s.replace(' ','T') + ':00');
@@ -302,7 +307,7 @@ function advance(){ if (hourIdx >= win.hours.length - 1) { phase = 'done'; } els
 
 function tick(){
   if (!running) return;
-  if (phase === 'tick') { minute += 1; if (minute >= 60) { minute = 60; phase = 'scored'; } render(); timer = setTimeout(tick, phase === 'scored' ? speed * 12 : speed); return; }
+  if (phase === 'tick') { minute += 1; if (minute >= 60) { minute = 60; phase = 'scored'; } render(); timer = setTimeout(tick, phase === 'scored' ? speed * 60 : speed); return; }
   if (phase === 'scored') { advance(); render(); if (phase === 'done') { stop(); return; } timer = setTimeout(tick, speed); return; }
 }
 
@@ -319,16 +324,25 @@ function render(){
   const cells = $('ticker').children;
   for (let i=0;i<60;i++){ const c = cells[i]; c.className = i < minute ? (i < h.minutes ? 'on' : 'missing') : ''; }
   $('ticker-note').textContent = phase === 'tick' ? `${present} of ${minute} minutes so far carried a reading` : (h.hold ? `Only ${h.minutes} of 60 minutes had readings. The quality gate needs at least 30, so no numbers and no score.` : `${h.minutes} of 60 minutes recorded. Six numbers computed from them.`);
-  DATA.features.forEach(f => { const d = $(`f-${f.name}`); const show = scored && !h.hold; d.classList.toggle('shown', show);
-    d.querySelector('.val').textContent = show ? h.texts[f.name] : '--';
+  // The cards and the decision always show the most recent finished hour, so a
+  // result stays readable while the next hour's readings tick in.
+  const shownIdx = scored ? hourIdx : hourIdx - 1;
+  const sh = shownIdx >= 0 ? win.hours[shownIdx] : null;
+  const isFresh = scored && lastShown !== `${win.id}:${hourIdx}`;
+  if (scored) lastShown = `${win.id}:${hourIdx}`;
+  $('scored-title').textContent = sh ? (scored ? `Scored: ${fmtHour(sh.hour)}` : `Last scored hour: ${fmtHour(sh.hour)} (stays until the next hour is scored)`) : 'Last scored hour';
+  $('scored-sub').textContent = sh ? (sh.hold ? `Held at ${fmtHour(sh.hour).slice(-5)} plus one hour: too few readings.` : `Six numbers computed from ${sh.minutes} recorded minutes; score available at ${fmtHour(sh.hour).slice(-5)} plus one hour.`) : 'Nothing scored yet.';
+  DATA.features.forEach(f => { const d = $(`f-${f.name}`); const show = !!sh && !sh.hold; d.classList.toggle('shown', show);
+    d.classList.toggle('fresh', isFresh && show);
+    d.querySelector('.val').textContent = show ? sh.texts[f.name] : '--';
     const c = d.querySelector('.cmp'); if (!show) { c.textContent=''; c.className='cmp'; return; }
-    const v = h.features[f.name]; const k = v > f.high ? 'high' : v < f.low ? 'low' : 'within';
+    const v = sh.features[f.name]; const k = v > f.high ? 'high' : v < f.low ? 'low' : 'within';
     c.className = `cmp ${k}`; c.textContent = k === 'high' ? 'higher than typical' : k === 'low' ? 'lower than typical' : 'within typical range'; });
-  const o = $('outcome');
-  if (!scored) { o.className = 'outcome wait'; o.innerHTML = `<div class="big">Waiting for readings</div><p>The six numbers and the score exist only after the hour ends, at ${fmtHour(h.hour).slice(-5)} plus one hour.</p>`; }
-  else if (h.hold) { o.className = 'outcome hold'; o.innerHTML = `<div class="big">HOLD · no score</div><p>Not enough readings to trust this hour. This is a data-quality problem, not an anomaly, and the machine keeps running under the normal maintenance process.</p>`; }
-  else if (h.flag) { o.className = 'outcome flag'; o.innerHTML = `<div class="big">Ask a person to look</div><p>Score ${h.score.toFixed(6)} is at or above the line ${DATA.cutoff_text}. A planner and technician inspect the compressor and its context. The model does not diagnose, stop the machine, or authorize work.${h.event ? ` A maintenance report (${h.event}) overlaps this hour; the report was never an input.` : ''}</p>`; }
-  else { o.className = 'outcome clear'; o.innerHTML = `<div class="big">No model flag</div><p>Score ${h.score.toFixed(6)} is below the line ${DATA.cutoff_text}. Below the line is not proof of health; it means this hour looks like the learning months.${h.event ? ` A maintenance report (${h.event}) overlaps this hour: a missed leak hour.` : ''}</p>`; }
+  const o = $('outcome'); const h0 = h; const hh = sh; o.classList.toggle('fresh', isFresh);
+  if (!sh) { o.className = 'outcome wait'; o.innerHTML = `<div class="big">Waiting for readings</div><p>The six numbers and the score exist only after the hour ends, at ${fmtHour(h0.hour).slice(-5)} plus one hour.</p>`; }
+  else if (hh.hold) { const h = hh; o.className = 'outcome hold'; o.innerHTML = `<div class="big">HOLD · no score</div><p>Not enough readings to trust this hour. This is a data-quality problem, not an anomaly, and the machine keeps running under the normal maintenance process.</p>`; }
+  else if (hh.flag) { const h = hh; o.className = 'outcome flag'; o.innerHTML = `<div class="big">Ask a person to look</div><p>Score ${h.score.toFixed(6)} is at or above the line ${DATA.cutoff_text}. A planner and technician inspect the compressor and its context. The model does not diagnose, stop the machine, or authorize work.${h.event ? ` A maintenance report (${h.event}) overlaps this hour; the report was never an input.` : ''}</p>`; }
+  else { const h = hh; o.className = 'outcome clear'; o.innerHTML = `<div class="big">No model flag</div><p>Score ${h.score.toFixed(6)} is below the line ${DATA.cutoff_text}. Below the line is not proof of health; it means this hour looks like the learning months.${h.event ? ` A maintenance report (${h.event}) overlaps this hour: a missed leak hour.` : ''}</p>`; }
   const done = scored ? hourIdx + 1 : hourIdx;
   const completed = win.hours.slice(0, done);
   const flags = completed.filter(x => x.flag).length, holds = completed.filter(x => x.hold).length;
