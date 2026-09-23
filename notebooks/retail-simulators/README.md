@@ -19,6 +19,21 @@ reviewing distribution rights. Source URLs and matching notes remain in `product
 `build_simulators.py --reuse-export` repackages the existing saved model data without fitting it
 again. Rebuilding the walkthrough also refreshes its same-folder notebook companion HTML files.
 
+## Saved Demos and Notebook Reruns
+
+The committed HTML exports freeze the teaching run. Browser tests check their exact score
+vectors, predictions, and replay fixtures; these demos do not retrain in Codespaces.
+Fresh Python notebook fits are not guaranteed to reproduce those numbers across platforms,
+even with identical input files and package versions. Histogram boosting and arbitrary
+ranking ties can produce different fitted trees, example predictions, or catalog coverage.
+For example, the verified Linux rerun produced forecast test MAE 47.94 instead of 47.97,
+the worked forecast 890.48 instead of 824.15, and recommendation coverage 25.57% instead
+of 25.77%. These are rerun results, not changes to the saved classroom evidence.
+
+Teaching tests check the input counts, model settings, calculations, and comparative lesson
+claims for fresh fits. Use `--reuse-export` to preserve the published model when repackaging;
+a new fit needs a new evidence review before replacing the classroom exports.
+
 - [Next Best Product](../product-recommendations/backup/02_recommendation_simulator.html)
 - [Demand Forecasting](../demand-forecasting/backup/02_forecast_simulator.html)
 - [How Recommendations Are Learned](../product-recommendations/backup/03_recommendation_story.html)
@@ -78,8 +93,8 @@ Reduced-motion preferences are respected and hidden tabs pause playback.
 The toy policy uses up to three neighbors, one purchase for personalization, and two slots.
 The final scene explicitly distinguishes the real 15-neighbor, five-purchase, ten-slot policy.
 Real catalog size, split date, and settings come from the existing recommendation simulator export.
-Six cached stock-code-matched photographs are embedded with their existing credits and rights
-notice. They are display labels, never model features.
+Public builds use lettered product labels. Permissioned local builds can embed six cached
+stock-code-matched photographs with credits; neither kind of label is a model feature.
 
 Build from the repository root after the recommendation simulator export exists:
 
@@ -151,6 +166,24 @@ Browser checks cover purchase, undo, repeat purchase, cold start, exclusions, ba
 export, forecast edits, invalid-input holds, product/week switching, and responsive chart framing.
 Screenshots go to `/tmp/m6-retail-simulator-tests` by default. Tested at 390, 768, and 1440 pixels
 with reduced motion, zero page/console errors, and all HTTP requests blocked.
+
+### Codespace Verification Notes (2026-09-23)
+
+The existing Codespace was updated and tested, not recreated. Both retail workflows and demos
+passed desktop and phone interaction tests against its production build, including byte-for-byte
+verification of the saved simulator HTML. Both retail teaching test files also passed on Linux
+and macOS. Run those tests with:
+
+```sh
+.venv/bin/python -m pytest notebooks/demand-forecasting/tests notebooks/product-recommendations/tests -q
+```
+
+The unfiltered repository-wide `npm run check` still has two pre-existing failures, reproduced
+on the prior `fc3f229` commit: the predictive-maintenance notebook exceeds its 4,500-word test
+limit (4,811 words), and Linux's legacy recommendation API reorder-strip ordering differs from
+its saved manifest in `test_slots_reproduce_the_packaged_manifest_exactly`. Neither affects
+the current browser-only retail demos. These tests remain unchanged; an explicitly excluded
+verification run must not be described as an unfiltered full-suite pass.
 
 ## Provenance and Boundaries
 
