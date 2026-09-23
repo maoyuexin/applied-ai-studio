@@ -1,140 +1,146 @@
-# Product Recommendation Lab — Which Ten Products Should This Shopper See?
+# Next Best Product
 
-ITAI 2372 Module 6, Case 2. Instructor-led demonstration; students rerun later in Codespaces.
+ITAI 2372 Module 6, Case 2. Instructor-led undergraduate lesson.
 
-## The case
+## The decision
 
-A UK giftware wholesaler sells online to buyers who come back, order after order. It wants ten
-products in a "Recommended for you" module. The narrow question is *which ten products should
-this shopper see* — and the hard half is *how would we know the list was any good?*
+**Question:** Which ten products should appear in a recommendation area for this customer?
 
-**Claim boundary — read this before using any number here.** An **offline ranking score is not
-evidence of revenue.** This system orders a list of products for one merchandising slot. Its
-hit rate is measured against what customers happened to buy next in one 13-week window of one
-retailer's history. The best personalized model here reaches **3.53% of the revenue available
-on products new to the customer, against 2.81% for a list with no personalization in it at
-all** — a 0.7-point gap that is itself an upper bound, because it credits the model for
-purchases the customer may have made anyway. A recommendation is not a statement about what
-the shopper needs. **Merchandisers own placement and exclusions; the model ranks within their
-rules.** Nothing here describes any real retailer's current operations.
+This is a ranking problem and a genuine **recommendation engine**. More precisely, it is a
+memory-based **item-item collaborative-filtering recommender**. It learns from shared customer
+purchase patterns, not product descriptions, embeddings, or an LLM.
 
-**And the lab's own headline is a warning about leaderboards.** A baseline with no parameters
-that recommends people their own purchase history is **rank 1 of 7** on the standard
-next-purchase table (HR@10 0.7995) and **rank 7 of 7** on the discovery table (0.0217) —
-below ten products drawn at random. Same model, same day, same data. Only the analyst's
-definition of a hit changed.
+The notebook compares:
+
+- a popularity baseline that shows the same products to everyone; and
+- full item-item similarity; and
+- item-item collaborative filtering that keeps each product's 15 closest neighbors.
+
+Use the name **Next Best Product**. The transaction log does not record offer exposure,
+eligibility, treatment, or counterfactual response, so it cannot support a causal Next Best Offer
+claim.
+
+## The five stages
+
+1. Data Ingestion
+2. Feature Engineering
+3. Model Training
+4. Model Validation
+5. Model Prediction
+
+The classroom notebook contains 37 cells, 14 code cells, and seven instructional plots. Every plot
+has a short guide explaining its marks, finding, and workflow consequence.
 
 ## The data
 
-The **same UCI Online Retail II workbook the demand-forecasting lab in this module reads** —
-same rows, different question. That lab groups by product and week and asks how many units
-will sell; this one keeps the customer column and asks what to show them.
+The source is **UCI Online Retail II**, dataset 502, DOI `10.24432/C5CG6D`, licensed CC BY 4.0.
+It is the same transaction source used in the demand-regression case, reshaped for a different
+question.
 
-Published by the UCI Machine Learning Repository as **Online Retail II** (dataset 502) under
-**CC BY 4.0**.
+The committed interaction data produces:
 
-- 1,067,371 raw invoice lines, one UK-registered non-store online retailer, **2009-12-01 to
-  2011-12-09**
-- Cleaned once by `scripts/build_dataset.py` under five counted rules — credit notes,
-  non-positive quantity or price, missing descriptions, non-product stock codes (postage, bank
-  charges, samples, test rows) and exact duplicates — leaving 1,003,424 lines
-- Committed at one row per product per basket: **992,123 rows**, about 3.2 MB
-  (`data/interactions.parquet`), with the ledger beside it
-- **22.8% of the invoice lines carry no customer id at all** — guest checkouts, structurally
-  impossible to personalize for and dropped from the matrix
-- Split **globally in time at 2011-09-09**, never randomly, into a **4,962 x 4,443 customer x
-  product matrix that is 98.228% empty**
-- **38.4% of the test-window truth and 43.5% of test-window revenue is a customer buying
-  something they already own.** That one measurement drives the whole notebook
+- 992,123 basket-product rows;
+- 4,962 eligible training customers;
+- 4,443 products;
+- a customer-product matrix that is 98.228% empty; and
+- 2,168 customers with at least one eligible new product in the later test window.
 
-## How to view or run it
+## How the recommendation engine works
 
-**No installation.** Open `backup/01_recommendation_build.html` in any browser. It is
-self-contained, loads no remote script, stylesheet or image, works offline, and shows the
-committed run with all eight figures rendered.
+1. Build a binary customer-product matrix from training purchases.
+2. Compare product columns with cosine similarity. Products bought by many of the same customers
+  receive higher similarity.
+3. For one customer, score a candidate by summing its similarities to products already bought.
+4. Remove products already bought and any merchandiser exclusions.
+5. Sort the remaining scores and fill ten slots.
 
-**To verify the app artifacts**, from the repository root:
+The score is for ordering only. A similarity of `0.40` is not a 40% purchase probability.
+
+The short model-selection table is:
+
+| Candidate | Hit Rate at 10 | Coverage | Result |
+|---|---:|---:|---|
+| Popularity | 29.5% | 1.8% | Baseline |
+| Full item-item | 36.4% | 15.5% | Not selected |
+| Item-item, top 15 neighbors | **41.6%** | **25.8%** | **Selected** |
+
+**Product example.** The strongest neighbors for `JUMBO BAG RED RETROSPOT` are `JUMBO BAG PINK
+POLKADOT` (0.611), `JUMBO BAG STRAWBERRY` (0.606), and `JUMBO BAG BAROQUE BLACK WHITE` (0.559).
+The reference is stock code `85099B`, explicitly named in the code, chart, and reading guide.
+Two additional training plots explain the calculation: distinct buyers of the red bag and pink
+bag `22386` (844 and 541 total, with 413 shared) produce cosine `413 / sqrt(844 x 541) = 0.611`;
+the top-20 link chart distinguishes the 15 retained links from discarded links. These are learned
+product neighbors, not yet a customer's personalized list. All counts use training data only.
+
+**Customer example.** For customer 12349, `DOORMAT FAIRY CAKE` ranks fourth. Its strongest single
+history match is `DOORMAT HEARTS` with similarity 0.416, and the customer buys `DOORMAT FAIRY
+CAKE` later. The total ranking score also includes smaller contributions from other history items.
+
+## Measured result
+
+Evaluation uses later purchases and excludes products a customer already bought.
+
+| Method | Hit Rate at 10 | Catalog coverage |
+|---|---:|---:|
+| Popularity | 29.5% | 1.8% |
+| Item-item, top 15 neighbors | 41.6% | 25.8% |
+
+Hit Rate at 10 is the share of scored customers whose ten recommendations contain at least one
+held-out new product. Catalog coverage is the share of 4,443 products that appear in at least one
+customer's list. Neither metric is revenue, customer satisfaction, or proof that a recommendation
+caused a purchase.
+
+## View or run
+
+Open `backup/01_recommendation_build.html` for the self-contained offline classroom copy.
+
+From the repository root, regenerate and execute the notebook with:
 
 ```bash
-node scripts/venv-python.mjs notebooks/product-recommendations/scripts/prepare_app_artifacts.py
+node scripts/venv-python.mjs notebooks/product-recommendations/scripts/build_notebook.py
+node scripts/venv-python.mjs -m nbconvert --to notebook --execute --inplace \
+  notebooks/product-recommendations/01_recommendation_build.ipynb
+node scripts/venv-python.mjs notebooks/product-recommendations/scripts/make_backup.py
 ```
 
-Default setup verifies and reuses the six committed artifacts. Rebuilding on a different
-numerical-library version can change tied rankings and the frozen leaderboard, so setup
-does not silently replace the model measured in the notebook. To explicitly rebuild from
-the committed data, run `npm run prepare:recommendations -- --force`.
+Run the focused teaching checks with:
 
-Open `01_recommendation_build.ipynb` to rerun the teaching experiment. Its export stage also
-replaces the local artifacts; rerunning is a new experiment, not a requirement for the app.
+```bash
+node scripts/venv-python.mjs -m pytest -q \
+  notebooks/product-recommendations/tests/test_recommendation_teaching.py
+```
 
-## What is in here
+## Paths
 
-| Path | What it is |
+| Path | Purpose |
 |---|---|
-| `01_recommendation_build.ipynb` | The executed teaching notebook, five stages, outputs committed |
-| `backup/01_recommendation_build.html` | The same notebook as a self-contained offline page |
-| `reclab/` | The lab package: config, data, matrix, models, evaluate, policy, charts, handoff |
-| `data/interactions.parquet` | The committed interaction log, one row per product per basket |
-| `data/item_descriptions.parquet` | Stock code to product name, so a column index becomes a product |
-| `data/cleaning_ledger.json` | What each of the five cleaning rules removed |
-| `scripts/build_dataset.py` | Rebuilds the parquet from the raw UCI download (run once, not at setup) |
-| `scripts/build_notebook.py` | Generates the notebook — **the canonical source; edit this, not the .ipynb** |
-| `scripts/make_backup.py` | Produces the offline HTML and refuses to finish if it needs the network |
-| `scripts/prepare_app_artifacts.py` | Verify the saved bundle; explicitly rebuild with `--force` |
-| `artifacts/` | Six validated, committed files matching the notebook evidence |
+| `01_recommendation_build.ipynb` | Executed five-stage classroom notebook |
+| `backup/01_recommendation_build.html` | Offline classroom HTML |
+| `reclab/teaching.py` | Small classroom calculation and plotting API |
+| `scripts/build_notebook.py` | Canonical classroom notebook source |
+| `tests/test_recommendation_teaching.py` | Structure and frozen-result checks |
+| `backup/02_recommendation_reference.ipynb` | Preserved advanced recommendation lesson |
+| `backup/02_recommendation_reference.html` | Offline advanced reference |
+| `scripts/build_reference_notebook.py` | Advanced reference generator |
+| `scripts/prepare_app_artifacts.py` | Existing application-artifact verifier/builder |
 
-## The exported contract
+## Operating policy
 
-Six files leave the notebook — under half a megabyte in total — and a storefront service loads
-these exact files, so it ranks with the same model the notebook measured:
+- Ten recommendation slots contain products not seen in the customer's training history.
+- Merchandisers own exclusions and placement; the model ranks within those rules.
+- A customer without usable history sees **Popular right now**, based on recent revenue.
+- Guest baskets are reported separately because they have no customer identity.
+- Previously purchased products belong in a separately labeled **Buy it again** area.
 
-- `item_similarity.npz` — the deployed model: item-item cosine truncated to 15 neighbours per
-  product, scipy CSR, float32, 66,631 stored links
-- `item_catalog.parquet` — one row per matrix column: stock code, description, training
-  customers, popularity rank
-- `operating_policy.json` — ten slots, discovery-only eligibility, the fallback list and its
-  labels, the boundary statement and the prohibited claims
-- `evaluation.json` — every number the notebook prints, under **both** protocols
-- `model_card.json`, `sample_manifest.parquet` — model facts and the packaged demo customers,
-  including the ones the model serves badly and the ones it cannot serve at all
+## Limits
 
-Three things are deliberately **not** exported. The customer x product matrix, because it is
-stale the day after it is written and the service owns its own history. The full dense
-similarity matrix, because truncating it to 15 neighbours takes it from 78.96 MB to 0.55 MB —
-about 143x smaller — and *raises* discovery HR@10 from 0.3644 to 0.4156. And the SVD model, because it wins discovery accuracy by 0.028
-and cannot answer "why am I seeing this?" with the name of a product the customer bought.
-
-`handoff.verify()` reloads the artifacts from disk, rebuilds the matrix from the committed log,
-and re-ranks 200 customers — requiring all ten stock codes identical in every slot, plus a
-matching SHA-256 over the stored similarity arrays.
-
-## Honest limitations, which are also the lesson
-
-- **The leaderboard depends on the protocol, not the model.** The reorder baseline is first on
-  one table and last on the other, below random. A leaderboard without its protocol written on
-  it is not a result, and this notebook always reports both.
-- **Accuracy hides what gets shown.** Popularity scores HR@10 0.5713 while showing **0.23% of
-  the catalog** to everybody and never once recommending from its less-popular half. Coverage
-  and novelty sit beside every accuracy number here for that reason.
-- **The usual split leaks in proportion to model capacity.** With targets held identical and
-  only the training data changed, leave-one-out inflates popularity by **+8.6%**, item-item CF
-  by **+89.5%** and TruncatedSVD-64 by **+104.3%** — it flatters exactly the model whose
-  complexity you were hoping to justify.
-- **Roughly one shopper in four gets no personalization at all.** 22.4% of registered test
-  customers are cold or too thin to serve, and separately 21.3% of test-window rows are guest
-  checkouts. Those are different populations with different denominators and they are never
-  added together.
-- **The feedback-loop simulation is a labeled classroom assumption, not a measurement.** It
-  assumes 5% of shown slots convert. Ten rounds move the top-10 purchase share from 2.38% to
-  6.26% while the system shows ten distinct products of 4,443 — but the 5% is chosen, not
-  measured, and the figure says so on the chart.
-- **This is one retailer, one 13-week test window, and no experiment.** There is no holdout
-  group and no causal claim anywhere in this lab.
+- Offline replay measures association, not causation.
+- A missing matrix cell does not mean dislike.
+- Cold-start customers cannot receive a personalized item-item ranking.
+- One wholesaler and one 13-week test window do not represent current retail.
+- A ranked product is not a statement about what a customer needs.
 
 ## Attribution
 
-Chen, D. (2019). *Online Retail II.* UCI Machine Learning Repository. CC BY 4.0.
-DOI: [10.24432/C5CG6D](https://doi.org/10.24432/C5CG6D) — dataset 502,
-<https://archive.ics.uci.edu/dataset/502/online+retail+ii>
-
-This lab is educational. It is not a validated recommendation system for any real retailer.
+Chen, D. (2019). *Online Retail II*. UCI Machine Learning Repository.
+https://doi.org/10.24432/C5CG6D, CC BY 4.0.

@@ -129,4 +129,24 @@ describe("CatalogStore seed contracts", () => {
       expect(courseCase!.introduction.endsWhen, lab.id).toBeTruthy();
     }
   });
+
+  it("describes the current classroom retail models without replacing the other labs", async () => {
+    const catalog = await CatalogStore.load();
+    const forecast = catalog.get("retail-demand-forecasting-lab");
+    const recommendations = catalog.get("retail-product-recommendations-lab");
+    expect(forecast?.title).toBe("Demand Forecasting with Regression");
+    expect(forecast?.architecture.join(" ")).toContain("HistGradientBoostingRegressor");
+    expect(JSON.stringify(forecast)).not.toMatch(/newsvendor|residual quantiles|FastAPI forecasting/i);
+    expect(recommendations?.title).toBe("Next Best Product");
+    expect(recommendations?.summary).toContain("without retraining");
+    const workflow = catalog.getCourseCase("retail-demand-forecasting")!;
+    const design = workflow.decisions.find((decision) => decision.id === "forecast")!.design!;
+    expect(design.method.technique).toContain("HistGradientBoostingRegressor");
+    expect(design.metric.technical).toContain("12,194");
+    expect(JSON.stringify(workflow)).not.toMatch(/newsvendor|critical ratio|residual quantiles|cost ratio/i);
+    const ranking = catalog.getCourseCase("retail-product-recommendations")!;
+    expect(ranking.introduction.workflow).toContain("never retrains");
+    expect(ranking.decisions.find((decision) => decision.id === "ranking")!.design!.metric.business).toContain("prospective experiment");
+    expect(catalog.getCourseCase("manufacturing-predictive-maintenance")).toBeDefined();
+  });
 });

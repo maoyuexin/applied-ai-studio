@@ -11,6 +11,7 @@ import {
   Flag,
   GitBranch,
   Goal,
+  Play,
   Route,
   Scale,
   UsersRound,
@@ -162,7 +163,9 @@ export default function CourseFlowPage({ courseCaseId }: { courseCaseId: string 
 
   const selectedDecision = courseCase.decisions.find((decision) => decision.id === selectedDecisionId)
     ?? courseCase.decisions[0];
-  const catalogTarget = courseCase.id === "retail-online-order"
+  const retailDemo = courseCase.id === "retail-demand-forecasting" ? "/forecast"
+    : courseCase.id === "retail-product-recommendations" ? "/recommendations" : null;
+  const catalogTarget = courseCase.id === "retail-online-order" || retailDemo
     ? "/showcase?industry=retail"
     : courseCase.id === "healthcare-pediatric-xray-prioritization"
       ? "/showcase?industry=healthcare"
@@ -179,7 +182,11 @@ export default function CourseFlowPage({ courseCaseId }: { courseCaseId: string 
           <h1>{courseCase.title}</h1>
           <p>{courseCase.subtitle}</p>
         </div>
-        <div className="source-badge"><Workflow size={16} aria-hidden="true" /> Detailed workflow</div>
+        {retailDemo ? (
+          <div className="case-card-actions retail-case-actions" aria-label="Retail workflow navigation">
+            <button type="button" onClick={() => navigate(retailDemo)}><Play size={15} aria-hidden="true" /> Open demo</button>
+          </div>
+        ) : <div className="source-badge"><Workflow size={16} aria-hidden="true" /> Detailed workflow</div>}
       </header>
 
       <section className="workflow-introduction" aria-labelledby="workflow-context-title">
@@ -240,6 +247,7 @@ export default function CourseFlowPage({ courseCaseId }: { courseCaseId: string 
             </div>
           </div>
           <BusinessWorkflowCanvas
+            horizontalSpacing={retailDemo ? 1.8 : 1}
             courseCase={courseCase}
             view={view}
             phase={phase}

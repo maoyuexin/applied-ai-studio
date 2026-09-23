@@ -183,7 +183,50 @@ Module 4 demos are at <http://127.0.0.1:5173/credit> and
 workflows. See [Module 4: notebooks and demos](docs/module-4.md) for the notebook
 links, offline reports, and Codespaces instructions.
 
-Modules 5 and 6 add four more labs on the same pattern. Module 5 covers predictive maintenance on real compressor telemetry (<http://127.0.0.1:5173/maintenance>) and a grounded procedure assistant that cites public safety regulation and refuses when the answer is not in its library (<http://127.0.0.1:5173/procedures>). The maintenance evidence page opens a dedicated telemetry simulator at <http://127.0.0.1:5173/maintenance-simulator>: six actual feature values arrive sequentially at a selectable interval, then the authoritative score, cutoff decision, alert signal, report label, KPIs, and score history update. Module 6 covers demand forecasting with prediction intervals feeding a reorder rule (<http://127.0.0.1:5173/forecast>) and product recommendations evaluated on what a shopper has never bought (<http://127.0.0.1:5173/recommendations>). Every card exposes its complete workflow alongside the demo.
+Modules 5 and 6 add four more labs on the same pattern. Module 5 covers predictive maintenance on real compressor telemetry (<http://127.0.0.1:5173/maintenance>) and a grounded procedure assistant that cites public safety regulation and refuses when the answer is not in its library (<http://127.0.0.1:5173/procedures>). The maintenance evidence page opens a dedicated telemetry simulator at <http://127.0.0.1:5173/maintenance-simulator>: six actual feature values arrive sequentially at a selectable interval, then the authoritative score, cutoff decision, alert signal, report label, KPIs, and score history update.
+
+Module 6's two retail cards expose **Workflow** and **Demo**. Demo contains the complete interactive simulator, so there is no duplicate Simulator button:
+
+| Case | Current demo | Detailed workflow |
+|---|---|---|
+| Demand Forecasting with Regression | `/forecast` | `/workflow?courseCase=retail-demand-forecasting` |
+| Next Best Product | `/recommendations` | `/workflow?courseCase=retail-product-recommendations` |
+
+The older `/forecast-simulator` and `/recommendations-simulator` URLs remain available for existing
+bookmarks, but are no longer linked from the cards, workflows or demo pages.
+
+The demos embed the same tested classroom HTML simulators as the course downloads. Vite packages
+photo-free public exports as local assets in production; they run model inference in the browser without the
+forecast or recommendation APIs. Forecasting uses the pooled absolute-error regressor, historical
+26-week replay, MA8 comparison, feature what-ifs and grouped attribution. Recommendations use the
+full catalog, fixed top-15 links, real-customer histories, purchase simulation, exclusions and
+contribution explanations. Neither simulator retrains or writes business records. Workflow maps
+retain the surrounding planner/merchandiser process and explicitly separate unimplemented
+operational integrations from the classroom demonstration.
+
+The earlier moving-average/interval planner is preserved at `/forecast-reference`; the broader
+recommendation comparison app is at `/recommendations-reference`. Those reference pages still
+require their original APIs. They are not silently relabeled as the current classroom models.
+
+The simulator exports must exist before the web build. To regenerate them, use
+`notebooks/retail-simulators/build_simulators.py` with the existing notebook environment. Editing
+the source templates alone does not update the embedded exports. Product photographs retain
+their separate merchant rights and are omitted from this public release, including generated HTML.
+Local teaching copies may retain photos; the public versions use product names and neutral
+missing-photo labels. No Git LFS installation or image download is needed in Codespaces.
+
+Test the Studio handoff against a running server:
+
+```sh
+STUDIO_URL=http://127.0.0.1:5173 \
+PLAYWRIGHT_MODULE=/absolute/path/to/playwright/index.mjs \
+  node scripts/test-retail-showcase.mjs
+```
+
+Set `RETAIL_VERIFY_BUILD=1` when running against a Vite production preview to additionally compare
+the served HTML assets byte-for-byte with their tested source exports. The browser test covers
+both cards, workflow lenses and diagram navigation, embedded inference, purchase/undo, the absence
+of duplicate Simulator actions, mobile layouts and deep-link reloads without legacy API calls.
 
 The large datasets for these labs are published as GitHub Release assets rather than committed; `scripts/fetch-lab-data.mjs` downloads them once during Codespace creation, and `scripts/lab-data-manifest.json` records each file's checksum, licence and how to rebuild it from its original public source.
 

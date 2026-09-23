@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Next Best Product | Retail Decisions</title><style>__STYLE__</style><script>__PLOTLY__</script></head>
+<body><a href="#main" class="skip">Skip to workspace</a><div class="shell">
+<header class="mast"><div><p class="brand">RETAIL DECISIONS / MODULE 06</p><h1>Next Best Product</h1><p class="subtitle">Pick a real customer / pick something they bought / see the ten products the model puts in front of them</p></div><div class="mast-actions"><span class="status-dot">Offline model ready</span><button class="icon-button" title="Full screen" aria-label="Full screen" data-fullscreen data-icon="Maximize2"></button><button id="export" class="icon-button" title="Export session" aria-label="Export session" data-icon="Download"></button></div></header>
+<main id="main">
+<div class="controls recommend-controls"><label>1. Customer<select id="customer"></select></label><label>2. Something they bought<select id="purchase"></select></label><div class="actions"><button id="recommend" class="primary"><span data-icon="Sparkles"></span>Recommend top 10</button><button id="undo" title="Undo last action" disabled><span data-icon="Undo2"></span>Undo</button><button id="reset" title="Reset customer"><span data-icon="RotateCcw"></span>Reset</button></div></div>
+<div class="mode-row"><span class="mode-label">3. Rank products by</span><div class="segmented" id="mode" role="group" aria-label="Ranking method"><button data-mode="history" aria-pressed="true">Everything this customer bought</button><button data-mode="neighbor" aria-pressed="false">Only the purchase above</button><button data-mode="popularity" aria-pressed="false">Popular with everyone</button></div></div>
+<div class="stats"><div class="stat"><span>Products this customer bought</span><strong id="history-count">--</strong><small id="eligibility">Before the 2011-09-09 cut</small></div><div class="stat"><span>Catalog</span><strong id="catalog-count">4,443</strong><small>Products the model knows</small></div><div class="stat"><span>Top score</span><strong id="top-score">--</strong><small id="top-score-label">Highest of the ten</small></div><div class="stat"><span>How the ten were picked</span><strong id="engine-state" style="font-size:20px">--</strong><small>Fixed model / changing history</small></div></div>
+<div id="announcement" role="status" aria-live="polite" class="notice">Pick a customer, pick one of their purchases, then press Recommend top 10.</div>
+<section aria-labelledby="basis-title"><div class="section-heading"><h2 id="basis-title">What this customer already bought</h2><span id="basis-chip" class="chip">Model input</span></div><div id="basis" class="history-strip"></div><p id="basis-note" class="reference-note"></p></section>
+<section class="ranking-section" aria-labelledby="ranking-title"><div class="section-heading"><h2 id="ranking-title">Recommended for this customer</h2><span class="chip">10 slots</span></div><div id="ranking" class="ranking"></div><label class="inline-check"><input id="reveal-truth" type="checkbox">Show what this customer actually bought in the weeks after the cut</label><p id="ranking-footnote" class="reference-note"></p><p id="truth-note" class="reference-note"></p></section>
+<section class="explain-section" id="explanation" aria-labelledby="why-title"><div class="explain-controls"><label>Explain slot<select id="explain-select"></select></label><button id="exclude"><span data-icon="Ban"></span>Exclude product</button></div><div class="explain-title"><div id="why-media" class="selected-media"></div><div><h2 id="why-title">Why this product?</h2><p id="why-subtitle"></p></div></div><div class="stage-line"><strong>Purchase history</strong><span>&rarr;</span><strong>Learned similarity links</strong><span>&rarr;</span><strong>Sum contributions</strong><span>&rarr;</span><strong>Rank eligible products</strong></div><div id="score-equation" class="equation"></div><div class="charts-grid"><div><h3 id="contribution-heading">Purchase-to-recommendation links</h3><div id="contribution-chart" class="chart tall" role="img" aria-label="How the customer's purchases add up to the score for the selected recommendation"></div></div><div><h3>Exact score contributions</h3><div id="contribution-table" class="table-wrap"></div><p id="last-change" class="reference-note"></p></div></div></section>
+<details id="workbench"><summary>Build your own shopper / browse the catalog</summary><div class="workbench"><section aria-labelledby="catalog-title"><div class="section-heading"><h2 id="catalog-title">Product catalog</h2><span class="chip">Photos first</span></div><div class="catalog-tools"><label>Search products<input id="search" type="search" placeholder="Name or stock code" autocomplete="off"></label><label>Category<select id="category"><option value="all">All products</option><option value="bag">Bags</option><option value="cup">Kitchen &amp; table</option><option value="mat">Doormats</option><option value="frame">Frames</option><option value="decor">Decor</option><option value="box">Other giftware</option></select></label></div><div id="catalog" class="catalog-grid"></div><div class="pagination"><span id="page-label"></span><div class="actions"><button id="previous" class="icon-button" aria-label="Previous products" title="Previous products" data-icon="ArrowLeft"></button><button id="next" class="icon-button" aria-label="Next products" title="Next products" data-icon="ArrowRight"></button></div></div>
+<section class="basket" aria-labelledby="basket-title"><div class="section-heading"><h3 id="basket-title">Basket <span id="basket-count" class="chip">0</span></h3><button id="clear-cart" class="icon-button" title="Clear basket" aria-label="Clear basket" data-icon="X"></button></div><div id="basket" class="basket-items"></div><button id="purchase-button" class="primary" disabled><span data-icon="ShoppingBag"></span>Add to this customer's history</button></section>
+<details><summary id="history-title">Full purchase history</summary><div id="history" class="history-grid"></div></details><details><summary id="blocked-title">Merchandiser exclusions</summary><div id="blocked" class="history-grid"></div></details></section></div></details>
+<details id="photo-credits"></details>
+<details id="evidence"><summary>Model, data &amp; explanation boundaries</summary><p>Item-item collaborative filtering, cosine similarity, 15 outgoing neighbors per product. Scores are sums of similarity links from distinct purchased products, not purchase probabilities. Buying the same product twice does not raise its score. Purchase history changes here; the similarity model never retrains.</p><p id="customer-provenance"></p><p>The classroom policy requires five distinct products before a customer is personalized. Cold-start and zero-signal slots use recent-revenue fallback; if that list is exhausted, remaining slots use training popularity. Only the purchase above ranks a product's nearest neighbors and makes no customer-level claim. Popular with everyone uses training-customer counts and has no personalized explanation. Ties are resolved by stock-code order.</p><p>The displayed links are exact contributions to this model's score, not reasons a person wants a product or evidence of causal sales lift. Neither offer exposure nor a discount-response experiment is available; this is Next Best Product, not offer optimization.</p><p>UCI Online Retail II, DOI <a href="https://doi.org/10.24432/C5CG6D" target="_blank" rel="noopener">10.24432/C5CG6D</a>, CC BY 4.0. One historical UK gift wholesaler. Similarities use records through the existing 2011-09-09 split. Product photos and category labels are display-only; image availability affects catalog browsing order, never recommendation scores or ranking. Photographs have separate rights from the dataset. All actions stay in this page, with no order, payment, or account update.</p></details></main>
+<footer><span>ITAI 2372 / Retail Decisions</span><span>Educational simulation / no real purchases</span></footer></div>
+<script id="model-data" type="application/json">__DATA__</script><script>__ENGINE__</script><script>const RetailIcons=__ICONS__;</script><script>__COMMON__</script>
+<script>
+'use strict';
+const customerById=id=>DATA.customers.find(record=>record.id===id);
+let state={customer:DATA.defaultCustomer,history:[],truth:[],anchor:null,mode:'history',cart:[],blocked:[],selected:null,previous:[],action:'Customer loaded from the training data.',undo:[],page:0,ranking:null,personalized:true};
+const catalogOrder=DATA.catalog.map((_,index)=>index).sort((left,right)=>DATA.catalog[right][2]-DATA.catalog[left][2]||left-right);
+const photoCatalogOrder=catalogOrder.slice().sort((left,right)=>Number(!!DATA.productImages[DATA.catalog[right][0]])-Number(!!DATA.productImages[DATA.catalog[left][0]]));
+const name=index=>titleCase(DATA.catalog[index][1]);
+const hasPhoto=index=>!!DATA.productImages[DATA.catalog[index][0]];
+const byDisplay=(left,right)=>Number(hasPhoto(right))-Number(hasPhoto(left))||DATA.catalog[right][2]-DATA.catalog[left][2]||left-right;
+$('#customer').innerHTML=DATA.customers.map(record=>`<option value="${record.id}">Customer ${record.id} / ${record.history.length} product${record.history.length===1?'':'s'} bought</option>`).join('');
+$('#catalog-count').textContent=format(DATA.catalog.length,0);
+$('#customer-provenance').textContent=`The ${DATA.customers.length} customers in the list are real shoppers from the training data, two per history-size band, chosen for how many of their products have a photograph so the classroom demo is legible. Selection never looked at whether the model ranks them well. Across all ${format(DATA.nTestCustomers,0)} test customers the top ten contains a later purchase ${format(DATA.hitRate*100)}% of the time, against ${format(DATA.baselineHitRate*100)}% for a popularity list; this handful is far too small to measure that.`;
+function checkpoint(){state.undo.push({history:state.history.slice(),cart:state.cart.slice(),blocked:state.blocked.slice(),anchor:state.anchor,mode:state.mode,action:state.action});}
+function beforeAction(){state.previous=state.ranking?state.ranking.map(row=>({...row})):[];}
+
+function renderPurchases(){
+ const options=state.history.slice().sort(byDisplay);
+ $('#purchase').innerHTML=options.map(index=>`<option value="${index}" ${index===state.anchor?'selected':''}>${escapeHtml(name(index))}${hasPhoto(index)?'':' / no photo'}</option>`).join('')||'<option value="">No purchases yet</option>';
+ $('#purchase').disabled=!options.length;
+}
+function renderBasis(){
+ const shown=state.history.slice().sort(byDisplay).slice(0,12);
+ $('#basis').innerHTML=shown.map(index=>`<button class="basis-item ${index===state.anchor?'selected':''}" data-anchor="${index}" title="Use ${escapeHtml(name(index))} as the selected purchase">${hasPhoto(index)?productPhoto(DATA.catalog[index][0],DATA.catalog[index][1],true):''}<span>${escapeHtml(name(index))}</span></button>`).join('')||'<p class="empty">No purchases recorded for this customer.</p>';
+ const hidden=state.history.length-shown.length;
+ $('#basis-note').textContent=state.mode==='history'?`All ${state.history.length} distinct products feed the score${hidden>0?`; ${hidden} more are not shown here`:''}. Click one to make it the selected purchase.`:state.mode==='neighbor'?`Only ${state.anchor===null?'the selected purchase':name(state.anchor)} is used. The other ${Math.max(0,state.history.length-1)} purchases are ignored in this mode.`:'None of these purchases are used. The popularity list is the same for everyone.';
+ $('#basis-chip').textContent=state.mode==='history'?'Model input':state.mode==='neighbor'?'One product only':'Not used';
+}
+function neighborRanking(){
+ const excluded=new Set([...state.history,...state.blocked]);
+ const links=state.anchor===null?[]:DATA.edges[state.anchor].filter(edge=>!excluded.has(edge[0])).sort((left,right)=>right[1]-left[1]||left[0]-right[0]);
+ return {personalized:false,result:links.slice(0,DATA.slots).map(edge=>({index:edge[0],score:edge[1],source:'neighbor'}))};
+}
+function popularityRanking(){
+ const excluded=new Set([...state.history,...state.blocked]);
+ return {personalized:false,result:catalogOrder.filter(index=>!excluded.has(index)).slice(0,DATA.slots).map(index=>({index,score:DATA.catalog[index][2],source:'popularity'}))};
+}
+function getRanking(){
+ if(state.mode==='neighbor')return neighborRanking();
+ if(state.mode==='popularity')return popularityRanking();
+ return ENGINE.rank(DATA,state.history,state.blocked);
+}
+function render(){
+ const ranking=getRanking();state.ranking=ranking.result;state.personalized=ranking.personalized;
+ const old=new Map(state.previous.map((row,index)=>[row.index,index]));
+ $('#history-count').textContent=state.history.length;
+ $('#eligibility').textContent=state.history.length>=DATA.minHistory?`Before the ${DATA.cut} cut`:`${DATA.minHistory-state.history.length} more products needed to personalize`;
+ $('#engine-state').textContent=state.mode==='popularity'?'Popularity':state.mode==='neighbor'?'Bought together':ranking.personalized?'Personalized':'Cold start';
+ $('#ranking-title').textContent=state.mode==='popularity'?'Popular with everyone':state.mode==='neighbor'?`Customers who bought ${state.anchor===null?'this':name(state.anchor)} also bought`:ranking.personalized?'Recommended for this customer':'Popular right now';
+ $('#ranking-footnote').textContent=state.mode==='popularity'?'Ranking unit: number of training customers who bought the product.':state.mode==='neighbor'?'Ranking unit: cosine similarity to the one selected purchase. This is a product-page list, not a personalized recommendation.':ranking.personalized?'Ranking unit: the sum of similarity links from every product this customer bought. Fallback slots are labeled.':'Generic recent-revenue list; fewer than five products bought, so no customer-level recommendation is claimed.';
+ const top=state.ranking[0];
+ $('#top-score').textContent=!top?'--':top.source==='popularity'?format(top.score,0):top.score===null?'n/a':format(top.score,3);
+ $('#top-score-label').textContent=!top?'Highest of the ten':top.source==='popularity'?'Training customers':top.source==='fallback'?'Fallback slot / no score':'Summed similarity';
+ if(!state.ranking.some(row=>row.index===state.selected))state.selected=state.ranking[0]?.index??null;
+ const truth=new Set(state.truth),reveal=$('#reveal-truth').checked;
+ $('#ranking').innerHTML=state.ranking.map((row,index)=>{
+  const prior=old.get(row.index),change=!state.previous.length?'':prior===undefined?'NEW':prior===index?'':prior>index?`UP ${prior-index}`:`DOWN ${index-prior}`;
+  const anchorLink=state.mode==='history'&&state.anchor!==null?(DATA.edges[state.anchor].find(edge=>edge[0]===row.index)||[0,0])[1]:0;
+  const score=row.source==='fallback'?'Generic fallback':row.source==='popularity'?`${format(row.score,0)} customers`:`Score ${format(row.score,3)}`;
+  return `<div class="rank-item ${row.index===state.selected?'selected':''} ${reveal&&truth.has(row.index)?'hit':''}" data-rank="${index+1}"><span class="rank-number">${index+1}</span><button class="rank-main" data-explain="${row.index}" aria-label="Explain ${escapeHtml(name(row.index))}">${productPhoto(DATA.catalog[row.index][0],DATA.catalog[row.index][1],true)}<span class="rank-copy"><strong>${escapeHtml(name(row.index))}</strong><span class="rank-meta"><span>${score}</span>${anchorLink>0?`<span class="rank-anchor" title="Share of the score coming from the selected purchase">${format(anchorLink/row.score*100,0)}% from the selected purchase</span>`:''}${change?`<span class="rank-move ${change.startsWith('DOWN')?'down':''}">${change}</span>`:''}${reveal&&truth.has(row.index)?'<span class="rank-hit">bought later</span>':''}</span></span></button><button class="icon-button" data-add="${row.index}" ${state.cart.includes(row.index)?'disabled':''} title="Add to basket" aria-label="Add ${escapeHtml(name(row.index))} to basket">${icon('Plus')}</button></div>`;
+ }).join('')||'<p class="empty">No products to rank.</p>';
+ const hits=state.ranking.map((row,index)=>truth.has(row.index)?index+1:null).filter(Boolean);
+ $('#truth-note').textContent=!reveal?'':!state.truth.length?'No purchases are recorded for this customer after the cut, so there is nothing to check against.':hits.length?`This customer went on to buy ${hits.length===1?'the product in slot':'products in slots'} ${hits.join(', ')} during the held-out weeks. They bought ${state.truth.length} distinct products in total after the cut, so the other slots are not necessarily wrong.`:`None of these ten were among the ${state.truth.length} distinct products this customer bought after the cut. Across all ${format(DATA.nTestCustomers,0)} test customers the top ten contains a later purchase ${format(DATA.hitRate*100)}% of the time, so a miss is the more common outcome.`;
+ $('#explain-select').innerHTML=state.ranking.map((row,index)=>`<option value="${row.index}" ${row.index===state.selected?'selected':''}>${index+1}. ${escapeHtml(name(row.index))}</option>`).join('');
+ $('#history-title').textContent=`Full purchase history / ${state.history.length} distinct products`;
+ $('#history').innerHTML=state.history.slice().sort(byDisplay).map(index=>`<div class="basket-item"><span>${escapeHtml(name(index))}</span><button class="icon-button" data-forget="${index}" title="Remove from history" aria-label="Remove ${escapeHtml(name(index))} from history">${icon('X')}</button></div>`).join('')||'<p class="empty">No recorded purchases.</p>';
+ $('#blocked-title').textContent=`Merchandiser exclusions / ${state.blocked.length}`;
+ $('#blocked').innerHTML=state.blocked.map(index=>`<div class="basket-item"><span>${escapeHtml(name(index))}</span><button class="icon-button" data-unblock="${index}" title="Restore product" aria-label="Restore ${escapeHtml(name(index))}">${icon('Undo2')}</button></div>`).join('')||'<p class="empty">No excluded products.</p>';
+ $('#undo').disabled=!state.undo.length;
+ renderPurchases();renderBasis();renderBasket();renderCatalog();renderExplanation();
+}
+function renderExplanation(){
+ const target=state.selected,row=state.ranking.find(entry=>entry.index===target);
+ if(!row){$('#score-equation').textContent='No slot selected.';$('#contribution-table').innerHTML='';Plotly.purge('contribution-chart');return;}
+ $('#why-media').innerHTML=productPhoto(DATA.catalog[target][0],DATA.catalog[target][1]);
+ $('#why-title').textContent=name(target);
+ $('#why-subtitle').textContent=`Stock ${DATA.catalog[target][0]} / slot ${state.ranking.findIndex(entry=>entry.index===target)+1} for customer ${state.customer}`;
+ if(row.source==='personalized'){
+  const links=ENGINE.contributions(DATA,state.history,target),total=links.reduce((sum,entry)=>sum+entry.weight,0);
+  $('#contribution-heading').textContent='Purchase-to-recommendation links';
+  $('#score-equation').innerHTML=`<strong>${links.length}</strong><span>of this customer's purchases point here</span><strong>&rarr;</strong><strong>${format(total,3)}</strong><span>total ranking score</span>`;
+  const displayed=links.slice(0,6),rest=links.slice(6).reduce((sum,entry)=>sum+entry.weight,0);
+  const labels=displayed.map(entry=>name(entry.source)),weights=displayed.map(entry=>entry.weight);
+  if(rest>0){labels.push(`${links.length-6} other purchases`);weights.push(rest);}
+  const fullLabels=[...labels,name(target)];
+  plot('contribution-chart',[{type:'sankey',orientation:'h',arrangement:'snap',node:{pad:24,thickness:14,label:fullLabels.map(label=>label.length>26?label.slice(0,24)+'...':label),color:fullLabels.map((_,index)=>index===fullLabels.length-1?'#e8913c':fullLabels[index]===name(state.anchor)?'#f0b429':'#7eaeb8'),customdata:fullLabels,hovertemplate:'%{customdata}<extra></extra>'},link:{source:weights.map((_,index)=>index),target:weights.map(()=>fullLabels.length-1),value:weights,color:'rgba(126,174,184,.28)',hovertemplate:'Similarity contribution %{value:.6f}<extra></extra>'}}],{margin:{l:10,r:10,t:15,b:15},font:{family:'Inter, sans-serif',size:12,color:'#f5f3f0'}});
+  $('#contribution-table').innerHTML=`<table class="data-table"><thead><tr><th>Previously bought</th><th>Contribution</th></tr></thead><tbody>${links.map(entry=>`<tr${entry.source===state.anchor?' class="anchor-row"':''}><td>${escapeHtml(name(entry.source))}${entry.source===state.anchor?' / selected purchase':''}</td><td>${format(entry.weight,6)}</td></tr>`).join('')}<tr><td><strong>Sum / score</strong></td><td><strong>${format(total,6)}</strong></td></tr></tbody></table>`;
+ }else if(row.source==='neighbor'){
+  $('#contribution-heading').textContent='Similarity to the selected purchase';
+  $('#score-equation').innerHTML=`<strong>${format(row.score,3)}</strong><span>cosine similarity between ${escapeHtml(name(state.anchor))} and ${escapeHtml(name(target))}</span>`;
+  const rows=state.ranking.slice().reverse();
+  plot('contribution-chart',[{type:'bar',orientation:'h',x:rows.map(entry=>entry.score),y:rows.map(entry=>{const label=name(entry.index);return label.length>28?label.slice(0,26)+'...':label;}),marker:{color:rows.map(entry=>entry.index===target?'#e8913c':'#7eaeb8')},hovertemplate:'%{y}<br>similarity %{x:.6f}<extra></extra>'}],{margin:{l:210,r:25,t:20,b:50},xaxis:{title:{text:'Cosine similarity'},rangemode:'tozero',gridcolor:'#2e3140'},yaxis:{automargin:false,tickfont:{size:11}},showlegend:false});
+  $('#contribution-table').innerHTML=`<table class="data-table"><thead><tr><th>Also bought</th><th>Similarity</th></tr></thead><tbody>${state.ranking.map((entry,index)=>`<tr${entry.index===target?' class="anchor-row"':''}><td>${index+1}. ${escapeHtml(name(entry.index))}</td><td>${format(entry.score,6)}</td></tr>`).join('')}</tbody></table>`;
+ }else{
+  $('#contribution-heading').textContent=row.source==='popularity'?'How many customers bought it':'No personalized score for this slot';
+  $('#score-equation').innerHTML=row.source==='popularity'?`<strong>${format(row.score,0)}</strong><span>training customers bought this product</span>`:`<strong>Generic list</strong><span>recent revenue, then training popularity if needed</span>`;
+  const rows=state.ranking.slice().reverse();
+  plot('contribution-chart',[{type:'bar',orientation:'h',x:rows.map(entry=>DATA.catalog[entry.index][2]),y:rows.map(entry=>{const label=name(entry.index);return label.length>28?label.slice(0,26)+'...':label;}),marker:{color:rows.map(entry=>entry.index===target?'#e8913c':'#f0b429')},hovertemplate:'%{y}<br>%{x} training customers<extra></extra>'}],{margin:{l:210,r:25,t:20,b:50},xaxis:{title:{text:'Training customers'},rangemode:'tozero',gridcolor:'#2e3140'},yaxis:{automargin:false,tickfont:{size:11}},showlegend:false});
+  $('#contribution-table').innerHTML=`<p class="empty">${row.source==='popularity'?'No personal history contributes to this baseline. Every customer sees the same ten.':'No personalized score is used for this slot. The fallback is a fixed generic ordering, not a confidence score.'}</p>`;
+ }
+ const previous=state.previous.find(entry=>entry.index===target);
+ const scoreLabel=entry=>entry.source==='fallback'?'generic fallback':entry.source==='popularity'?`${format(entry.score,0)} training customers`:entry.source==='neighbor'?`${format(entry.score,3)} similarity`:`${format(entry.score,3)} similarity score`;
+ $('#last-change').textContent=previous?`Before last action: ${scoreLabel(previous)}. Current: ${scoreLabel(row)}. ${state.action}`:state.action;
+ document.querySelectorAll('[data-explain]').forEach(button=>button.closest('.rank-item').classList.toggle('selected',Number(button.dataset.explain)===target));
+}
+function renderCatalog(){
+ const search=$('#search').value.toLowerCase().trim(),filter=$('#category').value;
+ const matches=photoCatalogOrder.filter(index=>(filter==='all'||category(DATA.catalog[index][1])===filter)&&(`${DATA.catalog[index][0]} ${DATA.catalog[index][1]}`.toLowerCase().includes(search)));
+ state.page=Math.min(state.page,Math.max(0,Math.ceil(matches.length/6)-1));
+ const visible=matches.slice(state.page*6,state.page*6+6);
+ $('#catalog').innerHTML=visible.map(index=>`<article class="product-card">${productPhoto(DATA.catalog[index][0],DATA.catalog[index][1])}<h3>${escapeHtml(name(index))}</h3><small>${escapeHtml(DATA.catalog[index][0])}${state.history.includes(index)?' / already bought':''}</small><button data-add="${index}" ${state.cart.includes(index)?'disabled':''}>${icon('Plus')}${state.cart.includes(index)?'In basket':'Add to basket'}</button></article>`).join('')||'<p class="empty">No matching products.</p>';
+ $('#page-label').textContent=`${matches.length?state.page*6+1:0}-${Math.min((state.page+1)*6,matches.length)} of ${format(matches.length,0)}`;
+ $('#previous').disabled=state.page===0;$('#next').disabled=(state.page+1)*6>=matches.length;
+}
+function renderBasket(){
+ $('#basket-count').textContent=state.cart.length;
+ $('#basket').innerHTML=state.cart.map(index=>`<div class="basket-item"><span>${escapeHtml(name(index))}</span><button class="icon-button" data-remove="${index}" aria-label="Remove ${escapeHtml(name(index))} from basket" title="Remove from basket">${icon('X')}</button></div>`).join('')||'<span class="muted">Basket empty</span>';
+ $('#purchase-button').disabled=!state.cart.length;$('#clear-cart').disabled=!state.cart.length;
+}
+function setMode(mode){
+ beforeAction();state.mode=mode;
+ document.querySelectorAll('#mode button').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.mode===mode)));
+ state.action=mode==='history'?'Ranking by everything this customer bought.':mode==='neighbor'?`Ranking by similarity to ${state.anchor===null?'the selected purchase':name(state.anchor)} alone.`:'Ranking by overall popularity; this customer’s history is ignored.';
+ render();announce(state.action);
+}
+function loadCustomer(id){
+ const record=customerById(id);if(!record)return;
+ state.customer=id;state.history=record.history.slice();state.truth=record.truth.slice();
+ state.anchor=state.history.slice().sort(byDisplay)[0]??null;
+ state.cart=[];state.blocked=[];state.undo=[];state.previous=[];state.selected=null;state.page=0;
+ $('#customer').value=String(id);$('#reveal-truth').checked=false;
+ state.action=`Customer ${id} loaded: ${record.history.length} distinct products bought before ${DATA.cut}. No real account was changed.`;
+ render();announce(state.action);
+}
+function revealRanking(animated){
+ const items=[...document.querySelectorAll('#ranking .rank-item')];
+ if(!animated||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+ items.forEach((item,index)=>{item.classList.add('revealing');setTimeout(()=>item.classList.remove('revealing'),120*index+260);});
+}
+$('#recommend').addEventListener('click',()=>{
+ beforeAction();
+ state.action=state.mode==='history'?`Ranked the catalog for customer ${state.customer} from all ${state.history.length} of their purchases.`:state.mode==='neighbor'?`Ranked the catalog by similarity to ${state.anchor===null?'the selected purchase':name(state.anchor)}.`:'Ranked the catalog by overall popularity.';
+ render();revealRanking(true);announce(state.action);
+ $('#ranking').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'center'});
+});
+$('#customer').addEventListener('change',()=>loadCustomer(Number($('#customer').value)));
+$('#purchase').addEventListener('change',()=>{beforeAction();state.anchor=Number($('#purchase').value);state.action=`Selected purchase: ${name(state.anchor)}.`;render();announce(state.action);});
+$('#mode').addEventListener('click',event=>{const button=event.target.closest('[data-mode]');if(button)setMode(button.dataset.mode);});
+$('#reveal-truth').addEventListener('change',render);
+$('#reset').addEventListener('click',()=>loadCustomer(state.customer));
+$('#explain-select').addEventListener('change',()=>{state.selected=Number($('#explain-select').value);renderExplanation();});
+$('#exclude').addEventListener('click',()=>{if(state.selected===null)return;checkpoint();beforeAction();const selected=state.selected;state.blocked.push(selected);state.action=`Merchandiser excluded ${name(selected)}. No model retraining.`;render();announce(state.action);});
+$('#undo').addEventListener('click',()=>{const previous=state.undo.pop();if(!previous)return;beforeAction();Object.assign(state,{history:previous.history,cart:previous.cart,blocked:previous.blocked,anchor:previous.anchor,action:'Last action undone.'});setMode(previous.mode);});
+$('#purchase-button').addEventListener('click',()=>{if(!state.cart.length)return;checkpoint();beforeAction();const distinct=state.cart.filter(index=>!state.history.includes(index));state.history=[...new Set([...state.history,...state.cart])];state.action=`Added ${state.cart.length} product${state.cart.length===1?'':'s'} to customer ${state.customer}: ${distinct.length} new history entries. ${distinct.length?'Ranking recalculated.':'Binary history unchanged; scores unchanged.'}`;state.cart=[];render();announce(state.action);});
+$('#clear-cart').addEventListener('click',()=>{state.cart=[];render();announce('Basket cleared. Purchase history unchanged.');});
+document.addEventListener('click',event=>{
+ const anchor=event.target.closest('[data-anchor]');if(anchor){beforeAction();state.anchor=Number(anchor.dataset.anchor);state.action=`Selected purchase: ${name(state.anchor)}.`;render();announce(state.action);return;}
+ const add=event.target.closest('[data-add]');if(add){const index=Number(add.dataset.add);if(!state.cart.includes(index))state.cart.push(index);renderBasket();renderCatalog();document.querySelectorAll(`[data-add="${index}"]`).forEach(button=>button.disabled=true);announce(`${name(index)} added to basket. The ranking does not change until it joins the history.`);return;}
+ const remove=event.target.closest('[data-remove]');if(remove){state.cart=state.cart.filter(index=>index!==Number(remove.dataset.remove));render();return;}
+ const explain=event.target.closest('[data-explain]');if(explain){state.selected=Number(explain.dataset.explain);$('#explain-select').value=state.selected;renderExplanation();$('#explanation').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});return;}
+ const forget=event.target.closest('[data-forget]'),unblock=event.target.closest('[data-unblock]');
+ if(forget||unblock){checkpoint();beforeAction();const index=Number(forget?forget.dataset.forget:unblock.dataset.unblock);if(forget){state.history=state.history.filter(item=>item!==index);if(state.anchor===index)state.anchor=state.history.slice().sort(byDisplay)[0]??null;}else state.blocked=state.blocked.filter(item=>item!==index);state.action=`${name(index)} ${forget?'removed from history':'restored to eligible catalog'}.`;render();announce(state.action);}
+});
+for(const selector of ['#search','#category'])$(selector).addEventListener(selector==='#search'?'input':'change',()=>{state.page=0;renderCatalog();});
+$('#previous').addEventListener('click',()=>{state.page--;renderCatalog();});$('#next').addEventListener('click',()=>{state.page++;renderCatalog();});
+$('#export').addEventListener('click',()=>downloadJson('recommendation-session.json',{simulation:true,model:DATA.model,customer:state.customer,rankedBy:state.mode,selectedPurchase:state.anchor===null?null:DATA.catalog[state.anchor][0],history:state.history.map(index=>DATA.catalog[index][0]),excluded:state.blocked.map(index=>DATA.catalog[index][0]),ranking:state.ranking.map(row=>({...row,product:DATA.catalog[row.index][0],boughtAfterCut:state.truth.includes(row.index)}))}));
+loadCustomer(DATA.defaultCustomer);
+window.retailSimulator={getState:()=>state,data:DATA,engine:ENGINE,loadCustomer,setMode};
+</script></body></html>

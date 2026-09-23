@@ -1,69 +1,117 @@
-# Demand Forecasting Lab — Weekly Demand, an Honest Interval, One Order
+# Demand Forecasting with Regression
 
-ITAI 2372 Module 6, Case 1. Instructor-led demonstration; students rerun later in Codespaces.
+ITAI 2372 Module 6, Case 1. Instructor-led undergraduate lesson.
 
-## The case
+## The decision
 
-A UK gift wholesaler ships to small independent retailers and has to decide, every week, how
-many of each product to have on the shelf. Too few and the sale walks away; too many and the
-money sits in a box. This lab forecasts next week's units per product, puts an honest range
-around that forecast, and turns the range into a **proposed** order quantity.
+**Question:** How many units of a steady-selling product might be needed next week?
 
-**Claim boundary — read this before using any number here.** The forecast is **not a promise**,
-the interval is **not a guarantee**, and **a planner approves every order — the system never
-places one.** On the 26 held-out weeks the 80% band contained actual demand **84.06%** of the
-time across 12,194 product-weeks. It **does not hold at Christmas**: on the 50 most Q4-skewed
-products inside the October–November ramp the same band caught only **66.2%**, and **69% of
-those misses were above the band** — the direction that empties a shelf. Every currency figure
-in the notebook is a labeled classroom assumption, not any real retailer's economics.
+The notebook turns recent weekly sales into lag and rolling-window features, then compares:
+
+- an eight-week moving-average baseline; and
+- a trained histogram gradient-boosted regressor using absolute-error loss.
+
+The output is a predicted number of units for planner review. It is not a probability, a
+guaranteed sale, or an automatically approved purchase order.
+
+## The five stages
+
+1. Data Ingestion
+2. Feature Engineering
+3. Model Training
+4. Model Validation
+5. Model Prediction
+
+The classroom notebook contains 32 cells, 13 code cells, and six instructional plots. Every plot
+has a short guide explaining its marks, finding, and workflow consequence.
 
 ## The data
 
-Real transaction records from **one** UK-registered, non-store online gift wholesaler,
-published by the UCI Machine Learning Repository as **Online Retail II** (dataset 502) under
-**CC BY 4.0**, DOI **10.24432/C5CG6D**.
+The source is **UCI Online Retail II**, dataset 502, DOI `10.24432/C5CG6D`, licensed CC BY 4.0.
+It records transactions from one UK online gift wholesaler from December 2009 through December
+2011.
 
-- 1,067,371 raw transaction lines, 2009-12-01 to 2011-12-09, 8 columns, 43 countries
-- Committed here as weekly units per product: `data/online_retail_weekly.csv.gz`, 952,490 bytes,
-  197,951 product-weeks. The 45.6 MB source workbook is **not** committed.
-- **The retailer is closed on Saturdays — exactly one open Saturday in 739 days.** A daily model
-  would learn the shutter as a weekly demand collapse, which is why this lab works in weeks.
-  104 weeks in the file; the two partial edge weeks are dropped, leaving **102 complete weeks**.
-- Quirks that are stated out loud rather than quietly cleaned: **19,494 cancellation lines**
-  (removed), **34,335 exact duplicate rows** (kept once), 22,950 non-positive quantities and
-  6,207 non-positive prices (removed), **243,007 guest-checkout lines with no customer at all —
-  22.8%** (kept: demand is demand), and non-product stock codes such as `POST`, `DOT`, `M`,
-  `BANK CHARGES` (removed by name; a handful survive and the cohort rule is what excludes them).
-- **The median product sells nothing in 68.6% of the 102 weeks.** Only **469 of 4,871 products
-  (9.6%)** clear the cohort rule, and those 469 carry **41.8%** of all units shipped. The rest
-  are intermittent demand and this lab refuses to forecast them.
-- The cohort is chosen on the **76 training weeks only**. The same rule read over all 102 weeks
-  admits 442 products — fewer, and **leaked**, because the membership test has read the test
-  window.
-- What the file contains is **sales**, not demand: units a customer wanted and could not get
-  leave no trace. Every historical stockout here is invisible.
+The committed classroom file is `data/online_retail_weekly.csv.gz`:
 
-**Checksum note.** The digest that is verified is taken on the **decompressed CSV content**
-(`4af85e40…`), not on the gzip archive. A gzip member stores the time it was written, so the
-archive's own digest changes every time the file is rebuilt from identical data and cannot be
-reproduced on another machine.
+- 197,951 product-week rows;
+- 102 complete weeks after dropping two partial edge weeks;
+- 4,871 products in the weekly panel;
+- 469 steady-selling products selected using training weeks only; and
+- 12,194 product-week rows in the final 26-week test period.
 
-## How to view or run it
+These records show **sales**, not every unit customers wanted. Historical stockouts can hide unmet
+demand.
 
-**No installation.** Open `backup/01_forecast_build.html` in any browser. It is self-contained,
-works offline, and shows the committed run with all nine figures rendered.
+## Features and model selection
 
-**To rerun the source notebook**, from the repository root:
+One supervised-learning row represents one product in one target week. The model inputs are:
 
-```bash
-node scripts/venv-python.mjs notebooks/demand-forecasting/scripts/prepare_app_artifacts.py
-```
+| Group | Columns | Meaning |
+|---|---|---|
+| Recent sales | `lag1`, `lag2`, `lag3`, `lag4`, `lag8` | Units in selected earlier weeks |
+| Recent level | `ma4`, `ma8` | Four- and eight-week averages |
+| Recent variation | `std4` | Standard deviation over four weeks |
+| Seasonality | `lag52`, `woy`, `woy_sin`, `woy_cos` | Same week last year and calendar position |
 
-Then open `01_forecast_build.ipynb`. It executes end to end in about three seconds and needs no
-network. Nothing downloads at setup or during class.
+The target is next week's units. Product name, price, inventory, promotion, lead time, and customer
+identity are not features.
 
-**To regenerate the notebook itself**, edit `scripts/build_notebook.py` and run it — never
-hand-edit the `.ipynb`:
+Four candidates are compared on chronological validation weeks, and the lowest validation MAE is
+selected before the final test is opened:
+
+| Candidate | Validation MAE | Selection result |
+|---|---:|---|
+| Eight-week average | 51.37 | Baseline |
+| Ridge regression | 52.96 | Not selected |
+| Gradient boosting, squared-error loss | 53.03 | Not selected |
+| Gradient boosting, absolute-error loss | **48.81** | **Selected** |
+
+The selected `HistGradientBoostingRegressor` builds small decision trees in sequence. Each tree
+corrects part of the error left by earlier trees. Absolute-error loss aligns training with the
+primary goal: reducing the typical absolute miss.
+
+### One shared model across products
+
+This lesson does **not** train 469 separate models. It stacks product-week rows and trains one
+shared estimator:
+
+| Period | Combined rows |
+|---|---:|
+| Model-selection fit | 24,388 = 469 products × 52 target weeks |
+| Validation | 7,504 = 469 products × 16 target weeks |
+| Final pre-test refit | 31,892 = 469 products × 68 target weeks |
+| Final test | 12,194 = 469 products × 26 target weeks |
+
+Each row uses only that product's own lag, average, variation, and calendar features. `StockCode`
+and product name are not inputs, so the model learns relationships shared across products rather
+than memorizing an item. Pooling is used because 52 selection-fit rows per product is too little
+for a separate boosted-tree model. The tradeoff is that the shared model cannot learn a permanent
+item-specific rule, and errors on high-volume products can have more influence in raw units.
+
+## Measured result
+
+Model choice uses a chronological validation period before the final test is opened. On the
+untouched 26-week test period:
+
+| Method | MAE | RMSE |
+|---|---:|---:|
+| Eight-week average | 52.31 units | 129.75 units |
+| Gradient-boosted regression | 47.97 units | 133.78 units |
+
+MAE is the average size of a miss. The regressor improves this typical miss by about 8.3%.
+RMSE gives extra weight to large misses; its increase shows that some seasonal spikes became
+worse. Both results belong in the conclusion.
+
+**Worked example.** For `JUMBO BAG RED RETROSPOT` in the week of November 21, 2011, actual sales
+were 753 units. The eight-week average predicted 1,386.75 (absolute error 633.75); the selected
+regressor predicted 824.15 (absolute error 71.15). One example explains the calculation, while the
+12,194-row test result justifies the model choice.
+
+## View or run
+
+Open `backup/01_forecast_build.html` for the self-contained offline classroom copy.
+
+From the repository root, regenerate and execute the notebook with:
 
 ```bash
 node scripts/venv-python.mjs notebooks/demand-forecasting/scripts/build_notebook.py
@@ -72,68 +120,43 @@ node scripts/venv-python.mjs -m nbconvert --to notebook --execute --inplace \
 node scripts/venv-python.mjs notebooks/demand-forecasting/scripts/make_backup.py
 ```
 
-## What is in here
+Run the focused teaching checks with:
 
-| Path | What it is |
+```bash
+node scripts/venv-python.mjs -m pytest -q \
+  notebooks/demand-forecasting/tests/test_demand_teaching.py
+```
+
+## Paths
+
+| Path | Purpose |
 |---|---|
-| `01_forecast_build.ipynb` | The executed teaching notebook, five stages, outputs committed |
-| `backup/01_forecast_build.html` | The same notebook as a self-contained offline page |
-| `fclab/` | The lab package: config, data, features, forecast, intervals, metrics, policy, charts, handoff |
-| `data/online_retail_weekly.csv.gz` | The committed weekly dataset |
-| `scripts/build_dataset.py` | Rebuilds the weekly CSV from the raw UCI download (run once, not at setup) |
-| `scripts/build_notebook.py` | Generates the notebook — **the canonical source; edit this, not the .ipynb** |
-| `scripts/make_backup.py` | Produces the offline HTML and refuses to finish if it loads anything remote |
-| `scripts/prepare_app_artifacts.py` | Headless artifact build for the web app |
-| `artifacts/` | Exported forecaster, model card, evaluation, operating policy, sample manifest (gitignored; regenerate with `prepare_app_artifacts.py`) |
+| `01_forecast_build.ipynb` | Executed five-stage classroom notebook |
+| `backup/01_forecast_build.html` | Offline classroom HTML |
+| `fclab/teaching.py` | Small classroom calculation and plotting API |
+| `scripts/build_notebook.py` | Canonical classroom notebook source |
+| `tests/test_demand_teaching.py` | Structure and frozen-result checks |
+| `backup/02_forecast_reference.ipynb` | Preserved advanced interval and inventory lesson |
+| `backup/02_forecast_reference.html` | Offline advanced reference |
+| `scripts/build_reference_notebook.py` | Advanced reference generator |
+| `scripts/prepare_app_artifacts.py` | Existing application-artifact build |
 
-## The exported contract
+## Classroom and application boundary
 
-The demo service loads these exact files, so it scores with the same model the notebook fitted:
+The existing application artifacts still use the earlier MA8 plus empirical-residual interval
+model. The rebuilt classroom notebook teaches genuine supervised regression and never writes or
+replaces application artifacts. The two paths are labeled separately until the application is
+explicitly redesigned and revalidated.
 
-- `forecaster.joblib` — the MA8 windows and each product's residual distribution
-- `operating_policy.json` — the critical ratios, the cost assumptions, and the boundary statement
-- `evaluation.json` — every measured number the notebook prints, including the baseline
-  leaderboard, the interval comparison, the seasonal coverage slices, and the frozen check
-- `model_card.json`, `sample_manifest.parquet` — model facts and the ten packaged demo products,
-  which include the three where the policy loses money
+## Limits
 
-The notebook's last cell reloads the artifact **from disk** and re-scores all 12,194 held-out
-product-weeks, requiring **bitwise-identical** forecasts and order quantities before it will
-call the run complete.
-
-## Honest limitations, which are also the lesson
-
-- **The interval fails at Christmas, and that is measured, not suspected.** One product's annual
-  coverage is a textbook **80.8%** — and **all five of its misses are above the band, inside the
-  autumn ramp**. An aggregate metric can be exactly right and still describe the wrong thing.
-- **Aggregate seasonality is 1.65x; product-level seasonality reaches 9.36x.** The average hid a
-  factor of nine.
-- **The policy makes 115 of 469 products more expensive**, all of them declining sellers. In
-  cash terms the worst of the walked-through cases is `PAPER CHAIN KIT EMPIRE`, whose holdout
-  cost goes from about `$162` to about `$785` — **+383.6%**. A rule that wins 75.5% of the time
-  visibly loses the rest, and the planner whose name is on those orders will notice.
-- **The textbook seasonal method is the worst real method here.** Seasonal-naive scores MAE
-  **84.52** and loses to forecasting zero forever (**84.33**), because one year of history gives
-  one noisy observation per week rather than a season. MA8 wins at **52.31**.
-- **The accurate model was the wrong model.** Quantile gradient boosting beat the deployed method
-  on MAE (47.97 vs 51.57) and delivered **75.0%** coverage against a promised 80%, predicting
-  negative demand on **3.63%** of rows. Empirical residual quantiles delivered 84.06%, fit
-  ~200x faster, and yield any quantile for free — which is the only reason the interactive
-  cost-ratio control can respond in real time.
-- **MAPE recommends closing the warehouse.** It scores the real forecast at **8.27e+15** and a
-  flat-zero forecast at **0.9073**. It appears in this lab exactly once, as a warning. MAE is not
-  innocent either: by MAE, flat zero beat seasonal-naive.
-- **The band is wider than the forecast.** Median band width is **88.08 units** against a median
-  non-zero week of 34 — **2.59x**. That width is a measurement of the business's real variance,
-  and a narrower band would simply be a band that lies.
-- **The dollar figures are classroom assumptions**, clearly labeled as such. Overstock
-  `co = 0.10 x unit price` per unit-week; understock `cu = ratio x co`. They are not measured
-  costs from any retailer, and `cu` and `co` are the two numbers only operations and finance can
-  supply.
+- The cohort excludes intermittent products that sell in fewer than 90% of training weeks.
+- Promotions, inventory, lead time, competitor activity, and stockouts are unavailable.
+- One wholesaler from 2009-2011 does not represent current retail.
+- Better MAE does not mean every week or every product improved.
+- A planner remains responsible for the replenishment decision.
 
 ## Attribution
 
 Chen, D. (2019). *Online Retail II*. UCI Machine Learning Repository.
-https://doi.org/10.24432/C5CG6D — dataset 502, **CC BY 4.0**.
-
-This lab is educational. It is not a validated demand-planning system for any real business.
+https://doi.org/10.24432/C5CG6D, CC BY 4.0.

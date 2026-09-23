@@ -92,6 +92,7 @@ export default function ShowcasePage() {
               : item.id === "retail-product-recommendations-lab"
                 ? "/recommendations"
               : `/demo?case=${encodeURIComponent(item.id)}`;
+            const retailSimulator = item.id === "retail-demand-forecasting-lab" || item.id === "retail-product-recommendations-lab";
             return (
               <article key={item.id} className={`use-case-card accent-${item.accent}`}>
                 <div className="use-case-card-main">
@@ -108,7 +109,7 @@ export default function ShowcasePage() {
                     <span>Data: {item.dataReadiness}</span>
                   </div>
                 </div>
-                <div className="case-card-actions">
+                <div className={`case-card-actions${retailSimulator ? " retail-case-actions" : ""}`}>
                   {item.courseCaseId ? (
                     <button type="button" onClick={() => navigate(workflowTarget)}>
                       <Workflow size={14} aria-hidden="true" /> Workflow
@@ -118,7 +119,7 @@ export default function ShowcasePage() {
                   {item.demoStatus === "available" ? (
                     <button type="button" onClick={() => navigate(demoTarget)}>
                       <Play size={14} aria-hidden="true" /> Demo
-                      <small>live</small>
+                      <small>{retailSimulator ? "browser" : "live"}</small>
                     </button>
                   ) : null}
                 </div>

@@ -23,6 +23,7 @@ __pycache__/
 *.sqlite3
 test-results/
 playwright-report/
+notebooks/retail-simulators/product-images/
 AppHost/bin/
 AppHost/obj/
 AppHost/.aspire/

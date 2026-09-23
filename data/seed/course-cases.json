@@ -6580,15 +6580,15 @@
   },
   {
     "id": "retail-demand-forecasting",
-    "title": "One Week of Reorder Planning",
-    "subtitle": "From the weekly sales file to a purchase order",
+    "title": "Demand Forecasting with Regression",
+    "subtitle": "From weekly sales history to a planner-reviewed replenishment decision",
     "industry": "Retail, Supply Chain & Logistics",
-    "learningObjective": "Map a wholesaler's weekly replenishment as an operating process, turn a demand range into an order quantity priced against stockout and overstock costs, and keep the order itself with a planner.",
-    "throughline": "The model produces a range, not a promise; the cost of being short versus the cost of being long picks the quantity inside that range; and a planner, never the system, places the order.",
+    "learningObjective": "Connect product-week features, one pooled regression model and later-period error checks to a replenishment process whose inventory decisions remain with a planner.",
+    "throughline": "Predict next-week units, compare with an eight-week average, then let the planner combine the estimate with inventory and lead time. A lower MAE is not an order quantity or a promise about seasonal peaks.",
     "introduction": {
       "title": "What happens in a wholesaler's weekly reorder planning?",
       "context": "This business sells gifts and homeware in bulk to shops, not to the public. It holds thousands of products in one warehouse, and every week it has to decide how many units of each one to buy from its suppliers. Order too few and a shop's order cannot be filled, so the sale goes to a competitor and may not come back. Order too many and the stock sits in the warehouse costing money until it is marked down. Nobody knows next week's demand. The planning team only knows what sold in the weeks before, and the whole job is deciding how to act on that.",
-      "workflow": "The workflow follows one weekly planning cycle. The sales file closes on Sunday night, cancellations and non-product lines are removed, and the remaining order lines are totaled into one row per product per week. Products with too little history are set aside to be planned by hand. For the rest, a model produces a demand range for the coming week, a cost-based policy turns that range into an order quantity, and a planner approves, adjusts, or holds it. The purchase order goes to the supplier, the delivery is received, and next week's sell-through is recorded against what was ordered.",
+      "workflow": "Clean and aggregate transaction lines into complete product-week histories, check the product's eligibility, and build twelve lag, rolling and calendar features. One shared regressor estimates next-week units. A planner checks stock, incoming supply, promotions and lead time before approving, adjusting or holding an order. Purchasing, receipt and outcome logging are the surrounding business process, not live integrations in the demo. The simulator replays ten products across 26 held-out weeks and compares regression with the eight-week average; it never orders or retrains.",
       "startsWhen": "The weekly sales file closes and the week's order lines are handed to the planning team.",
       "endsWhen": "The purchase order is placed with the supplier and the delivery receipt is recorded against it."
     },
@@ -6596,12 +6596,12 @@
       {
         "id": "input",
         "label": "Inputs",
-        "description": "A week of order lines: product, units sold, unit price, and the weeks before it"
+        "description": "Complete weekly sales histories; product identity joins records but is not a model feature"
       },
       {
         "id": "process",
         "label": "Process",
-        "description": "Clean the lines, build the weekly demand panel, forecast a range, size the order"
+        "description": "Clean sales, build earlier-week features, predict units, and review inventory context"
       },
       {
         "id": "decision",
@@ -6616,29 +6616,29 @@
       {
         "id": "outcome",
         "label": "Outcome",
-        "description": "Stock received, sell-through recorded, and the week's over- and under-ordering costed"
+        "description": "Recorded sales compared with predictions; stockouts and business outcomes reviewed separately"
       }
     ],
     "baseline": [
       {
-        "value": "4,900 products",
-        "label": "active products in the warehouse",
-        "note": "Classroom catalog-size assumption"
+        "value": "469 products",
+        "label": "steady sellers in the classroom model",
+        "note": "Cohort selected using training history; not the whole catalog"
       },
       {
-        "value": "470 products",
-        "label": "steady sellers planned by forecast each week",
-        "note": "Classroom cohort assumption; the rest are too intermittent to forecast"
+        "value": "31,892 rows",
+        "label": "pre-test product-weeks used for the final pooled fit",
+        "note": "469 products x 68 target weeks; one shared estimator"
       },
       {
-        "value": "10% of unit price",
-        "label": "cost of holding one unit of overstock for one week",
-        "note": "Classroom cost assumption"
+        "value": "52.31 → 47.97",
+        "label": "test MAE in units: average baseline versus regression",
+        "note": "Same 12,194 held-out product-weeks; lower average absolute error"
       },
       {
-        "value": "2:1, 4:1, 9:1",
-        "label": "stockout-to-overstock cost ratios taught in class",
-        "note": "Classroom cost-ratio assumptions, not one measured number"
+        "value": "129.75 → 133.78",
+        "label": "test RMSE in units: baseline versus regression",
+        "note": "Large misses worsen; no universal improvement claim"
       },
       {
         "value": "1 week",
@@ -6664,7 +6664,7 @@
       },
       {
         "id": "model",
-        "label": "Forecast model and order policy",
+        "label": "Regression model and planning rules",
         "order": 3
       },
       {
@@ -6737,7 +6737,7 @@
       },
       {
         "id": "forecast",
-        "label": "How much will sell next week, and in what range?",
+        "label": "How many units might sell next week?",
         "lane": "model",
         "kind": "decision",
         "x": 505,
@@ -6746,7 +6746,7 @@
       },
       {
         "id": "orderpolicy",
-        "label": "How many units does the cost ratio call for?",
+        "label": "What does inventory and lead time imply for ordering?",
         "lane": "model",
         "kind": "decision",
         "x": 605,
@@ -6796,7 +6796,7 @@
       },
       {
         "id": "review",
-        "label": "Did the range hold up for this product?",
+        "label": "Where did this product's forecast miss?",
         "lane": "review",
         "kind": "decision",
         "x": 1125,
@@ -6805,7 +6805,7 @@
       },
       {
         "id": "outcome",
-        "label": "Week closed and the cost of the order recorded",
+        "label": "Sales, forecast errors and planner actions reviewed",
         "lane": "review",
         "kind": "outcome",
         "x": 1195,
@@ -6857,7 +6857,7 @@
         "id": "e5",
         "from": "forecast",
         "to": "orderpolicy",
-        "label": "a demand range, not a single number",
+        "label": "next-week units, not certainty",
         "labelDy": -18,
         "kind": "normal",
         "documented": true
@@ -6866,7 +6866,7 @@
         "id": "e6",
         "from": "orderpolicy",
         "to": "proposal",
-        "label": "quantity at the cost-based service level",
+        "label": "stock and supply checked; proposal prepared",
         "kind": "normal",
         "documented": true
       },
@@ -6924,7 +6924,7 @@
         "id": "e13",
         "from": "review",
         "to": "outcome",
-        "label": "over- and under-ordering costed",
+        "label": "errors and operational exceptions inspected",
         "kind": "normal",
         "documented": true
       },
@@ -6977,7 +6977,7 @@
         "id": "x5",
         "from": "review",
         "to": "orderpolicy",
-        "label": "cost ratio revisited for declining sellers",
+        "label": "planning assumptions revisited",
         "labelDy": -28,
         "kind": "loop",
         "documented": false
@@ -7003,26 +7003,26 @@
         "label": "Does this product have enough weeks of sales to be forecast at all?",
         "owner": "Demand planning system",
         "frequency": "Every product, every weekly run",
-        "wrongCost": "A product with three weeks of history gets a confident-looking range that is really just noise, and somebody orders against it",
+        "wrongCost": "An outside-cohort product receives a precise-looking estimate from a model not evaluated for that demand pattern",
         "verdict": "rule",
         "verdictLabel": "Use a rule",
         "testAnswer": "No. How many weeks a product needs, and how many of them must have sales, is a requirement written down in advance.",
-        "why": "Most of the catalog sells in bursts: the middle product in the classroom data has no sales at all in about two weeks out of three. Forecasting that is not hard, it is meaningless, and the honest answer is to say so rather than produce a number.",
+        "why": "Many products have intermittent sales. Such demand can be forecast with appropriate methods, but this classroom regressor is evaluated only for 469 steady sellers. Sparse or new histories need a different method or manual review.",
         "recommendation": "Require a minimum number of weeks with sales inside the training window, and count those weeks on the training window only, never across the weeks the forecast will be tested on. Products that fail the check are sent to be planned by hand.",
         "aiRelevant": false,
         "placement": "decision"
       },
       {
         "id": "forecast",
-        "label": "How many units of this product will sell next week, and how far either side of that could it plausibly land?",
-        "owner": "Forecast model service",
+        "label": "How many units might this product sell next week?",
+        "owner": "Forecast model, reviewed by the demand planner",
         "frequency": "Every steady-selling product, every week",
-        "wrongCost": "A number with no range around it gets ordered as if it were certain, and the warehouse ends the week either short or overstocked",
+        "wrongCost": "A forecast miss is treated as certainty or copied straight into an order without inventory and supplier context",
         "verdict": "ai-prediction",
         "verdictLabel": "AI · Prediction",
-        "testAnswer": "Yes. How much a product sells next week depends on patterns in its own sales history that nobody can write down as a rule, and the width of the plausible range differs for every product.",
-        "why": "This is the module's central idea. A forecast of 40 units is not a plan. A forecast of 40 units that could plausibly be 22 or 61 is a plan, because the order quantity depends on the width of that range, not on its center.",
-        "recommendation": "Publish a demand range for the coming week with the interval and its nominal level shown together, and let the order policy and the planner decide what to do with it. Say what it claims: the forecast is not a promise, the interval is not a guarantee that demand will land inside it, and the system never places an order.",
+        "testAnswer": "Yes. A regressor can learn relationships between earlier sales features and later units. It must first beat a simple eight-week average on a time-ordered validation period.",
+        "why": "The selected absolute-error gradient boosting model lowers average absolute error while RMSE worsens. Both facts matter: a better average is not evidence that every product or seasonal peak improves.",
+        "recommendation": "Return predicted units with the baseline and an explanation of the feature-group contributions. Keep actual test outcomes separate until revealed. A planner decides how the estimate affects replenishment; what-if changes do not retrain the estimator or change the recorded outcome.",
         "aiRelevant": true,
         "placement": "decision",
         "design": {
@@ -7031,54 +7031,54 @@
             "owner": "Sales operations, who own the order records",
             "readiness": "Prepared classroom dataset: a public wholesaler transaction log covering two years, cleaned and totaled into a weekly panel once at build time and committed as a small CSV",
             "fields": [
-              "Product code and product name",
-              "Week ending date",
-              "Units sold in that week",
-              "Unit price that week",
-              "Number of weeks with sales inside the training window",
-              "Weeks since the product first sold"
+              "Product code for grouping only; not a model feature",
+              "Complete target-week date and recorded units",
+              "Sales lags 1, 2, 3, 4, 8 and 52",
+              "Four- and eight-week moving averages",
+              "Four-week standard deviation",
+              "Week number and sine/cosine calendar features"
             ],
-            "risk": "Most products sell in bursts, so a panel that looks complete is mostly zeros. The retailer is closed on Saturdays, which a daily model would learn as a fake weekly pattern and which is why the panel is weekly. Only about one year of usable history exists per product, so there is not enough to lean on a seasonal pattern. And selecting the steady-seller cohort across all weeks instead of the training window quietly leaks the test period into the setup."
+            "risk": "Sales omit unmet demand during stockouts. Promotion, price, inventory and lead time are not model inputs. Cohort selection and features must use only earlier data. The simulator's ten examples do not replace evaluation across all 469 products."
           },
           "method": {
             "pattern": "prediction",
-            "output": "A demand range, not a single number: a forecast of next week's units together with an interval around it at a stated level",
-            "technique": "An eight-week moving average as the point forecast, with the interval built from that product's own past forecast errors as empirical quantiles, clipped at zero because demand cannot be negative. Compared against a seasonal-naive forecast, which is worse here than forecasting nothing at all because one year is not a season, and against quantile gradient boosting, which wins on average error but covers only three quarters of the weeks its interval promises and predicts negative demand on some rows."
+            "output": "A numeric estimate of next-week units, with an eight-week-average baseline; no prediction interval is claimed by the classroom regressor",
+            "technique": "One pooled HistGradientBoostingRegressor with absolute-error loss across 469 products. Selection uses 24,388 fit rows and 7,504 later validation rows, comparing MA8, Ridge and two boosting losses. Refit on 31,892 pre-test rows, then test on 12,194 later rows. Predictions are clipped at zero. The simulator runs exported trees in the browser and explains four feature groups against fixed training references, not causal effects."
           },
           "metric": {
-            "technical": "Interval coverage measured against its nominal level, reported as a pair, alongside mean absolute error in units. Never a percentage error, which on products with zero-sales weeks divides by nearly nothing, inverts, and rates a forecast of zero as the best model in the room.",
-            "business": "Total cost of over- and under-ordering across the cohort, compared against ordering at the point forecast: on the frozen holdout the cost policy is about 9 percent cheaper at a 4:1 stockout-to-overstock ratio and about 28 percent cheaper at 9:1, and roughly break-even at 2:1.",
-            "baseline": "Order the point forecast with no range around it, or simply order what sold last week"
+            "technical": "Final test MAE: 52.31 baseline versus 47.97 regression. RMSE: 129.75 versus 133.78. Both use 12,194 product-weeks. The frozen choice is made on validation MAE before testing; individual products and large misses can worsen.",
+            "business": "Track stockouts, holding cost and planner overrides in a real rollout. Those outcomes require inventory and operational data absent here; no reduction in cost, waste or stockouts is claimed by this simulator.",
+            "baseline": "Predict the average of the previous eight recorded weeks, using the same eligible product-week rows"
           },
           "human": {
             "role": "Demand planner",
-            "checkpoint": "The planner sees the proposed quantity, the range it came from, and the cost ratio that picked it, and then approves, adjusts, or holds the order. The system proposes a number and never places an order.",
-            "falsePositiveCost": "Overstock: units sitting in the warehouse at a holding cost of about 10 percent of unit price per unit per week until they are marked down (classroom assumption).",
+            "checkpoint": "The planner compares the forecast with the baseline and checks usable stock, incoming orders, promotions, lead time and pack sizes. The simulator produces forecasts, not purchase orders; purchasing is outside its authority.",
+            "falsePositiveCost": "Overprediction may support excess stock, holding cost and markdowns; the actual cost depends on the operating policy and is not measured here.",
             "falseNegativeCost": "A stockout and a lost sale: the shop's order cannot be filled, the margin on those units is gone, and the shop may place its next order somewhere else."
           },
           "architecture": [
             "Transaction log with cancellations and non-product lines removed",
             "Weekly demand panel builder",
             "Training-window cohort selection for steady sellers",
-            "Moving-average point forecast",
-            "Per-product empirical residual quantiles for the interval",
-            "Newsvendor order-quantity policy with a configurable cost ratio",
-            "Planner approval queue",
+            "Earlier-week lag, rolling and calendar features",
+            "Pooled absolute-error regressor plus eight-week-average baseline",
+            "Embedded browser inference, historical replay and grouped explanation",
+            "Planner inventory and lead-time review (outside the simulator)",
             "Sell-through log and weekly forecast review"
           ]
         }
       },
       {
         "id": "order-policy",
-        "label": "Given the range, how many units should we actually order?",
-        "owner": "Order policy service",
+        "label": "Given the forecast and inventory context, how many units should we order?",
+        "owner": "Inventory planning rules and demand planner",
         "frequency": "Every forecast product, every week",
-        "wrongCost": "Ordering at the middle of the range treats a stockout and an overstock as if they cost the same, which they almost never do",
+        "wrongCost": "The estimate is copied into an order despite usable stock, incoming supply, lead time or pack constraints",
         "verdict": "automation",
         "verdictLabel": "Automate with policy",
-        "testAnswer": "No. Once the range exists and the business has priced a stockout against an overstock, the quantity is arithmetic anyone can check by hand.",
-        "why": "The right quantity is not the average forecast. It is a point chosen inside the range by the critical ratio: the cost of being short divided by the cost of being short plus the cost of being long. At 4:1 that is the 80th percentile of the range; at 9:1 it is the 90th.",
-        "recommendation": "Compute the critical ratio from the two costs, read the matching quantile out of the product's range, and version the cost ratio so a change to it is a visible business decision rather than a silent edit. Show the planner which percentile was used and what a different ratio would have ordered.",
+        "testAnswer": "Not necessarily. Once planning requirements, stock and arrivals are known, net requirements can be calculated with explicit rules and reviewed by a planner.",
+        "why": "Forecast units are only one input. For a one-week teaching illustration, forecast 825 plus assumed safety stock 100 minus on-hand 300 minus incoming 200 gives 425 units. The inventory values are invented, and arrivals must fall within the same horizon.",
+        "recommendation": "Use inventory and supplier systems to calculate a proposal under documented constraints, and show the assumptions to the planner. The current simulator stops at the forecast because these operational inputs are not in the dataset.",
         "aiRelevant": false,
         "placement": "decision"
       },
@@ -7091,8 +7091,8 @@
         "verdict": "human",
         "verdictLabel": "Keep the human",
         "testAnswer": "The panel knows what sold. It does not know that a customer is closing down, that a supplier has raised its minimum order, or that last week's spike was one shop's one-time buy.",
-        "why": "The forecast is not a promise and the interval is not a guarantee. Somebody has to own the commitment of money to stock, and the system is explicitly not that somebody.",
-        "recommendation": "Show the planner the quantity, the range, the cost ratio used and the product's recent weeks; let them approve, adjust or hold; and record the reason whenever they change the number, because those reasons are the fastest way to find what the model cannot see.",
+        "why": "A regression output is not a promise. Someone must own the commitment of money to stock, including context the model never received.",
+        "recommendation": "Show the forecast, baseline, recent history and planning assumptions; let the planner approve, adjust or hold in the operational system. Record override reasons to identify missing context. No such order is placed by the classroom simulator.",
         "aiRelevant": false,
         "placement": "decision"
       },
@@ -7105,22 +7105,22 @@
         "verdict": "human",
         "verdictLabel": "Keep the human",
         "testAnswer": "There is no history to learn from. A new product has no past weeks, and a discontinued one's past weeks describe a future that is not going to happen.",
-        "why": "Producing a range from three weeks of data would look like a forecast and behave like a guess. Saying plainly that this product cannot be forecast yet is the more honest output, and it routes the decision to the person who knows the launch plan.",
+        "why": "The current regressor is not evaluated for launch or run-out decisions. Route an ineligible product to an appropriate alternative instead of presenting an unsupported model estimate as validated.",
         "recommendation": "Route these products to a hand-planned list with the buyer's launch or run-out plan attached, mark the quantity as hand-planned in the purchase order, and re-test the history check each week so a new product joins the forecast cohort as soon as it has earned enough weeks.",
         "aiRelevant": false,
         "placement": "decision"
       },
       {
         "id": "review",
-        "label": "Is the cost policy still the right way to order this product?",
+        "label": "Are forecast errors and planner exceptions acceptable for this product?",
         "owner": "Weekly forecast review with the planning lead",
         "frequency": "Weekly, with the previous weeks' sell-through in hand",
-        "wrongCost": "A policy that helps most of the range is left running on the products it actively hurts",
+        "wrongCost": "A better average error hides large seasonal misses or products that need a different planning route",
         "verdict": "human",
         "verdictLabel": "Keep the human",
-        "testAnswer": "The averages hide the losers. Deciding whether a product should be taken off the policy needs someone who knows whether it is declining, being replaced, or just having a quiet month.",
-        "why": "On the frozen holdout the cost policy is cheaper for about three quarters of products at a 4:1 ratio and more expensive for the rest, and the losers are the declining sellers, where a range built from stronger past weeks keeps ordering for a demand that is going away. One product's costs rose by nearly five times.",
-        "recommendation": "Review the products the policy made worse alongside the ones it helped, on the same page, every week. Take declining lines off the automatic quantity and hand-plan their run-out, and record the change rather than quietly widening the ratio for everyone.",
+        "testAnswer": "Metrics identify misses, but deciding which exceptions warrant a different planning method requires business context and an accountable owner.",
+        "why": "The measured MAE improves while RMSE worsens. Average gains cannot establish that a particular high-volume week or product is handled well. The historical replay makes those exceptions inspectable.",
+        "recommendation": "Review errors by product and week alongside the baseline, investigate large changes, and record planner overrides. Validate any retrained model on a later period before changing the live decision process.",
         "aiRelevant": false,
         "placement": "decision"
       }
@@ -7130,15 +7130,15 @@
   },
   {
     "id": "retail-product-recommendations",
-    "title": "One Page of Recommendation Slots",
+    "title": "Next Best Product",
     "subtitle": "From a shopper opening a page to a logged slot outcome",
     "industry": "Retail, Supply Chain & Logistics",
     "learningObjective": "Map how a storefront fills its recommendation slots, judge a ranking model on products the shopper has never bought, and keep placement with the merchandisers who set the rules.",
-    "throughline": "A ranking score measured on repeat purchases flatters a model that adds nothing; the honest measure is what the shopper has never bought, and the model ranks inside merchandiser rules rather than deciding what gets placed.",
+    "throughline": "Learn product links from shared buyers, add the links activated by one shopper's history, remove ineligible products and rank the rest. Discovery, repeat buying and generic fallback are different tasks and must be measured separately.",
     "introduction": {
       "title": "What happens when a storefront fills its recommendation slots?",
       "context": "This is the same wholesaler's online storefront. When a shop's buyer opens a product or category page, a strip near the bottom of the page has a fixed number of empty slots to fill with other products. Somebody has to decide what goes in them. Filling them with what this buyer already reorders is easy and looks successful, but it shows them nothing they did not already know about. Filling them with the same few bestsellers for everyone is also easy, and buries most of the catalog. And a good share of visitors have no purchase history at all, so there is nothing personal to work from.",
-      "workflow": "The workflow follows one page view. The page requests items for its slots, the shopper's purchase history is looked up, and a check decides whether there is enough of it to personalize on. If there is, a ranking model scores products the shopper has not bought before; a slot policy sends already-bought items to a separate labeled strip; and merchandiser rules and exclusions filter what is left. The slots are filled, or the labeled fallback list is shown instead. What the shopper clicks and buys is logged, feeds the weekly model refresh, and is reviewed for whether the model is serving the whole catalog.",
+      "workflow": "Look up a shopper's distinct purchases, check the five-product threshold, sum retained item-item similarity links, and remove already-bought or excluded candidates before filling ten slots. Without sufficient history, show a labeled generic list. The simulator compares whole history, one product's neighbors and popularity; a simulated purchase changes history but never retrains the model. A separate Buy it again area, production impression logging and scheduled model refresh are surrounding workflow proposals, not features implemented by this demo. Historical later purchases stay fixed during what-if edits.",
       "startsWhen": "A shopper opens a product or category page that has recommendation slots on it.",
       "endsWhen": "The slots are filled, or the labeled fallback is shown, and the outcome of the slots is logged."
     },
@@ -7176,19 +7176,19 @@
         "note": "Classroom slot-count assumption"
       },
       {
-        "value": "4,400 products",
+        "value": "4,443 products",
         "label": "products in the storefront catalog",
-        "note": "Classroom catalog-size assumption"
+        "note": "Measured training catalog for the current classroom model"
       },
       {
-        "value": "1 in 5 shoppers",
-        "label": "arrive with no usable purchase history",
-        "note": "Classroom cold-start assumption; every guest checkout is in this group"
+        "value": "648 / 2,893",
+        "label": "registered test customers needing generic fallback",
+        "note": "Separate population: 306 guest baskets; do not add them to the customer numerator"
       },
       {
         "value": "weekly",
         "label": "how often the ranking model is rebuilt",
-        "note": "Classroom refresh-cadence assumption"
+        "note": "Proposed production cadence; browser simulations use fixed saved links"
       },
       {
         "value": "28 days",
@@ -7470,7 +7470,7 @@
         "id": "x3",
         "from": "clicks",
         "to": "refresh",
-        "label": "clicks and purchases join the training data",
+        "label": "purchases feed a future rebuild; clicks logged separately",
         "kind": "loop",
         "documented": true
       },
@@ -7503,7 +7503,7 @@
         "verdict": "rule",
         "verdictLabel": "Use a rule",
         "testAnswer": "No. How many past purchases are needed before a shopper can be personalized to is a threshold written down in advance and checked the same way every time.",
-        "why": "About one shopper in five arrives with nothing usable, and every guest checkout is in that group. The model cannot rank for them at all: with no history its scores are the same for every product, so what looks like a ranking is really a tie broken at random.",
+        "why": "648 of 2,893 registered test customers lack sufficient usable history; 306 guest baskets are separate. With an empty history all item-item scores are zero. A sorted list of zero-score ties is not personalized evidence.",
         "recommendation": "Check the count of prior purchases before calling the model, and route shoppers who fail the check to the fallback path rather than letting a model rank on an empty history.",
         "aiRelevant": false,
         "placement": "decision"
@@ -7539,12 +7539,12 @@
           "method": {
             "pattern": "classification",
             "output": "A ranked list of products the shopper has not bought before",
-            "technique": "Item-item similarity: products are compared by which customers bought them, each product's similarity list is truncated to its nearest neighbors, and a shopper is scored by adding up the similarities from what they already own. Truncating to the nearest fifteen neighbors raised accuracy and catalog coverage at the same time and shrank the model artifact by more than two orders of magnitude. Compared against a popularity list, the recent-revenue fallback, and matrix factorization."
+            "technique": "Binary customer-product matrix, cosine similarity and 15 outgoing neighbors per product. Sum retained weights from distinct purchases, mask already-bought and excluded items, then sort. The simulator also isolates one selected purchase's neighbors and the popularity baseline. Repeat purchases do not increase binary history weights; no browser action retrains the saved links."
           },
           "metric": {
-            "technical": "Hit rate in the top ten measured only on items the shopper has NOT bought before, because scoring on repeat purchases makes a worthless model look best: a list that simply re-shows what the customer already owns finishes first on the ordinary leaderboard and below a random list once repeats are masked. The same model, first and last, decided by what the analyst counts as a hit. Catalog coverage is printed next to every accuracy number.",
-            "business": "Incremental revenue from products the shopper had not bought before. The measured gain is small and must be reported as such: the best personalized model reaches about 3.5 percent of the available new-item revenue against about 2.8 percent with no personalization at all, a gap of under one percentage point, and that is an upper bound because an offline replay cannot show what a shopper would have done if shown something else.",
-            "baseline": "Fill the slots with what is popular right now, with no personalization at all"
+            "technical": "Discovery Hit Rate at 10: popularity 29.5%, full item-item 36.4%, top-15 41.6%, across 2,168 eligible customers. Catalog coverage: 1.8%, 15.5%, 25.8%, out of 4,443 products. This later-period comparison informed model choice; a fresh period is needed for independent confirmation. A fixed historical outcome cannot validate a simulated change to purchase history.",
+            "business": "A prospective experiment would measure incremental purchases, margin or satisfaction. Offline hits do not establish causal sales lift, and this simulator neither records actual impressions nor changes a customer account.",
+            "baseline": "Training-popularity ranking with the same discovery exclusions; recent-revenue fallback is a separate policy"
           },
           "human": {
             "role": "Merchandiser",
@@ -7556,9 +7556,9 @@
             "Transaction log shared with the demand forecasting case",
             "Customer by product matrix built on a time-based split",
             "Item-item similarity model truncated to the nearest neighbors",
-            "Slot eligibility and Buy it again split",
+            "Discovery eligibility; Buy it again is a separate proposed storefront area",
             "Recent-revenue fallback list for shoppers with no history",
-            "Merchandiser rule and exclusion service",
+            "Browser scoring, simulated history changes and merchandiser exclusions",
             "Slot outcome log",
             "Catalog coverage and popularity-bias monitor"
           ]

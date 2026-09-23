@@ -1850,27 +1850,27 @@
   },
   {
     "id": "retail-demand-forecasting-lab",
-    "title": "Weekly Reorder Planning with Forecast Ranges",
+    "title": "Demand Forecasting with Regression",
     "industry": "retail",
     "industryLabel": "Retail, Supply Chain & Logistics",
     "icon": "shopping-bag",
     "accent": "teal",
-    "summary": "Turn a wholesaler's weekly sales history into a demand range for each steady seller, convert that range into an order quantity priced against stockout and overstock costs, and put the quantity in front of a planner who decides.",
-    "problem": "A single forecast number gives a planner nothing to plan with: order the average and you are short in a good week and sitting on markdown stock in a bad one, and the cost of being short is rarely the same as the cost of being long.",
+    "summary": "Predict next week's units with one shared regression model, compare it with the eight-week average, and replay recorded outcomes before a planner reviews replenishment.",
+    "problem": "Planners need a forward estimate for each product, but recorded sales omit stockouts and promotions. A lower average forecast error does not guarantee smaller seasonal misses or determine an order quantity by itself.",
     "outcomes": [
-      "A demand range for each steady seller, not a single number",
-      "An order quantity that moves when the cost of a stockout changes",
-      "A planner who approves, adjusts, or holds every purchase order"
+      "One-week unit predictions for a 469-product steady-selling cohort",
+      "Visible baseline, forecast and actual comparisons across 26 held-out weeks",
+      "Planner-owned replenishment; no automatic orders or claimed profit uplift"
     ],
     "capabilities": [
       "Weekly demand panel from raw order lines",
-      "Point forecast with an empirical prediction interval",
-      "Cost-ratio order quantity (newsvendor critical ratio)"
+      "Pooled histogram gradient-boosted regression",
+      "Historical replay and coherent feature what-ifs"
     ],
     "patterns": [
-      "The cost ratio lives in the policy, not in the model",
-      "Products with too little history are planned by hand, not forecast badly",
-      "The system proposes a quantity and never places an order"
+      "MAE improves while RMSE worsens; inspect both",
+      "Outside-cohort products need another method or manual review",
+      "Forecasts are evidence; inventory and lead time remain planner inputs"
     ],
     "workloadType": "decision-support",
     "dataReadiness": "high",
@@ -1879,10 +1879,10 @@
     "architecture": [
       "UCI Online Retail II transaction log (CC BY 4.0)",
       "Weekly demand panel builder with cancellations and non-product lines removed",
-      "Moving-average point forecast with per-product residual quantiles",
-      "Newsvendor order-quantity policy with a configurable cost ratio",
-      "FastAPI forecasting service",
-      "Planner approval queue and sell-through log"
+      "Twelve lag, rolling and calendar features built from each product's own history",
+      "One pooled HistGradientBoostingRegressor selected by validation MAE",
+      "Embedded model inference, baseline replay and grouped attribution in the browser",
+      "Planner inventory review and outcome monitoring (business workflow, not a live integration)"
     ],
     "workflow": {
       "nodes": [
@@ -1898,12 +1898,12 @@
         },
         {
           "id": "forecast",
-          "label": "Demand forecast with a range",
+          "label": "Predict next-week units",
           "kind": "ai"
         },
         {
           "id": "policy",
-          "label": "Cost-based order quantity",
+          "label": "Review inventory and lead time",
           "kind": "system"
         },
         {
@@ -1936,12 +1936,12 @@
         {
           "from": "forecast",
           "to": "policy",
-          "label": "a range, not a number"
+          "label": "numeric estimate, not certainty"
         },
         {
           "from": "policy",
           "to": "planner",
-          "label": "quantity at the cost-based service level"
+          "label": "planning proposal with missing context checked"
         },
         {
           "from": "planner",
@@ -1961,8 +1961,8 @@
       ]
     },
     "demoPrompts": [
-      "Why does the order quantity change when the cost of a stockout goes from twice to nine times the cost of overstock?",
-      "What happens to a Christmas-heavy product when the planner orders at the middle of the range instead of the top?"
+      "Play the forecast replay: how does the regressor's average miss compare with the eight-week baseline?",
+      "Change the last eight recorded weeks. Which feature groups change the prediction, and why does the historical actual stay fixed?"
     ],
     "courseCaseId": "retail-demand-forecasting",
     "demoStatus": "available",
@@ -1970,13 +1970,13 @@
   },
   {
     "id": "retail-product-recommendations-lab",
-    "title": "Storefront Recommendation Slots",
+    "title": "Next Best Product",
     "industry": "retail",
     "industryLabel": "Retail, Supply Chain & Logistics",
     "icon": "shopping-bag",
     "accent": "amber",
-    "summary": "Fill a fixed number of recommendation slots on a storefront page by ranking products the shopper has not bought before, keeping already-bought items in a separate labeled strip and showing an honest popular-right-now list when there is nothing to personalize on.",
-    "problem": "A ranking model that scores well offline usually scores well because it is recommending what the shopper already buys, and a model that only ever surfaces the same handful of bestsellers looks accurate while showing a fraction of a percent of the catalog.",
+    "summary": "Rank ten eligible products from a real shopper's purchase history, inspect each score's similarity contributions, and simulate how another purchase changes the list without retraining.",
+    "problem": "A retailer has limited product slots and sparse customer histories. Ranking familiar repeats can inflate offline scores, and showing only bestsellers can hide most of the catalog. Discovery, eligibility and fallback must be explicit.",
     "outcomes": [
       "Recommendation slots judged on products the shopper has never bought",
       "An honestly labeled fallback for shoppers with no usable history",
@@ -2001,8 +2001,8 @@
       "Customer by product matrix built on a time-based split",
       "Item-item similarity model truncated to the nearest neighbors",
       "Slot eligibility, exclusion, and fallback policy",
-      "FastAPI ranking service",
-      "Slot outcome log and catalog coverage monitor"
+      "Embedded sparse similarity model with browser scoring and simulated purchases",
+      "Fixed later-purchase evidence and catalog coverage (not causal outcome measurement)"
     ],
     "workflow": {
       "nodes": [
@@ -2081,8 +2081,8 @@
       ]
     },
     "demoPrompts": [
-      "Why does the same model finish first on one leaderboard and below random on the other?",
-      "What does a high hit rate hide when the model has only ever shown ten products out of thousands?"
+      "Compare everything a customer bought, one selected purchase, and the popularity baseline. Which evidence drives each list?",
+      "Add a recommended product to the simulated history, inspect the new ranking and contributions, then undo the purchase."
     ],
     "courseCaseId": "retail-product-recommendations",
     "demoStatus": "available",

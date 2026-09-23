@@ -29,13 +29,9 @@ OUTPUT = BACKUP_DIR / "01_forecast_build.html"
 
 REQUIRE_URL = "https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"
 
-# One call per builder in fclab/charts.py, which has nine:
-#   product_demand, zero_week_distribution, baseline_mae, fan_chart,
-#   interval_method_coverage, cost_vs_quantile, policy_outcomes,
-#   christmas_coverage, metric_panel
-# Raise this if the notebook ever draws a builder twice (a second fan chart for
-# a second product is the likely one).
-EXPECTED_FIGURES = 9
+# The classroom lesson has a fixed six-plot budget. The advanced reference HTML
+# remains in backup/02_forecast_reference.html.
+EXPECTED_FIGURES = 6
 
 
 def main() -> None:

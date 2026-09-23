@@ -29,11 +29,9 @@ OUTPUT = BACKUP_DIR / "01_recommendation_build.html"
 
 REQUIRE_URL = "https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"
 
-# One per figure builder in reclab/charts.py: the popularity skew, the sparsity
-# profile, the two-leaderboard comparison, coverage against accuracy, the
-# exposure loop, the leave-one-out inflation, the cold-start census, and the
-# incremental-revenue panel.
-EXPECTED_FIGURES = 8
+# The classroom lesson includes two additional Model Training plots. The advanced reference
+# HTML remains in backup/02_recommendation_reference.html.
+EXPECTED_FIGURES = 7
 
 
 def main() -> None:
@@ -63,6 +61,7 @@ def main() -> None:
         r'<script[^>]*src="https://cdnjs\.cloudflare\.com/ajax/libs/mathjax[^"]*"[^>]*>\s*</script>',
         "", html,
     )
+    html = re.sub(r"(?m)^[ \t]+$", "", html)
     OUTPUT.write_text(html, encoding="utf-8")
 
     remote = (

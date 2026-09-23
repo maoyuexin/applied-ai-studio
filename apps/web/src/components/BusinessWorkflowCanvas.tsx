@@ -92,12 +92,14 @@ export default function BusinessWorkflowCanvas({
   phase,
   selectedDecisionId,
   onSelectDecision,
+  horizontalSpacing = 1,
 }: {
   courseCase: CourseCase;
   view: FlowView;
   phase: LessonPhase;
   selectedDecisionId: string;
   onSelectDecision: (decisionId: string) => void;
+  horizontalSpacing?: number;
 }) {
   const viewportRef = useRef<HTMLDivElement>(null);
   const [zoom, setZoom] = useState(1);
@@ -113,7 +115,9 @@ export default function BusinessWorkflowCanvas({
     const updateWidth = () => {
       if (element.clientWidth === 0) return;
       const isNarrowViewport = element.clientWidth < fitToPanelBreakpoint;
-      const nextBaseWidth = isNarrowViewport ? minimumCanvasWidth : element.clientWidth;
+      const nextBaseWidth = horizontalSpacing > 1
+        ? Math.max(minimumCanvasWidth * horizontalSpacing, element.clientWidth)
+        : isNarrowViewport ? minimumCanvasWidth : element.clientWidth;
       const nextFitZoom = isNarrowViewport ? minimumZoom : 1;
       setBaseWidth(nextBaseWidth);
       setFitZoom(nextFitZoom);
@@ -122,7 +126,7 @@ export default function BusinessWorkflowCanvas({
     const observer = new ResizeObserver(updateWidth);
     observer.observe(element);
     return () => observer.disconnect();
-  }, [isFullscreen]);
+  }, [isFullscreen, horizontalSpacing]);
 
   useEffect(() => {
     if (!isFullscreen) return;
@@ -166,14 +170,14 @@ export default function BusinessWorkflowCanvas({
         return {
           node,
           decision,
-          x: node.x,
+          x: node.x * horizontalSpacing,
           y: lane * laneHeight + (laneHeight - height) / 2,
           width,
           height,
         };
       });
     return new Map(values.map((layout) => [layout.node.id, layout]));
-  }, [courseCase.nodes, decisionById, laneOrder, view]);
+  }, [courseCase.nodes, decisionById, laneOrder, view, horizontalSpacing]);
   const visibleEdges = courseCase.edges.filter((edge) =>
     (view === "actual" || edge.documented) && layouts.has(edge.from) && layouts.has(edge.to),
   );

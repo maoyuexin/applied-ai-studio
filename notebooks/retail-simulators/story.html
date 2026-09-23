@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How Recommendations Are Learned | Module 6</title>
+<style>
+:root{color-scheme:dark;--bg:#111318;--surface:#181a20;--raised:#222530;--border:#2e3140;--text:#f5f3f0;--secondary:#c4c5ce;--muted:#9396a6;--orange:#e8913c;--teal:#7eaeb8;--green:#4ade80;--red:#e45a58;--radius:6px}
+*{box-sizing:border-box;letter-spacing:0}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 Inter,"Helvetica Neue",sans-serif}
+button,input,select{font:inherit}button,select,summary,input[type="range"],input[type="checkbox"]{cursor:pointer}
+button,select{min-height:44px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);color:var(--text)}
+button{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:8px 14px;transition:background .18s,border-color .18s}
+button:hover:not(:disabled),select:hover{background:var(--raised);border-color:var(--muted)}
+button:disabled{opacity:.35;cursor:default}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid var(--teal);outline-offset:3px}
+a{color:var(--teal);text-underline-offset:3px}svg{flex-shrink:0;vertical-align:middle}h1,h2,h3,p,figure{margin:0}h1{font-size:26px;line-height:1.25;font-weight:650}h2{font-size:26px;line-height:1.25;font-weight:650}h3{font-size:17px;font-weight:600}
+p{max-width:70ch}small,.small{font-size:13px;color:var(--secondary)}strong{font-weight:650}.muted{color:var(--muted)}.accent{color:var(--orange)}.teal{color:var(--teal)}.green{color:var(--green)}
+.shell{max-width:1180px;margin:auto;padding:28px 32px 40px}header{display:flex;justify-content:space-between;align-items:end;gap:24px;padding-bottom:24px}.eyebrow{font-size:12px;color:var(--teal);font-weight:650;margin-bottom:8px}.identity{font-size:13px;color:var(--muted);white-space:nowrap}
+.toolbar{position:sticky;top:0;z-index:10;background:var(--bg);padding:12px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}.transport{display:flex;align-items:center;gap:8px}.icon-button{width:44px;min-width:44px;padding:0}.primary{background:var(--orange);color:var(--bg);border-color:var(--orange)}.primary:hover:not(:disabled){background:#f3a653;color:var(--bg)}
+.time{font:13px/1.4 "JetBrains Mono",Menlo,monospace;min-width:103px;color:var(--secondary);padding-left:6px}.speed{display:flex;align-items:center;gap:8px;margin-left:auto}.speed label{font-size:13px;color:var(--muted)}.speed select{padding:6px 10px}.modes{display:flex;margin-left:12px;gap:4px}.modes button{font-size:13px}.modes button[aria-pressed="true"]{border-color:var(--teal);color:var(--teal);background:var(--raised)}
+.seek{width:100%;height:22px;min-height:22px;margin:8px 0 0;accent-color:var(--orange)}
+.chapters{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;padding:18px 0 22px}.chapter{flex-direction:column;gap:5px;border:0;border-radius:0;background:none;padding:6px 2px;min-width:44px;color:var(--muted);font-size:13px}.chapter:hover:not(:disabled){background:var(--surface)}.chapter[aria-current="step"]{color:var(--text)}.chapter-number{display:grid;place-items:center;width:28px;height:28px;border:1px solid var(--border);border-radius:50%;font:13px "JetBrains Mono",Menlo,monospace}.chapter[aria-current="step"] .chapter-number{background:var(--orange);color:var(--bg);border-color:var(--orange)}.chapter.done .chapter-number{border-color:var(--teal);color:var(--teal)}
+.scene{display:none;min-height:580px;padding-top:8px}.scene.active{display:block}.scene-head{margin-bottom:24px}.scene-head .eyebrow{margin-bottom:7px}.lead{color:var(--secondary);margin-top:12px;font-size:16px}.scene-grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(240px,1fr);gap:36px;align-items:start}.scene-grid>*{min-width:0}.scene-aside{border-left:1px solid var(--border);padding-left:26px}.scene-aside p{margin-top:12px;color:var(--secondary)}.big-number{font:600 46px/1.15 "JetBrains Mono",Menlo,monospace;color:var(--orange);margin:18px 0 8px}.caption{border-top:1px solid var(--border);padding:18px 0 12px;margin-top:24px;color:var(--secondary)}.caption strong{color:var(--text)}.caption p+p{margin-top:8px}.tag{font-size:12px;color:var(--teal);font-weight:600}.boundary{font-size:13px;color:var(--muted);margin-top:14px}
+.purchase-row{display:grid;grid-template-columns:70px minmax(0,1fr);align-items:center;gap:12px;border-bottom:1px solid var(--border);padding:10px 8px;border-left:3px solid transparent}.purchase-row.spotlight{background:var(--surface);border-left-color:var(--orange)}.customer-name{font-weight:600;font-size:15px}.purchase-items{display:flex;gap:16px;min-width:0}.item{display:flex;align-items:center;gap:9px;min-width:0}.item.vertical{flex-direction:column;gap:5px;width:100px;text-align:center;font-size:12px;line-height:1.35}.photo{width:48px;height:48px;object-fit:contain;background:white;border-radius:4px;flex-shrink:0}.photo.large{width:70px;height:70px}.photo.tiny{width:32px;height:32px}.receipt{margin:24px 0;padding:16px 0;border-block:1px solid var(--border)}.receipt-line{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:10px 0}.receipt .item{font-size:14px}.code-letter{display:inline-grid;place-items:center;min-width:21px;height:21px;font:12px "JetBrains Mono",Menlo,monospace;border:1px solid var(--border);color:var(--secondary);border-radius:3px}
+.matrix{width:100%;border-collapse:separate;border-spacing:4px;table-layout:fixed;font-size:15px}.matrix th{font-weight:500;font-size:13px;color:var(--secondary);padding:5px 0}.matrix th:first-child{width:65px;text-align:left}.matrix thead th>span{display:block;margin-top:3px}.matrix td{text-align:center;height:48px;background:var(--surface);border:1px solid var(--border);border-radius:4px;font-family:"JetBrains Mono",Menlo,monospace;color:var(--muted)}.matrix td.yes{background:#23383c;color:#deeff2;border-color:#44636b;font-weight:600}.matrix tr.spotlight td.yes{background:#674322;border-color:var(--orange);color:#fff1df}.matrix .photo{width:42px;height:42px;max-width:100%}.legend{display:flex;gap:18px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--secondary);margin-top:14px}.legend span{display:inline-flex;align-items:center;gap:7px}.swatch{width:12px;height:12px;display:inline-block;background:var(--teal);border-radius:2px}.swatch.orange{background:var(--orange)}.swatch.green{background:var(--green)}.swatch.empty{background:var(--surface);border:1px solid var(--muted)}
+.product-key{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 12px;margin-top:22px}.product-key .item{font-size:12px;line-height:1.3}.product-key .code-letter{border:0;color:var(--teal);min-width:13px}.pair-table{width:100%;border-collapse:collapse;font-size:15px}.pair-table th{font-weight:500;font-size:13px;color:var(--secondary);text-align:center;padding:12px 8px}.pair-table th:first-child,.pair-table td:first-child{text-align:left}.pair-table td{text-align:center;border-top:1px solid var(--border);padding:14px 8px}.pair-table tr.overlap{background:#23383c}.pair-table tr.overlap td:last-child{color:var(--green)}.pair-table .column-name{display:flex;align-items:center;justify-content:center;gap:8px}.pair-table .photo{width:42px;height:42px}.count-line{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid var(--border);font-size:15px}.count-line strong{font:600 19px "JetBrains Mono",Menlo,monospace;color:var(--teal)}.equation{display:flex;align-items:center;justify-content:center;gap:12px;margin:24px 0;font:24px "JetBrains Mono",Menlo,monospace;flex-wrap:wrap}.fraction{display:inline-flex;flex-direction:column;align-items:center;font-size:22px}.fraction>span:first-child{border-bottom:1px solid var(--secondary);padding:0 12px 8px;width:100%;text-align:center}.fraction>span:last-child{padding-top:8px}.math-word{font-family:Inter,"Helvetica Neue",sans-serif;font-size:14px}.zero-note{border-left:3px solid var(--teal);padding-left:14px;font-size:14px;margin-top:20px}
+.source-control{display:flex;align-items:center;gap:12px;margin-bottom:18px}.source-control label{font-size:14px;color:var(--secondary)}.source-control select{padding:8px 12px;min-width:150px;max-width:100%}.neighbor-row{display:grid;grid-template-columns:minmax(105px,1fr) minmax(90px,1.5fr) 54px 75px;gap:12px;align-items:center;min-height:70px;border-bottom:1px solid var(--border)}.neighbor-row .item{font-size:14px}.track{height:16px;background:var(--raised);border-radius:3px;display:flex;overflow:hidden}.fill{height:100%;background:var(--teal);display:block;min-width:0;transition:width .3s}.fill.orange{background:var(--orange)}.fill.green{background:var(--green)}.neighbor-row[data-kept="false"] .fill{background:var(--muted)}.weight{font:14px "JetBrains Mono",Menlo,monospace;text-align:right}.save-state{font-size:12px;line-height:1.3;color:var(--teal)}.neighbor-row[data-kept="false"] .save-state{color:var(--muted)}.learned{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:600;color:var(--teal);margin:16px 0}.details{border-top:1px solid var(--border);margin-top:20px;padding-top:12px}.details summary{min-height:44px;padding:10px 0;font-size:14px;color:var(--secondary)}.details p{font-size:14px;color:var(--secondary)}
+.history{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin:18px 0}.history .item{padding:8px 12px;background:var(--surface);border:1px solid var(--border);border-radius:4px;font-size:14px}.history-label{font-size:13px;color:var(--muted);margin-right:4px}.history .item:nth-of-type(1){border-bottom-color:var(--orange)}.history .item:nth-of-type(2){border-bottom-color:var(--teal)}.history .item:nth-of-type(3){border-bottom-color:var(--green)}
+.scores{width:100%;border-collapse:collapse;table-layout:fixed;font-size:14px}.scores th{font-size:12px;color:var(--secondary);font-weight:500;text-align:right;padding:10px 8px}.scores th:first-child{width:27%;text-align:left}.scores th:last-child{width:32%;text-align:left}.scores td{border-top:1px solid var(--border);padding:10px 8px;text-align:right;font-family:"JetBrains Mono",Menlo,monospace}.scores td:first-child{font-family:Inter,"Helvetica Neue",sans-serif;text-align:left}.scores td:last-child{text-align:left}.scores .item{font-size:14px}.score-total{display:flex;align-items:center;gap:10px}.score-total .track{flex:1}.score-total strong{width:47px;font-size:13px}.scores .winner{background:var(--surface)}.scores .owned{font-size:11px;color:var(--muted);font-family:Inter,"Helvetica Neue",sans-serif}.score-formula{font:20px "JetBrains Mono",Menlo,monospace;margin:24px 0 12px;line-height:1.6}.score-aside .photo{width:94px;height:94px;margin-top:18px}.axis-note{font-size:12px;color:var(--muted);text-align:right;margin-top:8px}
+.compare-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px}.compare-grid h3{border-bottom:1px solid var(--border);padding-bottom:12px}.ranking{list-style:none;padding:0;margin:0}.rank-item{display:grid;grid-template-columns:24px 64px minmax(0,1fr) 65px;gap:12px;align-items:center;border-bottom:1px solid var(--border);padding:18px 0;min-height:112px}.rank-item .photo{width:64px;height:64px}.rank-position{font:16px "JetBrains Mono",Menlo,monospace;color:var(--muted)}.rank-name{font-size:16px;font-weight:600}.rank-score{text-align:right;font:17px "JetBrains Mono",Menlo,monospace;color:var(--teal)}.rank-score small{display:block;font:11px/1.5 Inter,"Helvetica Neue",sans-serif;color:var(--muted)}.rank-detail{color:var(--secondary);font-size:12px;margin-top:5px}.purchase-toggle{display:flex;align-items:center;gap:10px;min-height:48px;margin-top:16px;font-size:15px}.purchase-toggle input{width:22px;height:22px;accent-color:var(--orange);flex-shrink:0}.status-line{display:flex;align-items:center;gap:10px;padding:14px 0;color:var(--teal);font-size:14px}.change-note{min-height:56px;color:var(--secondary);margin-top:12px;font-size:15px}.policy-note{font-size:13px;color:var(--muted);margin-top:18px}
+.real-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;border-block:1px solid var(--border);padding:24px 0;margin:22px 0}.stat strong{font:600 34px "JetBrains Mono",Menlo,monospace;color:var(--teal);display:block}.stat span{display:block;font-size:13px;color:var(--secondary);margin-top:6px}.phase{display:grid;grid-template-columns:160px minmax(0,1fr);gap:24px;margin:22px 0;align-items:start}.phase-name{font-size:15px;font-weight:600;color:var(--orange);padding-top:8px}.flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.flow>div{border-top:2px solid var(--border);padding:10px 4px;font-size:14px;min-width:0}.flow .flow-number{display:block;font:12px "JetBrains Mono",Menlo,monospace;color:var(--teal);margin-bottom:8px}.timeline{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;margin-top:24px;font-size:13px}.timeline>div{border-top:3px solid var(--teal);padding-top:8px}.timeline>div:last-child{border-color:var(--orange)}.timeline time{font:12px "JetBrains Mono",Menlo,monospace;color:var(--secondary)}
+footer{border-top:1px solid var(--border);padding-top:18px;margin-top:30px;color:var(--muted);font-size:13px}.credits{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:14px 0}.credit{font-size:12px;line-height:1.5}.credit strong{display:block;color:var(--secondary)}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+body[data-mode="all"] .scene{display:block;border-top:1px solid var(--border);padding:32px 0;margin-top:16px;min-height:0}body[data-mode="all"] .chapters{display:none}
+@media(min-width:761px){.scene.active{animation:scene-enter .22s ease-out}@keyframes scene-enter{from{transform:translateY(5px);opacity:.8}to{transform:translateY(0);opacity:1}}}
+@media(max-width:900px){.scene-grid{grid-template-columns:minmax(0,1.55fr) minmax(215px,1fr);gap:22px}.scene-aside{padding-left:18px}.scores th:last-child{width:27%}.scores .photo{display:none}.rank-item{grid-template-columns:18px 48px minmax(0,1fr) 56px;gap:8px}.rank-item .photo{width:48px;height:48px}.rank-name{font-size:14px}.identity{display:none}.modes{margin-left:4px}}
+@media(max-width:760px){.shell{padding:20px 16px 30px}h1{font-size:23px}h2{font-size:23px}header{padding-bottom:20px}.transport{flex-wrap:wrap}.speed{margin-left:auto}.speed label{display:none}.modes{margin-left:0}.modes button{padding-inline:12px}.time{font-size:12px;min-width:97px}.chapters{gap:2px;padding:12px 0 18px}.chapter{font-size:11px;line-height:1.3;justify-content:start;min-height:65px}.chapter-number{margin-bottom:3px}.scene{min-height:0}.scene-grid{grid-template-columns:1fr;gap:24px}.scene-aside{border-left:0;border-top:1px solid var(--border);padding:20px 0 0}.scene-head{margin-bottom:18px}.lead{font-size:15px}.purchase-row{grid-template-columns:54px minmax(0,1fr);gap:8px;padding-inline:3px}.customer-name{font-size:13px}.purchase-items{gap:8px}.item.vertical{width:78px;font-size:11px}.photo.large{width:56px;height:56px}.receipt{margin:14px 0}.matrix{border-spacing:3px}.matrix th:first-child{width:53px;font-size:12px}.matrix td{height:42px;font-size:14px}.matrix .photo{width:32px;height:32px}.product-key{gap:12px 8px}.product-key .photo{display:none}.pair-table td{padding:12px 6px}.pair-table .column-name{flex-direction:column;gap:4px}.count-line{padding-block:8px}.big-number{font-size:36px}.neighbor-row{grid-template-columns:minmax(100px,1.1fr) minmax(55px,1fr) 44px 53px;gap:8px;min-height:66px}.neighbor-row .photo{width:32px;height:32px}.neighbor-row .item{font-size:12px;gap:6px}.save-state{font-size:11px}.weight{font-size:12px}.scores th{font-size:11px;padding:8px 4px}.scores th:first-child{width:26%}.scores th:last-child{width:32%}.scores td{padding:12px 4px;font-size:12px}.scores .item{font-size:12px}.score-total{gap:5px}.score-total strong{font-size:12px;width:40px}.score-total .track{height:12px}.history{gap:8px}.history .item{padding:6px 8px;font-size:12px}.history .photo{width:32px;height:32px}.score-aside{display:grid;grid-template-columns:80px 1fr;gap:10px 18px}.score-aside h3{grid-column:1/-1}.score-aside .photo{width:80px;height:80px;margin-top:4px}.score-aside .score-formula{font-size:17px;margin:0}.score-aside p{grid-column:1/-1;margin-top:0}.compare-grid{grid-template-columns:1fr;gap:24px}.rank-item{grid-template-columns:24px 56px minmax(0,1fr) 65px;padding:12px 0;min-height:92px;gap:12px}.rank-item .photo{width:56px;height:56px}.rank-name{font-size:16px}.real-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}.stat strong{font-size:30px}.phase{grid-template-columns:1fr;gap:10px}.flow{gap:8px}.flow>div{font-size:13px}.timeline{grid-template-columns:1fr 1fr}.timeline time{grid-column:1/-1;grid-row:1}.credits{grid-template-columns:repeat(2,minmax(0,1fr))}.caption{margin-top:20px;font-size:15px}.toolbar{padding-top:8px}}
+@media(max-width:370px){.shell{padding-inline:12px}.transport{gap:6px}.time{min-width:94px;padding-left:0}.chapter{min-width:40px}.item.vertical{width:70px}.purchase-items{gap:6px}.speed select{padding-inline:7px}.source-control{flex-wrap:wrap}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media print{@page{size:A4 portrait;margin:14mm}*{print-color-adjust:exact;-webkit-print-color-adjust:exact}:root{color-scheme:light;--bg:#fff;--surface:#f5f6f8;--raised:#e2e5e9;--border:#bec5ce;--text:#172028;--secondary:#3d4954;--muted:#52606b;--orange:#955117;--teal:#235c68;--green:#226238}.shell{max-width:none;padding:0}header,.toolbar,.chapters,footer,.details,.purchase-toggle{display:none!important}.scene,body[data-mode="all"] .scene{display:block!important;break-after:page;min-height:0;padding:0;margin:0;border:0}.scene:last-child{break-after:auto}.scene-grid{grid-template-columns:1.5fr 1fr;gap:20px}.scene-aside{border:0;border-left:1px solid var(--border);padding:0 0 0 18px}.scene-head{margin-bottom:16px}.scene-head h2{font-size:24px}.scene-head p{font-size:13px}.scene{font-size:13px}.purchase-row{padding-block:7px}.item.vertical{width:80px}.photo.large{width:55px;height:55px}.matrix td.yes,.pair-table tr.overlap{background:#d9eaed;color:#18363c}.matrix tr.spotlight td.yes{background:#f3e0c9;color:#542b09}.compare-grid{grid-template-columns:1fr 1fr;gap:20px}.rank-item{grid-template-columns:16px 42px minmax(0,1fr) 50px;gap:8px}.rank-item .photo{width:42px;height:42px}.rank-name{font-size:13px}.rank-score{font-size:14px}.caption{font-size:13px}.real-stats{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.phase{grid-template-columns:120px 1fr}.score-aside{display:block}.score-formula{font-size:18px}.credits{display:none}}
+@media print{body[data-mode="all"] .scene:last-child{break-after:auto}#announcement{display:none}}
+.photo.photo-label{display:inline-grid;place-items:center;background:var(--raised);color:var(--teal);border:1px solid var(--border);font:18px "JetBrains Mono",Menlo,monospace}
+@media(max-width:900px){.scores .photo.photo-label{display:none}}
+</style>
+</head>
+<body data-mode="walkthrough">
+<div class="shell">
+<header><div><div class="eyebrow">ITAI 2372 / MODULE 6</div><h1>How recommendations are learned</h1></div><div class="identity">Retail Decisions / Item-item collaborative filtering</div></header>
+<section class="toolbar" aria-label="Lesson playback">
+  <div class="transport">
+    <button id="play" class="icon-button primary" aria-label="Play walkthrough" title="Play walkthrough"></button>
+    <button id="previous" class="icon-button" aria-label="Previous step" title="Previous step"></button>
+    <button id="next" class="icon-button" aria-label="Next step" title="Next step"></button>
+    <button id="restart" class="icon-button" aria-label="Restart walkthrough" title="Restart walkthrough"></button>
+    <span id="time" class="time">0:00 / 2:53</span>
+    <div class="speed"><label for="speed">Speed</label><select id="speed" aria-label="Playback speed"><option value="0.75">0.75x</option><option value="1" selected>1x</option><option value="1.5">1.5x</option><option value="2">2x</option></select></div>
+    <div class="modes" role="group" aria-label="Lesson view"><button id="walkthrough" aria-pressed="true">Walkthrough</button><button id="all-steps" aria-pressed="false">All steps</button></div>
+    <button id="print" class="icon-button" aria-label="Print all steps" title="Print all steps"></button>
+  </div>
+  <input id="seek" class="seek" type="range" min="0" max="173000" value="0" step="100" aria-label="Playback position">
+</section>
+<nav id="chapters" class="chapters" aria-label="Lesson steps"></nav>
+<main id="lesson">
+<article class="scene active" id="step-1" data-duration="18" aria-labelledby="title-1">
+  <div class="scene-head"><div class="eyebrow">01 / DATA INGESTION</div><h2 id="title-1">Start with what people bought.</h2><p class="lead">Five customers. Six products. Each row shows one person's purchase history, not necessarily one shopping basket.</p></div>
+  <div class="scene-grid">
+    <figure><figcaption class="tag">INVENTED PURCHASES / NAMED PRODUCTS</figcaption><div id="purchase-rows"></div></figure>
+    <aside class="scene-aside"><h3>What do we know?</h3><p>A customer bought an item. We do not need a star rating or a written review.</p><div class="receipt"><div class="small">One example transaction</div><div class="receipt-line"><strong>Asha</strong><span class="small">Customer</span></div><div class="receipt-line"><span id="receipt-product"></span><strong>3 units</strong></div></div><p>The model will record <strong>one purchase signal</strong> for this customer and product, even if the quantity is three.</p><p class="boundary">All customer names and purchases in this small example are invented. They are not records from the real dataset.</p></aside>
+  </div>
+  <div class="caption"><p><strong>The idea:</strong> products bought by many of the same people may be useful recommendations for one another.</p></div>
+</article>
+<article class="scene" id="step-2" data-duration="24" aria-labelledby="title-2">
+  <div class="scene-head"><div class="eyebrow">02 / FEATURE ENGINEERING</div><h2 id="title-2">Turn the histories into a table of 1s and 0s.</h2><p class="lead">A row is a customer. A column is a product. This is the customer-product matrix.</p></div>
+  <div class="scene-grid"><figure><div id="matrix"></div><figcaption class="legend"><span><i class="swatch"></i>1 = bought at least once</span><span><i class="swatch empty"></i>0 = no recorded purchase</span></figcaption><div id="product-key" class="product-key"></div></figure>
+  <aside class="scene-aside"><h3>One cell, one question</h3><div class="big-number">1 or 0</div><p>Did this person ever buy this product in the training period?</p><p>Asha's three red bags still become <strong>1</strong>. A repeat purchase does not add extra weight in this binary model.</p><div class="zero-note"><strong>0 does not mean dislike.</strong><br>The customer may never have seen the product.</div></aside></div>
+  <div class="caption"><p><strong>The features are purchase signals.</strong> Product photos, names, prices, and descriptions are not inputs to this similarity calculation.</p></div>
+</article>
+<article class="scene" id="step-3" data-duration="30" aria-labelledby="title-3">
+  <div class="scene-head"><div class="eyebrow">03 / MODEL TRAINING: COMPARE PRODUCTS</div><h2 id="title-3">Compare two product columns.</h2><p class="lead">Red bag and strawberry bag share two buyers. Cosine similarity adjusts that overlap for the number of buyers each product has.</p></div>
+  <div class="scene-grid"><figure><div id="pair-table"></div><figcaption class="legend"><span><i class="swatch"></i>Both bought it: Asha and Ben</span></figcaption></figure>
+  <aside class="scene-aside"><div class="count-line"><span>Red bag buyers</span><strong>3</strong></div><div class="count-line"><span>Strawberry bag buyers</span><strong>2</strong></div><div class="count-line"><span>Shared buyers</span><strong>2</strong></div><div class="equation" aria-label="Similarity equals two divided by the square root of three times two, approximately zero point eight one six"><span class="fraction" aria-hidden="true"><span>2</span><span>&radic;(3 &times; 2)</span></span><span aria-hidden="true">&asymp;</span><strong class="accent" aria-hidden="true">0.816</strong></div><p>For binary columns:<br><strong>shared buyers / square root of (buyers of A &times; buyers of B).</strong></p><p>0 = no shared buyers.<br>1 = identical buyer groups.</p><p class="boundary">Two 0s do not add similarity. The numerator counts shared purchases, not shared non-purchases.</p></aside></div>
+  <div class="caption"><p><strong>Similarity is a pattern in behavior, not a visual match.</strong> A bag and a cake stand can have a link if some people bought both.</p></div>
+</article>
+<article class="scene" id="step-4" data-duration="24" aria-labelledby="title-4">
+  <div class="scene-head"><div class="eyebrow">04 / MODEL TRAINING: SAVE THE LINKS</div><h2 id="title-4">Keep the strongest neighbors.</h2><p class="lead">Repeat the comparison for every product. Ignore its match with itself, then keep its strongest positive links.</p></div>
+  <div class="scene-grid"><figure><div class="source-control"><label for="source">Source product</label><select id="source"></select></div><div id="neighbors"></div><figcaption class="axis-note">Bar length = cosine similarity, from 0 to 1</figcaption></figure>
+  <aside class="scene-aside"><h3>The saved links are the model.</h3><div class="big-number">Top 3</div><p>This small example saves up to three neighbors per product. The real lesson saves up to <strong>15</strong>.</p><div class="learned"><span data-icon="LockKeyhole"></span> Learn once, reuse the links</div><p>Here, "learning" means calculating and storing similarities. There is no neural network or repeated error-correction loop.</p><details class="details"><summary>Why keep only a few links?</summary><p>It limits storage and weak connections. How many to keep is a model choice to test. Raw cosine is symmetric, but keeping only the best links per source can make the stored links one-way.</p></details></aside></div>
+  <div class="caption"><p><strong>Two different tables:</strong> the first table connects customers to products. The learned table connects products to other products.</p></div>
+</article>
+<article class="scene" id="step-5" data-duration="26" aria-labelledby="title-5">
+  <div class="scene-head"><div class="eyebrow">05 / MODEL PREDICTION: ADD THE EVIDENCE</div><h2 id="title-5">A new shopper arrives. Add the saved links.</h2><p class="lead">This shopper bought a red bag and a strawberry bag. Each purchase contributes its saved similarity to every candidate product.</p><div id="score-history" class="history"></div></div>
+  <div class="scene-grid"><figure><div id="scores"></div><figcaption class="legend"><span><i class="swatch orange"></i>From red bag</span><span><i class="swatch"></i>From strawberry bag</span></figcaption><div class="axis-note">Total ranking score; all bars use the same scale (0 to 2)</div></figure>
+  <aside class="scene-aside score-aside"><h3>Lunch bag gets two contributions</h3><div id="score-product"></div><div class="score-formula"><span class="accent">0.816</span> + <span class="teal">0.500</span><br>= <strong>1.316</strong></div><p>The red bag and the strawberry bag both point to the lunch bag. Those weights add together.</p><p><strong>1.316 is not a probability.</strong> This score can exceed 1. It is only used to order candidates.</p></aside></div>
+  <div class="caption"><p><strong>Same model, different shopper:</strong> different purchase histories activate different saved links. No similar-customer search or new training is needed at this step.</p></div>
+</article>
+<article class="scene" id="step-6" data-duration="26" aria-labelledby="title-6">
+  <div class="scene-head"><div class="eyebrow">06 / MODEL PREDICTION: FILTER AND RANK</div><h2 id="title-6">Remove bought items. Recommend what remains.</h2><p class="lead">This is a discovery task: do not recommend products already in the shopper's history. Sort the remaining scores from largest to smallest.</p></div>
+  <div class="compare-grid"><section aria-labelledby="before-title"><h3 id="before-title">Before the next purchase</h3><div class="small" style="margin-top:12px">History: red bag + strawberry bag</div><ol id="ranking-before" class="ranking"></ol></section><section aria-labelledby="after-title"><h3 id="after-title">Current recommendations</h3><label class="purchase-toggle"><input type="checkbox" id="purchase-cake">Cake stand purchased</label><ol id="ranking-after" class="ranking"></ol></section></div>
+  <p id="change-note" class="change-note" aria-live="polite"></p><div class="status-line"><span data-icon="LockKeyhole"></span> Saved similarities: unchanged</div><p class="small">Scores use unrounded weights; displayed values are rounded.</p>
+  <div class="caption"><p><strong>A new purchase changes the history, not the learned links.</strong> Scores are recomputed, purchased products are removed, and the list changes.</p><p class="policy-note">Toy settings: up to 3 neighbors, at least 1 distinct purchase, 2 recommendation slots. Real settings: 15 neighbors, at least 5 distinct purchases, 10 slots.</p></div>
+</article>
+<article class="scene" id="step-7" data-duration="25" aria-labelledby="title-7">
+  <div class="scene-head"><div class="eyebrow">07 / BACK TO THE REAL NOTEBOOK</div><h2 id="title-7">Same recipe. A much larger table.</h2><p class="lead">The real lesson uses item-item collaborative filtering with cosine similarity, built from the UCI Online Retail II purchase records.</p></div>
+  <div id="real-stats" class="real-stats"></div>
+  <div class="phase"><div class="phase-name">Learn from past data</div><div class="flow"><div><span class="flow-number">01</span>Build the binary customer-product matrix</div><div><span class="flow-number">02</span>Compare the product columns</div><div><span class="flow-number">03</span>Save each product's strongest links</div></div></div>
+  <div class="phase"><div class="phase-name">Recommend for a shopper</div><div class="flow"><div><span class="flow-number">01</span>Find links from purchased products</div><div><span class="flow-number">02</span>Add scores and exclude bought products</div><div><span class="flow-number">03</span>Return the highest-ranked remaining items</div></div></div>
+  <div class="timeline"><div>Earlier purchases: learn the links</div><time id="cutoff"></time><div>Later purchases: check the recommendations</div></div>
+  <div class="caption"><p><strong>Validation asks:</strong> did any of the top 10 recommendations appear among that customer's later, previously unpurchased products? Future purchases must not be used to build the links.</p><p><strong>Too little history?</strong> Fewer than five distinct purchases means a generic fallback, not a personalized claim. The real simulator uses recent-revenue products, then popularity if needed; fallback also fills empty slots.</p><p class="boundary">The model predicts useful product rankings, not a customer's reasons, purchase probability, or response to a discount.</p></div>
+</article>
+</main>
+<footer><p>Teaching example: invented customers and purchases. Product photographs are labels only; they do not enter the model.</p><details class="details"><summary>Sources and photograph credits</summary><p>Real data: <a href="https://doi.org/10.24432/C5CG6D" target="_blank" rel="noopener noreferrer">UCI Online Retail II</a>, CC BY 4.0. This walkthrough uses the same scoring engine as the Module 6 recommendation simulator.</p><div id="credits" class="credits"></div><p>Photograph rights remain with their respective owners and are separate from the dataset's CC BY license. No open redistribution license is claimed. Review image rights before public distribution.</p></details></footer>
+<div id="announcement" class="sr-only" aria-live="polite"></div>
+</div>
+<script id="story-data" type="application/json">__STORY_DATA__</script>
+<script>__ENGINE__</script>
+<script>
+'use strict';
+const data = JSON.parse(document.getElementById('story-data').textContent);
+const icons = __ICONS__;
+const engine = globalThis.RetailEngine;
+const byId = id => document.getElementById(id);
+const escapeHtml = value => String(value).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
+const number = value => value.toFixed(3);
+const letter = index => String.fromCharCode(65 + index);
+const photo = (index, extra = '') => data.photos[index].src
+  ? `<img class="photo ${extra}" src="${data.photos[index].src}" alt="${escapeHtml(data.photos[index].name)}" width="70" height="70">`
+  : `<span class="photo photo-label ${extra}" role="img" aria-label="${escapeHtml(data.photos[index].name)}">${letter(index)}</span>`;
+const item = (index, vertical = false) => `<span class="item${vertical ? ' vertical' : ''}">${photo(index, vertical ? 'large' : '')}<span>${escapeHtml(data.photos[index].name)}</span></span>`;
+const historyMarkup = history => `<div class="history-label">Purchased:</div>${history.map(index => item(index)).join('')}`;
+byId('purchase-rows').innerHTML = data.purchases.map((history, index) => `<div class="purchase-row" data-row="${index}"><span class="customer-name">${data.customers[index]}</span><div class="purchase-items">${history.map(product => item(product, true)).join('')}</div></div>`).join('');
+byId('receipt-product').innerHTML = item(0);
+byId('matrix').innerHTML = `<table class="matrix" aria-label="Binary purchases for five invented customers and six products"><thead><tr><th scope="col">Customer</th>${data.photos.map((product,index) => `<th scope="col" title="${escapeHtml(product.name)}">${photo(index)}<span>${letter(index)}<span class="sr-only">: ${escapeHtml(product.name)}</span></span></th>`).join('')}</tr></thead><tbody>${data.matrix.map((row,index) => `<tr data-row="${index}"><th scope="row">${data.customers[index]}</th>${row.map(value => `<td class="${value ? 'yes' : ''}">${value}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+byId('product-key').innerHTML = data.photos.map((product,index) => `<span class="item"><span class="code-letter">${letter(index)}</span>${photo(index,'tiny')}<span>${escapeHtml(product.name)}</span></span>`).join('');
+byId('pair-table').innerHTML = `<table class="pair-table"><thead><tr><th scope="col">Customer</th><th scope="col"><span class="column-name">${photo(0)}Red bag</span></th><th scope="col"><span class="column-name">${photo(1)}Strawberry bag</span></th><th scope="col">Both?</th></tr></thead><tbody>${data.matrix.map((row,index) => `<tr class="${row[0] && row[1] ? 'overlap' : ''}"><th scope="row">${data.customers[index]}</th><td>${row[0]}</td><td>${row[1]}</td><td>${row[0] && row[1] ? `${icons.Check}<span class="sr-only">Yes</span>` : 'No'}</td></tr>`).join('')}</tbody></table>`;
+byId('source').innerHTML = data.photos.map((product,index) => `<option value="${index}">${escapeHtml(product.name)}</option>`).join('');
+function renderNeighbors() {
+  const source = Number(byId('source').value);
+  const kept = new Set(data.toy.edges[source].map(([target]) => target));
+  byId('neighbors').innerHTML = data.similarities[source].map((weight,target) => ({weight,target})).filter(row => row.target !== source)
+    .sort((left,right) => right.weight-left.weight || left.target-right.target)
+    .map(({weight,target}) => `<div class="neighbor-row" data-kept="${kept.has(target)}" data-target="${target}">${item(target)}<div class="track" aria-hidden="true"><span class="fill" style="width:${weight*100}%"></span></div><span class="weight">${number(weight)}</span><span class="save-state">${kept.has(target) ? 'Saved' : 'Not saved'}</span></div>`).join('');
+}
+renderNeighbors();
+byId('score-history').innerHTML = historyMarkup(data.initialHistory);
+byId('score-product').innerHTML = photo(2);
+const initialScores = engine.recommendationScores(data.toy, data.initialHistory);
+byId('scores').innerHTML = `<table class="scores" aria-label="Add the contributions from the two purchased products"><thead><tr><th scope="col">Candidate</th><th scope="col">From<br>red bag</th><th scope="col">From<br>strawberry</th><th scope="col">Total score</th></tr></thead><tbody>${data.photos.map((product,target) => {
+  const weights = data.initialHistory.map(source => (data.toy.edges[source].find(edge => edge[0] === target) || [target,0])[1]);
+  return `<tr class="${target===2 ? 'winner' : ''}" data-target="${target}"><td>${item(target)}${data.initialHistory.includes(target) ? '<span class="owned">Already bought</span>' : ''}</td>${weights.map(weight => `<td>${number(weight)}</td>`).join('')}<td><div class="score-total"><div class="track" aria-hidden="true">${weights.map((weight,index) => `<span class="fill ${index===0 ? 'orange' : ''}" style="width:${weight/2*100}%"></span>`).join('')}</div><strong>${number(initialScores[target])}</strong></div></td></tr>`;
+}).join('')}</tbody></table>`;
+function rankingMarkup(history) {
+  return engine.rank(data.toy,history).result.map((row,position) => `<li class="rank-item" data-product="${row.index}"><span class="rank-position">${position+1}</span>${photo(row.index)}<div><div class="rank-name">${escapeHtml(data.photos[row.index].name)}</div><div class="rank-detail">${engine.contributions(data.toy,history,row.index).map(link => number(link.weight)).join(' + ')}</div></div><div class="rank-score">${number(row.score)}<small>score</small></div></li>`).join('');
+}
+byId('ranking-before').innerHTML = rankingMarkup(data.initialHistory);
+function renderPurchase() {
+  const purchased = byId('purchase-cake').checked;
+  byId('ranking-after').innerHTML = rankingMarkup(purchased ? data.changedHistory : data.initialHistory);
+  byId('change-note').textContent = purchased
+    ? 'Cake stand is now in the purchase history, so it leaves the list. Its saved links boost lunch bag to 1.725 and bring bunting into the top two.'
+    : 'Red bag and strawberry bag are removed because they were already bought. Lunch bag and cake stand have the two highest remaining scores.';
+}
+renderPurchase();
+byId('real-stats').innerHTML = [[data.real.products.toLocaleString(),'products in the training catalog'],[data.real.neighbors,'neighbors saved per product, at most'],[data.real.minHistory,'distinct purchases before personalization'],[data.real.slots,'recommendation slots']].map(([value,label]) => `<div class="stat"><strong>${value}</strong><span>${label}</span></div>`).join('');
+byId('cutoff').textContent = `Split: ${data.real.cut}`;
+byId('credits').innerHTML = data.photos.map(product => `<div class="credit"><strong>${escapeHtml(product.name)} / ${escapeHtml(product.code)}</strong><a href="${escapeHtml(product.sourcePage)}" target="_blank" rel="noopener noreferrer">${escapeHtml(product.credit)}</a><br>${escapeHtml(product.fullName)}</div>`).join('');
+document.querySelectorAll('[data-icon]').forEach(element => {element.innerHTML = icons[element.dataset.icon];});
+for (const [id,name] of Object.entries({previous:'ArrowLeft',next:'ArrowRight',restart:'RotateCcw',print:'Printer'})) byId(id).innerHTML = icons[name];
+const scenes = [...document.querySelectorAll('.scene')];
+const labels = ['Purchases','Matrix','Similarity','Model','Scores','Ranking','Real data'];
+const durations = scenes.map(scene => Number(scene.dataset.duration)*1000);
+const starts = durations.map((_,index) => durations.slice(0,index).reduce((total,value) => total+value,0));
+const total = durations.reduce((sum,value) => sum+value,0);
+let elapsed = 0, current = 0, playing = false, mode = 'walkthrough', lastTick = performance.now();
+byId('seek').max = total;
+byId('chapters').innerHTML = labels.map((label,index) => `<button class="chapter" data-step="${index}" aria-label="Step ${index+1}: ${label}"${index===0 ? ' aria-current="step"' : ''}><span class="chapter-number">${index+1}</span><span>${label}</span></button>`).join('');
+const formatTime = milliseconds => `${Math.floor(milliseconds/60000)}:${String(Math.floor(milliseconds/1000)%60).padStart(2,'0')}`;
+function updateTransport() {
+  byId('play').innerHTML = playing ? icons.Pause : elapsed >= total ? icons.RotateCcw : icons.Play;
+  const label = playing ? 'Pause walkthrough' : elapsed >= total ? 'Replay walkthrough' : 'Play walkthrough';
+  byId('play').setAttribute('aria-label',label);byId('play').title = label;
+  byId('time').textContent = `${formatTime(elapsed)} / ${formatTime(total)}`;
+  byId('seek').value = elapsed;
+  byId('seek').setAttribute('aria-valuetext',`${formatTime(elapsed)}, step ${current+1}: ${labels[current]}`);
+  byId('previous').disabled = current===0 || mode==='all';
+  byId('next').disabled = current===scenes.length-1 || mode==='all';
+}
+function setPlaying(value) {playing=value;lastTick=performance.now();updateTransport();}
+function setMode(value) {
+  mode=value;document.body.dataset.mode=value;
+  byId('walkthrough').setAttribute('aria-pressed',String(value==='walkthrough'));
+  byId('all-steps').setAttribute('aria-pressed',String(value==='all'));
+  if(value==='all') {setPlaying(false);byId('purchase-cake').checked=true;renderPurchase();}
+  else setPosition(elapsed);
+  updateTransport();
+}
+function setPosition(value, announce=false) {
+  elapsed=Math.min(total,Math.max(0,value));
+  current=starts.findLastIndex(start => elapsed>=start);
+  scenes.forEach((scene,index) => {scene.classList.toggle('active',index===current);});
+  document.querySelectorAll('.chapter').forEach((button,index) => {
+    button.classList.toggle('done',index<current);
+    if(index===current) button.setAttribute('aria-current','step');else button.removeAttribute('aria-current');
+  });
+  const sceneElapsed=elapsed-starts[current];
+  document.querySelectorAll('[data-row]').forEach(row => row.classList.toggle('spotlight',Number(row.dataset.row)===Math.floor(sceneElapsed/3000)%5));
+  const purchaseMoment=starts[5]+durations[5]/2;
+  const purchased=elapsed>=purchaseMoment;
+  if(byId('purchase-cake').checked!==purchased){byId('purchase-cake').checked=purchased;renderPurchase();}
+  if(announce) byId('announcement').textContent=`Step ${current+1}: ${scenes[current].querySelector('h2').textContent}`;
+  if(elapsed>=total) playing=false;
+  updateTransport();
+}
+function goToStep(index) {setPlaying(false);setMode('walkthrough');setPosition(starts[Math.min(scenes.length-1,Math.max(0,index))],true);}
+byId('play').addEventListener('click',() => {if(mode==='all')setMode('walkthrough');if(elapsed>=total)setPosition(0);setPlaying(!playing);});
+byId('previous').addEventListener('click',() => goToStep(current-1));
+byId('next').addEventListener('click',() => goToStep(current+1));
+byId('restart').addEventListener('click',() => {byId('source').value='0';renderNeighbors();goToStep(0);});
+byId('seek').addEventListener('input',event => {
+  const position=Number(event.target.value);
+  setPlaying(false);setMode('walkthrough');setPosition(position,true);
+});
+byId('chapters').addEventListener('click',event => {const button=event.target.closest('[data-step]');if(button)goToStep(Number(button.dataset.step));});
+byId('source').addEventListener('change',() => {setPlaying(false);renderNeighbors();});
+byId('purchase-cake').addEventListener('change',() => {
+  setPlaying(false);
+  if(mode==='walkthrough')setPosition(starts[5]+(byId('purchase-cake').checked ? durations[5]/2 : 0));
+  renderPurchase();
+});
+byId('walkthrough').addEventListener('click',() => setMode('walkthrough'));
+byId('all-steps').addEventListener('click',() => setMode('all'));
+byId('print').addEventListener('click',() => {setPlaying(false);window.print();});
+let beforePrintPurchase=false;
+window.addEventListener('beforeprint',() => {setPlaying(false);beforePrintPurchase=byId('purchase-cake').checked;byId('purchase-cake').checked=true;renderPurchase();});
+window.addEventListener('afterprint',() => {byId('purchase-cake').checked=beforePrintPurchase;renderPurchase();});
+document.addEventListener('visibilitychange',() => {if(document.hidden)setPlaying(false);});
+document.addEventListener('keydown',event => {
+  if(mode!=='walkthrough'||/INPUT|SELECT|BUTTON|SUMMARY|A/.test(event.target.tagName))return;
+  if(event.key==='ArrowRight'){event.preventDefault();goToStep(current+1);}
+  if(event.key==='ArrowLeft'){event.preventDefault();goToStep(current-1);}
+  if(event.code==='Space'){event.preventDefault();byId('play').click();}
+});
+setInterval(() => {
+  const now=performance.now();
+  if(playing)setPosition(elapsed+(now-lastTick)*Number(byId('speed').value));
+  lastTick=now;
+},100);
+setPosition(0);
+globalThis.retailStory={data,getState:()=>({elapsed,current,playing,mode,purchased:byId('purchase-cake').checked}),total};
+</script>
+</body>
+</html>

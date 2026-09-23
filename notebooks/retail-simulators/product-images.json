@@ -1,0 +1,183 @@
+{
+  "notice": "Merchant product photographs are separate from the UCI dataset license. Sources are retained for attribution and review; no open redistribution license is claimed. Do not publish these photographs without checking image rights.",
+  "products": {
+    "85099B": {
+      "name": "JUMBO BAG RED RETROSPOT",
+      "sourceTitle": "Jumbo storage bag - Red Retrospot",
+      "sourcePage": "https://www.rexlondon.com/red-retrospot-design-jumbo-storage-bag",
+      "imageUrl": "https://www.rexlondon.com/sites/default/files/85099B-1.png",
+      "credit": "Rex London",
+      "match": "Product code 85099B and Red Retrospot name match the merchant page.",
+      "kind": "matched",
+      "file": "product-images/85099B.webp"
+    },
+    "22423": {
+      "name": "REGENCY CAKESTAND 3 TIER", "credit": "Rex London",
+      "imageUrl": "https://www.rexlondon.com/sites/default/files/22423_0.jpg",
+      "sourcePage": "https://www.rexlondon.com/sites/default/files/22423_0.jpg",
+      "match": "Archived merchant photograph with matching stock-code filename; three-tier floral stand.",
+      "kind": "matched", "file": "product-images/22423.webp"
+    },
+    "22139": {
+      "name": "RETROSPOT TEA SET CERAMIC 11 PC", "credit": "Rex London",
+      "imageUrl": "https://www.rexlondon.com/sites/default/files/22139_0.jpg",
+      "sourcePage": "https://www.rexlondon.com/sites/default/files/22139_0.jpg",
+      "match": "Archived merchant photograph with matching stock-code filename.",
+      "kind": "matched", "file": "product-images/22139.webp"
+    },
+    "84879": {
+      "name": "ASSORTED COLOUR BIRD ORNAMENT", "credit": "Rex London",
+      "imageUrl": "https://www.rexlondon.com/sites/default/files/84879_0.jpg",
+      "sourcePage": "https://www.rexlondon.com/sites/default/files/84879_0.jpg",
+      "match": "Archived merchant photograph with matching stock-code filename.",
+      "kind": "matched", "file": "product-images/84879.webp"
+    },
+    "82494L": {
+      "name": "WOODEN FRAME ANTIQUE WHITE", "credit": "Rex London",
+      "imageUrl": "https://www.rexlondon.com/sites/default/files/82494L_0.jpg",
+      "sourcePage": "https://www.rexlondon.com/sites/default/files/82494L_0.jpg",
+      "match": "Archived merchant photograph with matching stock-code filename.",
+      "kind": "matched", "file": "product-images/82494L.webp"
+    },
+    "35961": {
+      "name": "FOLKART ZINC HEART CHRISTMAS DEC", "credit": "Rex London",
+      "imageUrl": "https://www.rexlondon.com/sites/default/files/35961_0.jpg",
+      "sourcePage": "https://www.rexlondon.com/sites/default/files/35961_0.jpg",
+      "match": "Archived merchant photograph with matching stock-code filename.",
+      "kind": "matched", "file": "product-images/35961.webp"
+    },
+    "84029E": {
+      "name": "RED WOOLLY HOTTIE WHITE HEART.", "credit": "Rex London",
+      "imageUrl": "https://www.rexlondon.com/sites/default/files/84029E_0.jpg",
+      "sourcePage": "https://www.rexlondon.com/sites/default/files/84029E_0.jpg",
+      "match": "Archived merchant photograph with matching stock-code filename.",
+      "kind": "matched", "file": "product-images/84029E.webp"
+    },
+    "21484": {
+      "name": "CHICK GREY HOT WATER BOTTLE", "credit": "Rex London",
+      "imageUrl": "https://www.rexlondon.com/sites/default/files/21484_0.jpg",
+      "sourcePage": "https://www.rexlondon.com/sites/default/files/21484_0.jpg",
+      "match": "Archived merchant photograph with matching stock-code filename.",
+      "kind": "matched", "file": "product-images/21484.webp"
+    },
+    "85099C": {
+      "name": "JUMBO BAG BAROQUE BLACK WHITE", "credit": "Rex London",
+      "imageUrl": "https://www.rexlondon.com/sites/default/files/85099C_0.jpg",
+      "sourcePage": "https://www.rexlondon.com/sites/default/files/85099C_0.jpg",
+      "match": "Archived merchant photograph with matching stock-code filename.",
+      "kind": "matched", "file": "product-images/85099C.webp"
+    },
+    "22197": {
+      "name": "SMALL POPCORN HOLDER", "credit": "Rex London",
+      "imageUrl": "https://www.rexlondon.com/sites/default/files/22197_1.png",
+      "sourcePage": "https://www.rexlondon.com/sites/default/files/22197_1.png",
+      "match": "Archived merchant photograph with matching stock-code filename.",
+      "kind": "matched", "file": "product-images/22197.webp"
+    },
+    "22084": {
+      "name": "PAPER CHAIN KIT EMPIRE", "credit": "Rex London",
+      "imageUrl": "https://www.rexlondon.com/sites/default/files/22084_1_0.png",
+      "sourcePage": "https://www.rexlondon.com/paper-chain-kit-empire",
+      "match": "Merchant image and paper-chain product page match code 22084.",
+      "kind": "matched", "file": "product-images/22084.webp"
+    },
+    "47566": {
+      "name": "PARTY BUNTING", "credit": "Rex London",
+      "imageUrl": "https://www.rexlondon.com/sites/default/files/47566_style_01L.jpg",
+      "sourcePage": "https://www.rexlondon.com/vintage-floral-washable-cotton-bunting",
+      "match": "Alternate lifestyle photograph from the merchant product page, which identifies product code 47566.",
+      "kind": "matched", "file": "product-images/47566-lifestyle.webp"
+    },
+    "22457": {
+      "name": "NATURAL SLATE HEART CHALKBOARD", "credit": "Rex London",
+      "imageUrl": "https://www.rexlondon.com/sites/default/files/22457_0.jpg",
+      "sourcePage": "https://www.rexlondon.com/sites/default/files/22457_0.jpg",
+      "match": "Archived merchant photograph with matching stock-code filename.",
+      "kind": "matched", "file": "product-images/22457.webp"
+    },
+    "84991": {
+      "name": "60 TEATIME FAIRY CAKE CASES", "credit": "Rex London",
+      "imageUrl": "https://www.rexlondon.com/sites/default/files/84991_1.jpg",
+      "sourcePage": "https://www.rexlondon.com/sites/default/files/84991_1.jpg",
+      "match": "Archived merchant photograph with matching stock-code filename.",
+      "kind": "matched", "file": "product-images/84991.webp"
+    },
+    "22469": {
+      "name": "HEART OF WICKER SMALL", "credit": "Rex London",
+      "imageUrl": "https://www.rexlondon.com/sites/default/files/22469_1.jpg",
+      "sourcePage": "https://www.rexlondon.com/sites/default/files/22469_1.jpg",
+      "match": "Archived merchant photograph with matching stock-code filename.",
+      "kind": "matched", "file": "product-images/22469.webp"
+    },
+    "23084": {
+      "name": "RABBIT NIGHT LIGHT", "credit": "Rex London",
+      "imageUrl": "https://www.rexlondon.com/sites/default/files/23084_0.jpg",
+      "sourcePage": "https://www.rexlondon.com/sites/default/files/23084_0.jpg",
+      "match": "Archived merchant photograph with matching stock-code filename.",
+      "kind": "matched", "file": "product-images/23084.webp"
+    },
+    "82482": {
+      "name": "WOODEN PICTURE FRAME WHITE FINISH", "credit": "Rex London",
+      "imageUrl": "https://www.rexlondon.com/sites/default/files/82482_0.jpg",
+      "sourcePage": "https://www.rexlondon.com/sites/default/files/82482_0.jpg",
+      "match": "Archived merchant photograph with matching stock-code filename.",
+      "kind": "matched", "file": "product-images/82482.webp"
+    },
+    "21755": {
+      "name": "LOVE BUILDING BLOCK WORD", "credit": "Rex London",
+      "imageUrl": "https://www.rexlondon.com/sites/default/files/21755_0.jpg",
+      "sourcePage": "https://www.rexlondon.com/sites/default/files/21755_0.jpg",
+      "match": "Archived merchant photograph with matching stock-code filename.",
+      "kind": "matched", "file": "product-images/21755.webp"
+    },
+    "22470": {
+      "name": "HEART OF WICKER LARGE", "credit": "Rex London",
+      "imageUrl": "https://www.rexlondon.com/sites/default/files/22470_0.jpg",
+      "sourcePage": "https://www.rexlondon.com/sites/default/files/22470_0.jpg",
+      "match": "Archived merchant photograph with matching stock-code filename.",
+      "kind": "matched", "file": "product-images/22470.webp"
+    },
+    "48187": {
+      "name": "DOORMAT NEW ENGLAND", "credit": "Rex London",
+      "imageUrl": "https://www.rexlondon.com/sites/default/files/48187_0.jpg",
+      "sourcePage": "https://www.rexlondon.com/sites/default/files/48187_0.jpg",
+      "match": "Archived merchant photograph with matching stock-code filename.",
+      "kind": "matched", "file": "product-images/48187.webp"
+    },
+    "48138": {
+      "name": "DOORMAT UNION FLAG", "credit": "Rex London",
+      "imageUrl": "https://www.rexlondon.com/sites/default/files/48138_1.jpg",
+      "sourcePage": "https://www.rexlondon.com/sites/default/files/48138_1.jpg",
+      "match": "Archived merchant photograph with matching stock-code filename.",
+      "kind": "matched", "file": "product-images/48138.webp"
+    },
+    "85099F": {
+      "name": "JUMBO BAG STRAWBERRY", "credit": "Rex London",
+      "imageUrl": "https://www.rexlondon.com/sites/default/files/85099F_0.jpg",
+      "sourcePage": "https://www.rexlondon.com/strawberry-design-jumbo-storage-bag",
+      "match": "Merchant product page and image stock code match.",
+      "kind": "matched", "file": "product-images/85099F.webp"
+    },
+    "20725": {
+      "name": "LUNCH BAG RED RETROSPOT", "credit": "Rex London / Petit Bazaar",
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0980/5762/products/rex-red-retrospot-lunch-bag-01.jpg?v=1476949747",
+      "sourcePage": "https://www.petit-bazaar.com/products/rex-red-retrospot-lunch-bag-kitchen-rex-20725",
+      "match": "Merchant product JSON identifies SKU REX-20725 and this photograph.",
+      "kind": "matched", "file": "product-images/20725.webp"
+    },
+    "22386": {
+      "name": "JUMBO BAG PINK POLKADOT", "credit": "DotComGiftShop photo via Pinterest",
+      "imageUrl": "https://i.pinimg.com/736x/fb/40/db/fb40db3160ea22c407d9c4de9f302d27.jpg",
+      "sourcePage": "https://cz.pinterest.com/pin/jumbo-bag-pink-polkadot--112097478196637674/",
+      "match": "Indexed historical product-name match; stock code is not independently confirmed by the current source page.",
+      "kind": "reference", "file": "product-images/22386.webp"
+    },
+    "85123A": {
+      "name": "WHITE HANGING HEART T-LIGHT HOLDER", "credit": "DotComGiftShop photo via Pinterest",
+      "imageUrl": "https://i.pinimg.com/736x/e6/46/e2/e646e235485467a0d1d643fff072a5dd.jpg",
+      "sourcePage": "https://uk.pinterest.com/pin/httpwwwdotcomgiftshopcomwhitehanginghearttlightholder--513621532477359445/",
+      "match": "Indexed historical product-name match; stock code is not independently confirmed by the current source page.",
+      "kind": "reference", "file": "product-images/85123A.webp"
+    }
+  }
+}

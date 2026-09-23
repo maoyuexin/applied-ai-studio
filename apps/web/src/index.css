@@ -351,6 +351,9 @@ h1, h2, h3 { letter-spacing: 0; }
 .case-card-actions button:last-child { border-right: 0; }
 .case-card-actions button:hover { background: var(--surface-raised); color: var(--orange); }
 .case-card-actions small { padding: 1px 3px; border: 1px solid var(--border); border-radius: 2px; color: var(--text-muted); font-family: var(--font-mono); font-size: 6px; text-transform: uppercase; }
+.retail-case-actions { flex-wrap: wrap; }
+.retail-case-actions button { min-height: 44px; flex: 1 1 95px; font-size: 11px; }
+.retail-case-actions small { font-size: 7px; }
 .case-detail { min-width: 0; position: sticky; top: 18px; padding: 20px; border: 1px solid var(--border); border-radius: 6px; background: rgba(24, 26, 32, 0.97); }
 .detail-heading { display: flex; gap: 12px; align-items: center; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
 .detail-heading span { color: var(--teal); font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; }

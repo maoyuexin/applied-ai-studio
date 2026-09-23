@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Demand Forecasting | Retail Decisions</title><style>__STYLE__</style><script>__PLOTLY__</script></head>
+<body><a href="#main" class="skip">Skip to workspace</a><div class="shell">
+<header class="mast"><div><p class="brand">RETAIL DECISIONS / MODULE 06</p><h1>Demand Forecasting</h1><p class="subtitle">Press play / the model forecasts one week at a time, then the week actually happens</p></div><div class="mast-actions"><span class="status-dot">Offline model ready</span><button class="icon-button" title="Full screen" aria-label="Full screen" data-fullscreen data-icon="Maximize2"></button><button id="export" class="icon-button" title="Export replay" aria-label="Export replay" data-icon="Download"></button></div></header>
+<main id="main"><div class="controls forecast-controls"><label>Product<select id="product"></select></label><label>Replay speed<select id="speed"><option value="350">Fast / 0.7 s per week</option><option value="800" selected>Normal / 1.6 s per week</option><option value="1600">Slow / 3.2 s per week</option></select></label><div class="actions"><button id="play" class="primary"><span data-icon="Play"></span>Play</button><button id="step" title="Advance one beat"><span data-icon="ChevronRight"></span>Step</button><button id="reset"><span data-icon="RotateCcw"></span>Reset</button></div></div>
+<div class="stats five"><div class="stat"><span>Replay position</span><strong id="week-counter">0 of 26</strong><small id="week-date">Press play</small></div><div class="stat"><span>Model forecast</span><strong id="forecast-value" class="green">--</strong><small>Units / this week</small></div><div class="stat"><span>8-week average</span><strong id="baseline-value">--</strong><small>Baseline for the same week</small></div><div class="stat"><span>Units actually sold</span><strong id="actual-value">--</strong><small id="actual-label">Revealed after the forecast</small></div><div class="stat"><span>Running error so far</span><strong id="mae-value">--</strong><small id="mae-label">Average miss / lower is better</small></div></div>
+<div class="forecast-story"><div id="product-media" class="selected-media"></div><div><h2 id="product-title"></h2><p id="product-context"></p></div></div>
+<div id="announcement" class="notice" role="status" aria-live="polite">Pick a product and press Play. The model has already been trained; nothing retrains here.</div>
+<section aria-labelledby="history-title"><div class="section-heading"><h2 id="history-title">26 held-out weeks, one week at a time</h2><span id="phase-chip" class="chip">Ready</span></div><div id="forecast-chart" class="chart tall" role="img" aria-label="Weekly sales history with the model forecast, the eight-week average baseline, and what actually sold, drawn one week at a time"></div><div class="timeline"><button id="previous-week" class="icon-button" title="Previous week" aria-label="Previous week" data-icon="ArrowLeft"></button><label><span class="sr-only">Replay position</span><input id="week-slider" type="range" min="0" max="26" step="1" value="0"><output id="week-label"></output></label><button id="next-week" class="icon-button" title="Next week" aria-label="Next week" data-icon="ArrowRight"></button></div><div id="outcome" class="reference-note">Each week the model sees only that product's recorded sales up to the week before. The target week's actual is never in the feature row.</div></section>
+<section class="explain-section" aria-labelledby="explanation-title"><div class="section-heading"><h2 id="explanation-title">Why this week's number?</h2><span class="chip">Grouped Shapley attribution</span></div><div class="equation" id="explanation-equation"></div><div class="charts-grid"><div><h3>Reference + signed contributions = forecast</h3><div id="shap-chart" class="chart tall" role="img" aria-label="Grouped Shapley waterfall showing contributions to the current week's forecast"></div></div><div><h3>Contribution ledger</h3><div class="table-wrap"><table class="data-table"><thead><tr><th>Model input group</th><th>Units contributed</th></tr></thead><tbody id="shap-table"></tbody></table></div><p class="reference-note">Positive contributions raise this model's output above its reference; negative contributions lower it. This is model attribution, not the cause of sales.</p><p id="additive-check" class="reference-note"></p><p class="reference-note">Reference: 16 fixed pre-test training rows. All 16 group combinations are evaluated. Correlated input groups can make mixed rows unrealistic; attribution depends on this reference and grouping.</p></div></div></section>
+<section aria-labelledby="scoreboard-title"><div class="section-heading"><h2 id="scoreboard-title">Week-by-week scoreboard</h2><span class="chip">Model vs 8-week average</span></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Week</th><th>Model</th><th>8-week average</th><th>Actually sold</th><th>Model miss</th><th>Baseline miss</th></tr></thead><tbody id="scoreboard"></tbody></table></div><p id="scoreboard-note" class="reference-note">Nothing scored yet.</p></section>
+<details id="whatif"><summary>What-if: change this week's recent sales</summary><p class="reference-note">Editing pauses the replay. These eight values are this product's recorded sales for the eight weeks before the week on screen. Change them and the features, the forecast and the attribution recompute. What actually sold does not change, and cannot confirm a hypothetical.</p><div class="adjustment"><div class="adjustment-head"><label for="scale">Scale the last eight weeks</label><output id="scale-value">100%</output></div><input id="scale" type="range" min="50" max="150" value="100" step="5" aria-label="Scale recent weekly sales"><div class="actions"><button id="increase">+25% recent sales</button><button id="drop">Last-week drop</button><button id="restore">Back to recorded</button></div></div><div class="week-inputs" id="week-inputs"></div><p id="validation-error" class="validation-error" role="alert"></p><div class="stage-line"><strong>Own product history</strong><span>&rarr;</span><strong>12 features</strong><span>&rarr;</span><strong>Shared model</strong><span>&rarr;</span><strong>Units</strong></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Recomputed input</th><th>Value</th></tr></thead><tbody id="feature-summary"></tbody></table></div></details>
+<details><summary>All 12 model inputs</summary><div class="table-wrap"><table class="data-table"><thead><tr><th>Feature</th><th>Value</th></tr></thead><tbody id="all-features"></tbody></table></div></details>
+<details id="photo-credits"></details>
+<details><summary>Model, data &amp; replay boundaries</summary><p id="model-facts"></p><p>One shared histogram gradient-boosted regressor, absolute-error loss, trained across 469 products. The simulator exports its numeric tree rules and evaluates them in JavaScript. It does not retrain during the replay. Stock code and product name are not model features.</p><p>Every forecast in the replay is one week ahead of recorded history. Advancing a week reveals that week's real sales and hands them to the next week's feature row; the model is never fed its own predictions, so the errors you see do not compound. A genuine four-week-out forecast would have to reuse predictions as inputs, and this model was neither trained nor validated that way.</p><p>Shapley values are computed exactly for four feature groups against the fixed 16-row reference, using the clipped-at-zero model output. They are not individual-feature TreeSHAP, causal effects, or confidence intervals. What-if adjustments may be unlike training data. Recorded actuals stay fixed and cannot validate a hypothetical change in demand.</p><p>UCI Online Retail II, <a href="https://doi.org/10.24432/C5CG6D" target="_blank" rel="noopener">DOI 10.24432/C5CG6D</a>, CC BY 4.0. One UK gift wholesaler, 2009-2011. Product photographs have separate source credits and rights; images are not model features. Inventory, stockouts, prices, and promotions are not modeled. Predicted units are planning evidence, not an order quantity. No order is placed.</p></details></main>
+<footer><span>ITAI 2372 / Retail Decisions</span><span>Educational simulation / planner approval required</span></footer></div>
+<script id="model-data" type="application/json">__DATA__</script><script>__ENGINE__</script><script>const RetailIcons=__ICONS__;</script><script>__COMMON__</script>
+<script>
+'use strict';
+const TEST_WEEKS=DATA.weeks.length-DATA.firstTest;
+const DEFAULT_PRODUCT=Math.max(0,DATA.products.findIndex(item=>item.code==='84029E'));
+const COLORS={history:'#c4c5ce',model:'#4ade80',baseline:'#f0b429',actual:'#8db5ef',whatif:'#c96a96'};
+let state={product:0,step:0,phase:'ready',timer:null,playing:false,trace:[],recent:null,features:[],explanation:null,forecast:null,baseline:null,valid:true};
+const product=()=>DATA.products[state.product];
+const weekIndex=step=>DATA.firstTest+step-1;
+const recordedRecent=()=>product().units.slice(weekIndex(state.step)-8,weekIndex(state.step));
+const isAdjusted=()=>state.recent!==null&&state.recent.some((value,index)=>value!==recordedRecent()[index]);
+$('#product').innerHTML=DATA.products.map((item,index)=>`<option value="${index}">${escapeHtml(titleCase(item.name))} / ${escapeHtml(item.code)}</option>`).join('');
+$('#week-slider').max=TEST_WEEKS;
+$('#model-facts').textContent=`${DATA.nProducts} products / ${format(DATA.nFitRows,0)} pre-test product-week rows / ${DATA.nTrees} fitted trees / 12 features. Across all 469 products and these 26 weeks the model's average miss is 47.97 units against 52.31 for the 8-week average.`;
+
+function predictWeek(week,recent){
+ const features=ENGINE.featureRow(product().units,week,DATA.weekNumbers[week],recent||null);
+ return {features,forecast:ENGINE.predict(DATA,features),baseline:features[6],actual:product().units[week]};
+}
+function buildTrace(){
+ state.trace=[];
+ for(let step=1;step<=TEST_WEEKS;step++){
+  const week=weekIndex(step),row=predictWeek(week);
+  state.trace.push({step,week,date:DATA.weeks[week],forecast:row.forecast,baseline:row.baseline,actual:row.actual,features:row.features});
+ }
+}
+const revealed=()=>state.trace.slice(0,state.phase==='revealed'?state.step:Math.max(0,state.step-1));
+const forecasted=()=>state.trace.slice(0,state.step);
+function runningError(){
+ const rows=revealed();
+ if(!rows.length)return null;
+ const total=(key)=>rows.reduce((sum,row)=>sum+Math.abs(row[key]-row.actual),0)/rows.length;
+ return {weeks:rows.length,model:total('forecast'),baseline:total('baseline')};
+}
+
+function renderChart(){
+ const contextStart=Math.max(0,DATA.firstTest-10);
+ const shown=forecasted(),done=revealed();
+ const traces=[{type:'scatter',x:DATA.weeks.slice(contextStart,DATA.firstTest),y:product().units.slice(contextStart,DATA.firstTest),mode:'lines+markers',name:'Sales before the held-out weeks',line:{color:COLORS.history,width:2},marker:{size:5},hovertemplate:'%{x}<br>%{y:.0f} units<extra></extra>'}];
+ traces.push({type:'scatter',x:[DATA.weeks[DATA.firstTest-1],...done.map(row=>row.date)],y:[product().units[DATA.firstTest-1],...done.map(row=>row.actual)],mode:'lines+markers',name:'What actually sold',line:{color:COLORS.actual,width:2},marker:{size:7,symbol:'x'},hovertemplate:'%{x}<br>sold %{y:.0f} units<extra></extra>'});
+ traces.push({type:'scatter',x:shown.map(row=>row.date),y:shown.map(row=>row.forecast),mode:'lines+markers',name:'Model forecast',line:{color:COLORS.model,width:2},marker:{size:8,symbol:'diamond'},hovertemplate:'%{x}<br>forecast %{y:.1f} units<extra></extra>'});
+ traces.push({type:'scatter',x:shown.map(row=>row.date),y:shown.map(row=>row.baseline),mode:'lines+markers',name:'8-week average',line:{color:COLORS.baseline,width:2,dash:'dot'},marker:{size:6,symbol:'square-open'},hovertemplate:'%{x}<br>baseline %{y:.1f} units<extra></extra>'});
+ if(isAdjusted()&&state.step>0)traces.push({type:'scatter',x:DATA.weeks.slice(weekIndex(state.step)-8,weekIndex(state.step)),y:state.recent,mode:'lines+markers',name:'What-if history',line:{color:COLORS.whatif,dash:'dot',width:2},marker:{size:5},hovertemplate:'%{x}<br>what-if %{y:.0f} units<extra></extra>'});
+ const visible=[...product().units.slice(contextStart,DATA.firstTest),...done.map(row=>row.actual),...shown.map(row=>Math.max(row.forecast,row.baseline)),...(isAdjusted()&&state.step?state.recent.filter(Number.isFinite):[])];
+ const ceiling=Math.max(...visible,1)*1.15;
+ const shapes=[{type:'rect',xref:'x',yref:'paper',x0:DATA.weeks[DATA.firstTest-1],x1:DATA.weeks[DATA.weeks.length-1],y0:0,y1:1,fillcolor:'rgba(126,174,184,.05)',line:{width:0},layer:'below'}];
+ if(state.step>0)shapes.push({type:'line',xref:'x',x0:state.trace[state.step-1].date,x1:state.trace[state.step-1].date,yref:'paper',y0:0,y1:1,line:{dash:'dot',width:1.5,color:'#9396a6'}});
+ plot('forecast-chart',traces,{xaxis:{type:'date',range:[DATA.weeks[contextStart],DATA.weeks[DATA.weeks.length-1]],tickformat:'%b %d',nticks:8,gridcolor:'#23262f'},yaxis:{title:{text:'Units sold'},range:[0,ceiling],gridcolor:'#2e3140'},legend:{orientation:'h',y:1.18,x:0,font:{size:12}},margin:{l:58,r:20,t:64,b:42},shapes});
+}
+function renderScoreboard(){
+ const rows=revealed();
+ $('#scoreboard').innerHTML=rows.slice().reverse().map(row=>{const model=Math.abs(row.forecast-row.actual),base=Math.abs(row.baseline-row.actual);return `<tr><td>${row.date}</td><td>${format(row.forecast)}</td><td>${format(row.baseline)}</td><td>${format(row.actual,0)}</td><td class="${model<=base?'positive':'negative'}">${format(model)}</td><td>${format(base)}</td></tr>`;}).join('')||'<tr><td colspan="6">No weeks scored yet.</td></tr>';
+ const error=runningError();
+ $('#scoreboard-note').textContent=error?`${error.weeks} of ${TEST_WEEKS} weeks scored for ${titleCase(product().name)}. Average miss so far: model ${format(error.model)} units, 8-week average ${format(error.baseline)} units. ${error.model<error.baseline?'The model is closer on average over these weeks.':'The plain 8-week average is closer on average over these weeks.'}`:'Nothing scored yet.';
+}
+function renderExplanation(){
+ if(!state.valid||!state.explanation){$('#explanation-equation').textContent='Press play or step to forecast a week.';$('#shap-table').innerHTML='';$('#additive-check').textContent='';$('#all-features').innerHTML='';$('#feature-summary').innerHTML='';Plotly.purge('shap-chart');return;}
+ const why=state.explanation,effectSum=why.effects.reduce((sum,value)=>sum+value,0);
+ $('#explanation-equation').innerHTML=`<strong>${format(why.reference)}</strong><span>reference prediction</span><strong>${effectSum>=0?'+':'-'} ${format(Math.abs(effectSum))}</strong><span>net feature contribution</span><strong>= ${format(why.prediction)}</strong><span>units</span>`;
+ $('#shap-table').innerHTML=`<tr><td>Reference prediction</td><td>${format(why.reference,3)}</td></tr>`+DATA.groupNames.map((label,index)=>`<tr><td>${label}</td><td class="${why.effects[index]>=0?'positive':'negative'}">${why.effects[index]>0?'+':''}${format(why.effects[index],3)}</td></tr>`).join('')+`<tr><td><strong>Predicted units</strong></td><td><strong>${format(why.prediction,3)}</strong></td></tr>`;
+ $('#additive-check').textContent=`Attribution sum check: ${Math.abs(why.reference+effectSum-why.prediction)<1e-7?'passed':'failed'}. Display rounding may leave a small difference.`;
+ $('#feature-summary').innerHTML=[['Last week',state.features[0]],['4-week average',state.features[5]],['8-week average',state.features[6]],['4-week variation',state.features[7]],['Same week last year',state.features[8]]].map(([label,value])=>`<tr><td>${label}</td><td>${value===null?'Missing':format(value)}</td></tr>`).join('');
+ $('#all-features').innerHTML=DATA.features.map((label,index)=>`<tr><td>${label}</td><td>${state.features[index]===null?'Missing':format(state.features[index],3)}</td></tr>`).join('');
+ plot('shap-chart',[{type:'waterfall',orientation:'v',x:['Reference','Recent<br>sales','Recent<br>averages','Recent<br>variation','Seasonality','Forecast'],measure:['absolute','relative','relative','relative','relative','total'],y:[why.reference,...why.effects,0],increasing:{marker:{color:COLORS.model}},decreasing:{marker:{color:'#e45a58'}},totals:{marker:{color:'#7eaeb8'}},connector:{line:{color:'#9396a6'}},hovertemplate:'%{x}<br>%{y:.3f} units<extra></extra>'}],{yaxis:{title:{text:'Units'},zeroline:true,gridcolor:'#2e3140'},xaxis:{tickfont:{size:11}},margin:{l:55,r:15,t:25,b:60},showlegend:false});
+}
+function renderWeekInputs(){
+ if(!state.step){$('#week-inputs').innerHTML='<p class="empty">Press Play or Step to put a week on screen, then its eight preceding weeks appear here.</p>';return;}
+ const week=weekIndex(state.step),values=state.recent||recordedRecent();
+ $('#week-inputs').innerHTML=values.map((value,index)=>`<label>${DATA.weeks[week-8+index]}<input data-week="${index}" aria-label="Units for ${DATA.weeks[week-8+index]}" type="number" min="0" max="100000" step="1" value="${value}"></label>`).join('');
+}
+function render(){
+ const current=state.step?state.trace[state.step-1]:null;
+ $('#product-media').innerHTML=productPhoto(product().code,product().name);
+ $('#product-title').textContent=titleCase(product().name);
+ $('#product-context').textContent=current?`Stock ${product().code} / week on screen ${current.date}`:`Stock ${product().code} / 26 held-out weeks from ${DATA.weeks[DATA.firstTest]} to ${DATA.weeks[DATA.weeks.length-1]}`;
+ $('#week-counter').textContent=`${state.step} of ${TEST_WEEKS}`;
+ $('#week-date').textContent=current?current.date:'Press play';
+ $('#week-slider').value=state.step;
+ $('#week-label').textContent=current?`Week ${state.step} of ${TEST_WEEKS} / ${current.date}`:`Not started / ${TEST_WEEKS} weeks ready`;
+ $('#previous-week').disabled=state.step<=0;$('#next-week').disabled=state.step>=TEST_WEEKS&&state.phase==='revealed';
+ $('#forecast-value').textContent=state.valid?(current?format(state.forecast):'--'):'Unavailable';
+ $('#baseline-value').textContent=state.valid?(current?format(state.baseline):'--'):'Unavailable';
+ const shown=state.phase==='revealed'&&current;
+ $('#actual-value').textContent=shown?format(current.actual,0):'--';
+ $('#actual-label').textContent=!current?'Revealed after the forecast':shown?(isAdjusted()?'Recorded / not a what-if outcome':`Model missed by ${format(Math.abs(state.forecast-current.actual))}`):'Forecast first, then reveal';
+ const error=runningError();
+ $('#mae-value').textContent=error?format(error.model):'--';
+ $('#mae-label').textContent=error?`8-week average ${format(error.baseline)} over ${error.weeks} week${error.weeks===1?'':'s'}`:'Average miss / lower is better';
+ $('#phase-chip').textContent=!current?'Ready':isAdjusted()?'What-if inputs':state.phase==='revealed'?'Week revealed':'Forecast made / week not revealed';
+ $('#play').innerHTML=`${icon(state.playing?'Pause':'Play')}${state.playing?'Pause':state.step>=TEST_WEEKS&&state.phase==='revealed'?'Replay':'Play'}`;
+ $('#export').disabled=!state.valid||!revealed().length;
+ renderChart();renderScoreboard();renderExplanation();renderWeekInputs();
+}
+function scoreCurrent(){
+ if(!state.step){state.forecast=null;state.baseline=null;state.features=[];state.explanation=null;return;}
+ const week=weekIndex(state.step);
+ if(state.recent&&state.recent.some(value=>!Number.isFinite(value)||value<0||value>100000)){
+  state.valid=false;state.explanation=null;state.features=[];state.forecast=null;state.baseline=null;
+  $('#validation-error').textContent='Enter eight values between 0 and 100,000 units.';return;
+ }
+ state.valid=true;$('#validation-error').textContent='';
+ state.features=ENGINE.featureRow(product().units,week,DATA.weekNumbers[week],isAdjusted()?state.recent:null);
+ state.forecast=ENGINE.predict(DATA,state.features);state.baseline=state.features[6];
+ state.explanation=ENGINE.explain(DATA,state.features);
+}
+function advance(){
+ if(state.phase==='forecast'){state.phase='revealed';}
+ else{
+  if(state.step>=TEST_WEEKS){stop();announce(`Replay finished. ${TEST_WEEKS} weeks scored for ${titleCase(product().name)}.`);render();return false;}
+  state.step++;state.phase='forecast';state.recent=null;$('#scale').value=100;$('#scale-value').textContent='100%';
+ }
+ scoreCurrent();render();
+ const current=state.trace[state.step-1];
+ announce(state.phase==='forecast'?`Week ${state.step}, ${current.date}: the model forecasts ${format(state.forecast)} units; the 8-week average says ${format(state.baseline)}. This week has not happened yet.`:`Week ${state.step}, ${current.date}: ${format(current.actual,0)} units actually sold. The model missed by ${format(Math.abs(state.forecast-current.actual))}; the 8-week average missed by ${format(Math.abs(state.baseline-current.actual))}.`);
+ return true;
+}
+function stop(){clearInterval(state.timer);state.timer=null;state.playing=false;}
+function play(){
+ if(state.step>=TEST_WEEKS&&state.phase==='revealed')goTo(0);
+ state.playing=true;render();
+ state.timer=setInterval(()=>{if(!advance())return;},Number($('#speed').value));
+ advance();
+}
+function goTo(step){
+ stop();
+ state.step=Math.max(0,Math.min(TEST_WEEKS,step));state.phase=state.step?'revealed':'ready';state.recent=null;
+ $('#scale').value=100;$('#scale-value').textContent='100%';
+ scoreCurrent();render();
+}
+function selectProduct(index){
+ stop();state.product=index;$('#product').value=String(index);buildTrace();goTo(0);
+ announce(`${titleCase(product().name)} loaded with ${TEST_WEEKS} held-out weeks. The model is already trained; press Play.`);
+}
+$('#play').addEventListener('click',()=>{if(state.playing){stop();render();announce('Replay paused.');}else play();});
+$('#step').addEventListener('click',()=>{stop();advance();render();});
+$('#reset').addEventListener('click',()=>{goTo(0);announce('Replay reset. The trained model and recorded sales are unchanged.');});
+$('#product').addEventListener('change',()=>selectProduct(Number($('#product').value)));
+$('#speed').addEventListener('change',()=>{if(state.playing){stop();play();}});
+$('#previous-week').addEventListener('click',()=>goTo(state.step-1));
+$('#next-week').addEventListener('click',()=>{stop();advance();render();});
+$('#week-slider').addEventListener('input',()=>goTo(Number($('#week-slider').value)));
+function applyWhatIf(recent,label){
+ stop();if(!state.step)goTo(1);
+ state.recent=recent;$('#scale-value').textContent=label;
+ scoreCurrent();render();
+ announce(state.valid?'Hypothetical recent sales applied. The forecast and attribution recomputed; what actually sold is unchanged.':'Invalid input: forecasting paused.');
+}
+$('#scale').addEventListener('input',()=>{const scale=Number($('#scale').value)/100;applyWhatIf(recordedRecent().map(value=>Math.round(value*scale)),`${Math.round(scale*100)}%`);});
+$('#increase').addEventListener('click',()=>{$('#scale').value=125;$('#scale').dispatchEvent(new Event('input'));});
+$('#drop').addEventListener('click',()=>{const recent=recordedRecent();recent[7]=Math.round(recent[7]*0.2);applyWhatIf(recent,'Custom');});
+$('#restore').addEventListener('click',()=>{$('#scale').value=100;state.recent=null;$('#scale-value').textContent='100%';scoreCurrent();render();announce('Back to this product’s recorded sales.');});
+$('#week-inputs').addEventListener('change',event=>{if(!event.target.matches('[data-week]'))return;const recent=(state.recent||recordedRecent()).slice();recent[Number(event.target.dataset.week)]=event.target.value.trim()===''?NaN:Number(event.target.value);applyWhatIf(recent,'Custom');});
+$('#export').addEventListener('click',()=>{const rows=revealed();if(!rows.length)return;const error=runningError();downloadJson('forecast-replay.json',{simulation:true,model:DATA.model,product:product().code,productName:product().name,weeksScored:rows.length,averageMiss:{model:error.model,eightWeekAverage:error.baseline},weeks:rows.map(row=>({week:row.date,forecast:row.forecast,eightWeekAverage:row.baseline,actual:row.actual,modelMiss:Math.abs(row.forecast-row.actual),baselineMiss:Math.abs(row.baseline-row.actual)})),currentWeekHypothetical:isAdjusted()?{recentUnits:state.recent,forecast:state.forecast}:null});});
+selectProduct(DEFAULT_PRODUCT);
+window.retailSimulator={getState:()=>state,data:DATA,engine:ENGINE,advance,goTo,play,stop,runningError,testWeeks:TEST_WEEKS,defaultProduct:DEFAULT_PRODUCT};
+</script></body></html>
