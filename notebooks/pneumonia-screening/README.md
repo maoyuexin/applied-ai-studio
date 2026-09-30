@@ -53,6 +53,12 @@ backup/                    Standalone offline HTML
 scripts/                   Notebook, artifact, and backup builders
 ```
 
+The offline report in `backup/` is the version used in class. After Stage 5 it adds an
+optional **Stage 6: Multimodal LLM** section that replays the captured vision-model response in
+`artifacts/multimodal_demo_response.json` (built with `pneumonialab/multimodal.py`). The
+executable notebook currently stops at Stage 5, so re-exporting it with
+`scripts/make_backup.py` would drop Stage 6.
+
 The final notebook cells export `model.pt`, `model_card.json`, `operating_policy.json`,
 `evaluation.json`, and `sample_manifest.parquet`. The app service loads those exact files.
 The validated bundle is versioned so Codespaces uses the same `0.748` cutoff and predictions

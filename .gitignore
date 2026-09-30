@@ -57,3 +57,6 @@ notebooks/product-recommendations/artifacts/*
 !notebooks/product-recommendations/artifacts/operating_policy.json
 !notebooks/product-recommendations/artifacts/sample_manifest.parquet
 
+
+# Built by npm run build:site (GitHub Pages teaching library)
+_site/

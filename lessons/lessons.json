@@ -1,0 +1,111 @@
+{
+  "title": "Applied AI Studio Teaching Library",
+  "tagline": "Slides, readings, executed notebooks and browser demos for teaching applied AI through real business workflows.",
+  "repository": "maoyuexin/applied-ai-studio",
+  "siteUrl": "https://maoyuexin.github.io/applied-ai-studio/",
+  "lessons": [
+    {
+      "id": "01-work-processes",
+      "title": "How Work Happens, and Where AI Fits",
+      "summary": "Map a business process as Inputs, Process, Decision, Action and Outcome; find the decisions inside it; judge which ones AI fits; then design the survivors with Data, Model, Metric and Human.",
+      "cases": ["One online order"],
+      "materials": [
+        { "type": "slides", "title": "Slides", "path": "lessons/01-work-processes/M1_Deck_How_Work_Happens.pdf" }
+      ],
+      "studio": [
+        { "title": "Industry workflows catalog", "route": "/showcase" },
+        { "title": "Online Order workflow", "route": "/workflow?courseCase=retail-online-order" },
+        { "title": "Online Order app", "route": "/online-order?view=customer" },
+        { "title": "AI Fit Analyzer", "route": "/fit" }
+      ]
+    },
+    {
+      "id": "02-data-to-decision",
+      "title": "From Data to Decision: How an AI System Is Built",
+      "summary": "What AI can and cannot do, the anatomy of an AI system (task, data modality, learning paradigm, model class), and a card-fraud model built stage by stage.",
+      "cases": ["Card transaction fraud"],
+      "materials": [
+        { "type": "slides", "title": "Slides", "path": "lessons/02-data-to-decision/S2_Deck_AI_Across_Industries.pdf" },
+        { "type": "reading", "title": "Machine learning paradigms explainer", "path": "lessons/02-data-to-decision/S2_Machine_Learning_Paradigms_Explainer.pdf" },
+        { "type": "reading", "title": "Neural network families explainer", "path": "lessons/02-data-to-decision/S2_Neural_Network_Families_Explainer.pdf" },
+        { "type": "report", "title": "Fraud detection notebook", "path": "notebooks/fraud-detection/backup/01_fraud_build.html", "notebook": "notebooks/fraud-detection/01_fraud_build.ipynb" }
+      ],
+      "studio": [
+        { "title": "Fraud detection lab", "route": "/fraud" },
+        { "title": "Card transaction workflow", "route": "/workflow?courseCase=financial-fraud-detection" }
+      ]
+    },
+    {
+      "id": "03-healthcare",
+      "title": "AI in Healthcare: Evidence, Workflow and Human Judgment",
+      "summary": "Healthcare as four connected workflows, then a compact image model that prioritizes pediatric chest X-rays for clinician review, never diagnosis, plus an optional multimodal LLM comparison.",
+      "cases": ["Pediatric chest X-ray prioritization"],
+      "materials": [
+        { "type": "slides", "title": "Slides", "path": "lessons/03-healthcare/M3_Deck_AI_in_Healthcare.pdf" },
+        { "type": "reading", "title": "AUC in plain language", "path": "lessons/03-healthcare/M3_AUC_Plain_Language_Guide.pdf" },
+        { "type": "report", "title": "Chest X-ray prioritization notebook", "path": "notebooks/pneumonia-screening/backup/01_pneumonia_build.html", "notebook": "notebooks/pneumonia-screening/01_pneumonia_build.ipynb" }
+      ],
+      "studio": [
+        { "title": "Chest X-ray review lab", "route": "/pneumonia" },
+        { "title": "Chest X-ray workflow", "route": "/workflow?courseCase=healthcare-pediatric-xray-prioritization" }
+      ]
+    },
+    {
+      "id": "04-finance-risk",
+      "title": "AI in Finance and Risk Management",
+      "summary": "Where AI runs in a bank, a credit-risk review model, complaint routing with text classification and an LLM comparison, explainability, fair lending and governance.",
+      "cases": ["Credit risk review", "Customer complaint routing"],
+      "materials": [
+        { "type": "slides", "title": "Slides", "path": "lessons/04-finance-risk/M4_Deck_AI_in_Finance.pdf" },
+        { "type": "reading", "title": "ML fairness: the basics", "path": "lessons/04-finance-risk/M4_ML_Fairness_Basics.pdf" },
+        { "type": "report", "title": "Credit risk notebook", "path": "notebooks/credit-risk/backup/01_credit_build.html", "notebook": "notebooks/credit-risk/01_credit_build.ipynb" },
+        { "type": "report", "title": "Complaint routing notebook", "path": "notebooks/complaint-routing/backup/01_complaint_build.html", "notebook": "notebooks/complaint-routing/01_complaint_build.ipynb" }
+      ],
+      "studio": [
+        { "title": "Credit risk review lab", "route": "/credit" },
+        { "title": "Complaint routing desk", "route": "/complaints" },
+        { "title": "Credit risk workflow", "route": "/workflow?courseCase=financial-credit-risk" },
+        { "title": "Complaint routing workflow", "route": "/workflow?courseCase=financial-complaint-routing" }
+      ]
+    },
+    {
+      "id": "05-manufacturing",
+      "title": "AI in Manufacturing and Industrial Operations",
+      "summary": "Industrial IoT and data streams, anomaly detection on real compressor telemetry, alert fatigue and drift, and why safety authority stays with people.",
+      "cases": ["Compressor predictive maintenance", "Grounded procedure assistant (related lab)"],
+      "materials": [
+        { "type": "slides", "title": "Slides", "path": "lessons/05-manufacturing/M5_Deck_AI_in_Manufacturing.pdf" },
+        { "type": "report", "title": "Predictive maintenance notebook", "path": "notebooks/predictive-maintenance/backup/01_pdm_build.html", "notebook": "notebooks/predictive-maintenance/01_pdm_build.ipynb" },
+        { "type": "demo", "title": "Compressor telemetry simulator", "path": "notebooks/predictive-maintenance/backup/02_pdm_simulator.html" },
+        { "type": "report", "title": "Procedure assistant (RAG) notebook", "path": "notebooks/procedure-assistant/backup/01_procedure_build.html", "notebook": "notebooks/procedure-assistant/01_procedure_build.ipynb" }
+      ],
+      "studio": [
+        { "title": "Maintenance lab", "route": "/maintenance" },
+        { "title": "Telemetry simulator", "route": "/maintenance-simulator" },
+        { "title": "Procedure assistant", "route": "/procedures" },
+        { "title": "Predictive maintenance workflow", "route": "/workflow?courseCase=manufacturing-predictive-maintenance" }
+      ]
+    },
+    {
+      "id": "06-retail-supply-chain",
+      "title": "AI in Retail and Supply Chain",
+      "summary": "Three applied cases on one retail dataset: predict a number (weekly demand), put things in order (next best product), and read and draft (catalog onboarding with an LLM and human review).",
+      "cases": ["Demand forecasting with regression", "Next best product", "Catalog onboarding"],
+      "materials": [
+        { "type": "slides", "title": "Slides", "path": "lessons/06-retail-supply-chain/M6_Deck_AI_in_Retail.pdf", "note": "Public copy: merchant product photos replaced with placeholders." },
+        { "type": "report", "title": "Demand forecasting notebook", "path": "notebooks/demand-forecasting/backup/01_forecast_build.html", "publishAs": "M6_Notebook_Demand_Forecasting.html", "notebook": "notebooks/demand-forecasting/01_forecast_build.ipynb" },
+        { "type": "report", "title": "Product recommendations notebook", "path": "notebooks/product-recommendations/backup/01_recommendation_build.html", "publishAs": "M6_Notebook_Product_Recommendations.html", "notebook": "notebooks/product-recommendations/01_recommendation_build.ipynb" },
+        { "type": "demo", "title": "Demand forecasting simulator", "path": "notebooks/demand-forecasting/backup/02_forecast_simulator.html", "publishAs": "M6_Simulator_Demand_Forecasting.html" },
+        { "type": "demo", "title": "Next best product simulator", "path": "notebooks/product-recommendations/backup/02_recommendation_simulator.html", "publishAs": "M6_Simulator_Next_Best_Product.html" },
+        { "type": "demo", "title": "How recommendations work (visual explainer)", "path": "notebooks/product-recommendations/M6_Explainer_How_Recommendations_Work.html" },
+        { "type": "demo", "title": "Catalog onboarding with an LLM", "path": "notebooks/catalog-onboarding/backup/M6_Demo_Catalog_Onboarding.html" }
+      ],
+      "studio": [
+        { "title": "Demand forecasting demo", "route": "/forecast" },
+        { "title": "Next best product demo", "route": "/recommendations" },
+        { "title": "Demand forecasting workflow", "route": "/workflow?courseCase=retail-demand-forecasting" },
+        { "title": "Next best product workflow", "route": "/workflow?courseCase=retail-product-recommendations" }
+      ]
+    }
+  ]
+}

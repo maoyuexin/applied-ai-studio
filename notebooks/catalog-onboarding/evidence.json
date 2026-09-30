@@ -1,0 +1,119 @@
+{
+  "reviewed_on": "2026-09-22",
+  "notice": "Real records are compact factual transcriptions from dated public product pages, not internal supplier files or historical UCI attributes. Original pages and photographs retain their own rights. Fictional records are independent teaching stress tests, not claims about any real brand. No current prices, stock, reviews or personal data are included.",
+  "fields": {
+    "product_code": {"label": "Product code", "type": "string", "instruction": "Exact product identifier; do not substitute the GTIN."},
+    "material": {"label": "Material", "type": "string", "instruction": "Material of the main product body. Preserve recycled if explicitly stated. Do not infer from an image."},
+    "length_cm": {"label": "Length (cm)", "type": "number", "instruction": "Overall or assembled product length in centimetres. Convert metres to centimetres. Preserve approximate versus exact; do not use packaging dimensions."},
+    "components": {"label": "Components", "type": "number", "instruction": "Number of pennants or paper links in one product, not number of retail packs. Preserve approximate if stated."},
+    "care": {"label": "Care", "type": "string", "instruction": "Short source-supported care instruction, preserving temperature or hand-wash limitations."},
+    "selling_unit": {"label": "Selling unit", "type": "string", "instruction": "What the customer buys: one string, one kit, one mug, etc. A shipping carton count does not establish the selling unit. Mark missing if not explicit."},
+    "safety": {"label": "Safety warning", "type": "string", "instruction": "Source-stated product warning. Do not infer a certification or absence of hazards."},
+    "waterproof": {"label": "Waterproof", "type": "string", "instruction": "Only an explicit waterproof claim. Plastic, outdoor use or a water-resistant coating does not establish waterproofness."},
+    "capacity_ml": {"label": "Capacity (ml)", "type": "number", "instruction": "Liquid capacity in millilitres; convert litres if needed. Conflicting current sources require conflict, not an arbitrary choice."},
+    "carton_quantity": {"label": "Shipping carton count", "type": "number", "instruction": "Units per shipping carton, distinct from the customer selling unit."}
+  },
+  "records": [
+    {
+      "id": "47566", "name": "Vintage floral bunting", "kind": "real", "photo_code": "47566",
+      "source_url": "https://www.rexlondon.com/vintage-floral-washable-cotton-bunting",
+      "source_label": "Rex London public product page",
+      "lesson": "Keep approximate length and care restrictions; 15 pennants are not 15 retail packs.",
+      "documents": [
+        {"id": "bunting-spec", "title": "Factual transcription / specifications", "text": "Product code: 47566. Material: cotton. Overall string length: approximately 8 metres. Pennants per string: 15. Customer product: one string of bunting."},
+        {"id": "bunting-care", "title": "Factual transcription / care and warning", "text": "Machine washable at 30 degrees Celsius. Keep away from fire."}
+      ],
+      "field_names": ["product_code", "material", "length_cm", "components", "care", "selling_unit", "safety", "waterproof"],
+      "required": ["product_code", "material", "length_cm", "components", "care", "selling_unit", "safety"],
+      "reference": {
+        "product_code": {"status": "supported", "values": ["47566"], "qualifier": null},
+        "material": {"status": "supported", "values": ["cotton"], "qualifier": null},
+        "length_cm": {"status": "supported", "values": [800], "qualifier": "approximate"},
+        "components": {"status": "supported", "values": [15], "qualifier": "exact"},
+        "care": {"status": "supported", "contains": ["machine", "30"], "qualifier": null},
+        "selling_unit": {"status": "supported", "contains": ["string"], "qualifier": null},
+        "safety": {"status": "supported", "contains": ["keep away from fire"], "qualifier": null},
+        "waterproof": {"status": "missing", "qualifier": null}
+      }
+    },
+    {
+      "id": "85099B", "name": "Red Retrospot storage bag", "kind": "real", "photo_code": "85099B",
+      "source_url": "https://www.rexlondon.com/red-retrospot-design-jumbo-storage-bag",
+      "source_label": "Rex London public product page",
+      "lesson": "Separate the recycled-plastic body from nylon handles. Wipe-clean does not mean machine washable.",
+      "documents": [
+        {"id": "bag-spec", "title": "Factual transcription / product details", "text": "Product code: 85099B. Product: Jumbo storage bag - Red Retrospot. Bag body: recycled plastic. Handles: woven nylon. Closure: zip fastener. Listed dimensions: 58 cm x 28 cm x 48 cm."},
+        {"id": "bag-care", "title": "Factual transcription / care", "text": "Care guidance: wipe clean with a damp cloth. Folds flat for storage."}
+      ],
+      "field_names": ["product_code", "material", "care", "selling_unit", "waterproof"],
+      "required": ["product_code", "material", "care", "selling_unit"],
+      "reference": {
+        "product_code": {"status": "supported", "values": ["85099B"], "qualifier": null},
+        "material": {"status": "supported", "contains": ["recycled", "plastic"], "qualifier": null},
+        "care": {"status": "supported", "contains": ["wipe", "damp cloth"], "qualifier": null},
+        "selling_unit": {"status": "missing", "qualifier": null},
+        "waterproof": {"status": "missing", "qualifier": null}
+      }
+    },
+    {
+      "id": "22084", "name": "Empire paper-chain kit", "kind": "real", "photo_code": "22084",
+      "source_url": "https://www.rexlondon.com/paper-chain-kit-empire",
+      "source_label": "Rex London public product page",
+      "lesson": "200 paper links form one kit; the assembled chain length is not the listed small dimensions.",
+      "documents": [
+        {"id": "chain-spec", "title": "Factual transcription / kit contents", "text": "Product code: 22084. Material: paper. One paper-chain kit contains approximately 200 paper links and double-sided sticky tape. The kit makes 10 metres of assembled paper chain."},
+        {"id": "chain-details", "title": "Factual transcription / listed dimensions", "text": "Listed dimensions: 21.3 cm x 12.6 cm x 1.6 cm. The page does not label these as the assembled chain length."}
+      ],
+      "field_names": ["product_code", "material", "length_cm", "components", "care", "selling_unit", "waterproof"],
+      "required": ["product_code", "material", "length_cm", "components", "selling_unit"],
+      "reference": {
+        "product_code": {"status": "supported", "values": ["22084"], "qualifier": null},
+        "material": {"status": "supported", "values": ["paper"], "qualifier": null},
+        "length_cm": {"status": "supported", "values": [1000], "qualifier": "exact"},
+        "components": {"status": "supported", "values": [200], "qualifier": "approximate"},
+        "care": {"status": "missing", "qualifier": null},
+        "selling_unit": {"status": "supported", "contains": ["kit"], "qualifier": null},
+        "waterproof": {"status": "missing", "qualifier": null}
+      }
+    },
+    {
+      "id": "B17", "name": "Bottle / ambiguous selling pack", "kind": "fictional", "photo_code": null,
+      "source_url": null, "source_label": "Invented supplier-sheet stress test",
+      "lesson": "A logistics carton contains six bottles; the customer-facing selling quantity remains unknown.",
+      "documents": [
+        {"id": "bottle-spec", "title": "Fictional supplier sheet", "text": "Product code: B17. Bottle capacity: 750 ml. Body: stainless steel. Lid: polypropylene. Care: hand wash only."},
+        {"id": "bottle-logistics", "title": "Fictional logistics note", "text": "6 bottles per shipping carton. Customer selling pack: not specified. This logistics note does not establish whether bottles are sold singly or in packs."}
+      ],
+      "field_names": ["product_code", "material", "capacity_ml", "care", "selling_unit", "carton_quantity", "waterproof"],
+      "required": ["product_code", "material", "capacity_ml", "care", "selling_unit"],
+      "reference": {
+        "product_code": {"status": "supported", "values": ["B17"], "qualifier": null},
+        "material": {"status": "supported", "contains": ["stainless steel"], "qualifier": null},
+        "capacity_ml": {"status": "supported", "values": [750], "qualifier": "exact"},
+        "care": {"status": "supported", "contains": ["hand wash", "only"], "qualifier": null},
+        "selling_unit": {"status": "missing", "qualifier": null},
+        "carton_quantity": {"status": "supported", "values": [6], "qualifier": "exact"},
+        "waterproof": {"status": "missing", "qualifier": null}
+      }
+    },
+    {
+      "id": "C24", "name": "Mug / conflicting capacity", "kind": "fictional", "photo_code": null,
+      "source_url": null, "source_label": "Invented contradictory-document stress test",
+      "lesson": "Neither sheet is marked authoritative. Preserve the capacity conflict and ask for clarification.",
+      "documents": [
+        {"id": "mug-sheet-a", "title": "Fictional supplier sheet A", "text": "Product code: C24. Ceramic mug. Capacity: 500 ml. Selling unit: one mug. Care: hand wash only."},
+        {"id": "mug-sheet-b", "title": "Fictional supplier sheet B", "text": "Product code: C24. Ceramic mug. Capacity: 750 ml. Selling unit: one mug. Care: hand wash only. Neither sheet has a revision date or priority designation."}
+      ],
+      "field_names": ["product_code", "material", "capacity_ml", "care", "selling_unit", "waterproof"],
+      "required": ["product_code", "material", "capacity_ml", "care", "selling_unit"],
+      "reference": {
+        "product_code": {"status": "supported", "values": ["C24"], "qualifier": null},
+        "material": {"status": "supported", "values": ["ceramic"], "qualifier": null},
+        "capacity_ml": {"status": "conflict", "qualifier": null},
+        "care": {"status": "supported", "contains": ["hand wash", "only"], "qualifier": null},
+        "selling_unit": {"status": "supported", "contains": ["one", "mug"], "qualifier": null},
+        "waterproof": {"status": "missing", "qualifier": null}
+      }
+    }
+  ]
+}
