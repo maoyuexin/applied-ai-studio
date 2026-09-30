@@ -11,6 +11,7 @@
   "scripts": {
     "predev": "node scripts/dev-preflight.mjs && npm run build -w @applied-ai-studio/contracts",
     "fetch:data": "node scripts/fetch-lab-data.mjs",
+    "build:site": "node scripts/build-teaching-site.mjs",
     "dev": "concurrently --kill-others-on-fail -n catalog,agent,orders,fraud,pneumonia,credit,complaints,pdm,procedures,forecast,recs,web -c yellow,cyan,magenta,red,blue,greenBright,magentaBright,cyanBright,redBright,yellowBright,blueBright,green \"npm run dev -w @applied-ai-studio/catalog-api\" \"npm run dev -w @applied-ai-studio/agent-api\" \"npm run dev:orders\" \"npm run dev:fraud\" \"npm run dev:pneumonia\" \"npm run dev:credit\" \"npm run dev:complaints\" \"npm run dev:pdm\" \"npm run dev:procedures\" \"npm run dev:forecast\" \"npm run dev:recommendations\" \"npm run dev -w @applied-ai-studio/web\"",
     "dev:orders": "node scripts/venv-python.mjs -m uvicorn app.main:app --app-dir services/order-api --host 127.0.0.1 --port 4330 --reload --reload-dir services/order-api/app --reload-dir services/order-api/migrations --timeout-graceful-shutdown 2",
     "dev:fraud": "node scripts/venv-python.mjs -m uvicorn app.main:app --app-dir services/fraud-api --host 127.0.0.1 --port 4340 --reload --reload-dir services/fraud-api/app --timeout-graceful-shutdown 2",
@@ -50,8 +51,9 @@
     "build:procedures": "node scripts/venv-python.mjs -m compileall -q services/procedures-api/app notebooks/procedure-assistant/raglab notebooks/procedure-assistant/scripts",
     "build:forecast": "node scripts/venv-python.mjs -m compileall -q services/forecast-api/app notebooks/demand-forecasting/fclab notebooks/demand-forecasting/scripts",
     "build:recommendations": "node scripts/venv-python.mjs -m compileall -q services/recommend-api/app notebooks/product-recommendations/reclab notebooks/product-recommendations/scripts",
-    "test": "npm run test:lifecycle && npm run test -w @applied-ai-studio/catalog-api && npm run test:orders && npm run test:fraud && npm run test:pneumonia && npm run test:credit && npm run test:complaints && npm run test:pdm && npm run test:procedures && npm run test:forecast && npm run test:recommendations",
+    "test": "npm run test:lifecycle && npm run test:lessons && npm run test -w @applied-ai-studio/catalog-api && npm run test:orders && npm run test:fraud && npm run test:pneumonia && npm run test:credit && npm run test:complaints && npm run test:pdm && npm run test:procedures && npm run test:forecast && npm run test:recommendations",
     "test:lifecycle": "node --test scripts/start-dev-detached.test.mjs",
+    "test:lessons": "node --test scripts/build-teaching-site.test.mjs",
     "test:orders": "node scripts/venv-python.mjs -m pytest services/order-api/tests -q",
     "test:fraud": "node scripts/venv-python.mjs -m pytest services/fraud-api/tests -q",
     "test:pneumonia": "node scripts/venv-python.mjs -m pytest services/pneumonia-api/tests -q",

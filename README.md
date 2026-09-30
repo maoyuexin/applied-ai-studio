@@ -1,37 +1,68 @@
 # Applied AI Studio
 
-Applied AI Studio is a locally hosted workbench for analyzing business workflows,
-judging where AI fits, and inspecting how AI outputs influence operational
-decisions. It combines reusable industry workflows with an executable Online
-Order application, a transaction-fraud lab, a pediatric chest X-ray
-prioritization lab, and two finance labs backed by public teaching data.
+**An open teaching lab for applied AI in real business workflows.** Each lesson pairs slides
+with an executed notebook, a browser demo, and a runnable workbench that shows exactly where a
+model's output changes a business decision, and where a person keeps authority.
 
-> **Students — start here.** You do not need to install anything. See
-> [docs/student-quickstart.md](docs/student-quickstart.md) to run this in your
-> browser with GitHub Codespaces.
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/maoyuexin/applied-ai-studio?quickstart=1)
+
+**Lesson site (slides, notebook reports and demos, no installation):**
+<https://maoyuexin.github.io/applied-ai-studio/>
+
+## Start here
+
+| I want to | Go to |
+|---|---|
+| Read slides and open notebook reports or demos in my browser | [Lesson site](https://maoyuexin.github.io/applied-ai-studio/) or [`lessons/`](lessons/README.md) |
+| Run the Studio app without installing anything | [Student quickstart (Codespaces)](docs/student-quickstart.md) |
+| Rerun a notebook | Open the repository in Codespaces, then the notebook linked from its lesson |
+| Teach with these materials or add a lesson | [Lesson library guide](lessons/README.md#teach-with-it) and [`courses/`](courses/README.md) |
+| Run or develop the Studio locally | [Run the Studio locally](#run-the-studio-locally) |
+
+## Lessons
+
+| # | Lesson | Worked cases | Slides | In the Studio |
+|---|---|---|---|---|
+| 01 | [How Work Happens, and Where AI Fits](lessons/01-work-processes/README.md) | One online order | [PDF](lessons/01-work-processes/M1_Deck_How_Work_Happens.pdf) | `/workflow`, `/online-order`, `/fit` |
+| 02 | [From Data to Decision](lessons/02-data-to-decision/README.md) | Card transaction fraud | [PDF](lessons/02-data-to-decision/S2_Deck_AI_Across_Industries.pdf) | `/fraud` |
+| 03 | [AI in Healthcare](lessons/03-healthcare/README.md) | Pediatric chest X-ray prioritization | [PDF](lessons/03-healthcare/M3_Deck_AI_in_Healthcare.pdf) | `/pneumonia` |
+| 04 | [AI in Finance and Risk](lessons/04-finance-risk/README.md) | Credit risk review; complaint routing | [PDF](lessons/04-finance-risk/M4_Deck_AI_in_Finance.pdf) | `/credit`, `/complaints` |
+| 05 | [AI in Manufacturing](lessons/05-manufacturing/README.md) | Compressor predictive maintenance; procedure assistant | [PDF](lessons/05-manufacturing/M5_Deck_AI_in_Manufacturing.pdf) | `/maintenance`, `/procedures` |
+| 06 | [AI in Retail and Supply Chain](lessons/06-retail-supply-chain/README.md) | Demand forecasting; next best product; catalog onboarding | [PDF](lessons/06-retail-supply-chain/M6_Deck_AI_in_Retail.pdf) | `/forecast`, `/recommendations` |
+
+Each lesson folder lists its readings, notebook reports, interactive demos and Studio routes.
+Courses map their own modules to these lessons; see [`courses/`](courses/README.md).
+
+## How every lesson is built
+
+1. **Map the work.** Inputs → Process → Decision → Action → Outcome, with the decisions marked.
+2. **Judge AI fit.** Ask of each decision: would it behave differently with another year of data?
+3. **Design what survives.** Data → Model → Metric → Human, with the human boundary explicit.
+4. **Show the evidence.** A notebook in five stages: data ingestion, preparation or feature
+   engineering, training, validation, and prediction with a handoff to the app.
+5. **Put it back in the workflow.** The Studio demo loads the notebook's exact artifacts and shows
+   the score, the cutoff, the action it triggers, and who decides.
 
 The repository contains no private customer data, API keys, model credentials, or
 database files. GitHub Copilot features use the current user's authenticated
 Copilot CLI session; authentication material remains outside the project.
 
-## Highlights
+## What is inside
 
-- Ten detailed industry workflows, including Online Order, Card Transaction,
-  Pediatric Chest X-ray Prioritization, Credit Risk, and Complaint Routing.
-- Map → Judge AI Fit → Design What Survives analysis method.
-- Deterministic AI-fit scoring with a gated solution blueprint.
-- Executable Online Order storefront, customer tracking, merchant operations,
-  and scenario controls.
-- Five-stage fraud and chest X-ray notebooks with artifact-backed FastAPI and
-  React workbenches.
-- Module 4 credit-risk and complaint-routing notebooks, offline HTML, validated
-  model bundles, and an optional captured LLM classification comparison.
-- FastAPI, SQLAlchemy, Alembic, and SQLite order vertical.
-- Persisted rule, classification, optimization, and prediction decisions.
+- Fourteen industry workflows, including Online Order, Card Transaction, Pediatric Chest X-ray
+  Prioritization, Credit Risk, Complaint Routing, Predictive Maintenance and retail planning.
+- Map → Judge AI Fit → Design What Survives analysis method, with deterministic AI-fit scoring
+  and a gated solution blueprint.
+- Executable Online Order storefront, customer tracking, merchant operations, and scenario controls.
+- Eight executed teaching notebooks with offline HTML reports: fraud, chest X-ray, credit risk,
+  complaint routing, predictive maintenance, procedure assistant (RAG), demand forecasting and
+  product recommendations, plus reference versions for deeper study.
+- Artifact-backed FastAPI and React workbenches, and single-file browser simulators that need no
+  server.
+- Captured, replayable LLM runs (complaint classification, multimodal X-ray reading, grounded
+  procedure answers, catalog extraction), so classes run offline; live reruns are optional.
 - Explainable AI impact: signals, probabilities, thresholds, workflow branches,
   counterfactuals, and human authority.
-- Double-click algorithm drill-downs covering features, training or
-  configuration, test design, metrics, monitoring, and limitations.
 - Sandboxed GitHub Copilot SDK gateway using only allowlisted read-only tools.
 - .NET Aspire AppHost source for local composition and observability.
 
@@ -47,6 +78,11 @@ flowchart LR
     Web --> Pneumonia[Chest X-ray API<br/>Python + FastAPI]
     Web --> Credit[Credit Risk API<br/>Python + FastAPI]
     Web --> Complaints[Complaint Routing API<br/>Python + FastAPI]
+    Web --> Maintenance[Maintenance API<br/>Python + FastAPI]
+    Web --> Procedures[Procedure Assistant API<br/>Python + FastAPI]
+    Web --> Forecast[Demand Forecast API<br/>Python + FastAPI]
+    Web --> Recommend[Recommendation API<br/>Python + FastAPI]
+    Web --> Simulators[Browser simulators<br/>no server]
     Agent --> Copilot[GitHub Copilot SDK]
     Agent --> Catalog
     Orders --> SQLite[(SQLite)]
@@ -54,6 +90,10 @@ flowchart LR
     Pneumonia --> ImageArtifacts[(Pneumonia model artifacts)]
     Credit --> CreditArtifacts[(Credit model artifacts)]
     Complaints --> ComplaintArtifacts[(Complaint model artifacts)]
+    Maintenance --> PdmArtifacts[(Maintenance model artifacts)]
+    Procedures --> RagArtifacts[(Retrieval index and captures)]
+    Forecast --> RetailArtifacts[(Retail model artifacts)]
+    Recommend --> RetailArtifacts
     Aspire[.NET Aspire] --> Web
     Aspire --> Catalog
     Aspire --> Agent
@@ -64,7 +104,12 @@ The Online Order domain is intentionally one cohesive service. Workflow steps
 are explicit state transitions and decision records, not separate microservices.
 See [ADR-0003](docs/adr/0003-online-order-vertical-service.md) for the trade-offs.
 
-## Prerequisites
+## Run the Studio locally
+
+In Codespaces everything below happens automatically; see the
+[student quickstart](docs/student-quickstart.md).
+
+### Prerequisites
 
 Required:
 
@@ -82,19 +127,17 @@ Optional:
 The deterministic workflows, scoring, and Online Order application run without
 Copilot authentication.
 
-## Quick Start
+### Quick Start
 
-### 1. Clone and install JavaScript dependencies
-
-The `main` branch includes the Module 4 notebooks, demos, and workflows:
+#### 1. Clone and install JavaScript dependencies
 
 ```bash
-git clone --branch main https://github.com/maoyuexin/applied-ai-studio.git
+git clone https://github.com/maoyuexin/applied-ai-studio.git
 cd applied-ai-studio
 npm ci
 ```
 
-### 2. Create the Python environment
+#### 2. Create the Python environment
 
 macOS or Linux:
 
@@ -145,7 +188,7 @@ npm run prepare:recommendations
 The npm scripts locate `.venv/bin/python` on macOS/Linux and
 `.venv\Scripts\python.exe` on Windows.
 
-### 3. Start all services
+#### 3. Start all services
 
 ```bash
 npm run dev
@@ -173,40 +216,39 @@ A missing API can appear as a proxy error even when the web page itself loads.
 | Demand Forecast API | <http://127.0.0.1:4400/health> |
 | Product Recommendation API | <http://127.0.0.1:4410/health> |
 
-The Online Order demo is available directly at
-<http://127.0.0.1:5173/online-order?view=customer>.
-The model labs are available at <http://127.0.0.1:5173/fraud> and
-<http://127.0.0.1:5173/pneumonia>.
+### Lab routes
 
-Module 4 demos are at <http://127.0.0.1:5173/credit> and
-<http://127.0.0.1:5173/complaints>. Both catalog cards also expose their complete
-workflows. See [Module 4: notebooks and demos](docs/module-4.md) for the notebook
-links, offline reports, and Codespaces instructions.
-
-Modules 5 and 6 add four more labs on the same pattern. Module 5 covers predictive maintenance on real compressor telemetry (<http://127.0.0.1:5173/maintenance>) and a grounded procedure assistant that cites public safety regulation and refuses when the answer is not in its library (<http://127.0.0.1:5173/procedures>). The maintenance evidence page opens a dedicated telemetry simulator at <http://127.0.0.1:5173/maintenance-simulator>: six actual feature values arrive sequentially at a selectable interval, then the authoritative score, cutoff decision, alert signal, report label, KPIs, and score history update.
-
-Module 6's two retail cards expose **Workflow** and **Demo**. Demo contains the complete interactive simulator, so there is no duplicate Simulator button:
-
-| Case | Current demo | Detailed workflow |
+| Route | Lab | Lesson |
 |---|---|---|
-| Demand Forecasting with Regression | `/forecast` | `/workflow?courseCase=retail-demand-forecasting` |
-| Next Best Product | `/recommendations` | `/workflow?courseCase=retail-product-recommendations` |
+| `/showcase` | Industry workflows catalog; cards open a **Workflow** and, where available, a **Demo** | all |
+| `/online-order?view=customer` | Online Order storefront, tracking and merchant operations | [01](lessons/01-work-processes/README.md) |
+| `/fit` | AI Fit Analyzer | [01](lessons/01-work-processes/README.md) |
+| `/fraud` | Card transaction fraud detection | [02](lessons/02-data-to-decision/README.md) |
+| `/pneumonia` | Pediatric chest X-ray prioritization | [03](lessons/03-healthcare/README.md) |
+| `/credit`, `/complaints` | Credit risk review; complaint routing ([guide](docs/module-4.md)) | [04](lessons/04-finance-risk/README.md) |
+| `/maintenance`, `/maintenance-simulator` | Compressor health monitoring and telemetry simulator | [05](lessons/05-manufacturing/README.md) |
+| `/procedures` | Grounded procedure assistant that cites public safety regulation and refuses when unsupported | [05](lessons/05-manufacturing/README.md) |
+| `/forecast`, `/recommendations` | Demand forecasting; next best product | [06](lessons/06-retail-supply-chain/README.md) |
+| `/workflow?courseCase=<id>` | The full business workflow behind a case | all |
+| `/ask` | Ask Studio (needs GitHub Copilot) | all |
+
+The maintenance simulator feeds six actual feature values in sequence at a selectable interval,
+then updates the authoritative score, cutoff decision, alert signal, report label, KPIs and score
+history.
+
+The retail demos embed the same tested single-file HTML simulators that the lesson site publishes.
+Vite packages photo-free public exports as local assets in production; they run model inference in
+the browser without the forecast or recommendation APIs. Forecasting uses the pooled
+absolute-error regressor, historical 26-week replay, MA8 comparison, feature what-ifs and grouped
+attribution. Recommendations use the full catalog, fixed top-15 links, real-customer histories,
+purchase simulation, exclusions and contribution explanations. Neither simulator retrains or writes
+business records. Workflow maps retain the surrounding planner/merchandiser process and explicitly
+separate unimplemented operational integrations from the classroom demonstration.
 
 The older `/forecast-simulator` and `/recommendations-simulator` URLs remain available for existing
-bookmarks, but are no longer linked from the cards, workflows or demo pages.
-
-The demos embed the same tested classroom HTML simulators as the course downloads. Vite packages
-photo-free public exports as local assets in production; they run model inference in the browser without the
-forecast or recommendation APIs. Forecasting uses the pooled absolute-error regressor, historical
-26-week replay, MA8 comparison, feature what-ifs and grouped attribution. Recommendations use the
-full catalog, fixed top-15 links, real-customer histories, purchase simulation, exclusions and
-contribution explanations. Neither simulator retrains or writes business records. Workflow maps
-retain the surrounding planner/merchandiser process and explicitly separate unimplemented
-operational integrations from the classroom demonstration.
-
-The earlier moving-average/interval planner is preserved at `/forecast-reference`; the broader
-recommendation comparison app is at `/recommendations-reference`. Those reference pages still
-require their original APIs. They are not silently relabeled as the current classroom models.
+bookmarks. The earlier moving-average/interval planner is preserved at `/forecast-reference`; the
+broader recommendation comparison app is at `/recommendations-reference`. Those reference pages
+still require their original APIs. They are not silently relabeled as the current classroom models.
 
 The simulator exports must exist before the web build. To regenerate them, use
 `notebooks/retail-simulators/build_simulators.py` with the existing notebook environment. Editing
@@ -282,13 +324,13 @@ Common settings:
 ## Useful Commands
 
 ```bash
-# Start all eight resources
+# Start the web app and all APIs
 npm run dev
 
 # Start only the Online Order API
 npm run dev:orders
 
-# Run catalog and order tests, then build everything
+# Run all tests, then build everything
 npm run check
 
 # Run only the migrated SQLite tests
@@ -297,6 +339,10 @@ npm run test:orders
 # Rebuild and test the chest X-ray model service
 npm run prepare:pneumonia
 npm run test:pneumonia
+
+# Check the lesson catalog and build the lesson site into _site/
+npm run test:lessons
+npm run build:site
 
 # Audit JavaScript dependencies at high severity
 npm audit --audit-level=high
@@ -325,10 +371,12 @@ npm run check
 
 It runs:
 
+- Lesson catalog checks: every listed file exists, slide links resolve, the site builds
 - Catalog and deterministic scoring tests
 - Migrated SQLite order-flow and algorithm-profile tests
+- Service tests for each model lab, plus notebook tests where a lab has them
 - TypeScript builds for contracts, catalog, agent, and web
-- Python bytecode compilation for the order API and migrations
+- Python bytecode compilation for the services and notebook packages
 - Vite production build
 
 Live Copilot quality evaluation is intentionally separate because it requires an
@@ -352,19 +400,30 @@ See [SECURITY.md](SECURITY.md) and
 ## Project Layout
 
 ```text
+lessons/                 Lesson library: slides, readings, lesson guides, lessons.json
+courses/                 Course maps from modules to lessons
+notebooks/               Executed five-stage teaching notebooks, offline HTML and simulators
 AppHost/                 .NET Aspire resource graph
 apps/web/                React workflow and operations workbench
 services/catalog-api/    Catalog, assessments, deterministic fit scoring
 services/agent-api/      Sandboxed GitHub Copilot SDK gateway
 services/order-api/      FastAPI, SQLAlchemy, Alembic, SQLite order vertical
-services/fraud-api/      Artifact-backed transaction scoring and review queue
-services/pneumonia-api/  Artifact-backed image scoring and review prioritization
-notebooks/               Executed five-stage teaching notebooks and offline HTML
+services/*-api/          Artifact-backed model services, one per lab
 packages/contracts/      Shared Zod schemas and TypeScript contracts
-data/seed/               Public teaching scenarios
-docs/                    Architecture, ADRs, examples, and delivery plan
-scripts/                 Cross-platform local tooling
+data/seed/               Public teaching scenarios and workflows
+docs/                    Quickstart, architecture, ADRs and lab guides
+scripts/                 Cross-platform tooling, including the lesson-site builder
+.github/workflows/       Lesson-site publication to GitHub Pages
 ```
+
+## Courses using this library
+
+| Course | Map |
+|---|---|
+| ITAI 2372 · Artificial Intelligence Applications (Houston Community College) | [courses/itai-2372](courses/itai-2372/README.md) |
+
+To teach from the library, map your own modules to lessons under `courses/`. To contribute a
+lesson, follow [Add or update a lesson](lessons/README.md#add-or-update-a-lesson).
 
 ## Current Scope
 
@@ -373,5 +432,5 @@ rule, classification, optimization, and prediction decisions. Exception
 scenarios such as manual fraud review, oversold inventory, carrier delay, and
 human remedy authorization are planned next. Algorithm training plans and metric
 targets shown in that workflow are proposed designs, not claims of production
-model performance. The fraud and pneumonia labs are educational, artifact-backed
-demonstrations using public teaching data; neither is a production decision system.
+model performance. Every model lab is an educational, artifact-backed demonstration
+using public teaching data; none is a production decision system.
