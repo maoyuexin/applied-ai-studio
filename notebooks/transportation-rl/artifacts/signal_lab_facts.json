@@ -1,0 +1,443 @@
+{
+ "lesson": {
+  "seed": 1,
+  "trainHours": 30,
+  "testSeeds": [
+   101,
+   102,
+   103,
+   104,
+   105
+  ],
+  "playSeed": 5,
+  "playTicks": 24,
+  "fixedMain": 7,
+  "fixedSide": 4,
+  "stepTicks": 12
+ },
+ "defaults": {
+  "mainRate": 0.4,
+  "sideRate": 0.15,
+  "alpha": 0.1,
+  "gamma": 0.9,
+  "exploration": 0.1,
+  "reward": "all",
+  "minGreen": 2,
+  "maxGreen": 12
+ },
+ "tickSeconds": 5,
+ "hourTicks": 720,
+ "carsPerMinute": {
+  "main": 4.800000000000001,
+  "side": 1.7999999999999998
+ },
+ "play": {
+  "cars": 13,
+  "fixed": {
+   "ticks": 24,
+   "served": 11,
+   "servedMain": 7,
+   "servedSide": 4,
+   "leftWaiting": 2,
+   "switches": 4,
+   "waitingTicks": 41,
+   "avgWait": 15.8,
+   "longestWait": 35,
+   "longestSideWait": 35
+  }
+ },
+ "firstTicks": [
+  {
+   "state": "Main St green · Main 0 · Side 0",
+   "chosen": "Keep",
+   "action": "Keep",
+   "rule": null,
+   "explored": false,
+   "points": -1,
+   "old": 0,
+   "target": -1,
+   "updated": -0.1
+  },
+  {
+   "state": "Main St green · Main 0 · Side 1–2",
+   "chosen": "Switch",
+   "action": "Keep",
+   "rule": "min",
+   "explored": false,
+   "points": -1,
+   "old": 0,
+   "target": -1,
+   "updated": -0.1
+  },
+  {
+   "state": "Main St green · Main 0 · Side 1–2",
+   "chosen": "Switch",
+   "action": "Switch",
+   "rule": null,
+   "explored": false,
+   "points": -1,
+   "old": 0,
+   "target": -1,
+   "updated": -0.1
+  },
+  {
+   "state": "Side St green · Main 0 · Side 1–2",
+   "chosen": "Keep",
+   "action": "Keep",
+   "rule": null,
+   "explored": false,
+   "points": 0,
+   "old": 0,
+   "target": 0,
+   "updated": 0
+  },
+  {
+   "state": "Side St green · Main 0 · Side 0",
+   "chosen": "Keep",
+   "action": "Keep",
+   "rule": null,
+   "explored": false,
+   "points": 0,
+   "old": 0,
+   "target": 0,
+   "updated": 0
+  },
+  {
+   "state": "Side St green · Main 0 · Side 0",
+   "chosen": "Keep",
+   "action": "Keep",
+   "rule": null,
+   "explored": false,
+   "points": 0,
+   "old": 0,
+   "target": 0,
+   "updated": 0
+  },
+  {
+   "state": "Side St green · Main 0 · Side 0",
+   "chosen": "Keep",
+   "action": "Keep",
+   "rule": null,
+   "explored": false,
+   "points": -1,
+   "old": 0,
+   "target": -1,
+   "updated": -0.1
+  },
+  {
+   "state": "Side St green · Main 1–2 · Side 0",
+   "chosen": "Keep",
+   "action": "Keep",
+   "rule": null,
+   "explored": false,
+   "points": -2,
+   "old": 0,
+   "target": -2,
+   "updated": -0.2
+  },
+  {
+   "state": "Side St green · Main 1–2 · Side 0",
+   "chosen": "Switch",
+   "action": "Switch",
+   "rule": null,
+   "explored": false,
+   "points": -3,
+   "old": 0,
+   "target": -3,
+   "updated": -0.3
+  },
+  {
+   "state": "Main St green · Main 1–2 · Side 1–2",
+   "chosen": "Switch",
+   "action": "Keep",
+   "rule": "min",
+   "explored": false,
+   "points": -3,
+   "old": 0,
+   "target": -3,
+   "updated": -0.3
+  },
+  {
+   "state": "Main St green · Main 1–2 · Side 1–2",
+   "chosen": "Switch",
+   "action": "Keep",
+   "rule": "min",
+   "explored": false,
+   "points": -3,
+   "old": -0.30000000000000004,
+   "target": -3,
+   "updated": -0.57
+  },
+  {
+   "state": "Main St green · Main 1–2 · Side 1–2",
+   "chosen": "Switch",
+   "action": "Switch",
+   "rule": null,
+   "explored": false,
+   "points": -4,
+   "old": 0,
+   "target": -4,
+   "updated": -0.4
+  }
+ ],
+ "curve": [
+  {
+   "hour": 1,
+   "practiceAvgWait": 300.9,
+   "testAvgWait": 91.7
+  },
+  {
+   "hour": 2,
+   "practiceAvgWait": 25.7,
+   "testAvgWait": 15.5
+  },
+  {
+   "hour": 3,
+   "practiceAvgWait": 17.4,
+   "testAvgWait": 16.5
+  },
+  {
+   "hour": 4,
+   "practiceAvgWait": 20.2,
+   "testAvgWait": 14.2
+  },
+  {
+   "hour": 5,
+   "practiceAvgWait": 14.1,
+   "testAvgWait": 14.1
+  },
+  {
+   "hour": 6,
+   "practiceAvgWait": 15.4,
+   "testAvgWait": 31.5
+  },
+  {
+   "hour": 7,
+   "practiceAvgWait": 16.8,
+   "testAvgWait": 12.6
+  },
+  {
+   "hour": 8,
+   "practiceAvgWait": 18.7,
+   "testAvgWait": 15.1
+  },
+  {
+   "hour": 9,
+   "practiceAvgWait": 17.4,
+   "testAvgWait": 15
+  },
+  {
+   "hour": 10,
+   "practiceAvgWait": 13.6,
+   "testAvgWait": 13.3
+  },
+  {
+   "hour": 11,
+   "practiceAvgWait": 13,
+   "testAvgWait": 12.6
+  },
+  {
+   "hour": 12,
+   "practiceAvgWait": 15.3,
+   "testAvgWait": 15.7
+  },
+  {
+   "hour": 13,
+   "practiceAvgWait": 16.1,
+   "testAvgWait": 12.6
+  },
+  {
+   "hour": 14,
+   "practiceAvgWait": 13.7,
+   "testAvgWait": 12.6
+  },
+  {
+   "hour": 15,
+   "practiceAvgWait": 12,
+   "testAvgWait": 12.9
+  },
+  {
+   "hour": 16,
+   "practiceAvgWait": 12.7,
+   "testAvgWait": 12.6
+  },
+  {
+   "hour": 17,
+   "practiceAvgWait": 12.3,
+   "testAvgWait": 12.6
+  },
+  {
+   "hour": 18,
+   "practiceAvgWait": 14.5,
+   "testAvgWait": 12.6
+  },
+  {
+   "hour": 19,
+   "practiceAvgWait": 13.7,
+   "testAvgWait": 12.6
+  },
+  {
+   "hour": 20,
+   "practiceAvgWait": 12.7,
+   "testAvgWait": 12.6
+  },
+  {
+   "hour": 21,
+   "practiceAvgWait": 15.6,
+   "testAvgWait": 12.6
+  },
+  {
+   "hour": 22,
+   "practiceAvgWait": 14.2,
+   "testAvgWait": 18.2
+  },
+  {
+   "hour": 23,
+   "practiceAvgWait": 14.6,
+   "testAvgWait": 17
+  },
+  {
+   "hour": 24,
+   "practiceAvgWait": 16.2,
+   "testAvgWait": 12.9
+  },
+  {
+   "hour": 25,
+   "practiceAvgWait": 14.5,
+   "testAvgWait": 14.8
+  },
+  {
+   "hour": 26,
+   "practiceAvgWait": 16.3,
+   "testAvgWait": 14.2
+  },
+  {
+   "hour": 27,
+   "practiceAvgWait": 18.7,
+   "testAvgWait": 12.6
+  },
+  {
+   "hour": 28,
+   "practiceAvgWait": 16,
+   "testAvgWait": 12.6
+  },
+  {
+   "hour": 29,
+   "practiceAvgWait": 14.7,
+   "testAvgWait": 12.6
+  },
+  {
+   "hour": 30,
+   "practiceAvgWait": 14.5,
+   "testAvgWait": 12.6
+  }
+ ],
+ "policy": [
+  0,
+  1,
+  1,
+  null,
+  0,
+  0,
+  1,
+  null,
+  0,
+  0,
+  1,
+  null,
+  0,
+  0,
+  1,
+  null,
+  1,
+  0,
+  1,
+  null,
+  1,
+  0,
+  1,
+  null,
+  1,
+  1,
+  1,
+  null,
+  1,
+  1,
+  1,
+  null
+ ],
+ "policySwitchCount": 15,
+ "policyUnvisited": 8,
+ "test": {
+  "fixed": {
+   "avgWait": 20.7,
+   "longestWait": 72,
+   "longestSideWait": 72,
+   "served": 405.8,
+   "leftWaiting": 2.8,
+   "switches": 130
+  },
+  "longerLine": {
+   "avgWait": 13.8,
+   "longestWait": 51,
+   "longestSideWait": 51,
+   "served": 406.8,
+   "leftWaiting": 1.8,
+   "switches": 136.8
+  },
+  "learned": {
+   "avgWait": 12.6,
+   "longestWait": 47,
+   "longestSideWait": 47,
+   "served": 406.8,
+   "leftWaiting": 1.8,
+   "switches": 133
+  }
+ },
+ "mainOnly": {
+  "avgWait": 41.6,
+  "longestWait": 245,
+  "longestSideWait": 245,
+  "served": 402.6,
+  "leftWaiting": 6,
+  "switches": 109.4
+ },
+ "mainOnlyNoRules": {
+  "avgWait": 506.3,
+  "longestWait": 3553,
+  "longestSideWait": 3553,
+  "served": 294.6,
+  "leftWaiting": 114,
+  "switches": 11.6
+ },
+ "busySide": {
+  "rates": {
+   "mainRate": 0.4,
+   "sideRate": 0.3
+  },
+  "fixed": {
+   "avgWait": 134.3,
+   "longestWait": 551,
+   "longestSideWait": 551,
+   "served": 488,
+   "leftWaiting": 31.6,
+   "switches": 130
+  },
+  "longerLine": {
+   "avgWait": 42.7,
+   "longestWait": 150,
+   "longestSideWait": 150,
+   "served": 514.2,
+   "leftWaiting": 5.4,
+   "switches": 178.8
+  },
+  "learned": {
+   "avgWait": 46.3,
+   "longestWait": 168,
+   "longestSideWait": 158,
+   "served": 512.2,
+   "leftWaiting": 7.4,
+   "switches": 151.6
+  }
+ }
+}

@@ -106,6 +106,27 @@
         { "title": "Demand forecasting workflow", "route": "/workflow?courseCase=retail-demand-forecasting" },
         { "title": "Next best product workflow", "route": "/workflow?courseCase=retail-product-recommendations" }
       ]
+    },
+    {
+      "id": "07-transportation",
+      "title": "AI in Transportation: Machines That Learn by Reward",
+      "summary": "Where AI already works in transportation and how a self-driving car decides, then reinforcement learning in three cases: a warehouse robot, a traffic light inside safety rules, and a ride-hail driver on real New York trip data, ending with who a reward leaves behind.",
+      "cases": ["Warehouse robot", "Traffic light", "Ride-hail driver"],
+      "materials": [
+        { "type": "slides", "title": "Slides", "path": "lessons/07-transportation/M7_Deck_AI_in_Transportation.pdf" },
+        { "type": "demo", "title": "Train a warehouse robot (lesson and lab)", "path": "notebooks/transportation-rl/backup/warehouse-robot.html", "publishAs": "M7_Robot_Training_Lab.html" },
+        { "type": "report", "title": "Warehouse robot notebook", "path": "notebooks/transportation-rl/backup/01_warehouse_robot.html", "publishAs": "M7_Notebook_Warehouse_Robot.html", "notebook": "notebooks/transportation-rl/01_warehouse_robot.ipynb" },
+        { "type": "demo", "title": "Train a traffic light (lesson and lab)", "path": "notebooks/transportation-rl/backup/traffic-signal.html", "publishAs": "M7_Traffic_Signal_Lab.html" },
+        { "type": "report", "title": "Traffic light notebook", "path": "notebooks/transportation-rl/backup/02_traffic_signal.html", "publishAs": "M7_Notebook_Traffic_Signal.html", "notebook": "notebooks/transportation-rl/02_traffic_signal.ipynb" },
+        { "type": "demo", "title": "Train a ride-hail driver (lesson and lab)", "path": "notebooks/transportation-rl/backup/ride-hail.html", "publishAs": "M7_Ride_Hail_Lab.html" },
+        { "type": "report", "title": "Ride-hail notebook", "path": "notebooks/transportation-rl/backup/03_ride_hail_dispatch.html", "publishAs": "M7_Notebook_Ride_Hail_Dispatch.html", "notebook": "notebooks/transportation-rl/03_ride_hail_dispatch.ipynb" }
+      ],
+      "studio": [
+        { "title": "Warehouse robot lesson", "route": "/warehouse-robot" },
+        { "title": "Traffic light lesson", "route": "/traffic-signal" },
+        { "title": "Ride-hail lesson", "route": "/ride-hail" },
+        { "title": "Fleet dispatch workflow", "route": "/workflow?courseCase=transportation-fleet-routing" }
+      ]
     }
   ]
 }

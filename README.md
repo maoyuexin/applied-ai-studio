@@ -29,6 +29,7 @@ model's output changes a business decision, and where a person keeps authority.
 | 04 | [AI in Finance and Risk](lessons/04-finance-risk/README.md) | Credit risk review; complaint routing | [PDF](lessons/04-finance-risk/M4_Deck_AI_in_Finance.pdf) | `/credit`, `/complaints` |
 | 05 | [AI in Manufacturing](lessons/05-manufacturing/README.md) | Compressor predictive maintenance; procedure assistant | [PDF](lessons/05-manufacturing/M5_Deck_AI_in_Manufacturing.pdf) | `/maintenance`, `/procedures` |
 | 06 | [AI in Retail and Supply Chain](lessons/06-retail-supply-chain/README.md) | Demand forecasting; next best product; catalog onboarding | [PDF](lessons/06-retail-supply-chain/M6_Deck_AI_in_Retail.pdf) | `/forecast`, `/recommendations` |
+| 07 | [AI in Transportation](lessons/07-transportation/README.md) | Warehouse robot; traffic light; ride-hail driver | [PDF](lessons/07-transportation/M7_Deck_AI_in_Transportation.pdf) | `/warehouse-robot`, `/traffic-signal`, `/ride-hail` |
 
 Each lesson folder lists its readings, notebook reports, interactive demos and Studio routes.
 Courses map their own modules to these lessons; see [`courses/`](courses/README.md).
@@ -54,9 +55,10 @@ Copilot CLI session; authentication material remains outside the project.
 - Map → Judge AI Fit → Design What Survives analysis method, with deterministic AI-fit scoring
   and a gated solution blueprint.
 - Executable Online Order storefront, customer tracking, merchant operations, and scenario controls.
-- Eight executed teaching notebooks with offline HTML reports: fraud, chest X-ray, credit risk,
-  complaint routing, predictive maintenance, procedure assistant (RAG), demand forecasting and
-  product recommendations, plus reference versions for deeper study.
+- Eleven executed teaching notebooks with offline HTML reports: fraud, chest X-ray, credit risk,
+  complaint routing, predictive maintenance, procedure assistant (RAG), demand forecasting,
+  product recommendations and three reinforcement-learning cases (warehouse robot, traffic light,
+  ride-hail driver), plus reference versions for deeper study.
 - Artifact-backed FastAPI and React workbenches, and single-file browser simulators that need no
   server.
 - Captured, replayable LLM runs (complaint classification, multimodal X-ray reading, grounded
@@ -229,6 +231,7 @@ A missing API can appear as a proxy error even when the web page itself loads.
 | `/maintenance`, `/maintenance-simulator` | Compressor health monitoring and telemetry simulator | [05](lessons/05-manufacturing/README.md) |
 | `/procedures` | Grounded procedure assistant that cites public safety regulation and refuses when unsupported | [05](lessons/05-manufacturing/README.md) |
 | `/forecast`, `/recommendations` | Demand forecasting; next best product | [06](lessons/06-retail-supply-chain/README.md) |
+| `/warehouse-robot`, `/traffic-signal`, `/ride-hail` | Reinforcement learning: warehouse robot, traffic light, ride-hail driver (run in the browser) | [07](lessons/07-transportation/README.md) |
 | `/workflow?courseCase=<id>` | The full business workflow behind a case | all |
 | `/ask` | Ask Studio (needs GitHub Copilot) | all |
 

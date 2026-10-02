@@ -91,8 +91,15 @@ export default function ShowcasePage() {
                 ? "/forecast"
               : item.id === "retail-product-recommendations-lab"
                 ? "/recommendations"
+              : item.id === "transportation-warehouse-robot-lab"
+                ? "/warehouse-robot"
+              : item.id === "transportation-traffic-signal-lab"
+                ? "/traffic-signal"
+              : item.id === "transportation-ride-hail-lab"
+                ? "/ride-hail"
               : `/demo?case=${encodeURIComponent(item.id)}`;
             const retailSimulator = item.id === "retail-demand-forecasting-lab" || item.id === "retail-product-recommendations-lab";
+            const browserDemo = retailSimulator || ["transportation-warehouse-robot-lab", "transportation-traffic-signal-lab", "transportation-ride-hail-lab"].includes(item.id);
             return (
               <article key={item.id} className={`use-case-card accent-${item.accent}`}>
                 <div className="use-case-card-main">
@@ -109,7 +116,7 @@ export default function ShowcasePage() {
                     <span>Data: {item.dataReadiness}</span>
                   </div>
                 </div>
-                <div className={`case-card-actions${retailSimulator ? " retail-case-actions" : ""}`}>
+                <div className={`case-card-actions${browserDemo ? " retail-case-actions" : ""}`}>
                   {item.courseCaseId ? (
                     <button type="button" onClick={() => navigate(workflowTarget)}>
                       <Workflow size={14} aria-hidden="true" /> Workflow
@@ -119,7 +126,7 @@ export default function ShowcasePage() {
                   {item.demoStatus === "available" ? (
                     <button type="button" onClick={() => navigate(demoTarget)}>
                       <Play size={14} aria-hidden="true" /> Demo
-                      <small>{retailSimulator ? "browser" : "live"}</small>
+                      <small>{browserDemo ? "browser" : "live"}</small>
                     </button>
                   ) : null}
                 </div>

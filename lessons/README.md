@@ -15,6 +15,7 @@ shows where the model's output changes a real decision and where a person keeps 
 | 04 | [AI in Finance and Risk Management](04-finance-risk/README.md) | Credit risk review; complaint routing | [PDF](04-finance-risk/M4_Deck_AI_in_Finance.pdf) |
 | 05 | [AI in Manufacturing](05-manufacturing/README.md) | Compressor predictive maintenance | [PDF](05-manufacturing/M5_Deck_AI_in_Manufacturing.pdf) |
 | 06 | [AI in Retail and Supply Chain](06-retail-supply-chain/README.md) | Demand forecasting; next best product; catalog onboarding | [PDF](06-retail-supply-chain/M6_Deck_AI_in_Retail.pdf) |
+| 07 | [AI in Transportation](07-transportation/README.md) | Warehouse robot; traffic light; ride-hail driver | [PDF](07-transportation/M7_Deck_AI_in_Transportation.pdf) |
 
 ## Three ways to use a lesson
 

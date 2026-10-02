@@ -5,7 +5,7 @@ describe("CatalogStore seed contracts", () => {
   it("loads the syllabus-aligned showcase catalog", async () => {
     const catalog = await CatalogStore.load();
 
-    expect(catalog.list()).toHaveLength(21);
+    expect(catalog.list()).toHaveLength(24);
     expect(catalog.industries()).toHaveLength(12);
     expect(catalog.list({ industry: "retail" }).map((item) => item.id)).toEqual([
       "retail-online-order-decision-lab",
@@ -128,6 +128,25 @@ describe("CatalogStore seed contracts", () => {
       expect(courseCase!.introduction.startsWhen, lab.id).toBeTruthy();
       expect(courseCase!.introduction.endsWhen, lab.id).toBeTruthy();
     }
+  });
+
+  it("shows the three transportation lessons after the fleet case, each as a browser demo", async () => {
+    const catalog = await CatalogStore.load();
+    expect(catalog.list({ industry: "transportation" }).map((item) => item.id)).toEqual([
+      "transportation-fleet-routing",
+      "transportation-warehouse-robot-lab",
+      "transportation-traffic-signal-lab",
+      "transportation-ride-hail-lab",
+    ]);
+    for (const id of ["transportation-warehouse-robot-lab", "transportation-traffic-signal-lab", "transportation-ride-hail-lab"]) {
+      const card = catalog.get(id)!;
+      expect(card.demoStatus, id).toBe("available");
+      expect(card.courseCaseId, id).toBeUndefined();
+      expect(card.capabilities, id).toContain("Reinforcement learning");
+    }
+    expect(catalog.get("transportation-ride-hail-lab")!.summary).toContain("19.7 million real New York trips");
+    expect(catalog.get("transportation-fleet-routing")?.title).toBe("Fleet Routing Decision Workbench");
+    expect(catalog.getCourseCase("transportation-fleet-routing")?.title).toBe("One Day of Fleet Dispatch");
   });
 
   it("describes the current classroom retail models without replacing the other labs", async () => {

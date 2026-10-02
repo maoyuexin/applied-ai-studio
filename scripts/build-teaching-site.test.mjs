@@ -52,7 +52,7 @@ test("relative links inside slide PDFs resolve to files published beside them", 
     for (const material of lesson.materials.filter((m) => m.path.endsWith(".pdf"))) {
       for (const link of pdfLinks(join(root, material.path))) {
         if (/^[a-z]+:/i.test(link)) continue;
-        assert.ok(published.has(link), `${material.path} links to ${link}, which is not published in ${lesson.id}`);
+        assert.ok(published.has(link.split("#")[0]), `${material.path} links to ${link}, which is not published in ${lesson.id}`);
       }
     }
   }

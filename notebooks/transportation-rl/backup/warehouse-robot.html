@@ -1,0 +1,2273 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Train a Warehouse Robot</title>
+<style>
+:root {
+  --bg: #111318;
+  --panel: #181a20;
+  --panel-2: #222530;
+  --line: #2e323d;
+  --text: #f5f3f0;
+  --dim: #b9bdc6;
+  --faint: #858a97;
+  --orange: #e8913c;
+  --orange-soft: #3a2a17;
+  --teal: #7eaeb8;
+  --teal-bright: #a8d4dd;
+  --red: #e5675f;
+  --green: #7cc59a;
+  color-scheme: dark;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--text); }
+body { font-size: 17px; line-height: 1.45; }
+button, select, input { font: inherit; }
+[hidden] { display: none !important; }
+
+.top {
+  display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+  max-width: 1440px; margin: 0 auto; padding: 18px 32px 14px;
+  border-bottom: 1px solid var(--line);
+}
+.brand { flex: 1 1 380px; }
+.kicker { margin: 0; color: var(--teal); font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.brand h1 { margin: 2px 0 0; font-size: 28px; line-height: 1.15; }
+.modes { display: flex; gap: 6px; }
+.modes button, .speed select {
+  min-height: 44px; padding: 8px 16px; border-radius: 10px; border: 1px solid var(--line);
+  background: var(--panel); color: var(--dim); cursor: pointer;
+}
+.modes button[aria-selected="true"] { background: var(--panel-2); color: var(--text); border-color: var(--teal); }
+.speed { color: var(--dim); font-size: 15px; }
+.speed select { margin-left: 6px; min-height: 40px; padding: 6px 10px; }
+
+main { max-width: 1440px; margin: 0 auto; padding: 14px 32px 28px; }
+
+.chapters { display: flex; gap: 6px; list-style: none; margin: 0 0 14px; padding: 0; flex-wrap: wrap; }
+.chapters button {
+  display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 6px 12px 6px 6px;
+  border-radius: 999px; border: 1px solid var(--line); background: var(--panel); color: var(--dim); cursor: pointer; font-size: 15px;
+}
+.chapters .num {
+  display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%;
+  border: 1px solid var(--faint); font-size: 14px; font-weight: 700;
+}
+.chapters button[aria-current="step"] { color: var(--text); border-color: var(--orange); }
+.chapters button[aria-current="step"] .num { background: var(--orange); border-color: var(--orange); color: #1b1206; }
+.chapters button.done .num { border-color: var(--teal); color: var(--teal); }
+
+.step-kicker { margin: 0; color: var(--orange); font-size: 14px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+.step-head h2 { margin: 4px 0 6px; font-size: 32px; line-height: 1.15; }
+.lead { margin: 0 0 14px; color: var(--dim); font-size: 19px; max-width: 1000px; }
+
+.step-body { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.95fr); gap: 22px; align-items: start; }
+.stage-col { min-width: 0; }
+.floor-wrap {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 12px;
+  display: grid; place-items: center;
+}
+.floor-wrap.pair { grid-template-columns: 1fr 1fr; gap: 10px; }
+svg.floor { width: 100%; height: auto; max-height: 440px; display: block; user-select: none; }
+svg.floor.big { max-height: 470px; }
+.floor-caption { margin: 8px 4px 0; color: var(--faint); font-size: 14px; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; margin: 8px 4px 0; color: var(--dim); font-size: 14px; }
+.legend span::before { content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; background: var(--swatch); }
+
+.controls { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; align-items: center; }
+.btn {
+  min-height: 46px; padding: 9px 18px; border-radius: 11px; border: 1px solid var(--line);
+  background: var(--panel-2); color: var(--text); cursor: pointer; font-weight: 600;
+}
+.btn:hover:not(:disabled) { border-color: var(--teal); }
+.btn.primary { background: var(--orange); border-color: var(--orange); color: #1b1206; }
+.btn.primary:hover:not(:disabled) { filter: brightness(1.07); }
+.btn:disabled { opacity: .42; cursor: not-allowed; }
+.btn:focus-visible, .chapters button:focus-visible, .modes button:focus-visible, .pad button:focus-visible { outline: 3px solid var(--teal-bright); outline-offset: 2px; }
+.btn .n { display: inline-grid; place-items: center; width: 22px; height: 22px; margin-right: 6px; border-radius: 50%; background: rgba(0,0,0,.25); font-size: 13px; }
+
+.pad { display: grid; grid-template-columns: repeat(3, 54px); grid-template-rows: repeat(2, 48px); gap: 6px; }
+.pad button { border-radius: 10px; border: 1px solid var(--line); background: var(--panel-2); color: var(--text); font-size: 22px; cursor: pointer; }
+.pad button:disabled { opacity: .4; }
+.pad .up { grid-column: 2; grid-row: 1; }
+.pad .left { grid-column: 1; grid-row: 2; }
+.pad .down { grid-column: 2; grid-row: 2; }
+.pad .right { grid-column: 3; grid-row: 2; }
+
+.status { min-height: 26px; margin: 10px 4px 0; color: var(--dim); font-size: 16px; }
+.status strong { color: var(--text); }
+
+.explain { display: grid; gap: 12px; min-width: 0; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; }
+.card h3 { margin: 0 0 8px; font-size: 14px; color: var(--teal); letter-spacing: .07em; text-transform: uppercase; }
+.card p { margin: 0 0 8px; }
+.card p:last-child { margin-bottom: 0; }
+.card.accent { border-color: var(--orange); background: linear-gradient(0deg, rgba(232,145,60,.06), rgba(232,145,60,.06)), var(--panel); }
+.card.good { border-color: var(--teal); }
+.card.warn { border-color: var(--red); }
+.muted { color: var(--dim); }
+.small { font-size: 15px; }
+.big-number { font-size: 34px; font-weight: 800; color: var(--orange); line-height: 1.1; }
+
+.points { width: 100%; border-collapse: collapse; }
+.points td { padding: 6px 0; border-bottom: 1px solid var(--line); }
+.points tr:last-child td { border-bottom: 0; }
+.points td:last-child { text-align: right; font-weight: 800; font-size: 20px; white-space: nowrap; }
+.plus { color: var(--green); }
+.minus { color: var(--red); }
+
+.formula {
+  font-size: 19px; font-weight: 700; padding: 10px 12px; border-radius: 10px; background: var(--panel-2);
+  display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+}
+.formula .term { padding: 2px 8px; border-radius: 7px; background: var(--bg); }
+.formula .t-new { color: var(--orange); }
+.formula .t-now { color: var(--red); }
+.formula .t-next { color: var(--teal-bright); }
+
+.moveline { display: grid; grid-template-columns: 150px 1fr; gap: 3px 10px; font-size: 16px; }
+.moveline dt { color: var(--faint); }
+.moveline dd { margin: 0; }
+.calc { margin-top: 8px; font-size: 21px; font-weight: 800; }
+.calc .eq { color: var(--orange); }
+
+.compass { display: grid; grid-template-columns: repeat(3, 64px); grid-template-rows: repeat(3, 40px); gap: 4px; justify-content: start; }
+.compass div { display: grid; place-items: center; border-radius: 8px; background: var(--panel-2); font-weight: 700; }
+.compass .c { background: transparent; color: var(--faint); font-size: 14px; }
+.compass .hl { outline: 2px solid var(--orange); }
+.compass .blank { color: var(--faint); }
+
+table.data { width: 100%; border-collapse: collapse; font-size: 15px; }
+table.data th { text-align: left; color: var(--faint); font-weight: 600; padding: 4px 6px; border-bottom: 1px solid var(--line); }
+table.data td { padding: 4px 6px; border-bottom: 1px solid var(--line); }
+table.data td.num, table.data th.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.data tr.new td { background: rgba(126,174,184,.12); }
+table.q { font-size: 14px; }
+table.q td, table.q th { padding: 2px 6px; }
+table.q td { text-align: center; }
+table.q td:first-child, table.q th:first-child { text-align: left; }
+table.q th { text-align: center; }
+
+.terms { display: grid; grid-template-columns: max-content 1fr; gap: 5px 12px; margin: 0; font-size: 16px; }
+.terms dt { font-weight: 800; color: var(--text); }
+.terms dd { margin: 0; color: var(--dim); }
+
+.checklist { margin: 0; padding-left: 20px; }
+.checklist li { margin: 4px 0; }
+.steps-list { margin: 0; padding-left: 22px; }
+.steps-list li { margin: 5px 0; }
+
+.log { display: grid; gap: 8px; }
+.log .entry { border-left: 3px solid var(--line); padding: 2px 0 2px 10px; }
+.log .entry.bad { border-color: var(--red); }
+.log .entry.ok { border-color: var(--teal); }
+.log .entry strong { display: block; }
+
+.chart { width: 100%; height: auto; display: block; }
+.chart text { font-family: inherit; }
+
+.stepnav { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line); }
+.stepnav .count { color: var(--faint); }
+
+/* Floor drawing */
+.tile { fill: #1d2028; stroke: #2c303a; stroke-width: 2; }
+.tile.clickable { cursor: pointer; }
+.tile.clickable:hover { stroke: var(--teal); }
+.shelf-body { fill: #2a3446; stroke: #3a4760; stroke-width: 2; }
+.shelf-line { stroke: #43506a; stroke-width: 3; }
+.shelf-box { fill: #6a5238; }
+.station-body { fill: var(--orange-soft); stroke: var(--orange); stroke-width: 3; }
+.station-label { fill: var(--orange); font-size: 15px; font-weight: 800; letter-spacing: 1px; }
+.coord { fill: var(--faint); font-size: 18px; font-weight: 700; }
+.start-label { fill: var(--faint); font-size: 12px; font-weight: 700; letter-spacing: 1px; }
+.score-tint { fill: var(--teal); }
+.score-num { fill: var(--text); font-size: 30px; font-weight: 800; }
+.score-num.low { fill: var(--faint); font-size: 22px; font-weight: 700; }
+.score-arrow { fill: var(--teal-bright); font-size: 24px; font-weight: 800; }
+.score-arrow.low { fill: var(--faint); font-size: 18px; }
+.slot { fill: var(--faint); font-size: 16px; font-weight: 800; }
+.slot.filled { fill: var(--text); }
+.slot-box { fill: none; stroke: #4d5362; stroke-width: 2; stroke-dasharray: 4 3; }
+.slot-box.filled { fill: #2b3140; stroke: var(--teal); stroke-dasharray: none; }
+.flash { fill: none; stroke: var(--orange); stroke-width: 5; }
+.path-test { fill: none; stroke: var(--orange); stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; opacity: .9; }
+.path-map { fill: none; stroke: var(--text); stroke-width: 4; stroke-dasharray: 10 10; stroke-linecap: round; stroke-linejoin: round; opacity: .85; }
+.robot { transition-property: transform; transition-timing-function: ease-in-out; }
+.robot-body { fill: var(--teal); stroke: #d9eef2; stroke-width: 2; }
+.robot-face { fill: #173038; }
+.robot-eye { fill: #e8fbff; }
+.robot-load { fill: var(--orange); }
+.robot.bumped .robot-body { fill: var(--red); }
+.pallet-body { fill: #7a4e24; stroke: #c98a4b; stroke-width: 3; }
+.pallet-strap { stroke: #c98a4b; stroke-width: 4; }
+.pallet-label { fill: #fbe3c8; font-size: 14px; font-weight: 800; letter-spacing: .5px; }
+
+/* Lab */
+.lab-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.95fr); gap: 22px; align-items: start; }
+.settings { display: grid; grid-template-columns: max-content 1fr; gap: 10px 14px; align-items: center; }
+.settings label { color: var(--dim); font-size: 15px; }
+.settings > div { display: flex; align-items: center; gap: 10px; }
+.settings input[type="range"] { flex: 1; min-width: 0; accent-color: var(--orange); }
+.settings select, .settings input[type="number"] {
+  min-height: 40px; padding: 6px 10px; border-radius: 9px; border: 1px solid var(--line); background: var(--panel-2); color: var(--text);
+}
+.value-out { color: var(--text); font-weight: 700; min-width: 44px; text-align: right; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+.stat { background: var(--panel-2); border-radius: 10px; padding: 8px 10px; }
+.stat b { display: block; font-size: 24px; }
+.stat span { color: var(--faint); font-size: 13px; }
+.toggle { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.toggle button { min-height: 40px; padding: 6px 14px; border: 0; background: var(--panel); color: var(--dim); cursor: pointer; }
+.toggle button[aria-pressed="true"] { background: var(--panel-2); color: var(--text); box-shadow: inset 0 -3px 0 var(--orange); }
+
+/* Live labs: header gear, settings pop-up, play button, live panel */
+.lab-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.gear-btn { flex: none; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 14px; border: 1px solid var(--line);
+  border-radius: 12px; background: var(--panel); color: var(--text); font: inherit; font-weight: 600; cursor: pointer; }
+.gear-btn svg { width: 22px; height: 22px; color: var(--orange); }
+.gear-btn:hover { border-color: var(--teal); }
+.gear-btn:focus-visible, .pop-close:focus-visible, .toggle button:focus-visible { outline: 3px solid var(--teal-bright); outline-offset: 2px; }
+dialog.settings-pop { position: fixed; inset: 88px 24px auto auto; margin: 0; width: min(470px, calc(100vw - 32px)); max-height: calc(100vh - 112px);
+  padding: 0; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); color: var(--text); box-shadow: 0 18px 50px rgba(0,0,0,.5); overflow: auto; }
+dialog.settings-pop::backdrop { background: rgba(8,9,12,.55); }
+.pop-inner { padding: 16px 18px 18px; }
+.pop-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.pop-head h3 { margin: 0; font-size: 19px; }
+.pop-inner h4 { margin: 18px 0 6px; font-size: 15px; color: var(--dim); }
+.pop-close { width: 40px; height: 40px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel-2); color: var(--text); font-size: 22px; cursor: pointer; }
+.pop-note { color: var(--faint); font-size: 13px; margin: 12px 0 0; }
+.help-btn { flex: none; width: 34px; height: 34px; margin-left: auto; border: 1px solid var(--line); border-radius: 50%; background: var(--panel);
+  color: var(--orange); font: inherit; font-size: 18px; font-weight: 800; line-height: 1; cursor: pointer; }
+.help-btn:hover { border-color: var(--teal); }
+.help-btn:focus-visible { outline: 3px solid var(--teal-bright); outline-offset: 2px; }
+.card h3.with-help { display: flex; align-items: center; gap: 8px; }
+.card h3.with-help .help-btn { width: 28px; height: 28px; font-size: 15px; }
+dialog.settings-pop.help-pop { inset: 0; margin: auto; height: fit-content; width: min(780px, calc(100vw - 32px)); max-height: calc(100vh - 48px); }
+.help-pop p { margin: 0 0 10px; }
+.help-pop .formula { font-size: 16px; margin-bottom: 12px; }
+.help-pop .terms { font-size: 15px; }
+.help-pop .steps-list { font-size: 15px; }
+.play-btn { min-width: 124px; }
+.live-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.live-now { border-left: 3px solid var(--orange); padding-left: 10px; margin: 0 0 8px; color: var(--dim); font-size: 14px; }
+.live-log { list-style: none; margin: 0; padding: 0; font-size: 14px; max-height: 150px; overflow: auto; }
+.live-log li { padding: 4px 0; border-bottom: 1px solid var(--line); color: var(--dim); }
+.live-log li:first-child { color: var(--text); }
+
+/* One-screen live lab: scene across the top, one control bar, then a row of panels. */
+body.lab-mode .top .speed { display: none; }
+body.lab-mode main { padding-bottom: 0; }
+.live-lab { display: flex; flex-direction: column; gap: 10px; }
+.live-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.live-head .step-kicker { margin: 0; }
+.live-head h2 { margin: 2px 0 0; font-size: 24px; line-height: 1.2; }
+.live-head .lead { margin: 3px 0 0; font-size: 15px; max-width: none; }
+.live-stage { flex: 1 1 auto; min-height: 0; display: flex; gap: 12px; align-items: stretch;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 10px; }
+.live-stage .legend { flex: 0 0 170px; flex-direction: column; align-self: flex-start; gap: 7px; margin: 4px 0 0; font-size: 13px; }
+.live-stage .scene { flex: 1 1 auto; min-width: 0; min-height: 0; display: flex; align-items: center; justify-content: center; }
+.live-stage .scene > svg { width: 100%; height: 100%; max-height: none; }
+.live-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.live-bar .controls { margin: 0; }
+.live-bar .status { flex: 1 1 320px; margin: 0; min-height: 0; font-size: 15px; }
+.live-panels { flex: 0 0 clamp(210px, 29vh, 290px); display: flex; gap: 10px; min-height: 0; }
+.live-panels > * { flex: 1 1 0; min-width: 0; min-height: 0; overflow: auto; }
+.live-panels > .wide { flex-grow: 1.35; }
+.live-panels > .wider { flex-grow: 1.7; }
+.live-panels > .widest { flex-grow: 2; }
+.live-panels > .narrow { flex-grow: 0.8; }
+.live-panels > .stack { display: flex; flex-direction: column; gap: 10px; }
+.live-panels .card { height: 100%; overflow: auto; padding: 10px 12px; }
+.live-panels > .stack > .card { height: auto; flex: 0 0 auto; }
+.live-panels .card h3 { font-size: 12.5px; margin-bottom: 6px; }
+.live-panels .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.live-panels .stat { padding: 5px 8px; }
+.live-panels .stat b { font-size: 18px; }
+.live-panels .stat span { font-size: 12px; }
+.live-panels .moveline { grid-template-columns: 112px 1fr; gap: 4px 10px; font-size: 13.5px; }
+.live-panels .calc { font-size: 15px; margin-top: 6px; }
+.live-panels .live-log { max-height: none; font-size: 13px; }
+.live-panels table.data { font-size: 13px; }
+.live-panels .pgrids { gap: 8px; }
+.live-panels .pgrid h4 { font-size: 12.5px; margin-bottom: 4px; }
+.live-panels .pgrid table { font-size: 11.5px; border-spacing: 2px; }
+.live-panels .pgrid td { padding: 3px 1px; }
+.live-panels .axis-note { display: none; }
+.live-panels table.qd td, .live-panels table.qd th { padding: 3px 4px; font-size: 12px; }
+.live-panels .steps-list { margin: 0 0 8px; }
+/* Side layout (square scenes such as the New York map): columns of panels left and right of a full-height scene. */
+.live-main { flex: 1 1 auto; min-height: 0; display: flex; gap: 10px; }
+.live-side { flex: 1 1 0; min-width: 0; min-height: 0; overflow: auto; display: flex; flex-direction: column; gap: 10px; }
+.live-side.right { flex-grow: 1.2; }
+.live-side .card { flex: 0 0 auto; padding: 10px 12px; }
+.live-side .card h3 { font-size: 12.5px; margin-bottom: 6px; }
+.live-side .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.live-side .stat { padding: 5px 8px; }
+.live-side .stat b { font-size: 18px; }
+.live-side .stat span { font-size: 12px; }
+.live-side .moveline { grid-template-columns: 112px 1fr; gap: 4px 10px; font-size: 13.5px; }
+.live-side .calc { font-size: 15px; margin-top: 6px; }
+.live-side .live-log { max-height: 96px; font-size: 13px; }
+.live-side table.data { font-size: 13px; }
+.live-side table.qd td, .live-side table.qd th { padding: 3px 4px; font-size: 12px; }
+.live-side .steps-list { margin: 0 0 8px; }
+.live-main > .live-stage { flex: 0 0 auto; position: relative; padding: 6px; }
+.live-main > .live-stage .legend { position: absolute; top: 12px; left: 12px; z-index: 1; margin: 0; padding: 8px 10px; border-radius: 10px;
+  background: rgba(14, 24, 34, .86); flex-direction: column; gap: 5px; font-size: 12.5px; }
+@media (max-width: 900px) {
+  .live-main { flex: none; flex-direction: column; }
+  .live-main > .live-stage .legend { position: static; flex-direction: row; background: none; padding: 0 0 6px; }
+  .live-side { flex: none; overflow: visible; }
+}
+.rule-list { list-style: none; margin: 0 0 8px; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px 12px; font-size: 13px; color: var(--dim); }
+.rule-list strong { color: var(--text); }
+
+/* Guided lesson on one screen: controls column + scene, then explanation cards in a row ('top')
+   or a column beside a height-sized square scene ('side'). Narrow screens keep the stacked page. */
+.fit-stage { display: contents; }
+.explain > div:empty { display: none; }
+@media (max-width: 900px) {
+  .fit-stage > .floor-wrap { order: -1; }
+}
+@media (min-width: 901px) {
+  #lesson .chapters { margin-bottom: 8px; }
+  #lesson .chapters button { min-height: 34px; padding: 3px 10px 3px 4px; font-size: 14px; }
+  #lesson .chapters .num { width: 24px; height: 24px; font-size: 13px; }
+  #lesson .step-head h2 { font-size: 25px; margin: 2px 0 4px; }
+  #lesson .lead { font-size: 16px; margin-bottom: 8px; max-width: none; }
+  #lesson .stepnav { margin-top: 10px; padding-top: 10px; }
+  .step-body.fit-top, .step-body.fit-side { display: flex; gap: 10px; min-height: 0; align-items: stretch; }
+  .step-body.fit-top { flex-direction: column; }
+  .fit-stage { display: flex; gap: 14px; min-height: 0; min-width: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 10px; position: relative; }
+  .fit-top .fit-stage { flex: 1 1 0; }
+  .fit-side .fit-stage { flex: 0 0 auto; }
+  .fit-stage > .stage-col { flex: 0 0 300px; min-width: 0; min-height: 0; overflow: auto; display: flex; flex-direction: column; gap: 10px; }
+  .fit-stage > .stage-col .controls { margin: 0; flex-direction: column; align-items: stretch; }
+  .fit-stage > .stage-col .controls > .btn, .fit-stage > .stage-col .play-pad .btn { width: 100%; }
+  .fit-stage > .stage-col .play-pad { grid-template-columns: minmax(0, 1fr); }
+  .fit-stage > .stage-col .legend { margin: 0; flex-direction: row; flex-wrap: wrap; gap: 4px 12px; font-size: 12.5px; }
+  .fit-top .fit-stage > .stage-col .legend { position: absolute; top: 12px; right: 14px; z-index: 1; max-width: 230px; flex-direction: column;
+    padding: 8px 10px; border-radius: 10px; background: rgba(24, 26, 32, .88); }
+  .fit-stage > .stage-col .btn { min-height: 40px; padding: 6px 12px; font-size: 14.5px; }
+  .fit-stage > .stage-col .play-pad .btn { min-height: 44px; }
+  .fit-stage > .stage-col .floor-caption { margin: 0; }
+  .fit-stage > .stage-col .status { margin: 0; font-size: 15px; }
+  .fit-stage > .floor-wrap { flex: 1 1 auto; min-width: 0; min-height: 0; display: flex; align-items: center; justify-content: center; gap: 10px;
+    background: none; border: 0; border-radius: 0; padding: 0; }
+  .fit-side .fit-stage > .floor-wrap { flex: 0 0 auto; }
+  .fit-stage > .floor-wrap > svg { width: 100%; height: 100%; max-height: none; }
+  .fit-stage > .floor-wrap > div:not(.wide) { max-height: 100%; overflow: auto; }
+  .fit-stage > .floor-wrap > .wide { display: flex; gap: 14px; width: 100%; height: 100%; align-items: center; }
+  .fit-stage > .floor-wrap > .wide > * { flex: 1 1 0; min-width: 0; max-height: 100%; overflow: auto; }
+  .fit-stage > .floor-wrap.trio { align-items: stretch; }
+  .fit-stage > .floor-wrap.trio > figure { flex: 1 1 0; min-width: 0; min-height: 0; display: flex; flex-direction: column; justify-content: center; }
+  .fit-stage > .floor-wrap.trio > figure > svg { flex: 0 1 auto; min-height: 0; height: auto; }
+  .fit-top .explain { flex: 0 0 auto; max-height: clamp(200px, 31vh, 310px); display: flex; gap: 10px; overflow-x: auto; min-height: 0; }
+  .fit-top .explain > * { flex: 1 1 0; min-width: 250px; overflow: auto; }
+  .fit-top .explain > div:not(:empty) { display: flex; flex-direction: column; gap: 10px; }
+  .fit-top .explain > div > .card:only-child { flex: 1 1 auto; }
+  .fit-side .explain { flex: 1 1 0; min-width: 0; overflow: auto; display: flex; flex-direction: column; gap: 10px; }
+  .fit-side .explain > * { flex: 0 0 auto; }
+  .fit-side .shiftlog { max-height: 110px; }
+  .fit-top .explain .card, .fit-side .explain .card { padding: 11px 13px; }
+  .step-body .explain .card h3 { font-size: 12.5px; margin-bottom: 6px; }
+  .fit-top .explain .moveline, .fit-side .explain .moveline { grid-template-columns: 118px 1fr; font-size: 14px; }
+  .fit-top .explain .calc, .fit-side .explain .calc { font-size: 16px; }
+}
+@media (max-width: 900px) {
+  .live-stage { flex-direction: column; }
+  .live-stage .legend { flex: none; flex-direction: row; }
+  .live-stage .scene > svg { height: auto; }
+  .live-panels { flex: none; flex-direction: column; }
+  .live-panels > * { flex: none; overflow: visible; }
+  .live-panels .card { height: auto; }
+}
+
+#error-banner { position: fixed; left: 16px; right: 16px; bottom: 16px; padding: 12px 16px; border-radius: 10px; background: #4a1d1b; border: 1px solid var(--red); color: var(--text); z-index: 10; }
+
+@media (max-width: 960px) {
+  .step-body, .lab-grid { grid-template-columns: 1fr; }
+  .top, main { padding-left: 16px; padding-right: 16px; }
+  .step-head h2 { font-size: 26px; }
+  .lead { font-size: 17px; }
+  .floor-wrap.pair { grid-template-columns: 1fr; }
+}
+@media (max-width: 520px) {
+  body { font-size: 16px; }
+  .chapters button { padding-right: 8px; font-size: 13px; }
+  .chapters .label { display: none; }
+  .chapters button[aria-current="step"] .label { display: inline; }
+  .moveline { grid-template-columns: 120px 1fr; }
+  .lab-head, .live-head { flex-direction: column; align-items: flex-start; }
+  dialog.settings-pop { inset: 12px 12px auto 12px; width: auto; max-height: calc(100vh - 24px); }
+  .settings { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .robot { transition: none !important; }
+}
+@media print {
+  .top .modes, .speed, .controls, .stepnav, .chapters { display: none; }
+}
+
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <p class="kicker">AI in Transportation · Learning by reward</p>
+    <h1>Train a warehouse robot</h1>
+  </div>
+  <nav class="modes" role="tablist" aria-label="View">
+    <button id="mode-lesson" role="tab" aria-selected="true" aria-controls="lesson">Guided lesson</button>
+    <button id="mode-lab" role="tab" aria-selected="false" aria-controls="lab">Training lab</button>
+  </nav>
+  <label class="speed">Speed
+    <select id="speed" aria-label="Animation speed">
+      <option value="slow">Slow</option>
+      <option value="normal" selected>Normal</option>
+      <option value="fast">Fast</option>
+    </select>
+  </label>
+</header>
+<main>
+  <section id="lesson" role="tabpanel" aria-labelledby="mode-lesson">
+    <nav aria-label="Lesson steps"><ol class="chapters" id="chapters"></ol></nav>
+    <article id="step" aria-live="off"></article>
+    <footer class="stepnav">
+      <button class="btn" id="back">&larr; Back</button>
+      <span class="count" id="count"></span>
+      <button class="btn primary" id="next">Next &rarr;</button>
+    </footer>
+  </section>
+  <section id="lab" role="tabpanel" aria-labelledby="mode-lab" hidden></section>
+</main>
+<div id="error-banner" role="alert" hidden></div>
+<script type="module">
+const rl = (() => {
+// Tabular Q-learning for one warehouse robot. Shared by the page, the build checks and the deck.
+// Learning rate 1 and no discount: on a predictable floor the score is simply
+// "delivery reward minus the moves still needed", which a beginner can check by hand.
+
+const ACTIONS = [
+  {key: 'up', label: 'Up', arrow: '↑', dr: -1, dc: 0},
+  {key: 'right', label: 'Right', arrow: '→', dr: 0, dc: 1},
+  {key: 'down', label: 'Down', arrow: '↓', dr: 1, dc: 0},
+  {key: 'left', label: 'Left', arrow: '←', dr: 0, dc: -1},
+];
+
+const DEFAULT_REWARDS = {delivery: 20, moveCost: 1};
+
+function seededRandom(seed) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+// '.' open floor, '#' shelf, 'S' usual start, 'P' packing station.
+function parseFloor(lines) {
+  const rows = lines.length;
+  const cols = lines[0].length;
+  const open = new Array(rows * cols).fill(false);
+  let start = -1;
+  let station = -1;
+  lines.forEach((line, r) => {
+    if (line.length !== cols) throw new Error('Floor rows must have equal length.');
+    [...line].forEach((ch, c) => {
+      const i = r * cols + c;
+      open[i] = ch !== '#';
+      if (ch === 'S') start = i;
+      if (ch === 'P') station = i;
+    });
+  });
+  if (station < 0) throw new Error('Floor needs a packing station P.');
+  return {rows, cols, open, start, station};
+}
+
+function cloneFloor(floor) {
+  return {...floor, open: floor.open.slice()};
+}
+
+function cellName(floor, i) {
+  return String.fromCharCode(65 + (i % floor.cols)) + (Math.floor(i / floor.cols) + 1);
+}
+
+function openCells(floor) {
+  return floor.open.map((isOpen, i) => (isOpen ? i : -1)).filter(i => i >= 0);
+}
+
+function move(floor, s, a) {
+  const r = Math.floor(s / floor.cols) + ACTIONS[a].dr;
+  const c = (s % floor.cols) + ACTIONS[a].dc;
+  if (r < 0 || r >= floor.rows || c < 0 || c >= floor.cols) return {next: s, bumped: true};
+  const n = r * floor.cols + c;
+  if (!floor.open[n]) return {next: s, bumped: true};
+  return {next: n, bumped: false};
+}
+
+function moveReward(floor, next, rewards) {
+  return (next === floor.station ? rewards.delivery : 0) - rewards.moveCost;
+}
+
+function createTable(floor) {
+  return new Array(floor.rows * floor.cols * 4).fill(null);
+}
+
+// Untried arrows count as 0 when the robot decides.
+function scoreOf(table, s, a) {
+  const v = table[s * 4 + a];
+  return v === null ? 0 : v;
+}
+
+function bestScore(floor, table, s) {
+  if (s === floor.station) return 0;
+  let best = -Infinity;
+  for (let a = 0; a < 4; a += 1) best = Math.max(best, scoreOf(table, s, a));
+  return best;
+}
+
+// Highest tried score and its arrow, or null when nothing has been tried here.
+function bestTried(table, s) {
+  let best = null;
+  for (let a = 0; a < 4; a += 1) {
+    const v = table[s * 4 + a];
+    if (v !== null && (best === null || v > best.score)) best = {score: v, action: a};
+  }
+  return best;
+}
+
+function bestActions(table, s) {
+  let best = -Infinity;
+  let list = [];
+  for (let a = 0; a < 4; a += 1) {
+    const v = scoreOf(table, s, a);
+    if (v > best) { best = v; list = [a]; } else if (v === best) list.push(a);
+  }
+  return list;
+}
+
+function chooseAction(table, s, exploration, random) {
+  if (random() < exploration) return {action: Math.floor(random() * 4), explored: true};
+  const list = bestActions(table, s);
+  return {action: list.length === 1 ? list[0] : list[Math.floor(random() * list.length)], explored: false};
+}
+
+// One move: choose, move, receive points, update the score of the arrow just used.
+function takeMove(env, s) {
+  const {floor, table, rewards, exploration, random} = env;
+  const {action, explored} = chooseAction(table, s, exploration, random);
+  const {next, bumped} = move(floor, s, action);
+  const points = moveReward(floor, next, rewards);
+  const landedBest = bestScore(floor, table, next);
+  const before = table[s * 4 + action];
+  const after = points + landedBest;
+  table[s * 4 + action] = after;
+  return {from: s, action, to: next, bumped, explored, points, landedBest, before, after,
+    delivered: next === floor.station};
+}
+
+// The moves of one trip, one at a time, so a page can animate them as they happen.
+function* tripMoves(env, start, maxMoves) {
+  let s = start;
+  for (let k = 0; k < maxMoves; k += 1) {
+    const m = takeMove(env, s);
+    yield m;
+    if (m.delivered) return;
+    s = m.to;
+  }
+}
+
+function tripOf(start, moves) {
+  const delivered = moves.length > 0 && moves[moves.length - 1].delivered;
+  const points = moves.reduce((sum, m) => sum + m.points, 0);
+  return {start, moves, delivered, points};
+}
+
+function runTrip(env, start, maxMoves) {
+  return tripOf(start, [...tripMoves(env, start, maxMoves)]);
+}
+
+// Shortest number of moves from every square to the station, computed from the map (search, not learning).
+function shortestMoves(floor) {
+  const dist = new Array(floor.rows * floor.cols).fill(Infinity);
+  dist[floor.station] = 0;
+  const queue = [floor.station];
+  while (queue.length) {
+    const s = queue.shift();
+    for (let a = 0; a < 4; a += 1) {
+      const {next, bumped} = move(floor, s, a);
+      if (!bumped && dist[next] === Infinity) { dist[next] = dist[s] + 1; queue.push(next); }
+    }
+  }
+  return dist;
+}
+
+// Test drive: no random moves and no learning. Equal best scores are broken by the seeded tie stream.
+function testDrive(floor, table, start, maxMoves, tieSeed = 7) {
+  const random = seededRandom(tieSeed);
+  const path = [start];
+  const actions = [];
+  let s = start;
+  let bumps = 0;
+  while (path.length - 1 < maxMoves) {
+    if (s === floor.station) break;
+    const list = bestActions(table, s);
+    const action = list.length === 1 ? list[0] : list[Math.floor(random() * list.length)];
+    const {next, bumped} = move(floor, s, action);
+    path.push(next);
+    actions.push(action);
+    bumps = bumped ? bumps + 1 : 0;
+    s = next;
+    if (bumps >= 3) return {path, actions, delivered: false, stuck: 'bump', moves: path.length - 1};
+  }
+  const delivered = s === floor.station;
+  return {path, actions, delivered, stuck: delivered ? null : 'limit', moves: path.length - 1};
+}
+
+// A training session keeps the floor, the score table and one random stream together so replays are exact.
+function createSession({floor, seed = 1, exploration = 0.2, rewards = DEFAULT_REWARDS,
+  startMode = 'fixed', maxMoves = 200}) {
+  const random = seededRandom(seed);
+  return {floor, seed, exploration, rewards: {...rewards}, startMode, maxMoves, random,
+    table: createTable(floor), trips: []};
+}
+
+function tripStart(session) {
+  if (session.startMode === 'fixed') return session.floor.start;
+  const cells = openCells(session.floor).filter(i => i !== session.floor.station);
+  return cells[Math.floor(session.random() * cells.length)];
+}
+
+function recordTrip(session, trip) {
+  session.trips.push({moves: trip.moves.length, delivered: trip.delivered, points: trip.points,
+    explored: trip.moves.filter(m => m.explored).length});
+  return trip;
+}
+
+function trainTrip(session) {
+  return recordTrip(session, runTrip(session, tripStart(session), session.maxMoves));
+}
+
+function train(session, count) {
+  let last = null;
+  for (let i = 0; i < count; i += 1) last = trainTrip(session);
+  return last;
+}
+
+// How many open squares a test drive reaches the station from in the fewest possible moves.
+function coverage(floor, table) {
+  const dist = shortestMoves(floor);
+  const cells = openCells(floor).filter(i => i !== floor.station && dist[i] < Infinity);
+  let shortest = 0;
+  let delivered = 0;
+  for (const s of cells) {
+    const drive = testDrive(floor, table, s, 4 * cells.length);
+    if (drive.delivered) delivered += 1;
+    if (drive.delivered && drive.moves === dist[s]) shortest += 1;
+  }
+  return {squares: cells.length, delivered, shortest};
+}
+
+return {ACTIONS, DEFAULT_REWARDS, seededRandom, parseFloor, cloneFloor, cellName, openCells, move, moveReward, createTable, scoreOf, bestScore, bestTried, chooseAction, takeMove, tripMoves, tripOf, runTrip, shortestMoves, testDrive, createSession, tripStart, recordTrip, trainTrip, train, coverage};
+})();
+const live = (() => {
+// Shared controls for the three "watch it learn" labs: play/pause loop, speed switch and a gear-button settings pop-up.
+// Self-contained (no imports) so every lesson page can include it.
+
+const make = (tag, props = {}, ...children) => {
+  const node = document.createElement(tag);
+  for (const [key, value] of Object.entries(props)) {
+    if (value === null || value === undefined || value === false) continue;
+    if (key === 'class') node.className = value;
+    else if (key.startsWith('on')) node.addEventListener(key.slice(2), value);
+    else node.setAttribute(key, value === true ? '' : value);
+  }
+  for (const child of children.flat()) if (child !== null && child !== undefined && child !== false) node.append(child.nodeType ? child : String(child));
+  return node;
+};
+
+const SPEEDS = {watch: 'Watch', fast: 'Fast'};
+const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const frame = () => new Promise(resolve => requestAnimationFrame(() => resolve()));
+const pause = ms => new Promise(resolve => setTimeout(resolve, REDUCED ? 0 : ms));
+
+function gearIcon() {
+  const ns = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(ns, 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('aria-hidden', 'true');
+  for (let k = 0; k < 8; k += 1) {
+    const tooth = document.createElementNS(ns, 'rect');
+    Object.entries({x: 10, y: 1.5, width: 4, height: 5, rx: 1, fill: 'currentColor', transform: `rotate(${k * 45} 12 12)`}).forEach(([a, v]) => tooth.setAttribute(a, v));
+    svg.append(tooth);
+  }
+  const ring = document.createElementNS(ns, 'circle');
+  Object.entries({cx: 12, cy: 12, r: 6.2, fill: 'none', stroke: 'currentColor', 'stroke-width': 3.6}).forEach(([a, v]) => ring.setAttribute(a, v));
+  svg.append(ring);
+  return svg;
+}
+
+// A pop-up panel on a native <dialog>: Esc closes it, focus is managed by the browser.
+function popup(title, content, closeLabel) {
+  const close = make('button', {type: 'button', class: 'pop-close', 'aria-label': closeLabel}, '\u00d7');
+  const dialog = make('dialog', {class: 'settings-pop', 'aria-label': title},
+    make('div', {class: 'pop-inner'}, make('div', {class: 'pop-head'}, make('h3', {}, title), close), ...content));
+  close.addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+  return dialog;
+}
+
+function settingsPopup(title, ...content) {
+  const dialog = popup(title, content, 'Close settings');
+  const gear = make('button', {type: 'button', class: 'gear-btn', 'aria-haspopup': 'dialog', title: 'Settings'}, gearIcon(), make('span', {}, 'Settings'));
+  gear.addEventListener('click', () => dialog.showModal());
+  return {gear, dialog};
+}
+
+function helpPopup(title, ...content) {
+  const dialog = popup(title, content, 'Close explanation');
+  dialog.classList.add('help-pop');
+  const button = make('button', {type: 'button', class: 'help-btn', 'aria-haspopup': 'dialog', 'aria-label': `Explain: ${title}`, title: 'Explain this'}, '?');
+  button.addEventListener('click', () => dialog.showModal());
+  return {button, dialog};
+}
+
+function speedSwitch(value, onChange) {
+  const group = make('div', {class: 'toggle live-speed', role: 'group', 'aria-label': 'Speed'});
+  const render = () => group.replaceChildren(...Object.entries(SPEEDS).map(([key, label]) =>
+    make('button', {type: 'button', 'aria-pressed': String(key === value), onclick: () => { value = key; render(); onChange(key); }}, label)));
+  render();
+  return group;
+}
+
+// Sizes a lab to exactly fill the window below its top edge, so scene, controls and panels fit on one screen.
+// Narrow screens keep the normal stacked page.
+let refit = null;
+function fillWindow(el, {minHeight = 620, bottom = 28, narrow = 900} = {}) {
+  const fit = () => {
+    if (!el.isConnected) return;
+    if (window.innerWidth <= narrow) { el.style.height = ''; return; }
+    const top = el.getBoundingClientRect().top + window.scrollY;
+    el.style.height = `${Math.max(minHeight, Math.floor(window.innerHeight - top - bottom))}px`;
+  };
+  if (refit) window.removeEventListener('resize', refit);
+  refit = fit;
+  window.addEventListener('resize', fit);
+  fit();
+  requestAnimationFrame(fit);
+}
+
+// Keeps a stage as wide as its scene needs at the row's full height, leaving at least `reserve` px for the side columns.
+let stageObserver = null;
+function sizeStage(stage, row, {ratio = 1, reserve = 560, inset = 0, narrow = 900} = {}) {
+  const fit = () => {
+    if (window.innerWidth <= narrow) { stage.style.width = ''; return; }
+    stage.style.width = `${Math.floor(Math.max(300, Math.min((row.clientHeight - inset) * ratio, row.clientWidth - reserve)))}px`;
+  };
+  if (stageObserver) stageObserver.disconnect();
+  stageObserver = new ResizeObserver(fit);
+  stageObserver.observe(row);
+  fit();
+}
+
+// Guided-lesson steps: fill the window above the Back/Next bar; square scenes (layout 'side') get a height-sized stage.
+function fitLesson(body, floorWrap, {layout = 'top', ratio = 1} = {}) {
+  const footer = document.querySelector('.stepnav');
+  fillWindow(body, {minHeight: 380, bottom: (footer ? footer.offsetHeight : 50) + 40});
+  if (layout === 'side') sizeStage(floorWrap, body, {ratio, reserve: 730, inset: 24});
+}
+
+// Runs `unit` again and again while playing. Each unit must await a frame or a timer so the page stays responsive,
+// and should change the model before its last await, so a pause never leaves half a step behind.
+function player({unit, alive, onChange = () => {}}) {
+  let playing = false, token = 0;
+  const button = make('button', {type: 'button', class: 'btn primary play-btn'});
+  const draw = () => { button.textContent = playing ? '\u275a\u275a Pause' : '\u25b6 Play'; button.setAttribute('aria-pressed', String(playing)); };
+  const loop = async mine => {
+    while (playing && mine === token && alive()) await unit();
+    if (playing && mine === token) { playing = false; draw(); onChange(false); }
+  };
+  const api = {
+    button,
+    get playing() { return playing; },
+    play() { if (playing) return; playing = true; draw(); onChange(true); loop(++token); },
+    stop() { if (!playing) return; playing = false; token += 1; draw(); onChange(false); },
+  };
+  button.addEventListener('click', () => (playing ? api.stop() : api.play()));
+  draw();
+  return api;
+}
+
+return {SPEEDS, REDUCED, frame, pause, settingsPopup, helpPopup, speedSwitch, fillWindow, sizeStage, fitLesson, player};
+})();
+// The floors, seeds and settings used by the guided lesson, the build checks and the deck.
+
+const MINI_FLOOR = ['.....', '.###.', 'S...P'];
+const BIG_FLOOR = [
+  '...........',
+  '.##.##.##..',
+  '.##.##.##..',
+  '..........P',
+  '.##.##.##..',
+  '.##.##.##..',
+  '...........',
+];
+const LESSON = {
+  miniSeed: 7,
+  bigSeed: 35,
+  exploration: 0.2,
+  miniMaxMoves: 200,
+  bigMaxMoves: 400,
+  trainedTrips: 20,
+  bigCheckEvery: 10,
+  bigTrips: 200,
+  palletCell: 'C3',
+  changeTrips: 10,
+  noCostTrips: 20,
+};
+
+function cellIndex(floor, name) {
+  const col = name.charCodeAt(0) - 65;
+  const row = Number(name.slice(1)) - 1;
+  return row * floor.cols + col;
+}
+
+function miniSession(options = {}) {
+  return rl.createSession({floor: rl.parseFloor(MINI_FLOOR), seed: LESSON.miniSeed,
+    exploration: LESSON.exploration, maxMoves: LESSON.miniMaxMoves, ...options});
+}
+
+function bigSession(options = {}) {
+  return rl.createSession({floor: rl.parseFloor(BIG_FLOOR), seed: LESSON.bigSeed,
+    exploration: LESSON.exploration, startMode: 'random', maxMoves: LESSON.bigMaxMoves, ...options});
+}
+
+// Squares whose best tried score is positive: the robot knows a route from there.
+function trail(floor, table) {
+  return rl.openCells(floor).filter(c => c !== floor.station).map(c => {
+    const best = rl.bestTried(table, c);
+    return best && best.score > 0 ? {cell: c, name: rl.cellName(floor, c), score: best.score,
+      arrow: rl.ACTIONS[best.action].arrow} : null;
+  }).filter(Boolean);
+}
+
+// Every number the lesson and deck quote, recomputed from the engine.
+function computeFacts() {
+  const facts = {lesson: LESSON, rewards: rl.DEFAULT_REWARDS};
+  const mini = rl.parseFloor(MINI_FLOOR);
+  const dist = rl.shortestMoves(mini);
+  facts.mini = {rows: mini.rows, cols: mini.cols, squares: rl.openCells(mini).length - 1,
+    start: rl.cellName(mini, mini.start), station: rl.cellName(mini, mini.station),
+    shortest: dist[mini.start], topRoute: 8};
+
+  const s = miniSession();
+  const first = rl.trainTrip(s);
+  facts.firstTrip = {moves: first.moves.length, points: first.points,
+    random: first.moves.filter(m => m.explored).length,
+    bumps: first.moves.filter(m => m.bumped).length,
+    log: first.moves.map(m => ({from: rl.cellName(mini, m.from), arrow: rl.ACTIONS[m.action].arrow,
+      to: rl.cellName(mini, m.to), bumped: m.bumped, explored: m.explored, points: m.points,
+      landedBest: m.landedBest, after: m.after}))};
+  facts.trips = [{trip: 1, moves: first.moves.length, points: first.points, trail: trail(mini, s.table)}];
+  for (let t = 2; t <= LESSON.trainedTrips; t += 1) {
+    const trip = rl.trainTrip(s);
+    facts.trips.push({trip: t, moves: trip.moves.length, points: trip.points, trail: trail(mini, s.table)});
+  }
+  const test = rl.testDrive(mini, s.table, mini.start, 40);
+  facts.test = {moves: test.moves, delivered: test.delivered, points: rl.DEFAULT_REWARDS.delivery - test.moves,
+    path: test.path.map(c => rl.cellName(mini, c))};
+  facts.firstTestAtShortest = (() => {
+    const probe = miniSession();
+    for (let t = 1; t <= LESSON.trainedTrips; t += 1) {
+      rl.trainTrip(probe);
+      const d = rl.testDrive(mini, probe.table, mini.start, 40);
+      if (d.delivered && d.moves === dist[mini.start]) return t;
+    }
+    return null;
+  })();
+
+  // The floor changes: continue the trained session.
+  const pallet = cellIndex(mini, LESSON.palletCell);
+  const change = {};
+  s.floor.open[pallet] = false;
+  const blocked = rl.testDrive(s.floor, s.table, s.floor.start, 40);
+  change.blocked = {delivered: blocked.delivered, stuck: blocked.stuck, path: blocked.path.map(c => rl.cellName(mini, c))};
+  const retrainMoves = [];
+  for (let t = 0; t < LESSON.changeTrips; t += 1) retrainMoves.push(rl.trainTrip(s).moves.length);
+  const afterRetrain = rl.testDrive(s.floor, s.table, s.floor.start, 40);
+  change.retrain = {tripMoves: retrainMoves, testMoves: afterRetrain.moves, delivered: afterRetrain.delivered,
+    path: afterRetrain.path.map(c => rl.cellName(mini, c))};
+  s.floor.open[pallet] = true;
+  const reopened = rl.testDrive(s.floor, s.table, s.floor.start, 40);
+  change.reopened = {testMoves: reopened.moves, delivered: reopened.delivered,
+    startScores: [0, 1, 2, 3].map(a => s.table[s.floor.start * 4 + a])};
+  const fresh = miniSession();
+  rl.train(fresh, LESSON.changeTrips);
+  const freshTest = rl.testDrive(fresh.floor, fresh.table, fresh.floor.start, 40);
+  change.fresh = {testMoves: freshTest.moves, delivered: freshTest.delivered};
+  facts.change = change;
+
+  // Same recipe, bigger floor.
+  const big = bigSession();
+  const curve = [];
+  for (let t = 1; t <= LESSON.bigTrips; t += 1) {
+    rl.trainTrip(big);
+    if (t % LESSON.bigCheckEvery === 0) curve.push({trips: t, ...rl.coverage(big.floor, big.table)});
+  }
+  const bigMoves = big.trips.map(t => t.moves);
+  const mean = list => Math.round(10 * list.reduce((a, b) => a + b, 0) / list.length) / 10;
+  facts.big = {rows: big.floor.rows, cols: big.floor.cols, squares: rl.openCells(big.floor).length - 1,
+    curve, firstAllShortest: (curve.find(p => p.shortest === p.squares) || {}).trips ?? null,
+    meanFirst50: mean(bigMoves.slice(0, 50)), meanNext50: mean(bigMoves.slice(50, 100)),
+    firstTrip: bigMoves[0]};
+
+  // You get what you reward: no cost per move.
+  const noCost = miniSession({rewards: {delivery: rl.DEFAULT_REWARDS.delivery, moveCost: 0}});
+  rl.train(noCost, LESSON.noCostTrips);
+  const noCostTest = rl.testDrive(noCost.floor, noCost.table, noCost.floor.start, 40);
+  facts.noCost = {tripMoves: noCost.trips.map(t => t.moves), testDelivered: noCostTest.delivered,
+    testStuck: noCostTest.stuck, startScores: [0, 1, 2, 3].map(a => noCost.table[noCost.floor.start * 4 + a])};
+  return facts;
+}
+
+
+const SVGNS = 'http://www.w3.org/2000/svg';
+const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const SPEEDS = {
+  slow: {move: 700, trip: 150, batch: 70},
+  normal: {move: 360, trip: 70, batch: 28},
+  fast: {move: 120, trip: 18, batch: 4},
+};
+let speed = 'normal';
+const timing = () => SPEEDS[speed];
+const wait = ms => new Promise(resolve => setTimeout(resolve, REDUCED ? 0 : ms));
+let generation = 0;
+let keyHandler = null;
+const REWARDS = rl.DEFAULT_REWARDS;
+
+function h(tag, props = {}, ...children) {
+  const node = document.createElement(tag);
+  for (const [key, value] of Object.entries(props || {})) {
+    if (value === false || value === null || value === undefined) continue;
+    if (key === 'class') node.className = value;
+    else if (key === 'text') node.textContent = value;
+    else if (key === 'html') node.innerHTML = value;
+    else if (key.startsWith('on')) node.addEventListener(key.slice(2), value);
+    else node.setAttribute(key, value === true ? '' : value);
+  }
+  for (const child of children.flat()) {
+    if (child === null || child === undefined || child === false) continue;
+    node.append(child.nodeType ? child : document.createTextNode(String(child)));
+  }
+  return node;
+}
+
+function s(tag, attrs = {}, content) {
+  const node = document.createElementNS(SVGNS, tag);
+  for (const [key, value] of Object.entries(attrs)) node.setAttribute(key, value);
+  if (content !== undefined) node.textContent = content;
+  return node;
+}
+
+const minus = n => (n < 0 ? `\u2212${Math.abs(n)}` : String(n));
+const signed = n => (n > 0 ? `+${n}` : minus(n));
+const arrowOf = a => rl.ACTIONS[a].arrow;
+
+function button(label, onclick, {primary = false, title} = {}) {
+  return h('button', {class: `btn${primary ? ' primary' : ''}`, type: 'button', onclick, title}, label);
+}
+
+function card(title, ...children) {
+  return h('section', {class: 'card'}, title ? h('h3', {}, title) : null, ...children);
+}
+
+/* ── Floor drawing ─────────────────────────────────────────────────── */
+
+class FloorView {
+  constructor(floor, {big = false, label = 'Warehouse floor'} = {}) {
+    this.floor = floor;
+    this.pad = 36;
+    this.pallets = new Set();
+    const width = this.pad + floor.cols * 100 + 6;
+    const height = this.pad + floor.rows * 100 + 6;
+    this.el = s('svg', {viewBox: `0 0 ${width} ${height}`, class: `floor${big ? ' big' : ''}`, role: 'img', 'aria-label': label});
+    this.base = s('g');
+    this.tints = s('g');
+    this.labels = s('g');
+    this.paths = s('g');
+    this.fx = s('g');
+    this.robot = this.makeRobot();
+    this.el.append(this.base, this.tints, this.paths, this.labels, this.robot, this.fx);
+    this.el.addEventListener('click', event => {
+      const target = event.target.closest('[data-cell]');
+      if (target && this.onCell) this.onCell(Number(target.getAttribute('data-cell')));
+    });
+    this.drawBase();
+    this.placeRobot(floor.start >= 0 ? floor.start : 0, 0);
+  }
+
+  corner(i) {
+    return {x: this.pad + (i % this.floor.cols) * 100, y: this.pad + Math.floor(i / this.floor.cols) * 100};
+  }
+
+  center(i) {
+    const {x, y} = this.corner(i);
+    return {x: x + 50, y: y + 50};
+  }
+
+  drawBase() {
+    const f = this.floor;
+    this.base.replaceChildren();
+    for (let c = 0; c < f.cols; c += 1) {
+      this.base.append(s('text', {x: this.pad + c * 100 + 50, y: 25, 'text-anchor': 'middle', class: 'coord'}, String.fromCharCode(65 + c)));
+    }
+    for (let r = 0; r < f.rows; r += 1) {
+      this.base.append(s('text', {x: 17, y: this.pad + r * 100 + 57, 'text-anchor': 'middle', class: 'coord'}, String(r + 1)));
+    }
+    for (let i = 0; i < f.rows * f.cols; i += 1) {
+      const {x, y} = this.corner(i);
+      const group = s('g', {'data-cell': i});
+      if (!f.open[i] && !this.pallets.has(i)) {
+        group.append(s('rect', {x: x + 4, y: y + 4, width: 92, height: 92, rx: 8, class: 'shelf-body'}));
+        for (const ly of [32, 55, 78]) group.append(s('line', {x1: x + 14, y1: y + ly, x2: x + 86, y2: y + ly, class: 'shelf-line'}));
+        group.append(s('rect', {x: x + 20, y: y + 17, width: 18, height: 13, class: 'shelf-box'}));
+        group.append(s('rect', {x: x + 56, y: y + 40, width: 20, height: 13, class: 'shelf-box'}));
+        group.append(s('rect', {x: x + 30, y: y + 63, width: 16, height: 13, class: 'shelf-box'}));
+      } else {
+        group.append(s('rect', {x: x + 3, y: y + 3, width: 94, height: 94, rx: 10, class: `tile${this.onCell ? ' clickable' : ''}`}));
+        if (i === f.station) {
+          group.append(s('rect', {x: x + 5, y: y + 5, width: 90, height: 90, rx: 10, class: 'station-body'}));
+          group.append(s('rect', {x: x + 31, y: y + 20, width: 38, height: 30, rx: 3, fill: '#e8913c'}));
+          group.append(s('line', {x1: x + 31, y1: y + 31, x2: x + 69, y2: y + 31, stroke: '#3a2a17', 'stroke-width': 3}));
+          group.append(s('text', {x: x + 50, y: y + 78, 'text-anchor': 'middle', class: 'station-label'}, 'PACK'));
+        }
+        if (i === f.start) group.append(s('text', {x: x + 9, y: y + 91, class: 'start-label'}, 'START'));
+        if (this.pallets.has(i)) {
+          group.append(s('rect', {x: x + 14, y: y + 16, width: 72, height: 68, rx: 6, class: 'pallet-body'}));
+          group.append(s('line', {x1: x + 14, y1: y + 30, x2: x + 86, y2: y + 30, class: 'pallet-strap'}));
+          group.append(s('line', {x1: x + 14, y1: y + 70, x2: x + 86, y2: y + 70, class: 'pallet-strap'}));
+          group.append(s('text', {x: x + 50, y: y + 56, 'text-anchor': 'middle', class: 'pallet-label'}, 'PALLET'));
+        }
+      }
+      this.base.append(group);
+    }
+  }
+
+  setClickable(handler) {
+    this.onCell = handler;
+    this.drawBase();
+  }
+
+  setPallet(i, on) {
+    if (on) this.pallets.add(i); else this.pallets.delete(i);
+    this.drawBase();
+  }
+
+  makeRobot() {
+    const g = s('g', {class: 'robot', 'aria-hidden': 'true'});
+    g.append(s('rect', {x: -18, y: -38, width: 36, height: 10, rx: 3, class: 'robot-load'}));
+    g.append(s('rect', {x: -30, y: -27, width: 60, height: 54, rx: 15, class: 'robot-body'}));
+    g.append(s('rect', {x: -20, y: -15, width: 40, height: 20, rx: 7, class: 'robot-face'}));
+    g.append(s('circle', {cx: -9, cy: -5, r: 4.5, class: 'robot-eye'}));
+    g.append(s('circle', {cx: 9, cy: -5, r: 4.5, class: 'robot-eye'}));
+    return g;
+  }
+
+  showRobot(visible) {
+    this.robot.style.display = visible ? '' : 'none';
+  }
+
+  placeRobot(i, ms) {
+    const {x, y} = this.center(i);
+    this.robot.style.transitionDuration = `${REDUCED ? 0 : ms}ms`;
+    this.robot.style.transform = `translate(${x}px, ${y}px)`;
+    this.robotAt = i;
+    return wait(ms);
+  }
+
+  async bump(i, action, ms) {
+    const {x, y} = this.center(i);
+    const a = rl.ACTIONS[action];
+    const half = Math.max(40, ms / 2);
+    this.robot.classList.add('bumped');
+    this.robot.style.transitionDuration = `${REDUCED ? 0 : half}ms`;
+    this.robot.style.transform = `translate(${x + a.dc * 24}px, ${y + a.dr * 24}px)`;
+    await wait(half);
+    this.robot.style.transform = `translate(${x}px, ${y}px)`;
+    await wait(half);
+    this.robot.classList.remove('bumped');
+    this.robotAt = i;
+  }
+
+  showScores(table, {mode = 'best', delivery = REWARDS.delivery} = {}) {
+    this.tints.replaceChildren();
+    this.labels.replaceChildren();
+    if (!table) return;
+    const f = this.floor;
+    for (const c of rl.openCells(f)) {
+      if (c === f.station || this.pallets.has(c)) continue;
+      const {x, y} = this.center(c);
+      if (mode === 'slots') {
+        const spots = [[0, -28], [26, 0], [0, 28], [-26, 0]];
+        spots.forEach(([dx, dy], a) => {
+          const v = table[c * 4 + a];
+          this.labels.append(s('rect', {x: x + dx - 17, y: y + dy - 12, width: 34, height: 24, rx: 5, class: `slot-box${v === null ? '' : ' filled'}`}));
+          if (v !== null) this.labels.append(s('text', {x: x + dx, y: y + dy + 6, 'text-anchor': 'middle', class: 'slot filled'}, minus(v)));
+        });
+        continue;
+      }
+      const best = rl.bestTried(table, c);
+      if (!best) continue;
+      if (best.score > 0) {
+        const strength = Math.max(0, Math.min(1, best.score / delivery));
+        const {x: cx, y: cy} = this.corner(c);
+        this.tints.append(s('rect', {x: cx + 3, y: cy + 3, width: 94, height: 94, rx: 10, class: 'score-tint', opacity: (0.1 + 0.42 * strength).toFixed(2)}));
+        this.labels.append(s('text', {x, y: y - 14, 'text-anchor': 'middle', class: 'score-arrow'}, arrowOf(best.action)));
+        this.labels.append(s('text', {x, y: y + 27, 'text-anchor': 'middle', class: 'score-num'}, minus(best.score)));
+      } else {
+        this.labels.append(s('text', {x, y: y - 12, 'text-anchor': 'middle', class: 'score-arrow low'}, arrowOf(best.action)));
+        this.labels.append(s('text', {x, y: y + 22, 'text-anchor': 'middle', class: 'score-num low'}, minus(best.score)));
+      }
+    }
+  }
+
+  flash(i) {
+    const {x, y} = this.corner(i);
+    const rect = s('rect', {x: x + 4, y: y + 4, width: 92, height: 92, rx: 10, class: 'flash'});
+    this.fx.append(rect);
+    setTimeout(() => rect.remove(), REDUCED ? 600 : 1100);
+  }
+
+  drawPath(cells, kind = 'test') {
+    const points = [];
+    const offset = kind === 'map' ? 30 : 0;
+    cells.forEach((c, index) => {
+      if (index && c === cells[index - 1]) return;
+      const {x, y} = this.center(c);
+      points.push(`${x},${y + offset}`);
+    });
+    const line = s('polyline', {points: points.join(' '), class: kind === 'map' ? 'path-map' : 'path-test'});
+    this.paths.append(line);
+    return line;
+  }
+
+  clearPaths() {
+    this.paths.replaceChildren();
+  }
+}
+
+// Animate one recorded move.
+function animateMove(view, m, ms) {
+  return m.bumped ? view.bump(m.from, m.action, ms) : view.placeRobot(m.to, ms);
+}
+
+async function animateDrive(view, drive, ms, g, onStep = null) {
+  const {path, actions} = drive;
+  await view.placeRobot(path[0], 0);
+  for (let k = 1; k < path.length; k += 1) {
+    if (g !== generation) return false;
+    if (onStep) onStep(k);
+    if (path[k] === path[k - 1]) await view.bump(path[k], actions[k - 1], ms);
+    else await view.placeRobot(path[k], ms);
+  }
+  return true;
+}
+
+/* ── Small charts ───────────────────────────────────────────────────── */
+
+function niceMax(value) {
+  const steps = [5, 10, 20, 25, 50, 100, 150, 200, 250, 300, 400, 500];
+  return steps.find(step => step >= value) || Math.ceil(value / 100) * 100;
+}
+
+function chartFrame(title, width, height) {
+  return s('svg', {viewBox: `0 0 ${width} ${height}`, class: 'chart', role: 'img', 'aria-label': title});
+}
+
+function axes(chart, {left, top, plotW, plotH, yMax, yLabel, xLabel, width}) {
+  for (const fraction of [0, 0.5, 1]) {
+    const y = top + plotH - fraction * plotH;
+    chart.append(s('line', {x1: left, y1: y, x2: left + plotW, y2: y, stroke: '#2e323d', 'stroke-width': 1}));
+    chart.append(s('text', {x: left - 8, y: y + 5, 'text-anchor': 'end', fill: '#858a97', 'font-size': 13}, String(Math.round(fraction * yMax))));
+  }
+  if (yLabel) chart.append(s('text', {x: left, y: top - 9, fill: '#b9bdc6', 'font-size': 13}, yLabel));
+  if (xLabel) chart.append(s('text', {x: width - 12, y: top + plotH + 32, 'text-anchor': 'end', fill: '#b9bdc6', 'font-size': 13}, xLabel));
+}
+
+function barChart({values, ref = null, refLabel = '', max, title, yLabel = 'Moves', xLabel = 'Practice trip', color = '#7eaeb8', height = 210, firstIndex = 1, width = 560}) {
+  const left = 44, right = ref === null ? 14 : 84, top = 26, bottom = 38;
+  const plotW = width - left - right, plotH = height - top - bottom;
+  const yMax = niceMax(max ?? Math.max(1, ...values, ref ?? 0));
+  const chart = chartFrame(title, width, height);
+  axes(chart, {left, top, plotW, plotH, yMax, yLabel, xLabel, width});
+  const slot = plotW / Math.max(values.length, 1);
+  values.forEach((v, index) => {
+    const barH = Math.max(1.5, (Math.min(v, yMax) / yMax) * plotH);
+    chart.append(s('rect', {x: left + index * slot + slot * 0.15, y: top + plotH - barH, width: slot * 0.7, height: barH, rx: 2, fill: color}));
+    const label = firstIndex + index;
+    if (values.length <= 20 || label === firstIndex || label % 10 === 0) {
+      chart.append(s('text', {x: left + index * slot + slot / 2, y: top + plotH + 17, 'text-anchor': 'middle', fill: '#858a97', 'font-size': 12}, String(label)));
+    }
+  });
+  if (ref !== null) {
+    const y = top + plotH - (ref / yMax) * plotH;
+    chart.append(s('line', {x1: left, y1: y, x2: left + plotW + 4, y2: y, stroke: '#e8913c', 'stroke-width': 2, 'stroke-dasharray': '7 6'}));
+    chart.append(s('text', {x: left + plotW + 8, y: y + 5, fill: '#e8913c', 'font-size': 13, 'font-weight': 700}, refLabel));
+  }
+  return chart;
+}
+
+function lineChart({series, xMax, yMax, title, yLabel, xLabel, height = 240}) {
+  const width = 560;
+  const left = 44, right = 18, top = 40, bottom = 38;
+  const plotW = width - left - right, plotH = height - top - bottom;
+  const chart = chartFrame(title, width, height);
+  axes(chart, {left, top, plotW, plotH, yMax, yLabel, xLabel, width});
+  for (const x of [0, xMax / 2, xMax]) {
+    chart.append(s('text', {x: left + (x / xMax) * plotW, y: top + plotH + 17, 'text-anchor': 'middle', fill: '#858a97', 'font-size': 12}, String(x)));
+  }
+  for (const line of series) {
+    if (!line.points.length) continue;
+    const pts = [[0, 0], ...line.points].map(([x, y]) => `${left + (x / xMax) * plotW},${top + plotH - (y / yMax) * plotH}`);
+    chart.append(s('polyline', {points: pts.join(' '), fill: 'none', stroke: line.color, 'stroke-width': 3, 'stroke-linejoin': 'round', 'stroke-dasharray': line.dash || ''}));
+  }
+  let lx = width - right;
+  for (const line of [...series].reverse()) {
+    lx -= 26 + line.name.length * 7.4;
+    chart.append(s('rect', {x: lx, y: 9, width: 16, height: 5, fill: line.color}));
+    chart.append(s('text', {x: lx + 21, y: 16, fill: '#b9bdc6', 'font-size': 13}, line.name));
+  }
+  return chart;
+}
+
+/* ── Reusable explanation pieces ───────────────────────────────────── */
+
+function pointsTable() {
+  return h('table', {class: 'points'},
+    h('tr', {}, h('td', {}, 'Every move'), h('td', {class: 'minus'}, '\u22121')),
+    h('tr', {}, h('td', {}, 'Bump into a shelf or wall (it stays put)'), h('td', {class: 'minus'}, '\u22121')),
+    h('tr', {}, h('td', {}, 'Reach the packing station'), h('td', {class: 'plus'}, `+${REWARDS.delivery}`)));
+}
+
+function compass(table, cell, highlight = null) {
+  const value = a => {
+    const v = table[cell * 4 + a];
+    return v === null ? h('span', {class: 'blank'}, 'blank') : minus(v);
+  };
+  const box = (a, cls) => h('div', {class: `${cls}${highlight === a ? ' hl' : ''}`}, `${arrowOf(a)} `, value(a));
+  return h('div', {class: 'compass', 'aria-label': 'Four scores for this square'},
+    h('div', {class: 'c'}), box(0, ''), h('div', {class: 'c'}),
+    box(3, ''), h('div', {class: 'c'}, 'scores'), box(1, ''),
+    h('div', {class: 'c'}), box(2, ''), h('div', {class: 'c'}));
+}
+
+function qTable(floor, table, highlight = null) {
+  const rows = rl.openCells(floor).filter(c => c !== floor.station);
+  return h('table', {class: 'data q'},
+    h('tr', {}, h('th', {}, 'Square'), ...rl.ACTIONS.map(a => h('th', {}, `${a.arrow} ${a.label}`))),
+    ...rows.map(c => h('tr', {}, h('td', {}, rl.cellName(floor, c)),
+      ...[0, 1, 2, 3].map(a => {
+        const v = table[c * 4 + a];
+        const hl = highlight && highlight.cell === c && highlight.action === a;
+        return h('td', {style: hl ? 'outline:2px solid #e8913c' : null, class: v === null ? 'muted' : null}, v === null ? '\u00b7' : minus(v));
+      }))));
+}
+
+function legend(items) {
+  return h('div', {class: 'legend'}, ...items.map(([label, color]) => h('span', {style: `--swatch:${color}`}, label)));
+}
+
+const floorLegend = () => legend([['Robot', '#7eaeb8'], ['Shelf', '#2a3446'], ['Packing station', '#e8913c']]);
+const scoreLegend = () => legend([['Arrow + number = best score the robot has found on that square', '#4f7780'], ['Grey = tried, nothing good yet', '#3b3f4a']]);
+
+function describeMove(floor, m, trip = 1, index = 1, {title = null, exploration = 0.2, delivery = REWARDS.delivery} = {}) {
+  const from = rl.cellName(floor, m.from);
+  const to = rl.cellName(floor, m.to);
+  const arrow = arrowOf(m.action);
+  const why = m.explored ? `a random move (${exploration === 0.2 ? '1 in 5 moves is random' : `${Math.round(exploration * 100)}% of moves are random`})` : 'the highest score here (blank counts as 0)';
+  const pointsText = m.delivered ? `+${delivery} \u2212 ${delivery - m.points} = ${signed(m.points)} (delivered!)` : minus(m.points);
+  const landed = m.bumped ? `bumped, stayed on ${from}` : `moved to ${to}`;
+  const bestText = m.delivered ? '0 (the trip is over)' : `${minus(m.landedBest)}${m.landedBest === 0 ? ' (nothing good known yet)' : ''}`;
+  return card(title || `Trip ${trip} \u00b7 move ${index}`,
+    h('dl', {class: 'moveline'},
+      h('dt', {}, 'On square'), h('dd', {}, from),
+      h('dt', {}, 'Chose'), h('dd', {}, `${arrow} ${rl.ACTIONS[m.action].label} \u2014 ${why}`),
+      h('dt', {}, 'Result'), h('dd', {}, landed),
+      h('dt', {}, 'Points now'), h('dd', {}, pointsText),
+      h('dt', {}, `Best score at ${m.bumped ? from : to}`), h('dd', {}, bestText)),
+    h('p', {class: 'calc'}, `New score for ${from} ${arrow}:  ${minus(m.points)} + ${minus(m.delivered ? 0 : m.landedBest)} `,
+      h('span', {class: 'eq'}, `= ${minus(m.after)}`)));
+}
+
+function formulaCard() {
+  return card('The update rule',
+    h('div', {class: 'formula'},
+      h('span', {class: 'term t-new'}, 'new score'), '=', h('span', {class: 'term t-now'}, 'points from this move'), '+',
+      h('span', {class: 'term t-next'}, 'best score where it landed')),
+    h('p', {class: 'small muted', style: 'margin-top:8px'}, 'Only the arrow it just used changes. When it delivers, the trip is over, so the best score at the station is 0.'));
+}
+
+/* ── Lesson steps ───────────────────────────────────────────────────── */
+
+const steps = [
+  {id: 'step-1', label: 'The job', stage: 'Stage 1 \u00b7 The world and its points',
+    title: 'Drive the robot to the packing station.',
+    lead: 'You can see the whole floor. The robot cannot: it only knows which square it is on and that it can move up, right, down or left. Use the arrow buttons or your keyboard.',
+    mount: mountJob},
+  {id: 'step-2', label: 'Score table', stage: 'Stage 2 \u00b7 The model',
+    title: 'The robot\u2019s only memory is a table of scores.',
+    lead: 'Each square gets four scores, one for each arrow. Before training every score is blank. Training fills them in.',
+    mount: mountTable},
+  {id: 'step-3', label: 'First trip', stage: 'Stage 3 \u00b7 Training',
+    title: 'After every move, it updates one score.',
+    lead: 'Press One move and watch. The robot has no route and no map. It picks an arrow, gets points, and writes down what it learned.',
+    mount: mountFirstTrip},
+  {id: 'step-4', label: 'Trip after trip', stage: 'Stage 3 \u00b7 Training',
+    title: 'Good news travels backward, one square per trip.',
+    lead: 'Trip 1 left one good score next to the station. Each new trip passes a square beside the known good one and copies the news one step back.',
+    mount: mountTrips},
+  {id: 'step-5', label: 'Test it', stage: 'Stage 4 \u00b7 Validation',
+    title: 'Test drive: always take the highest score.',
+    lead: 'This robot has practiced 20 trips. The test rule is simple: on every square, read its four scores and take the highest. No random moves, no learning. Does it find the shortest route?',
+    mount: mountTest},
+  {id: 'step-6', label: 'Bigger floor', stage: 'Stages 3 and 4 \u00b7 Scale up',
+    title: 'Same recipe, bigger warehouse: more squares need more practice.',
+    lead: 'Each trip now starts from a random square, like orders arriving from anywhere on the floor. Press Practice and watch the scores spread.',
+    mount: mountBigger},
+  {id: 'step-7', label: 'Floor changes', stage: 'Stage 5 \u00b7 Use and limits',
+    title: 'It only knows the floor it practiced on.',
+    lead: 'Take the trained robot from Step 5. Someone leaves a pallet in the bottom aisle. Follow the numbered buttons.',
+    mount: mountChange},
+  {id: 'step-8', label: 'Reward design', stage: 'Stage 5 \u00b7 Use and limits',
+    title: 'You get what you reward.',
+    lead: 'Change the points: moves are now free, and delivering still pays 20. Same robot, same floor, same training.',
+    mount: mountReward},
+];
+
+function stepShell(ctx, view, {caption} = {}) {
+  ctx.floorWrap.append(view.el);
+  if (caption) ctx.stageCol.insertBefore(h('p', {class: 'floor-caption'}, caption), ctx.controls);
+}
+
+function mountJob(ctx) {
+  const floor = rl.parseFloor(MINI_FLOOR);
+  const view = new FloorView(floor, {label: 'Small warehouse: robot at A3, packing station at E3, shelves on B2, C2 and D2'});
+  stepShell(ctx, view);
+  ctx.stageCol.insertBefore(floorLegend(), ctx.controls);
+  let pos = floor.start, moves = 0, points = 0, busy = false, done = false;
+  const trips = [];
+  const readout = h('p', {class: 'big-number'}, '0 points');
+  const detail = h('p', {class: 'muted'}, 'Moves this trip: 0');
+  const tripList = h('div', {class: 'log'});
+
+  const pad = h('div', {class: 'pad', role: 'group', 'aria-label': 'Drive the robot'},
+    ...rl.ACTIONS.map((a, index) => h('button', {class: a.key, type: 'button', 'aria-label': `Move ${a.label}`, onclick: () => drive(index)}, a.arrow)));
+  const again = button('Start a new trip', reset);
+  ctx.controls.append(pad, again);
+
+  function reset() {
+    pos = floor.start; moves = 0; points = 0; done = false;
+    view.placeRobot(pos, 0);
+    readout.textContent = '0 points';
+    detail.textContent = 'Moves this trip: 0';
+    ctx.status.textContent = 'The robot is back at the start (A3).';
+    pad.querySelectorAll('button').forEach(b => { b.disabled = false; });
+  }
+
+  async function drive(a) {
+    if (busy || done) return;
+    busy = true;
+    const g = ctx.g;
+    const {next, bumped} = rl.move(floor, pos, a);
+    const p = rl.moveReward(floor, next, REWARDS);
+    moves += 1; points += p;
+    if (bumped) await view.bump(pos, a, timing().move); else await view.placeRobot(next, timing().move);
+    if (g !== generation) return;
+    pos = next;
+    readout.textContent = `${minus(points)} points`;
+    detail.textContent = `Moves this trip: ${moves}`;
+    if (bumped) ctx.status.innerHTML = `<strong>Bump.</strong> Something is in the way. \u22121, and it is still on ${rl.cellName(floor, pos)}.`;
+    else if (next === floor.station) {
+      done = true;
+      ctx.status.innerHTML = `<strong>Delivered in ${moves} moves.</strong> Trip points = ${REWARDS.delivery} \u2212 ${moves} = ${minus(points)}.`;
+      trips.push({moves, points});
+      tripList.replaceChildren(...trips.map((t, index) => h('div', {class: `entry ${t.moves === 4 ? 'ok' : ''}`},
+        h('strong', {}, `Your trip ${index + 1}: ${t.moves} moves \u2192 ${minus(t.points)} points`),
+        t.moves === 4 ? 'The shortest trip on this floor.' : t.moves === 8 ? 'The long way over the top.' : null)));
+      pad.querySelectorAll('button').forEach(b => { b.disabled = true; });
+    } else ctx.status.textContent = `Moved ${rl.ACTIONS[a].label.toLowerCase()} to ${rl.cellName(floor, pos)}: \u22121.`;
+    busy = false;
+  }
+
+  keyHandler = event => {
+    const map = {ArrowUp: 0, ArrowRight: 1, ArrowDown: 2, ArrowLeft: 3};
+    if (event.key in map) { event.preventDefault(); drive(map[event.key]); }
+  };
+
+  ctx.explain.append(
+    card('The points', pointsTable(), h('p', {class: 'small muted', style: 'margin-top:8px'}, `So a whole trip earns ${REWARDS.delivery} minus the number of moves.`)),
+    card('This trip', readout, detail),
+    card('Try this', h('p', {}, 'Deliver along the bottom. Then press Start a new trip and go the long way over the top. Which trip earns more?'), tripList),
+    card('Three words for what you just did',
+      h('dl', {class: 'terms'},
+        h('dt', {}, 'State'), h('dd', {}, 'Where the robot is: its square, such as A3.'),
+        h('dt', {}, 'Action'), h('dd', {}, 'What it can do: up, right, down or left.'),
+        h('dt', {}, 'Reward'), h('dd', {}, 'The points it receives after each move.')),
+      h('p', {class: 'small muted', style: 'margin-top:8px'}, 'Earlier modules started by loading a dataset. Here there is no dataset: the robot makes its own data by trying moves.')));
+  ctx.status.textContent = 'The robot is on A3. The packing station is E3.';
+}
+
+function mountTable(ctx) {
+  const floor = rl.parseFloor(MINI_FLOOR);
+  const table = rl.createTable(floor);
+  const view = new FloorView(floor, {label: 'Each open square shows four blank scores, one per arrow'});
+  view.showRobot(false);
+  stepShell(ctx, view, {caption: 'Each small box is one score. Top box = up, right box = right, bottom box = down, left box = left.'});
+  view.showScores(table, {mode: 'slots'});
+  const example = rl.createTable(floor);
+  const C3 = cellIndex(floor, 'C3');
+  [[0, -1], [1, 18], [2, -1], [3, 16]].forEach(([a, v]) => { example[C3 * 4 + a] = v; });
+  let showing = false;
+  const toggle = button('Show an example square (C3)', () => {
+    showing = !showing;
+    view.showScores(showing ? example : table, {mode: 'slots'});
+    toggle.textContent = showing ? 'Back to the blank table' : 'Show an example square (C3)';
+    ctx.status.innerHTML = showing
+      ? 'On C3: up \u22121, right 18, down \u22121, left 16. The highest is <strong>right (18)</strong>, so that is the move it picks \u2014 unless this is one of its random moves.'
+      : 'All 44 scores are blank before training.';
+    if (showing) view.flash(C3);
+  });
+  ctx.controls.append(toggle);
+  ctx.status.textContent = 'All 44 scores are blank before training.';
+  ctx.explain.append(
+    card('What a score means',
+      h('p', {}, 'The points the robot expects to collect from here to the end of the trip if it takes this arrow now.'),
+      h('p', {class: 'muted small'}, `Example: if D3 \u2192 is 19, going right from D3 delivers: \u22121 for the move, +${REWARDS.delivery} for the delivery.`)),
+    card('How it picks a move (its policy)',
+      h('ol', {class: 'steps-list'},
+        h('li', {}, 'Read the four scores for the square it is on.'),
+        h('li', {}, 'Take the arrow with the highest score. A blank counts as 0. If two are tied, flip a coin.'),
+        h('li', {}, 'But 1 move in 5 is a random arrow instead, so it keeps trying new things. This is called exploration.'))),
+    card('Its name',
+      h('p', {}, 'This is a Q-table (Q for quality: how good each move is). It is the whole model: 11 squares \u00d7 4 arrows = 44 numbers. Nothing else is stored.'),
+      qTable(floor, table)));
+}
+
+function mountFirstTrip(ctx) {
+  const session = miniSession();
+  const floor = session.floor;
+  const view = new FloorView(floor, {label: 'Small warehouse during the first practice trip'});
+  stepShell(ctx, view);
+  ctx.stageCol.insertBefore(scoreLegend(), ctx.controls);
+  let pos = floor.start, index = 0, busy = false, done = false;
+  const moveSlot = h('div');
+  const cardSlot = h('div');
+  const summarySlot = h('div');
+  const one = button('One move', () => step(timing().move), {primary: true});
+  const finish = button('Finish the trip', finishTrip);
+  const restart = button('Start over', () => renderStep(2));
+  ctx.controls.append(one, finish, restart);
+
+  async function step(ms) {
+    if (busy || done) return false;
+    busy = true;
+    const g = ctx.g;
+    const m = rl.takeMove(session, pos);
+    index += 1;
+    await animateMove(view, m, ms);
+    if (g !== generation) return false;
+    pos = m.to;
+    view.showScores(session.table);
+    view.flash(m.from);
+    moveSlot.replaceChildren(describeMove(floor, m, 1, index));
+    cardSlot.replaceChildren(card(`Scores on ${rl.cellName(floor, m.from)} now`, compass(session.table, m.from, m.action)));
+    ctx.status.innerHTML = `Move ${index}: ${rl.cellName(floor, m.from)} ${arrowOf(m.action)}${m.explored ? ' (random move)' : ''}. New score for that arrow: <strong>${minus(m.after)}</strong>.`;
+    if (m.delivered) {
+      done = true;
+      const trip = {moves: index};
+      const good = trail(floor, session.table);
+      summarySlot.replaceChildren(h('section', {class: 'card accent'}, h('h3', {}, 'Trip 1 is over'),
+        h('p', {}, `${trip.moves} moves. Points: ${REWARDS.delivery} \u2212 ${trip.moves} = ${minus(REWARDS.delivery - trip.moves)}.`),
+        h('p', {}, `What did it learn? One good score: ${good.map(t => `${t.name} ${t.arrow} ${t.score}`).join(', ')}. Every other arrow it tried is \u22121: \u201cthat cost a point and led nowhere yet.\u201d`),
+        h('p', {class: 'muted small'}, 'Next step: what happens on trip 2?')));
+      one.disabled = true; finish.disabled = true;
+    }
+    busy = false;
+    return !done;
+  }
+
+  async function finishTrip() {
+    const g = ctx.g;
+    finish.disabled = true;
+    while (!done && g === generation) {
+      const more = await step(Math.max(timing().trip * 2, 60));
+      if (!more) break;
+    }
+  }
+
+  ctx.explain.append(formulaCard(), moveSlot, cardSlot, summarySlot,
+    card('Why does it keep trying new arrows?', h('p', {class: 'small'}, 'A blank counts as 0, and 0 is better than \u22121. So an arrow it has never tried looks better than one that only cost a point. Early on, that makes the robot curious for free.')));
+  moveSlot.append(card('Before the first move', h('p', {}, 'The robot is on A3 and all 44 scores are blank. Press One move.')));
+  ctx.status.textContent = 'Trip 1, move 0.';
+}
+
+function mountTrips(ctx) {
+  const session = miniSession();
+  const floor = session.floor;
+  rl.trainTrip(session);
+  const view = new FloorView(floor, {label: 'Small warehouse between practice trips'});
+  stepShell(ctx, view);
+  ctx.stageCol.insertBefore(scoreLegend(), ctx.controls);
+  view.showScores(session.table);
+  const lastTrip = 5;
+  let tripNo = 1, busy = false;
+  const rows = h('tbody');
+  const addRow = (n, moves, points, fresh) => rows.append(h('tr', {class: fresh.length ? 'new' : ''},
+    h('td', {}, String(n)), h('td', {class: 'num'}, String(moves)), h('td', {class: 'num'}, minus(points)),
+    h('td', {}, fresh.length ? fresh.map(t => `${t.name} ${t.arrow} ${t.score}`).join(', ') : '\u2014')));
+  addRow(1, session.trips[0].moves, session.trips[0].points, trail(floor, session.table));
+  const callout = h('div');
+  const run = button('Run trip 2', () => runTrip(), {primary: true});
+  const runAll = button(`Run to trip ${lastTrip}`, async () => { while (tripNo < lastTrip && await runTrip()); });
+  const restart = button('Start over', () => renderStep(3));
+  ctx.controls.append(run, runAll, restart);
+
+  async function runTrip() {
+    if (busy || tripNo >= lastTrip) return false;
+    busy = true; run.disabled = true; runAll.disabled = true;
+    const g = ctx.g;
+    const before = new Set(trail(floor, session.table).map(t => t.name));
+    tripNo += 1;
+    ctx.status.textContent = `Trip ${tripNo} is running\u2026`;
+    await view.placeRobot(floor.start, 0);
+    let pos = floor.start, moves = 0, points = 0;
+    while (moves < session.maxMoves) {
+      const m = rl.takeMove(session, pos);
+      moves += 1; points += m.points;
+      await animateMove(view, m, timing().trip);
+      if (g !== generation) return false;
+      view.showScores(session.table);
+      pos = m.to;
+      if (m.delivered) break;
+    }
+    session.trips.push({moves, points});
+    const fresh = trail(floor, session.table).filter(t => !before.has(t.name));
+    fresh.forEach(t => view.flash(t.cell));
+    addRow(tripNo, moves, points, fresh);
+    ctx.status.innerHTML = `Trip ${tripNo}: ${moves} moves, ${minus(points)} points. ${fresh.length ? `New good score: <strong>${fresh.map(t => `${t.name} ${t.arrow} ${t.score}`).join(', ')}</strong>.` : 'No new good scores.'}`;
+    if (tripNo >= lastTrip) {
+      run.textContent = `${lastTrip} trips done`;
+      const start = rl.bestTried(session.table, floor.start);
+      callout.replaceChildren(h('section', {class: 'card accent'}, h('h3', {}, 'The good news reached the start'),
+        h('p', {}, `A3 now scores ${minus(start.score)}. That is ${REWARDS.delivery} \u2212 4: exactly the points of the shortest possible trip. Nobody told it the route; the scores add up to it.`)));
+    } else { run.textContent = `Run trip ${tripNo + 1}`; run.disabled = false; runAll.disabled = false; }
+    busy = false;
+    return tripNo < lastTrip;
+  }
+
+  ctx.explain.append(
+    card('Why the good news moves backward',
+      h('p', {}, 'Suppose D3 \u2192 already scores 19. When the robot steps right from C3 onto D3:'),
+      h('div', {class: 'formula'}, h('span', {class: 'term t-now'}, '\u22121'), '+', h('span', {class: 'term t-next'}, '19'), '=', h('span', {class: 'term t-new'}, '18')),
+      h('p', {class: 'small muted', style: 'margin-top:8px'}, 'So C3 becomes good, one point less. Next time, the square before C3 learns 17, and so on.')),
+    card('Practice trips',
+      h('table', {class: 'data'}, h('thead', {}, h('tr', {}, h('th', {}, 'Trip'), h('th', {class: 'num'}, 'Moves'), h('th', {class: 'num'}, 'Points'), h('th', {}, 'New good score'))), rows),
+      h('p', {class: 'small muted', style: 'margin-top:8px'}, 'One complete trip is called an episode. Training means running many episodes.')),
+    callout);
+  ctx.status.textContent = 'Trip 1 is done. Press Run trip 2.';
+}
+
+function mountTest(ctx) {
+  const session = miniSession();
+  const floor = session.floor;
+  rl.train(session, LESSON.trainedTrips);
+  const view = new FloorView(floor, {label: 'Small warehouse after 20 practice trips'});
+  stepShell(ctx, view, {caption: 'Click any open square to test drive from there.'});
+  view.showScores(session.table);
+  const dist = rl.shortestMoves(floor);
+  const result = h('div');
+  let busy = false;
+  async function drive(start) {
+    if (busy) return;
+    busy = true;
+    const g = ctx.g;
+    view.clearPaths();
+    const d = rl.testDrive(floor, session.table, start, 40);
+    view.drawPath(d.path);
+    const rows = h('tbody');
+    const note = h('p', {class: 'small muted', style: 'margin-top:8px'});
+    result.replaceChildren(card(`Test drive from ${rl.cellName(floor, start)}, move by move`,
+      h('table', {class: 'data q'}, h('thead', {}, h('tr', {}, h('th', {}, 'On'), ...rl.ACTIONS.map(a => h('th', {}, a.arrow)), h('th', {}, 'Takes'))), rows), note));
+    const addRow = k => {
+      const from = d.path[k - 1];
+      const action = d.actions[k - 1];
+      const scores = [0, 1, 2, 3].map(a => rl.scoreOf(session.table, from, a));
+      const tie = scores.filter(v => v === scores[action]).length > 1;
+      rows.append(h('tr', {},
+        h('td', {}, rl.cellName(floor, from)),
+        ...[0, 1, 2, 3].map(a => {
+          const v = session.table[from * 4 + a];
+          return h('td', {class: v === null ? 'muted' : null, style: a === action ? 'outline:2px solid #e8913c;font-weight:700;color:#f5f3f0' : null}, v === null ? 'blank' : minus(v));
+        }),
+        h('td', {}, `${arrowOf(action)} ${scores[action]}${tie ? ' (tie: coin flip)' : ''}`)));
+    };
+    await animateDrive(view, d, timing().move, g, addRow);
+    if (g !== generation) return;
+    const shortest = dist[start];
+    const same = d.delivered && d.moves === shortest;
+    const bumpWins = d.path.slice(0, -1).some((c, k) => [0, 1, 2, 3].some(a => a !== d.actions[k] && rl.move(floor, c, a).bumped && session.table[c * 4 + a] !== null && session.table[c * 4 + a] > 0));
+    note.textContent = `${same ? '\u2713' : '\u2717'} ${d.moves} moves, ${minus(REWARDS.delivery - d.moves)} points. Shortest route on the map: ${shortest} moves.`
+      + (bumpWins ? ' A bump arrow (into a shelf or wall) can score high, but always 1 less than the best arrow on the same square, so it never wins.' : '');
+    ctx.status.innerHTML = `Test drive from ${rl.cellName(floor, start)}: <strong>${d.moves} moves</strong>. Shortest possible: ${shortest}.`;
+    busy = false;
+  }
+  view.setClickable(cell => { if (cell !== floor.station && floor.open[cell]) drive(cell); });
+  view.showScores(session.table);
+  ctx.controls.append(
+    button('Test drive from A3', () => drive(floor.start), {primary: true}),
+    button('Show the shortest route on the map', () => {
+      const path = [floor.start];
+      let c = floor.start;
+      while (c !== floor.station) {
+        for (let a = 0; a < 4; a += 1) { const m = rl.move(floor, c, a); if (!m.bumped && dist[m.next] === dist[c] - 1) { c = m.next; break; } }
+        path.push(c);
+      }
+      view.drawPath(path, 'map');
+      ctx.status.innerHTML = `Dashed line: a shortest route found by <strong>searching the map</strong> (${dist[floor.start]} moves). No learning involved.`;
+    }),
+    button('Clear lines', () => { view.clearPaths(); ctx.status.textContent = ''; }));
+  const moves = session.trips.map(t => t.moves);
+  ctx.explain.append(
+    card('The test-drive rule',
+      h('ol', {class: 'steps-list'},
+        h('li', {}, 'Read the four scores on the square the robot is on.'),
+        h('li', {}, 'Take the arrow with the highest score. A blank counts as 0; a tie is a coin flip.'),
+        h('li', {}, 'No random moves and no learning: the scores do not change during a test.')),
+      h('p', {class: 'small', style: 'margin-top:8px'}, `Why this finds the shortest route: after practice, each score is ${REWARDS.delivery} minus the moves still needed. The highest score is the way with the fewest moves left.`),
+      h('p', {class: 'small muted'}, 'The robot never looks at the next square. Each arrow\u2019s score already includes the best score of the square it leads to: that is what the update in Step 3 did.')),
+    result,
+    card('Moves per practice trip',
+      barChart({values: moves, ref: dist[floor.start], refLabel: `shortest = ${dist[floor.start]}`, title: 'Moves in each of the 20 practice trips'}),
+      h('p', {class: 'small'}, `Trips 1\u20133 wander (${moves.slice(0, 3).join(', ')} moves). From trip 4 on it takes ${Math.min(...moves.slice(3))}\u2013${Math.max(...moves.slice(3))} moves. Practice trips include random moves, so some are longer than the test.`)),
+    card('Why we can grade it',
+      h('p', {class: 'small'}, 'Because we know this map, a search program can compute the shortest route exactly, just like a GPS. That gives us an answer key to check the robot against. Reinforcement learning is meant for problems where nobody can write that answer down, such as how long a traffic light should stay green.')));
+  result.append(card('Test drive', h('p', {}, 'Press Test drive from A3, or click any square on the floor.')));
+  ctx.status.textContent = 'Practice is over: 20 trips.';
+}
+
+function mountBigger(ctx) {
+  let session = bigSession();
+  const floor = session.floor;
+  const view = new FloorView(floor, {big: true, label: 'Large warehouse with 52 open squares'});
+  stepShell(ctx, view, {caption: 'Click any square to test drive from there.'});
+  const corner = cellIndex(floor, 'A1');
+  view.placeRobot(corner, 0);
+  const curve = [];
+  let busy = false;
+  const chartSlot = h('div');
+  const stats = h('div', {class: 'stats'});
+  const target = LESSON.bigTrips;
+  const watch = button('Watch 1 practice trip', () => watchTrip(), {primary: true});
+  const practice = button('Practice 50 trips', () => train(50));
+  const restart = button('Start over', () => renderStep(5));
+  ctx.controls.append(watch, practice, restart);
+
+  function drawChart() {
+    chartSlot.replaceChildren(lineChart({xMax: target, yMax: 52, title: 'Test drives from all 52 squares, after every 10 practice trips',
+      yLabel: 'Squares (of 52)', xLabel: 'Practice trips',
+      series: [
+        {name: 'reaches the station', color: '#7eaeb8', points: curve.map(p => [p.trips, p.delivered])},
+        {name: 'takes the shortest route', color: '#e8913c', points: curve.map(p => [p.trips, p.shortest])},
+      ]}));
+  }
+  function drawStats() {
+    const last = curve[curve.length - 1] || {delivered: 0, shortest: 0, squares: 52};
+    const moves = session.trips.map(t => t.moves);
+    const recent = moves.slice(-50);
+    const mean = recent.length ? Math.round(10 * recent.reduce((a, b) => a + b, 0) / recent.length) / 10 : 0;
+    stats.replaceChildren(
+      h('div', {class: 'stat'}, h('b', {}, String(session.trips.length)), h('span', {}, 'practice trips')),
+      h('div', {class: 'stat'}, h('b', {}, `${last.delivered}/${last.squares}`), h('span', {}, 'squares that reach the station')),
+      h('div', {class: 'stat'}, h('b', {}, `${last.shortest}/${last.squares}`), h('span', {}, 'squares that take the shortest route')),
+      h('div', {class: 'stat'}, h('b', {}, String(mean)), h('span', {}, 'average moves, last 50 trips')));
+  }
+  function checkpoint() {
+    if (session.trips.length % LESSON.bigCheckEvery !== 0) return;
+    curve.push({trips: session.trips.length, ...rl.coverage(floor, session.table)});
+    drawChart(); drawStats();
+  }
+  function finished() {
+    const done = session.trips.length >= target;
+    watch.disabled = done; practice.disabled = done;
+    if (done) practice.textContent = `${target} trips done`;
+  }
+  // Same random draws as rl.trainTrip, so watched trips keep the page in step with the facts file.
+  async function watchTrip() {
+    if (busy || session.trips.length >= target) return;
+    busy = true;
+    const g = ctx.g;
+    view.clearPaths();
+    let pos = rl.tripStart(session);
+    const start = pos;
+    await view.placeRobot(pos, 0);
+    const record = {moves: 0, delivered: false, points: 0, explored: 0};
+    while (record.moves < session.maxMoves) {
+      const m = rl.takeMove(session, pos);
+      record.moves += 1; record.points += m.points; if (m.explored) record.explored += 1;
+      await animateMove(view, m, timing().trip);
+      if (g !== generation) return;
+      view.showScores(session.table);
+      ctx.status.textContent = `Practice trip ${session.trips.length + 1}, move ${record.moves}${m.explored ? ' (random move)' : ''}.`;
+      pos = m.to;
+      if (m.delivered) { record.delivered = true; break; }
+    }
+    session.trips.push(record);
+    checkpoint(); drawStats();
+    ctx.status.innerHTML = `Practice trip ${session.trips.length}: started on ${rl.cellName(floor, start)} and delivered in <strong>${record.moves} moves</strong>. The green scores grew along its path.`;
+    busy = false;
+    finished();
+  }
+  async function train(count) {
+    if (busy) return;
+    busy = true; watch.disabled = true; practice.disabled = true;
+    const g = ctx.g;
+    view.clearPaths(); view.showRobot(false);
+    for (let k = 0; k < count && session.trips.length < target; k += 1) {
+      rl.trainTrip(session);
+      checkpoint();
+      view.showScores(session.table);
+      ctx.status.textContent = `Practice trip ${session.trips.length}: ${session.trips.at(-1).moves} moves (fast-forward).`;
+      await wait(timing().batch);
+      if (g !== generation) return;
+    }
+    const last = curve[curve.length - 1];
+    const summary = `After ${session.trips.length} trips: from <strong>${last.delivered} of ${last.squares}</strong> squares the test drive reaches the station, and from <strong>${last.shortest}</strong> it takes the shortest route.`;
+    ctx.status.innerHTML = summary;
+    // Show the robot using what it learned: a test drive from the far corner.
+    view.showRobot(true);
+    const d = rl.testDrive(floor, session.table, corner, 80);
+    view.drawPath(d.path);
+    await animateDrive(view, d, Math.max(timing().move / 3, 40), g);
+    if (g !== generation) return;
+    const shortest = rl.shortestMoves(floor)[corner];
+    ctx.status.innerHTML = `${summary} Test drive from A1: ${d.delivered ? `<strong>${d.moves} moves</strong> (shortest ${shortest})` : '<strong>did not arrive</strong> yet'}.`;
+    busy = false;
+    finished();
+  }
+  view.setClickable(async cell => {
+    if (busy || cell === floor.station || !floor.open[cell]) return;
+    busy = true;
+    const g = ctx.g;
+    view.clearPaths(); view.showRobot(true);
+    const d = rl.testDrive(floor, session.table, cell, 80);
+    view.drawPath(d.path);
+    await animateDrive(view, d, Math.max(timing().move / 2, 60), g);
+    if (g !== generation) return;
+    const shortest = rl.shortestMoves(floor)[cell];
+    ctx.status.innerHTML = d.delivered
+      ? `From ${rl.cellName(floor, cell)}: <strong>${d.moves} moves</strong> (shortest possible ${shortest}).`
+      : `From ${rl.cellName(floor, cell)}: <strong>did not arrive</strong> \u2014 this square has not learned enough yet.`;
+    busy = false;
+  });
+  drawChart(); drawStats();
+  ctx.explain.append(
+    card('Progress', stats),
+    card('Test drives from every square', chartSlot,
+      h('p', {class: 'small'}, 'Every 10 practice trips we pause and test drive from each of the 52 squares, using the Step 5 rule: highest score, no random moves, no learning. Each test drive ends one of three ways:'),
+      h('ul', {class: 'checklist small'},
+        h('li', {}, h('strong', {}, 'Takes the shortest route'), ' (orange): it reaches the station in the fewest possible moves.'),
+        h('li', {}, h('strong', {}, 'Reaches the station'), ' (teal): it gets there, sometimes by a detour. This line includes the orange squares.'),
+        h('li', {}, h('strong', {}, 'Does not arrive'), ': its scores are still blank or all negative, so it bumps or wanders. That is the gap under the teal line.')),
+      h('p', {class: 'small muted'}, 'The two lines meet at 52 when every square takes the shortest route. Click a square on the floor to test drive from it yourself.')),
+    card('What to notice',
+      h('ul', {class: 'checklist'},
+        h('li', {}, 'Watch 1 practice trip: each trip starts on a random square, like a new order arriving. Early trips wander for a long time.'),
+        h('li', {}, 'Practice 50 trips fast-forwards, then the robot test drives from the far corner (A1) with what it has learned.'),
+        h('li', {}, 'Squares near the station learn first. Far corners are visited less, so they learn last.'),
+        h('li', {}, 'The recipe did not change at all. Only the amount of practice did.'))));
+  ctx.status.textContent = 'A fresh robot: every score is blank. Press Practice 50 trips.';
+}
+
+function mountChange(ctx) {
+  let session = miniSession();
+  const floor = session.floor;
+  rl.train(session, LESSON.trainedTrips);
+  const pallet = cellIndex(floor, LESSON.palletCell);
+  const view = new FloorView(floor, {label: 'Small warehouse where the floor changes'});
+  stepShell(ctx, view);
+  view.showScores(session.table);
+  const log = h('div', {class: 'log'});
+  let stage = 0, busy = false;
+  const entry = (title, text, kind = '') => log.append(h('div', {class: `entry ${kind}`}, h('strong', {}, title), text));
+  const labels = [
+    `Drop a pallet on ${LESSON.palletCell}`,
+    'Test drive',
+    `Practice ${LESSON.changeTrips} trips, then test`,
+    'Remove the pallet, then test',
+    `Erase the table, practice ${LESSON.changeTrips} trips, test`,
+  ];
+  const buttons = labels.map((label, index) => h('button', {class: 'btn', type: 'button', onclick: () => act(index)}, h('span', {class: 'n'}, String(index + 1)), label));
+  ctx.controls.append(...buttons, button('Start over', () => renderStep(6)));
+  const sync = () => buttons.forEach((b, index) => { b.disabled = busy || index !== stage; b.classList.toggle('primary', index === stage); });
+
+  async function test(g) {
+    view.clearPaths();
+    const d = rl.testDrive(floor, session.table, floor.start, 40);
+    view.drawPath(d.path);
+    view.showRobot(true);
+    await animateDrive(view, d, timing().move, g);
+    return d;
+  }
+
+  async function practice(count, g) {
+    const moves = [];
+    view.clearPaths();
+    for (let k = 0; k < count; k += 1) {
+      moves.push(rl.trainTrip(session).moves.length);
+      view.showScores(session.table);
+      ctx.status.textContent = `Practice trip ${k + 1} of ${count}: ${moves.at(-1)} moves.`;
+      await wait(timing().trip * 4);
+      if (g !== generation) return null;
+    }
+    return moves;
+  }
+
+  async function act(index) {
+    if (busy || index !== stage) return;
+    busy = true; sync();
+    const g = ctx.g;
+    if (index === 0) {
+      floor.open[pallet] = false;
+      view.setPallet(pallet, true);
+      view.showScores(session.table);
+      entry(`1. A pallet now blocks ${LESSON.palletCell}.`, ' The robot does not know. Its scores still point along the bottom aisle.');
+    } else if (index === 1) {
+      const B3 = cellIndex(floor, 'B3');
+      const before = rl.bestTried(session.table, B3);
+      const d = await test(g);
+      if (g !== generation) return;
+      entry('2. Stuck.', ` It drives to B3 and bumps into the pallet ${d.path.length - 2} times. B3 \u2192 still says ${minus(before.score)}: a test drive does not learn.`, 'bad');
+    } else if (index === 2) {
+      const moves = await practice(LESSON.changeTrips, g);
+      if (!moves) return;
+      const d = await test(g);
+      if (g !== generation) return;
+      entry(`3. Practice again: ${moves.join(', ')} moves.`, ` Every bump costs a point, so the blocked arrow's score falls until going over the top looks better. Test: ${d.moves} moves, ${minus(REWARDS.delivery - d.moves)} points.`, 'ok');
+    } else if (index === 3) {
+      floor.open[pallet] = true;
+      view.setPallet(pallet, false);
+      view.showScores(session.table);
+      const d = await test(g);
+      if (g !== generation) return;
+      const scores = [0, 1, 2, 3].map(a => `${arrowOf(a)} ${minus(session.table[floor.start * 4 + a])}`).join(', ');
+      entry(`4. The pallet is gone, but it still takes ${d.moves} moves.`, ` Scores at A3: ${scores}. It remembers going right as a bad idea. To find out the aisle is open, it would need several random moves in a row in the right direction, which is rare.`, 'bad');
+    } else if (index === 4) {
+      session = miniSession();
+      session.floor = floor;
+      view.showScores(session.table);
+      const moves = await practice(LESSON.changeTrips, g);
+      if (!moves) return;
+      const d = await test(g);
+      if (g !== generation) return;
+      entry(`5. Fresh table, ${LESSON.changeTrips} practice trips: ${d.moves} moves again.`, ' Starting over was faster than waiting for it to rediscover the aisle.', 'ok');
+      ctx.explain.append(h('section', {class: 'card accent'}, h('h3', {}, 'The lesson'),
+        h('p', {}, 'A trained model only knows the world it practiced in. When the world changes, it must practice again, and sometimes start fresh.'),
+        h('p', {class: 'small muted'}, 'Real warehouse systems watch the floor for changes and plan routes from a live map. Learning is saved for decisions nobody can write down.')));
+    }
+    stage += 1;
+    ctx.status.textContent = stage < labels.length ? `Next: press button ${stage + 1}.` : 'Done. Press Start over to replay.';
+    busy = false; sync();
+  }
+
+  ctx.explain.append(card('What happened', log));
+  entry('The trained robot', ' After 20 practice trips it drives A3 \u2192 E3 in 4 moves.', 'ok');
+  sync();
+  ctx.status.textContent = 'Press button 1.';
+}
+
+function mountReward(ctx) {
+  const normal = miniSession();
+  rl.train(normal, LESSON.noCostTrips);
+  const session = miniSession({rewards: {delivery: REWARDS.delivery, moveCost: 0}});
+  const floor = session.floor;
+  const view = new FloorView(floor, {label: 'Small warehouse trained with free moves'});
+  stepShell(ctx, view);
+  let busy = false, trained = false;
+  const chartSlot = h('div');
+  const result = h('div');
+  const drawCharts = () => {
+    const max = Math.max(...normal.trips.map(t => t.moves), ...session.trips.map(t => t.moves), 10);
+    chartSlot.replaceChildren(
+      h('p', {class: 'small', style: 'margin:0'}, h('strong', {}, 'Moves cost 1 point')),
+      barChart({values: normal.trips.map(t => t.moves), max, ref: 4, refLabel: 'shortest = 4', title: 'Moves per trip when moves cost a point', height: 170}),
+      h('p', {class: 'small', style: 'margin:6px 0 0'}, h('strong', {}, 'Moves are free')),
+      barChart({values: session.trips.map(t => t.moves), max, ref: 4, refLabel: 'shortest = 4', color: '#e8913c', title: 'Moves per trip when moves are free', height: 170}));
+  };
+  const trainBtn = button(`Practice ${LESSON.noCostTrips} trips with free moves`, async () => {
+    if (busy || trained) return;
+    busy = true; trainBtn.disabled = true;
+    const g = ctx.g;
+    for (let k = 0; k < LESSON.noCostTrips; k += 1) {
+      rl.trainTrip(session);
+      view.showScores(session.table);
+      drawCharts();
+      ctx.status.textContent = `Practice trip ${k + 1}: ${session.trips.at(-1).moves} moves.`;
+      await wait(timing().trip * 3);
+      if (g !== generation) return;
+    }
+    trained = true; busy = false; testBtn.disabled = false;
+    const scores = [0, 1, 2, 3].map(a => `${arrowOf(a)} ${minus(session.table[floor.start * 4 + a])}`).join(', ');
+    ctx.status.innerHTML = `Scores at A3: <strong>${scores}</strong>. Every arrow looks equally good.`;
+  }, {primary: true});
+  const testBtn = button('Test drive', async () => {
+    if (busy || !trained) return;
+    busy = true;
+    const g = ctx.g;
+    view.clearPaths();
+    const d = rl.testDrive(floor, session.table, floor.start, 40);
+    view.drawPath(d.path);
+    await animateDrive(view, d, timing().move, g);
+    if (g !== generation) return;
+    result.replaceChildren(h('section', {class: 'card warn'}, h('h3', {}, 'Test drive with free moves'),
+      h('p', {}, d.delivered ? `It arrives after ${d.moves} moves.` : 'It never arrives: it bumps into a wall or shelf three times in a row, so we stop it.'),
+      h('p', {}, `Every arrow at A3 scores ${REWARDS.delivery}. A 40-move trip is worth the same as a 4-move trip, and even a bump scores ${REWARDS.delivery}. Nothing in the points says hurry, so it doesn\u2019t.`)));
+    busy = false;
+  });
+  testBtn.disabled = true;
+  ctx.controls.append(trainBtn, testBtn);
+  drawCharts();
+  ctx.explain.append(result,
+    card('Practice trips: normal points vs free moves', chartSlot),
+    card('The same question for traffic lights',
+      h('p', {}, 'If a traffic light earns points for less waiting and only cars are counted, what happens to people crossing on foot, or to a quiet side street that always has fewer cars?')),
+    card('The whole recipe',
+      h('dl', {class: 'terms'},
+        h('dt', {}, 'State'), h('dd', {}, 'where it is (a square)'),
+        h('dt', {}, 'Action'), h('dd', {}, 'what it can do (four arrows)'),
+        h('dt', {}, 'Reward'), h('dd', {}, 'points after each move'),
+        h('dt', {}, 'Episode'), h('dd', {}, 'one trip from start to station'),
+        h('dt', {}, 'Q-table'), h('dd', {}, 'the scores: the whole model'),
+        h('dt', {}, 'Policy'), h('dd', {}, 'take the highest score'),
+        h('dt', {}, 'Exploration'), h('dd', {}, 'sometimes try a random arrow'),
+        h('dt', {}, 'Test'), h('dd', {}, 'no random moves, no learning'))));
+  ctx.status.textContent = 'All scores are blank. Press Practice.';
+}
+
+/* ── Lesson navigation ─────────────────────────────────────────────── */
+
+function renderChapters() {
+  const list = document.getElementById('chapters');
+  list.replaceChildren(...steps.map((step, index) => h('li', {},
+    h('button', {type: 'button', 'aria-current': index === current ? 'step' : null, class: index < current ? 'done' : '',
+      onclick: () => renderStep(index)}, h('span', {class: 'num'}, String(index + 1)), h('span', {class: 'label'}, step.label)))));
+}
+
+let current = 0;
+function renderStep(index) {
+  generation += 1;
+  keyHandler = null;
+  current = Math.max(0, Math.min(steps.length - 1, index));
+  const step = steps[current];
+  const article = document.getElementById('step');
+  const floorWrap = h('div', {class: 'floor-wrap'});
+  const controls = h('div', {class: 'controls'});
+  const status = h('p', {class: 'status', 'aria-live': 'polite'});
+  const stageCol = h('div', {class: 'stage-col'}, controls, status);
+  const explain = h('aside', {class: 'explain', 'aria-label': 'Explanation'});
+  const body = h('div', {class: 'step-body fit-top'}, h('div', {class: 'fit-stage'}, stageCol, floorWrap), explain);
+  article.replaceChildren(
+    h('div', {class: 'step-head'}, h('p', {class: 'step-kicker'}, `Step ${current + 1} of ${steps.length} \u00b7 ${step.stage}`),
+      h('h2', {}, step.title), h('p', {class: 'lead'}, step.lead)),
+    body);
+  step.mount({floorWrap, controls, status, explain, stageCol, g: generation});
+  live.fitLesson(body, floorWrap);
+  renderChapters();
+  document.getElementById('count').textContent = `${current + 1} / ${steps.length}`;
+  document.getElementById('back').disabled = current === 0;
+  const next = document.getElementById('next');
+  next.disabled = current === steps.length - 1;
+  if (location.hash !== `#${step.id}`) history.replaceState(null, '', `#${step.id}`);
+}
+
+/* ── Training lab: watch the robot learn ───────────────────────────── */
+
+function mountLab() {
+  generation += 1;
+  keyHandler = null;
+  const g0 = generation;
+  const root = document.getElementById('lab');
+  const settings = {floor: 'mini', exploration: 0.2, delivery: REWARDS.delivery, moveCost: REWARDS.moveCost, startMode: 'fixed', seed: 1};
+  // Robot animation time per move and pause after each move, per speed.
+  const PACE = {watch: {ms: 280, rest: 60, tripRest: 600}, fast: {ms: 45, rest: 5, tripRest: 80}};
+  let floor, session, view, edit = false, speed = 'watch', trip = null, latest = null, drawnAt = 0, testing = false;
+  const floorWrap = h('div', {class: 'scene'});
+  const status = h('p', {class: 'status', 'aria-live': 'off'});
+  const stats = h('div', {class: 'stats'});
+  const nowSlot = h('div', {class: 'wide'});
+  const chartSlot = h('div');
+  const log = h('ol', {class: 'live-log', 'aria-label': 'Finished practice trips'});
+  const testSlot = h('div');
+  const cellSlot = h('div');
+  const tripNo = () => session.trips.length + 1;
+
+  function fresh(keepFloor = false) {
+    if (!keepFloor) {
+      floor = rl.parseFloor(settings.floor === 'mini' ? MINI_FLOOR : BIG_FLOOR);
+      view = new FloorView(floor, {big: settings.floor === 'big', label: 'Training lab floor'});
+      view.setClickable(onCell);
+      floorWrap.replaceChildren(view.el);
+    }
+    session = rl.createSession({floor, seed: settings.seed, exploration: settings.exploration,
+      rewards: {delivery: settings.delivery, moveCost: settings.moveCost}, startMode: settings.startMode,
+      maxMoves: settings.floor === 'mini' ? LESSON.miniMaxMoves : LESSON.bigMaxMoves});
+    trip = null;
+    latest = null;
+    view.clearPaths();
+    view.showScores(session.table, {delivery: settings.delivery});
+    view.placeRobot(floor.start, 0);
+    log.replaceChildren();
+    nowSlot.replaceChildren(card('What just happened', h('p', {class: 'small muted'},
+      'Each move the robot picks an arrow (the highest score, or sometimes a random one), gets points, and rewrites the score of that arrow: points now + the best score where it landed. The latest move appears here.')));
+    testSlot.replaceChildren(card('Test drive', h('p', {class: 'small muted'}, 'Press Test drive from START, or click any square. A test drive always takes the highest score: no random moves, no learning.')));
+    cellSlot.replaceChildren(card('Scores on a square', h('p', {class: 'small muted'}, 'After each move, the four scores of the square the robot just left appear here, with the one it rewrote outlined.')));
+    drawTrips();
+    drawLive(true);
+  }
+
+  function drawTrips() {
+    const recent = session.trips.slice(-60).map(t => t.moves);
+    const shortest = settings.startMode === 'fixed' ? rl.shortestMoves(floor)[floor.start] : null;
+    chartSlot.replaceChildren(recent.length
+      ? barChart({values: recent, ref: Number.isFinite(shortest) ? shortest : null, refLabel: `shortest = ${shortest}`, title: 'Moves per practice trip', firstIndex: session.trips.length - recent.length + 1, width: 400, height: 220})
+      : h('p', {class: 'small muted'}, 'A bar appears each time the robot reaches the packing station.'));
+  }
+
+  // The live panels. At Fast they are redrawn a few times a second, not after every move.
+  function drawLive(force = false) {
+    if (!force && speed !== 'watch' && performance.now() - drawnAt < 350) return;
+    drawnAt = performance.now();
+    const last = session.trips.at(-1);
+    const cov = rl.coverage(floor, session.table);
+    stats.replaceChildren(
+      h('div', {class: 'stat'}, h('b', {}, `Trip ${tripNo()}`), h('span', {}, `practising, ${trip ? trip.moves.length : 0} moves so far`)),
+      h('div', {class: 'stat'}, h('b', {}, last ? String(last.moves) : '\u2014'), h('span', {}, 'moves, last finished trip')),
+      h('div', {class: 'stat'}, h('b', {}, `${cov.delivered}/${cov.squares}`), h('span', {}, 'squares it can deliver from')),
+      h('div', {class: 'stat'}, h('b', {}, `${cov.shortest}/${cov.squares}`), h('span', {}, 'on a shortest route')),
+      h('div', {class: 'stat'}, h('b', {}, `${Math.round(settings.exploration * 100)}%`), h('span', {}, 'random moves')));
+    if (latest) {
+      const {m} = latest;
+      nowSlot.replaceChildren(describeMove(floor, m, latest.trip, latest.index,
+        {title: `What just happened \u00b7 trip ${latest.trip}, move ${latest.index}`, exploration: settings.exploration, delivery: settings.delivery}));
+      cellSlot.replaceChildren(card(`Scores on ${rl.cellName(floor, m.from)}`, compass(session.table, m.from, m.action),
+        h('p', {class: 'small muted', style: 'margin-top:8px'}, `Outlined: ${arrowOf(m.action)}, the score it just rewrote. The test drive takes the highest of the four.`)));
+    }
+  }
+
+  function startTrip() {
+    const start = rl.tripStart(session);
+    trip = {start, moves: [], steps: rl.tripMoves(session, start, session.maxMoves)};
+    view.clearPaths();
+    view.placeRobot(start, 0);
+  }
+
+  function finishTrip() {
+    const done = rl.recordTrip(session, rl.tripOf(trip.start, trip.moves));
+    trip = null;
+    const n = session.trips.length;
+    log.prepend(h('li', {}, `Trip ${n}: ${done.moves.length} moves, ${done.delivered ? 'delivered' : 'gave up'}, ${minus(done.points)} points`));
+    while (log.children.length > 40) log.lastChild.remove();
+    if (done.delivered) view.flash(floor.station);
+    drawTrips();
+  }
+
+  function remember(m) {
+    trip.moves.push(m);
+    latest = {m, trip: tripNo(), index: trip.moves.length};
+  }
+
+  async function unit() {
+    const pace = PACE[speed];
+    if (!trip) {
+      startTrip();
+      status.textContent = `Trip ${tripNo()} starts on ${rl.cellName(floor, trip.start)}.`;
+      drawLive(true);
+      await wait(pace.tripRest / 2);
+      return;
+    }
+    const next = trip.steps.next();
+    if (next.done) {
+      finishTrip();
+      const last = session.trips.at(-1);
+      status.textContent = `Trip ${session.trips.length} ${last.delivered ? 'delivered' : 'stopped'} after ${last.moves} moves.`;
+      drawLive(true);
+      await wait(pace.tripRest);
+      return;
+    }
+    const m = next.value;
+    remember(m);
+    view.showScores(session.table, {delivery: settings.delivery});
+    status.textContent = `Trip ${latest.trip}, move ${latest.index}: ${arrowOf(m.action)}${m.explored ? ' (random)' : ''} ${m.bumped ? 'bumped' : `to ${rl.cellName(floor, m.to)}`}, ${minus(m.points)} points.`;
+    drawLive();
+    await animateMove(view, m, pace.ms);
+    await wait(pace.rest);
+  }
+
+  const player = live.player({unit, alive: () => generation === g0});
+
+  async function testFrom(cell) {
+    if (testing) return;
+    const wasPlaying = player.playing;
+    testing = true;
+    player.stop();
+    await wait(PACE.watch.ms + 60);
+    const g = generation;
+    view.clearPaths();
+    const d = rl.testDrive(floor, session.table, cell, 4 * rl.openCells(floor).length);
+    view.drawPath(d.path);
+    await animateDrive(view, d, Math.max(timing().move / 2, 90), g);
+    if (g !== generation) return;
+    const shortest = rl.shortestMoves(floor)[cell];
+    const result = d.delivered
+      ? `${d.moves} moves (shortest possible ${shortest})${d.moves === shortest ? ': a shortest route.' : '.'}`
+      : `did not arrive (${d.stuck === 'bump' ? 'bumped three times in a row' : 'too many moves'}).`;
+    testSlot.replaceChildren(card(`Test drive from ${rl.cellName(floor, cell)} after ${session.trips.length} trips`,
+      h('p', {}, h('strong', {}, result)),
+      h('p', {class: 'small muted'}, 'Orange line = the test route. Practice carries on from where the robot was.')));
+    status.textContent = `Test drive from ${rl.cellName(floor, cell)}: ${result}`;
+    await wait(900);
+    if (g !== generation) return;
+    view.placeRobot(trip ? (trip.moves.length ? trip.moves.at(-1).to : trip.start) : floor.start, 0);
+    testing = false;
+    if (wasPlaying) player.play();
+  }
+
+  function onCell(cell) {
+    if (testing || cell === floor.station) return;
+    if (edit) {
+      if (cell === floor.start) { status.textContent = 'The start square must stay open.'; return; }
+      const isPallet = view.pallets.has(cell);
+      if (!floor.open[cell] && !isPallet) { status.textContent = 'Shelves stay put. Click an open square to drop a pallet.'; return; }
+      floor.open[cell] = isPallet;
+      view.setPallet(cell, !isPallet);
+      view.showScores(session.table, {delivery: settings.delivery});
+      drawLive(true);
+      status.textContent = isPallet ? `Pallet removed from ${rl.cellName(floor, cell)}. The score table was not changed.` : `Pallet dropped on ${rl.cellName(floor, cell)}. The score table was not changed.`;
+      return;
+    }
+    if (!floor.open[cell]) return;
+    testFrom(cell);
+  }
+
+  const changed = keepFloor => { fresh(keepFloor); status.textContent = 'Setting changed: the robot starts again from a blank table.'; };
+  const range = (label, min, max, stepSize, key, format, parse = Number) => {
+    const out = h('span', {class: 'value-out'}, format(settings[key]));
+    const input = h('input', {type: 'range', min, max, step: stepSize, value: key === 'exploration' ? settings[key] * 100 : settings[key], 'aria-label': label,
+      oninput: event => { out.textContent = format(parse(event.target.value)); },
+      onchange: event => { settings[key] = parse(event.target.value); changed(true); }});
+    return [h('label', {}, label), h('div', {}, input, out)];
+  };
+  const pick = (label, key, options) => {
+    const group = h('div', {class: 'toggle', role: 'group', 'aria-label': label});
+    const renderPick = () => group.replaceChildren(...options.map(([value, text]) => h('button', {type: 'button', 'aria-pressed': String(settings[key] === value),
+      onclick: () => { if (testing) return; settings[key] = value; renderPick(); changed(key !== 'floor'); }}, text)));
+    renderPick();
+    return [h('label', {}, label), group];
+  };
+  const seedInput = h('input', {type: 'number', min: 1, max: 9999, value: settings.seed, 'aria-label': 'Random seed',
+    onchange: event => { settings.seed = Math.max(1, Math.min(9999, Math.round(Number(event.target.value) || 1))); event.target.value = settings.seed; changed(true); }});
+  const editBtn = button('Edit floor: off', () => {
+    edit = !edit;
+    editBtn.textContent = `Edit floor: ${edit ? 'on \u2014 click squares to add or remove pallets' : 'off'}`;
+    editBtn.classList.toggle('primary', edit);
+  });
+  const popup = live.settingsPopup('Training lab settings',
+    h('div', {class: 'settings'},
+      ...pick('Floor', 'floor', [['mini', 'Small (11 squares)'], ['big', 'Large (52 squares)']]),
+      ...range('Random moves', 0, 50, 5, 'exploration', v => `${Math.round(v * 100)}%`, v => Number(v) / 100),
+      ...range('Delivery points', 5, 40, 1, 'delivery', v => `+${v}`),
+      ...range('Cost per move', 0, 3, 1, 'moveCost', v => (v ? `\u2212${v}` : '0')),
+      ...pick('Each trip starts', 'startMode', [['fixed', 'At START'], ['random', 'Random square']]),
+      h('label', {}, 'Random seed'), seedInput),
+    h('p', {class: 'pop-note'}, 'Any change starts the robot again from a blank table. Pallets you dropped stay unless you change the floor.'),
+    h('h4', {}, 'Experiments to try'),
+    h('ol', {class: 'steps-list small'},
+      h('li', {}, 'Random moves 0%. Does it still find the 4-move route? (Blank arrows count as 0, so it still tries new things.)'),
+      h('li', {}, 'After about 20 trips, turn on Edit floor and drop a pallet on its route. Test drive, then let it practise on.'),
+      h('li', {}, 'Cost per move 0. Do the trips get shorter?'),
+      h('li', {}, 'Large floor, starts At START, Fast for about 100 trips. Click a far corner: has it learned there?')));
+
+  const layout = h('div', {class: 'live-lab'},
+    h('div', {class: 'live-head'},
+      h('div', {}, h('p', {class: 'step-kicker'}, 'Training lab \u00b7 watch it learn'),
+        h('h2', {}, 'Watch the robot learn, one move at a time.'),
+        h('p', {class: 'lead'}, 'It starts knowing nothing and practises trip after trip while you watch. Click a square to test drive from it; the gear changes the floor and the points.')),
+      popup.gear),
+    popup.dialog,
+    h('div', {class: 'live-stage'}, legend([['Robot', '#7eaeb8'], ['Packing station', '#e8913c'], ['Arrow + number = best score found on that square', '#4f7780'], ['Grey = tried, nothing good yet', '#3b3f4a']]), floorWrap),
+    h('div', {class: 'live-bar'},
+      h('div', {class: 'controls live-controls'}, player.button, live.speedSwitch(speed, value => { speed = value; drawLive(true); }),
+        button('Test drive from START', () => testFrom(floor.start)), button('Restart', () => { if (!testing) { fresh(true); status.textContent = 'Restarted: blank table, same floor.'; } }), editBtn),
+      status),
+    h('div', {class: 'live-panels'},
+      h('div', {class: 'stack'}, card('Training, live', stats), testSlot),
+      nowSlot,
+      card('Practice trips', chartSlot, log),
+      cellSlot));
+  root.replaceChildren(layout);
+  live.fillWindow(layout);
+  fresh();
+  status.textContent = live.REDUCED ? 'Press Play to start practice.' : 'Practice has started. Pause any time, or switch to Fast.';
+  if (!live.REDUCED) player.play();
+  return g0;
+}
+
+/* ── Wiring ────────────────────────────────────────────────────────── */
+
+function showMode(mode) {
+  const lab = mode === 'lab';
+  document.getElementById('lesson').hidden = lab;
+  document.getElementById('lab').hidden = !lab;
+  document.getElementById('mode-lesson').setAttribute('aria-selected', String(!lab));
+  document.getElementById('mode-lab').setAttribute('aria-selected', String(lab));
+  document.body.classList.toggle('lab-mode', lab);
+  if (lab) { mountLab(); history.replaceState(null, '', '#lab'); } else renderStep(current);
+}
+
+function routeFromHash() {
+  const hash = location.hash.slice(1);
+  if (hash === 'lab') { showMode('lab'); return; }
+  const index = steps.findIndex(step => step.id === hash);
+  current = index >= 0 ? index : 0;
+  showMode('lesson');
+}
+
+document.getElementById('mode-lesson').addEventListener('click', () => showMode('lesson'));
+document.getElementById('mode-lab').addEventListener('click', () => showMode('lab'));
+document.getElementById('back').addEventListener('click', () => { renderStep(current - 1); window.scrollTo({top: 0}); });
+document.getElementById('next').addEventListener('click', () => { renderStep(current + 1); window.scrollTo({top: 0}); });
+document.getElementById('speed').addEventListener('change', event => { speed = event.target.value; });
+window.addEventListener('keydown', event => {
+  const tag = (event.target.tagName || '').toLowerCase();
+  if (['input', 'select', 'textarea'].includes(tag)) return;
+  if (keyHandler) keyHandler(event);
+});
+window.addEventListener('hashchange', routeFromHash);
+function showError(message) {
+  const banner = document.getElementById('error-banner');
+  banner.textContent = `Something went wrong (${message}). Reload the page before continuing; do not trust the current result.`;
+  banner.hidden = false;
+}
+window.addEventListener('error', event => showError(event.message));
+window.addEventListener('unhandledrejection', event => showError(String(event.reason)));
+routeFromHash();
+
+</script>
+</body>
+</html>

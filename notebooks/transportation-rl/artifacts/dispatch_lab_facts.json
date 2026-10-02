@@ -1,0 +1,675 @@
+{
+ "lesson": {
+  "seed": 4,
+  "trainShifts": 1000,
+  "checkEvery": 50,
+  "stepDecisions": 10,
+  "playStart": 3,
+  "playSeed": 12,
+  "gammas": [
+   0,
+   0.5,
+   0.9
+  ],
+  "bonusBorough": 3,
+  "bonus": 25
+ },
+ "defaults": {
+  "topChance": 0.8,
+  "costPerMile": 0.5,
+  "alpha": 0.05,
+  "gamma": 0.9,
+  "exploration": 0.2,
+  "bonus": [
+   0,
+   0,
+   0,
+   0,
+   0
+  ]
+ },
+ "blockMinutes": 15,
+ "shiftBlocks": 32,
+ "data": {
+  "rows": {
+   "total": 19663930,
+   "kept": 18799627,
+   "days": 31
+  },
+  "pickupsPerHour": [
+   9996.6,
+   6785.3,
+   5102.3,
+   3017.5,
+   366.6
+  ],
+  "pickupShare": [
+   0.3956,
+   0.2685,
+   0.2019,
+   0.1194,
+   0.0145
+  ],
+  "uberWait": {
+   "note": "Minutes from request to driver on scene, Uber (HV0003) only; Lyft does not report on-scene time.",
+   "trips": [
+    5504441,
+    3599676,
+    2697269,
+    1699209,
+    179987
+   ],
+   "mean": [
+    2.74,
+    3.24,
+    3.59,
+    3.37,
+    4.32
+   ],
+   "median": [
+    2.15,
+    2.72,
+    2.95,
+    2.85,
+    3.78
+   ]
+  },
+  "source": "NYC TLC High Volume For-Hire Vehicle trip records, January 2024"
+ },
+ "city": {
+  "names": [
+   "Manhattan",
+   "Brooklyn",
+   "Queens",
+   "Bronx",
+   "Staten Island"
+  ],
+  "requestChance": [
+   0.8,
+   0.543,
+   0.408,
+   0.241,
+   0.029
+  ],
+  "blocks": [
+   [
+    1,
+    2,
+    2,
+    1,
+    3
+   ],
+   [
+    2,
+    1,
+    2,
+    3,
+    2
+   ],
+   [
+    2,
+    2,
+    1,
+    2,
+    3
+   ],
+   [
+    1,
+    3,
+    2,
+    1,
+    4
+   ],
+   [
+    3,
+    2,
+    3,
+    4,
+    1
+   ]
+  ],
+  "driveCost": [
+   [
+    0,
+    3.1,
+    5.03,
+    2.87,
+    9.49
+   ],
+   [
+    3.01,
+    0,
+    4.1,
+    8.95,
+    5.67
+   ],
+   [
+    4.72,
+    3.92,
+    0,
+    5.88,
+    12.39
+   ],
+   [
+    2.79,
+    8.92,
+    5.76,
+    0,
+    15.26
+   ],
+   [
+    9.43,
+    5.65,
+    12.46,
+    15.51,
+    0
+   ]
+  ],
+  "pay": [
+   [
+    13.45,
+    26.95,
+    35.57,
+    21.57,
+    52.75
+   ],
+   [
+    27.29,
+    12.41,
+    27.73,
+    49.38,
+    33.94
+   ],
+   [
+    35.44,
+    27.99,
+    13.16,
+    34.27,
+    64.24
+   ],
+   [
+    21.93,
+    49.33,
+    33.42,
+    11.74,
+    76.58
+   ],
+   [
+    55.6,
+    34.36,
+    65.53,
+    80.56,
+    12.22
+   ]
+  ],
+  "destShare": [
+   [
+    0.767,
+    0.086,
+    0.091,
+    0.055,
+    0.001
+   ],
+   [
+    0.112,
+    0.779,
+    0.099,
+    0.006,
+    0.004
+   ],
+   [
+    0.161,
+    0.125,
+    0.693,
+    0.021,
+    0.001
+   ],
+   [
+    0.175,
+    0.013,
+    0.036,
+    0.776,
+    0
+   ],
+   [
+    0.026,
+    0.07,
+    0.013,
+    0.003,
+    0.889
+   ]
+  ]
+ },
+ "firstDecisions": [
+  {
+   "from": "Staten Island",
+   "action": "drive to Brooklyn",
+   "to": "Brooklyn",
+   "ride": false,
+   "explored": false,
+   "points": -5.65,
+   "blocks": 2,
+   "old": 0,
+   "target": -5.65,
+   "updated": -0.28
+  },
+  {
+   "from": "Brooklyn",
+   "action": "wait",
+   "to": "Manhattan",
+   "ride": true,
+   "explored": true,
+   "points": 27.29,
+   "blocks": 3,
+   "old": 0,
+   "target": 27.29,
+   "updated": 1.36
+  },
+  {
+   "from": "Manhattan",
+   "action": "drive to Bronx",
+   "to": "Bronx",
+   "ride": false,
+   "explored": false,
+   "points": -2.87,
+   "blocks": 1,
+   "old": 0,
+   "target": -2.87,
+   "updated": -0.14
+  },
+  {
+   "from": "Bronx",
+   "action": "wait",
+   "to": "Bronx",
+   "ride": false,
+   "explored": false,
+   "points": 0,
+   "blocks": 1,
+   "old": 0,
+   "target": 0,
+   "updated": 0
+  },
+  {
+   "from": "Bronx",
+   "action": "drive to Staten Island",
+   "to": "Staten Island",
+   "ride": false,
+   "explored": false,
+   "points": -15.26,
+   "blocks": 4,
+   "old": 0,
+   "target": -15.26,
+   "updated": -0.76
+  },
+  {
+   "from": "Staten Island",
+   "action": "drive to Bronx",
+   "to": "Bronx",
+   "ride": false,
+   "explored": false,
+   "points": -15.51,
+   "blocks": 4,
+   "old": 0,
+   "target": -15.51,
+   "updated": -0.78
+  },
+  {
+   "from": "Bronx",
+   "action": "drive to Brooklyn",
+   "to": "Brooklyn",
+   "ride": false,
+   "explored": false,
+   "points": -8.92,
+   "blocks": 3,
+   "old": 0,
+   "target": -7.93,
+   "updated": -0.4
+  },
+  {
+   "from": "Brooklyn",
+   "action": "wait",
+   "to": "Brooklyn",
+   "ride": false,
+   "explored": false,
+   "points": 0,
+   "blocks": 1,
+   "old": 1.36,
+   "target": 1.23,
+   "updated": 1.36
+  },
+  {
+   "from": "Brooklyn",
+   "action": "wait",
+   "to": "Brooklyn",
+   "ride": true,
+   "explored": false,
+   "points": 12.41,
+   "blocks": 2,
+   "old": 1.36,
+   "target": 13.51,
+   "updated": 1.97
+  },
+  {
+   "from": "Brooklyn",
+   "action": "wait",
+   "to": "Brooklyn",
+   "ride": true,
+   "explored": false,
+   "points": 12.41,
+   "blocks": 2,
+   "old": 1.97,
+   "target": 14,
+   "updated": 2.57
+  }
+ ],
+ "curve": [
+  {
+   "shifts": 50,
+   "test": 163.23
+  },
+  {
+   "shifts": 100,
+   "test": 163.23
+  },
+  {
+   "shifts": 150,
+   "test": 181.4
+  },
+  {
+   "shifts": 200,
+   "test": 181.4
+  },
+  {
+   "shifts": 250,
+   "test": 181.4
+  },
+  {
+   "shifts": 300,
+   "test": 181.4
+  },
+  {
+   "shifts": 350,
+   "test": 181.4
+  },
+  {
+   "shifts": 400,
+   "test": 181.4
+  },
+  {
+   "shifts": 450,
+   "test": 181.4
+  },
+  {
+   "shifts": 500,
+   "test": 181.4
+  },
+  {
+   "shifts": 550,
+   "test": 181.4
+  },
+  {
+   "shifts": 600,
+   "test": 181.4
+  },
+  {
+   "shifts": 650,
+   "test": 181.4
+  },
+  {
+   "shifts": 700,
+   "test": 181.4
+  },
+  {
+   "shifts": 750,
+   "test": 178.64
+  },
+  {
+   "shifts": 800,
+   "test": 181.4
+  },
+  {
+   "shifts": 850,
+   "test": 181.4
+  },
+  {
+   "shifts": 900,
+   "test": 181.4
+  },
+  {
+   "shifts": 950,
+   "test": 181.4
+  },
+  {
+   "shifts": 1000,
+   "test": 181.4
+  }
+ ],
+ "rule": [
+  0,
+  1,
+  2,
+  0,
+  0
+ ],
+ "ruleText": [
+  "Manhattan: wait",
+  "Brooklyn: wait",
+  "Queens: wait",
+  "Bronx: drive to Manhattan",
+  "Staten Island: drive to Manhattan"
+ ],
+ "table": [
+  65.26,
+  42.88,
+  42.31,
+  49.43,
+  19.66,
+  51.55,
+  55.9,
+  43.07,
+  33.32,
+  26.56,
+  49.9,
+  41.81,
+  59.84,
+  40.96,
+  16.47,
+  57.76,
+  30.49,
+  38.45,
+  51.39,
+  8.26,
+  39.74,
+  32.17,
+  25.72,
+  17.59,
+  26.36
+ ],
+ "practice": {
+  "first100": 87.03,
+  "last100": 117.25
+ },
+ "test": {
+  "stay": {
+   "perShift": 134.95,
+   "bonusPerShift": 0,
+   "ridesPerShift": 8.1,
+   "emptyMilesPerShift": 0,
+   "waitShare": [
+    0.154,
+    0.185,
+    0.19,
+    0.197,
+    0.274
+   ]
+  },
+  "manhattan": {
+   "perShift": 176.37,
+   "bonusPerShift": 0,
+   "ridesPerShift": 11,
+   "emptyMilesPerShift": 24.9,
+   "waitShare": [
+    1,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  "learned": {
+   "perShift": 181.4,
+   "bonusPerShift": 0,
+   "ridesPerShift": 10.8,
+   "emptyMilesPerShift": 7.2,
+   "waitShare": [
+    0.374,
+    0.307,
+    0.319,
+    0,
+    0
+   ]
+  },
+  "best": {
+   "rule": [
+    0,
+    1,
+    2,
+    0,
+    0
+   ],
+   "ruleText": [
+    "Manhattan: wait",
+    "Brooklyn: wait",
+    "Queens: wait",
+    "Bronx: drive to Manhattan",
+    "Staten Island: drive to Manhattan"
+   ],
+   "perShift": 181.4,
+   "bonusPerShift": 0,
+   "ridesPerShift": 10.8,
+   "emptyMilesPerShift": 7.2,
+   "waitShare": [
+    0.374,
+    0.307,
+    0.319,
+    0,
+    0
+   ]
+  }
+ },
+ "gamma": [
+  {
+   "gamma": 0,
+   "rule": [
+    0,
+    1,
+    2,
+    3,
+    4
+   ],
+   "ruleText": [
+    "Manhattan: wait",
+    "Brooklyn: wait",
+    "Queens: wait",
+    "Bronx: wait",
+    "Staten Island: wait"
+   ],
+   "perShift": 134.95,
+   "bonusPerShift": 0,
+   "ridesPerShift": 8.1,
+   "emptyMilesPerShift": 0,
+   "waitShare": [
+    0.154,
+    0.185,
+    0.19,
+    0.197,
+    0.274
+   ]
+  },
+  {
+   "gamma": 0.5,
+   "rule": [
+    0,
+    1,
+    2,
+    0,
+    4
+   ],
+   "ruleText": [
+    "Manhattan: wait",
+    "Brooklyn: wait",
+    "Queens: wait",
+    "Bronx: drive to Manhattan",
+    "Staten Island: wait"
+   ],
+   "perShift": 151.34,
+   "bonusPerShift": 0,
+   "ridesPerShift": 8.9,
+   "emptyMilesPerShift": 2.6,
+   "waitShare": [
+    0.248,
+    0.226,
+    0.233,
+    0,
+    0.293
+   ]
+  },
+  {
+   "gamma": 0.9,
+   "rule": [
+    0,
+    1,
+    2,
+    0,
+    0
+   ],
+   "ruleText": [
+    "Manhattan: wait",
+    "Brooklyn: wait",
+    "Queens: wait",
+    "Bronx: drive to Manhattan",
+    "Staten Island: drive to Manhattan"
+   ],
+   "perShift": 181.4,
+   "bonusPerShift": 0,
+   "ridesPerShift": 10.8,
+   "emptyMilesPerShift": 7.2,
+   "waitShare": [
+    0.374,
+    0.307,
+    0.319,
+    0,
+    0
+   ]
+  }
+ ],
+ "bonus": {
+  "borough": "Bronx",
+  "amount": 25,
+  "rule": [
+   0,
+   1,
+   2,
+   3,
+   0
+  ],
+  "ruleText": [
+   "Manhattan: wait",
+   "Brooklyn: wait",
+   "Queens: wait",
+   "Bronx: wait",
+   "Staten Island: drive to Manhattan"
+  ],
+  "perShift": 194.21,
+  "bonusPerShift": 30.98,
+  "ridesPerShift": 9.9,
+  "emptyMilesPerShift": 4,
+  "waitShare": [
+   0.248,
+   0.242,
+   0.25,
+   0.26,
+   0
+  ]
+ }
+}
