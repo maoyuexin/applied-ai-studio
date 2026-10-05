@@ -74,6 +74,11 @@ class RunContext:
     def brief(self) -> dict[str, Any]:
         return self.run["brief"]
 
+    def deployment(self, role: str) -> str:
+        """The deployment this run uses for a role: the run's own choice, else the install default."""
+        chosen = (self.run.get("settings") or {}).get("models", {}).get(role)
+        return chosen or self.providers.deployment(role)
+
     # Steps
     def step(self, key: str) -> dict[str, Any]:
         step = self.store.get_step(self.run_id, key)
@@ -111,7 +116,7 @@ class RunContext:
             provider = "local tools"
         elif role:
             provider = {"text-draft": "text", "text-judge": "text"}.get(role, role)
-            deployment = self.providers.deployment(role)
+            deployment = self.deployment(role)
             if role == "video":
                 version = self.settings.video_model_version or None
             elif role == "image":
@@ -171,7 +176,7 @@ class RunContext:
         self.require(role)
         self.reserve(role)
         result: TextResult = await self.providers.text.complete(
-            self.providers.deployment(role), system, user, json_mode=True, max_tokens=max_tokens, purpose=purpose,
+            self.deployment(role), system, user, json_mode=True, max_tokens=max_tokens, purpose=purpose,
             context=context)
         return result.json(), result
 
@@ -263,7 +268,8 @@ class Engine:
 
     def create_run(self, pipeline_key: str, brief: dict[str, Any], *, title: str | None = None,
                    template: str | None = None, parent_run_id: str | None = None,
-                   tags: list[str] | None = None, source: str = "studio") -> dict[str, Any]:
+                   tags: list[str] | None = None, source: str = "studio",
+                   models: dict[str, str] | None = None) -> dict[str, Any]:
         pipeline = self.pipelines.get(pipeline_key)
         if pipeline is None:
             raise ActionError(f"Unknown pipeline: {pipeline_key}")
@@ -271,7 +277,8 @@ class Engine:
         stamp = now()
         run = {
             "id": new_run_id(), "pipeline": pipeline_key, "title": (title or pipeline.default_title(normalized))[:120],
-            "template": template, "status": "running", "brief": normalized, "settings": {},
+            "template": template, "status": "running", "brief": normalized,
+            "settings": {"models": self._check_models(models or {})},
             "parent_run_id": parent_run_id, "tags": sorted(set(tags or [])), "restricted": False, "source": source,
             "current_step": pipeline.steps[0].key, "counters": {}, "created_at": stamp, "updated_at": stamp,
         }
@@ -287,6 +294,19 @@ class Engine:
         ctx.event("info", f"Run created{parent}.", code="created")
         self._advance(created["id"])
         return created
+
+    def _check_models(self, models: dict[str, str]) -> dict[str, str]:
+        allowed = self.settings.text_model_list
+        checked = {}
+        for role, deployment in models.items():
+            if not deployment:
+                continue
+            if role not in ("text-draft", "text-judge"):
+                raise ActionError(f"Only text models can be chosen per run (got '{role}').")
+            if not self.providers.fake and deployment not in allowed:
+                raise ActionError(f"'{deployment}' is not one of this install's text models: {', '.join(allowed)}.")
+            checked[role] = deployment
+        return checked
 
     def _add_references(self, run_id: str, step_key: str, references: list[dict[str, Any]]) -> None:
         """Reference images become artifacts so history shows them and bundles carry them."""
@@ -567,7 +587,10 @@ class Engine:
                               current_step=current["key"])
         pipeline = self.pipelines.get(run["pipeline"])
         if pipeline is not None:
-            fields["counters"] = pipeline.summarize(run, self.store.list_artifacts(run_id))
+            counters = pipeline.summarize(run, self.store.list_artifacts(run_id))
+            step_models = {step["data"].get("model") for step in steps if step["data"].get("model")}
+            counters["models"] = sorted(set(counters.get("models") or []) | step_models)
+            fields["counters"] = counters
         changed = {key: value for key, value in fields.items() if run.get(key) != value}
         if changed:
             self.store.update_run(run_id, **changed)

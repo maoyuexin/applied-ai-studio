@@ -68,6 +68,13 @@ export default function SettingsPage() {
                 </tbody>
               </table>
             </div>
+            {data.text_models.length > 0 && (
+              <p className="ds-small" style={{ marginTop: 10 }}>
+                <b>Text models a run can choose:</b>{" "}
+                {data.text_models.map((name) => <span key={name} className="ds-chip model" style={{ marginRight: 4 }}>{name}</span>)}
+                <span className="ds-tiny ds-muted"> · set with <code>DESIGN_TEXT_MODELS</code>; the defaults are the two text roles above.</span>
+              </p>
+            )}
             <p className="ds-tiny ds-muted" style={{ marginTop: 8 }}>
               Text tests make one tiny call (it counts toward the text cap). Image, video and voice tests only check
               that the endpoint answers and your sign-in works; they don't generate anything.

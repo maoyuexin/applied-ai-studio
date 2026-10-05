@@ -68,3 +68,36 @@ def test_article_rules_and_validation(client: TestClient) -> None:
     v1 = next(a for a in detail["artifacts"] if a["label"] == "v1")
     assert [c["key"] for c in v1["checks"]] == ["length", "rules"] and v1["checks"][1]["state"] == "bad"
     assert act(client, run_id, "revise", {"note": ""}, expect=409)["detail"].startswith("Say what")
+
+
+def test_run_chooses_its_own_text_models(client: TestClient) -> None:
+    models = {"text-draft": "gpt-6-astra", "text-judge": "gpt-6.1-sol"}
+    created = client.post("/api/design/runs", json={"pipeline": "article", "brief": article_brief(), "models": models})
+    assert created.status_code == 201, created.text
+    run_id = created.json()["run"]["id"]
+    assert created.json()["run"]["settings"] == {"models": models}
+    detail = wait_for(client, run_id, at_gate("outline"))
+    assert next(s for s in detail["steps"] if s["key"] == "outline")["data"]["model"] == "gpt-6-astra"
+    act(client, run_id, "approve", {"step": "outline"})
+    detail = wait_for(client, run_id, at_gate("draft"))
+    v1 = next(a for a in detail["artifacts"] if a["label"] == "v1")
+    assert v1["deployment"] == "gpt-6-astra" and v1["data"]["judge"] == "gpt-6.1-sol"
+    assert "gpt-6.1-sol" in v1["checks"][0]["basis"]
+    assert {"gpt-6-astra", "gpt-6.1-sol"} <= set(detail["run"]["counters"]["models"])
+    bundle = client.get(f"/api/design/runs/{run_id}/export")
+    assert bundle.status_code == 200
+
+
+def test_live_install_only_allows_its_text_models(make_client: Any) -> None:
+    client = make_client(provider_mode="live", text_endpoint="https://example.openai.azure.com/openai/v1",
+                         text_draft_deployment="gpt-6-astra", text_judge_deployment="gpt-6.1-sol",
+                         text_models="gpt-5.4-mini")
+    status = client.get("/api/design/status").json()
+    assert status["text_models"] == ["gpt-6-astra", "gpt-6.1-sol", "gpt-5.4-mini"]
+    assert status["text_defaults"] == {"text-draft": "gpt-6-astra", "text-judge": "gpt-6.1-sol"}
+    response = client.post("/api/design/runs", json={"pipeline": "article", "brief": article_brief(),
+                                                     "models": {"text-draft": "not-deployed"}})
+    assert response.status_code == 409 and "not one of this install's text models" in response.json()["detail"]
+    response = client.post("/api/design/runs", json={"pipeline": "article", "brief": article_brief(),
+                                                     "models": {"video": "sora-3"}})
+    assert response.status_code == 409 and "Only text models" in response.json()["detail"]

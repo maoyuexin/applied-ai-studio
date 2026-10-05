@@ -6,6 +6,7 @@ export type StepStatus = "pending" | "running" | "waiting" | "done" | "skipped" 
 export type ArtifactStatus = "queued" | "running" | "ready" | "failed" | "blocked" | "canceled" | "superseded";
 export type Verdict = "keep" | "usable" | "regenerate" | "reject";
 export type CheckState = "ok" | "warn" | "bad" | "info";
+export type TextRole = "text-draft" | "text-judge";
 
 export interface Check {
   key: string;
@@ -268,6 +269,7 @@ export interface Run {
   template: string | null;
   status: RunStatus;
   brief: Brief;
+  settings: { models?: Partial<Record<TextRole, string>> };
   parent_run_id: string | null;
   tags: string[];
   restricted: boolean;
@@ -390,6 +392,8 @@ export interface StudioStatus {
   pipelines: Array<{ key: PipelineKey; title: string; ready: boolean; missing: string[] }>;
   video_retirement: { on: string; days_left: number } | null;
   hide_restricted: boolean;
+  text_models: string[];
+  text_defaults: Record<TextRole, string>;
 }
 
 export interface Voice {
@@ -464,6 +468,7 @@ export interface CreateRunBody {
   template?: string;
   parent_run_id?: string;
   tags?: string[];
+  models?: Partial<Record<TextRole, string>>;
 }
 
 export const designApi = {

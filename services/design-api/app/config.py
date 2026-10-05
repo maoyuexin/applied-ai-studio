@@ -34,6 +34,8 @@ class Settings(BaseSettings):
     text_endpoint: str = ""
     text_draft_deployment: str = ""
     text_judge_deployment: str = ""
+    # Other text deployments a run may choose instead of the defaults (comma separated).
+    text_models: str = ""
 
     # Image role (MAI-Image REST: /mai/v1/images/generations and /edits)
     image_endpoint: str = ""
@@ -68,6 +70,11 @@ class Settings(BaseSettings):
     ffmpeg: str = "ffmpeg"
     ffprobe: str = "ffprobe"
     c2patool: str = "c2patool"
+
+    @property
+    def text_model_list(self) -> list[str]:
+        names = [self.text_draft_deployment, self.text_judge_deployment, *self.text_models.split(",")]
+        return list(dict.fromkeys(name.strip() for name in names if name and name.strip()))
 
     @property
     def origin_list(self) -> list[str]:

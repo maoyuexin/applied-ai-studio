@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { FileUp, ImagePlus, Trash2, Wand2 } from "lucide-react";
 import {
   designApi, errorMessage, mediaUrl, useLoad,
-  type ArticleSource, type Brief, type PipelineInfo, type PipelineKey, type Reference, type Speaker, type StudioStatus, type Voice,
+  type ArticleSource, type Brief, type PipelineInfo, type TextRole, type PipelineKey, type Reference, type Speaker, type StudioStatus, type Voice,
 } from "./api";
 import { Banner, Crumbs, Spinner } from "./ui";
 import { PREFILL_KEY, go, useUploader, type Prefill } from "./lib";
@@ -55,6 +55,13 @@ const EXAMPLES: Record<PipelineKey, { title: string; brief: Partial<Brief> }> = 
 };
 
 const DESIGN_SHEET_RUN = "run_2026-10-04_m8-design-sheet";
+
+const TEXT_MODEL_HINT: Record<PipelineKey, string> = {
+  video: "Writes the shot list from your brief.",
+  image: "Writes the full image prompt and rewrites your revision notes.",
+  voice: "Writes the script.",
+  article: "Writes the outline and every draft.",
+};
 
 const VIDEO_DEFAULTS: Brief = {
   brief: "", shots: 4, seconds: 8, takes_per_shot: 3, size: "1280x720", must_not_include: "", visible_label: "Made with AI",
@@ -344,8 +351,9 @@ function ArticleForm({ brief, set }: { brief: Brief; set: (patch: Partial<Brief>
   );
 }
 
-function Preview({ info, status, brief, pipeline, onStart, busy, canStart }: {
+function Preview({ info, status, brief, pipeline, onStart, busy, canStart, models }: {
   info: PipelineInfo; status: StudioStatus | null; brief: Brief; pipeline: PipelineKey; onStart: () => void; busy: boolean; canStart: boolean;
+  models: Partial<Record<TextRole, string>>;
 }) {
   const [estimate, setEstimate] = useState<Record<string, number | string> | null>(null);
   const [problem, setProblem] = useState<string | null>(null);
@@ -369,7 +377,8 @@ function Preview({ info, status, brief, pipeline, onStart, busy, canStart }: {
     return () => window.clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key, pipeline, longEnough]);
-  const roleModel = (role: string | null) => status?.roles.find((item) => item.role === role)?.model;
+  const roleModel = (role: string | null) => (role === "text-draft" || role === "text-judge" ? models[role] : undefined)
+    ?? status?.roles.find((item) => item.role === role)?.model;
   const kpis: Array<[string, string]> = [];
   if (estimate) {
     if (pipeline === "video") kpis.push([String(estimate.video_generations), "video generations"], [`${estimate.video_seconds} s`, "video generated (billed)"], [`~${estimate.minutes} min`, "for the takes"]);
@@ -390,6 +399,7 @@ function Preview({ info, status, brief, pipeline, onStart, busy, canStart }: {
               <b style={{ color: "var(--text)" }}>{step.title}{step.gate ? " ✋" : ""}</b>
               <small>
                 {step.role && roleModel(step.role) ? <span className="ds-chip model" style={{ marginRight: 6 }}>{roleModel(step.role)}</span> : null}
+                {pipeline === "article" && step.key === "draft" && roleModel("text-judge") ? <span className="ds-chip model" style={{ marginRight: 6 }}>checks: {roleModel("text-judge")}</span> : null}
                 {step.description}
               </small>
             </div>
@@ -427,6 +437,7 @@ export default function NewRunPage({ pipeline: rawPipeline, forkOf }: { pipeline
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState("");
   const [parent, setParent] = useState<string | null>(null);
+  const [models, setModels] = useState<Partial<Record<TextRole, string>>>({});
   const [note, setNote] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -459,6 +470,7 @@ export default function NewRunPage({ pipeline: rawPipeline, forkOf }: { pipeline
       }));
       setRefs(references);
       setTitle(`${source.title} (fork)`);
+      if (source.settings?.models) setModels(source.settings.models);
       setTags(source.tags.join(", "));
       setParent(source.id);
       setNote(`Forked from “${source.title}”. Change anything, then start.`);
@@ -475,6 +487,11 @@ export default function NewRunPage({ pipeline: rawPipeline, forkOf }: { pipeline
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [voices.data, pipeline]);
 
+  const defaults = status.data?.text_defaults;
+  const chosenModels: Partial<Record<TextRole, string>> = {
+    "text-draft": models["text-draft"] ?? defaults?.["text-draft"],
+    ...(pipeline === "article" ? { "text-judge": models["text-judge"] ?? defaults?.["text-judge"] } : {}),
+  };
   const fullBrief: Brief = pipeline === "voice" || pipeline === "article" ? brief : { ...brief, references: refs.map(({ sha, role, name }) => ({ sha, role, name })) };
   const ready = status.data?.pipelines.find((item) => item.key === pipeline)?.ready ?? false;
   const canStart = ready && brief.brief.trim().length >= (pipeline === "image" || pipeline === "article" ? 10 : 20)
@@ -485,7 +502,7 @@ export default function NewRunPage({ pipeline: rawPipeline, forkOf }: { pipeline
     setError(null);
     try {
       const detail = await designApi.create({
-        pipeline, brief: fullBrief, title: title.trim() || undefined, parent_run_id: parent ?? undefined,
+        pipeline, brief: fullBrief, title: title.trim() || undefined, parent_run_id: parent ?? undefined, models: chosenModels,
         tags: tags.split(",").map((tag) => tag.trim()).filter(Boolean),
       });
       go(`/design-studio/runs/${detail.run.id}`);
@@ -543,6 +560,22 @@ export default function NewRunPage({ pipeline: rawPipeline, forkOf }: { pipeline
               <Field label="Run title"><input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Shown in run history" /></Field>
               <Field label="Tags" hint="Comma separated, e.g. Module 8, example"><input value={tags} onChange={(e) => setTags(e.target.value)} /></Field>
             </div>
+            {status.data && status.data.text_models.length > 0 && (
+              <div className="ds-grid2">
+                <Field label="Text model" hint={TEXT_MODEL_HINT[pipeline]}>
+                  <select value={chosenModels["text-draft"] ?? ""} onChange={(e) => setModels({ ...models, "text-draft": e.target.value })}>
+                    {status.data.text_models.map((name) => <option key={name} value={name}>{name}{name === defaults?.["text-draft"] ? " (default)" : ""}</option>)}
+                  </select>
+                </Field>
+                {pipeline === "article" && (
+                  <Field label="Fact-check model" hint="A second model checks every claim against the sources. A reasoning model is stricter.">
+                    <select value={chosenModels["text-judge"] ?? ""} onChange={(e) => setModels({ ...models, "text-judge": e.target.value })}>
+                      {status.data.text_models.map((name) => <option key={name} value={name}>{name}{name === defaults?.["text-judge"] ? " (default)" : ""}</option>)}
+                    </select>
+                  </Field>
+                )}
+              </div>
+            )}
             {pipeline === "video" && <VideoForm brief={brief} set={set} voices={voices.data ?? []} />}
             {pipeline === "image" && <ImageForm brief={brief} set={set} info={info} />}
             {pipeline === "voice" && <VoiceForm brief={brief} set={set} voices={voices.data ?? []} />}
@@ -559,7 +592,7 @@ export default function NewRunPage({ pipeline: rawPipeline, forkOf }: { pipeline
               </>
             )}
           </section>
-          <Preview info={info} status={status.data} brief={fullBrief} pipeline={pipeline} onStart={() => void start()} busy={busy} canStart={canStart} />
+          <Preview info={info} status={status.data} brief={fullBrief} pipeline={pipeline} onStart={() => void start()} busy={busy} canStart={canStart} models={chosenModels} />
         </div>
       )}
     </div>

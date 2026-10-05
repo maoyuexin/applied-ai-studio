@@ -43,6 +43,7 @@ class CreateRunRequest(BaseModel):
     template: str | None = Field(None, max_length=60)
     parent_run_id: str | None = Field(None, max_length=80)
     tags: list[str] = Field(default_factory=list, max_length=12)
+    models: dict[str, str] = Field(default_factory=dict, max_length=4)
 
 
 class EstimateRequest(BaseModel):
@@ -161,6 +162,10 @@ def create_app(
             "data_dir": _display_path(current.data_dir), "storage_bytes": store.media_total_bytes(),
             "tools": engine.tools.available(), "roles": roles, "caps": caps, "pipelines": pipelines,
             "video_retirement": retires, "hide_restricted": current.hide_restricted,
+            "text_models": current.text_model_list if not engine.providers.fake else
+            sorted({engine.providers.deployment("text-draft"), engine.providers.deployment("text-judge")}),
+            "text_defaults": {"text-draft": engine.providers.deployment("text-draft"),
+                              "text-judge": engine.providers.deployment("text-judge")},
         }
 
     @app.post(f"{PREFIX}/status/test/{{role}}")
@@ -264,7 +269,7 @@ def create_app(
                     raise ActionError(f"Unknown voice for {speaker.get('name')}: {speaker.get('voice')}")
         tags = sorted({tag.strip()[:40] for tag in body.tags if tag.strip()})
         run = engine.create_run(body.pipeline, body.brief, title=body.title, template=body.template,
-                                parent_run_id=body.parent_run_id, tags=tags)
+                                parent_run_id=body.parent_run_id, tags=tags, models=body.models)
         return engine.detail(run["id"])
 
     @app.get(f"{PREFIX}/runs")

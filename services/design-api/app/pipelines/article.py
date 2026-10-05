@@ -209,7 +209,7 @@ class ArticlePipeline(Pipeline):
         if brief["fact_check"]:
             claims = await self._critique(ctx, data)
             data["claims"] = claims
-            data["judge"] = ctx.providers.deployment("text-judge")
+            data["judge"] = ctx.deployment("text-judge")
             counts = {verdict: sum(1 for c in claims if c["verdict"] == verdict)
                       for verdict in ("supported", "partly", "unsupported")}
             state = "bad" if counts["unsupported"] else ("warn" if counts["partly"] else "ok")
@@ -371,4 +371,5 @@ class ArticlePipeline(Pipeline):
                 fixed = max(first.get("unsupported", 0) - last.get("unsupported", 0), 0)
                 outputs.append(f"{last.get('unsupported', 0)} unsupported" + (f" ({fixed} fixed)" if fixed else ""))
         return {"outputs": " · ".join(outputs), "thumb_sha": None, "versions": len(versions),
-                "models": sorted({a["deployment"] for a in artifacts if a["deployment"] and a["status"] == "ready"})}
+                "models": sorted({a["deployment"] for a in artifacts if a["deployment"] and a["status"] == "ready"}
+                                 | {a["data"]["judge"] for a in versions if a["data"].get("judge")})}
