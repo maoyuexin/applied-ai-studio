@@ -439,7 +439,7 @@ const styles = `
   .promo-studio.page { padding-inline: 14px; }
   .promo-studio .page-header { display: grid; }
   .promo-top-actions { justify-content: flex-start; }
-  .promo-tabs { position: sticky; top: 0; z-index: 4; padding: 8px 0; background: rgba(17,19,24,0.96); }
+  .promo-tabs { position: static; padding: 8px 0; background: rgba(17,19,24,0.96); }
   .promo-tabs button { flex: 1 1 calc(50% - 8px); justify-content: center; padding-inline: 10px; }
   .promo-tabs button { scroll-margin-top: 24px; }
   .promo-control-grid, .promo-kv, .promo-stat-strip, .promo-take-grid { grid-template-columns: 1fr; }
