@@ -15,7 +15,7 @@ Promo Studio page)
   from phase 3 at your request), each verified live on Foundry (gpt-5.4-mini/gpt-5.4, MAI-Image-2.6,
   Sora 2, MAI-Voice-2.1-Flash with speech-to-text listen-back).
 - Module 8 round 1 and round 2, the design sheet and the brand test are imported into history.
-- 28 backend tests on offline fakes; typecheck and lint clean.
+- 26 backend tests on offline fakes; typecheck and lint clean.
 - Next: home-server deployment (service principal, compose, nginx), example runs, rehearsal.
 - Listen-back uses Azure Speech speech-to-text on the same resource, so no `gpt-4o-transcribe`
   deployment is needed.
