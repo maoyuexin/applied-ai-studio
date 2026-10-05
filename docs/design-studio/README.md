@@ -83,3 +83,13 @@ Pipelines whose roles are not configured show what is missing instead of failing
 ```sh
 npm run test:design      # pytest on offline fake providers, including resume-after-restart and bundles
 ```
+
+Browser end-to-end (all four pipelines clicked through the real UI against the fake API):
+see the header of [`services/design-api/e2e/browser_e2e.py`](../../services/design-api/e2e/browser_e2e.py).
+
+## Home server
+
+The home server runs Design Studio as its own `design` container (release notes and rollback in the
+deploy README on the server). It authenticates with a service principal that has only
+*Cognitive Services User* on the two Foundry resources. Copy runs to it with **Export bundle** on the
+Mac and **Import bundle** in its Run history.
