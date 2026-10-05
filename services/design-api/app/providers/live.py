@@ -56,9 +56,14 @@ async def _send(
                 await asyncio.sleep(backoff * (attempt + 1))
                 continue
             raise last from error
-        except httpx.HTTPError as error:
-            raise ProviderError(f"Could not reach {service}: {error.__class__.__name__}.", code="network",
-                                retryable=True) from error
+        except httpx.TransportError as error:
+            # Dropped or reset connections happen on long image/video calls; treat them like a timeout.
+            last = ProviderError(f"Could not reach {service}: {error.__class__.__name__}.", code="network",
+                                 retryable=True)
+            if attempt < attempts - 1:
+                await asyncio.sleep(backoff * (attempt + 1))
+                continue
+            raise last from error
         if response.status_code < 400:
             return response
         last = classify(response, service)
@@ -182,7 +187,7 @@ class ImageClient:
                     response = await _send(client, self.service, "POST", url, attempts=1,
                                            headers={"Authorization": f"Bearer {token}"}, **kwargs)
                 except ProviderError as error:
-                    if error.code in ("rate_limit", "upstream", "timeout") and attempt < 3:
+                    if error.code in ("rate_limit", "upstream", "timeout", "network") and attempt < 3:
                         await asyncio.sleep(self.rate_backoff * (attempt + 1))
                         continue
                     raise

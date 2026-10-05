@@ -1,4 +1,5 @@
 from ..config import Settings
+from .article import ArticlePipeline
 from .base import Pipeline
 from .image import ImagePipeline
 from .video import VideoPipeline
@@ -10,5 +11,6 @@ def build_pipelines(settings: Settings) -> dict[str, Pipeline]:
         VideoPipeline(poll_seconds=settings.video_poll_seconds, timeout_seconds=settings.video_timeout_seconds),
         ImagePipeline(),
         VoicePipeline(),
+        ArticlePipeline(),
     ]
     return {pipeline.key: pipeline for pipeline in pipelines}

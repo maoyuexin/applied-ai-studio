@@ -524,8 +524,10 @@ class VideoPipeline(Pipeline):
         }
         checks = [c2pa_check(final_c2pa)]
         present = sum(1 for take in report["takes"] if (take["c2pa"] or {}).get("present"))
-        checks.append(check("c2pa-takes", f"Raw takes with Content Credentials: {present} of {len(takes)}",
-                            "ok" if present == len(takes) else "info", "c2patool on each kept take"))
+        valid = sum(1 for take in report["takes"] if (take["c2pa"] or {}).get("valid"))
+        checks.append(check("c2pa-takes", f"Raw takes: Content Credentials present on {present} of {len(takes)}, "
+                                          f"valid on {valid}", "ok" if valid == len(takes) else "warn",
+                            "c2patool on each kept take"))
         ctx.update_artifact(artifact["id"], status="ready", data=report, checks=checks)
         ctx.set_step_data("provenance", report=report)
 

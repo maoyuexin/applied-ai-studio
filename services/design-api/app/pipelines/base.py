@@ -110,7 +110,8 @@ def c2pa_check(result: dict[str, Any]) -> dict[str, str]:
     if result.get("valid"):
         issuer = f" ({result['issuer']})" if result.get("issuer") else ""
         return check("c2pa", f"Content Credentials: present, valid{issuer}", "ok", "c2patool")
-    return check("c2pa", f"Content Credentials: present, {result.get('detail', 'fails check')}", "bad", "c2patool")
+    # The vendor's signature failing (e.g. an expired signing certificate) is a provenance finding, not a content defect.
+    return check("c2pa", f"Content Credentials: present, {result.get('detail', 'fails check')}", "warn", "c2patool")
 
 
 def clean_text(value: Any, limit: int = 4000) -> str:

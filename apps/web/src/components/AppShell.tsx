@@ -1,8 +1,8 @@
 import {
   Bot,
   Boxes,
-  Film,
   FlaskConical,
+  Sparkles,
   type LucideIcon,
 } from "lucide-react";
 import type { ReactNode } from "react";
@@ -10,9 +10,9 @@ import { navigate } from "../router";
 
 const navigation: Array<{ to: string; label: string; icon: LucideIcon }> = [
   { to: "/showcase", label: "Industry Workflows", icon: Boxes },
-  { to: "/promo-studio", label: "Promo Studio", icon: Film },
   { to: "/fit", label: "AI Fit Analyzer", icon: FlaskConical },
   { to: "/ask", label: "Ask Studio", icon: Bot },
+  { to: "/design-studio", label: "Design Studio", icon: Sparkles },
 ];
 
 export default function AppShell({ pathname, children }: { pathname: string; children: ReactNode }) {

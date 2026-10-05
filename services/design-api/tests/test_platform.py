@@ -205,3 +205,19 @@ def test_text_client_and_json_parsing() -> None:
     assert result.json() == {"shots": []} and result.usage == {"total_tokens": 9}
     with pytest.raises(ProviderError):
         TextResult("no json here", 0, "m").json()
+
+
+def test_image_client_retries_dropped_connections() -> None:
+    calls = {"count": 0}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        calls["count"] += 1
+        if calls["count"] == 1:
+            raise httpx.ReadError("connection dropped", request=request)
+        import base64
+        return httpx.Response(200, json={"data": [{"b64_json": base64.b64encode(png_bytes()).decode()}]})
+
+    client = ImageClient("https://example.services.ai.azure.com", "mai-image-2-6", StaticTokenProvider(), 60,
+                         httpx.MockTransport(handler), rate_backoff=0.01)
+    assert asyncio.run(client.edit("a car", [png_bytes()], 1536, 864)).startswith(b"\x89PNG")
+    assert calls["count"] == 2

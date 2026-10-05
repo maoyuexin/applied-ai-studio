@@ -72,6 +72,24 @@ class FakeText:
             payload = {"lines": [
                 {"speaker": speakers[index % len(speakers)]["name"], "text": f"This is line {index + 1}.", "style": ""}
                 for index in range(int(ctx.get("lines", 4)))]}
+        elif purpose == "article.outline":
+            payload = {"headline": "Fake headline", "points": [
+                {"text": f"Point {index + 1} from the source.", "sources": [1]} for index in range(3)]}
+        elif purpose in ("article.draft", "article.revise"):
+            note = ctx.get("note") or ""
+            body = "The agency announced a plan. The first flight could happen in December 2024."
+            if purpose == "article.revise":
+                body = "The agency announced a plan. The first flight could happen in December 2026." + (
+                    f" ({note})" if note else "")
+            payload = {"headline": "Fake headline", "body": body}
+        elif purpose == "article.critique":
+            body = str(ctx.get("body") or "")
+            payload = {"claims": [
+                {"claim": "The agency announced a plan.", "verdict": "supported", "evidence": "announced a plan",
+                 "source": 1, "note": ""},
+                {"claim": "The first flight could happen in December.",
+                 "verdict": "unsupported" if "2024" in body else "supported",
+                 "evidence": "December of this year", "source": 1, "note": "year"}]}
         else:
             payload = {"text": "ok"}
         return TextResult(json.dumps(payload), self.delay, deployment, {"total_tokens": 0})

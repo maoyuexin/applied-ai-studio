@@ -22,8 +22,8 @@ if TYPE_CHECKING:
 SCRIPT_SYSTEM = """You write short audio scripts for synthetic voices (Microsoft MAI-Voice). Write natural spoken \
 language: short sentences, contractions, no stage directions, no sound effects, no emojis, no markdown. Each line \
 is one speaker turn of one to three sentences. Use only the speakers given, by name. A speaker's "style" may be \
-one value from that speaker's style list, or empty. Aim for the target length at about 150 words per minute. \
-Write in the language of the locale. {disclosure}Return only JSON: \
+one value from that speaker's style list, or empty. Stay within 10% of target_words in total: these voices read at about 160 words per \
+minute. Write in the language of the locale. {disclosure}Return only JSON: \
 {{"lines": [{{"speaker": "...", "text": "...", "style": ""}}]}}"""
 
 DISCLOSURE_RULE = "The last line, spoken by the first speaker, says in one short sentence that the voices are \
@@ -65,9 +65,14 @@ class Line(BaseModel):
     style: str = Field("", max_length=40)
 
 
+ORDINALS = {"1st": "first", "2nd": "second", "3rd": "third", "4th": "fourth", "5th": "fifth"}
+
+
 def words(text: str) -> list[str]:
-    tokens = re.findall(r"[\w']+", text.lower())
-    return [NUMBER_WORDS.get(token, token) for token in tokens]
+    """Lowercase words with apostrophes unified and numbers in one spelling, so '8'/'eight' and 'we’re'/'we're' match."""
+    normalized = text.lower().replace("\u2019", "'").replace("\u2018", "'").replace("-", " ")
+    tokens = re.findall(r"[\w']+", normalized)
+    return [NUMBER_WORDS.get(ORDINALS.get(token, token), ORDINALS.get(token, token)) for token in tokens]
 
 
 def listen_back(expected: str, heard: str) -> dict[str, Any]:
@@ -137,7 +142,7 @@ class VoicePipeline(Pipeline):
         speakers = [{"name": s["name"], "styles": styles.get(s["voice"], [])} for s in brief["speakers"]]
         request: dict[str, Any] = {
             "format": FORMATS[brief["format"]], "brief": brief["brief"], "target_seconds": brief["target_seconds"],
-            "target_words": round(brief["target_seconds"] * 150 / 60), "locale": brief["locale"],
+            "target_words": round(brief["target_seconds"] * 160 / 60 * 0.95), "locale": brief["locale"],
             "speakers": speakers,
         }
         if feedback:
@@ -152,7 +157,7 @@ class VoicePipeline(Pipeline):
                           drafts=ctx.step_data("script").get("drafts", 0) + 1, feedback=feedback or None)
         words_total = sum(len(line["text"].split()) for line in lines)
         ctx.event("info", f"{'Redrafted' if feedback else 'Drafted'} {len(lines)} lines ({words_total} words, about "
-                          f"{words_total * 60 / 150:.0f} s) with {result.deployment}.", code="drafted")
+                          f"{words_total * 60 / 160:.0f} s) with {result.deployment}.", code="drafted")
 
     def _clean_lines(self, ctx: RunContext, raw: Any, styles: dict[str, list[str]]) -> list[dict[str, Any]]:
         if not isinstance(raw, list) or not raw:
