@@ -97,9 +97,11 @@ export default function ShowcasePage() {
                 ? "/traffic-signal"
               : item.id === "transportation-ride-hail-lab"
                 ? "/ride-hail"
+              : item.id === "media-promo-studio-lab"
+                ? "/promo-studio"
               : `/demo?case=${encodeURIComponent(item.id)}`;
             const retailSimulator = item.id === "retail-demand-forecasting-lab" || item.id === "retail-product-recommendations-lab";
-            const browserDemo = retailSimulator || ["transportation-warehouse-robot-lab", "transportation-traffic-signal-lab", "transportation-ride-hail-lab"].includes(item.id);
+            const browserDemo = retailSimulator || ["transportation-warehouse-robot-lab", "transportation-traffic-signal-lab", "transportation-ride-hail-lab", "media-promo-studio-lab"].includes(item.id);
             return (
               <article key={item.id} className={`use-case-card accent-${item.accent}`}>
                 <div className="use-case-card-main">

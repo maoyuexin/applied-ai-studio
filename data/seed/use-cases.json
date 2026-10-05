@@ -1400,6 +1400,68 @@
     "source": "public-synthetic"
   },
   {
+    "id": "media-promo-studio-lab",
+    "title": "Promo Studio · SOLENNE GT",
+    "industry": "media-creative",
+    "industryLabel": "Media, Content & Creative Industries",
+    "icon": "film",
+    "accent": "pink",
+    "summary": "Review image and video generations for a fictional luxury car ad, compare text-only and keyframe-guided Sora takes, and export the class QC record.",
+    "problem": "Creative teams can generate convincing car-ad footage quickly, but design consistency, brand safety, rights review, provenance, and publishability still need explicit human checkpoints.",
+    "outcomes": [
+      "Build a five-shot ad from a fixed creative brief",
+      "Separate live generation from recorded review mode",
+      "Export keep/regenerate and QC decisions for the lab sheet"
+    ],
+    "capabilities": [
+      "Image generation",
+      "Image editing",
+      "Text-to-video",
+      "Image-to-video",
+      "Provenance review"
+    ],
+    "patterns": [
+      "Prompt built from approved options",
+      "Recorded fallback when live quota or credentials are unavailable",
+      "Brand-and-legal review outside vendor guardrails",
+      "C2PA and visible-label review"
+    ],
+    "workloadType": "content-generation",
+    "dataReadiness": "medium",
+    "riskLevel": "high",
+    "maturity": "showcase",
+    "architecture": [
+      "Synced local media manifest served as static assets",
+      "Optional server-side Foundry image and video API",
+      "No Azure calls or secrets in the browser",
+      "Instructor review record exported as JSON"
+    ],
+    "workflow": {
+      "nodes": [
+        { "id": "brief", "label": "Approved car brief", "kind": "input" },
+        { "id": "image", "label": "Generate or edit stills", "kind": "ai" },
+        { "id": "video", "label": "Generate Sora takes", "kind": "ai" },
+        { "id": "qc", "label": "Student and instructor QC", "kind": "human" },
+        { "id": "legal", "label": "Brand and provenance review", "kind": "human" },
+        { "id": "record", "label": "Review record", "kind": "output" }
+      ],
+      "edges": [
+        { "from": "brief", "to": "image", "label": "fixed options" },
+        { "from": "image", "to": "video", "label": "keyframe" },
+        { "from": "video", "to": "qc", "label": "takes" },
+        { "from": "qc", "to": "legal", "label": "usable clips" },
+        { "from": "legal", "to": "record", "label": "export" }
+      ]
+    },
+    "demoPrompts": [
+      "What did the keyframe preserve that text-only generation lost?",
+      "Why is the vendor guardrail not the brand-and-legal review?",
+      "Which C2PA signal survived the edit pipeline?"
+    ],
+    "demoStatus": "available",
+    "source": "public-synthetic"
+  },
+  {
     "id": "agriculture-crop-monitoring",
     "title": "Crop Stress Monitoring Assistant",
     "industry": "agriculture",

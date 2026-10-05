@@ -13,6 +13,7 @@ const ForecastPage = lazy(() => import("./pages/ForecastPage"));
 const FraudPage = lazy(() => import("./pages/FraudPage"));
 const OnlineOrderPage = lazy(() => import("./pages/OnlineOrderPage"));
 const PneumoniaPage = lazy(() => import("./pages/PneumoniaPage"));
+const PromoStudioPage = lazy(() => import("./pages/PromoStudioPage"));
 const RecommendPage = lazy(() => import("./pages/RecommendPage"));
 const RetailDemoPage = lazy(() => import("./pages/RetailDemoPage"));
 const TransportationLabPage = lazy(() => import("./pages/TransportationLabPage"));
@@ -29,7 +30,7 @@ const load = (page: React.ReactNode) => (
 export default function App() {
   const location = useLocationSnapshot();
   const pathname = location.split("?", 1)[0];
-  const validPath = ["/workflow", "/demo", "/showcase", "/fit", "/ask", "/online-order", "/fraud", "/pneumonia", "/credit", "/complaints", "/maintenance", "/maintenance-simulator", "/procedures", "/forecast", "/recommendations", "/forecast-simulator", "/recommendations-simulator", "/forecast-reference", "/recommendations-reference", "/warehouse-robot", "/traffic-signal", "/ride-hail"].includes(pathname);
+  const validPath = ["/workflow", "/demo", "/showcase", "/fit", "/ask", "/online-order", "/fraud", "/pneumonia", "/credit", "/complaints", "/maintenance", "/maintenance-simulator", "/procedures", "/forecast", "/recommendations", "/forecast-simulator", "/recommendations-simulator", "/forecast-reference", "/recommendations-reference", "/warehouse-robot", "/traffic-signal", "/ride-hail", "/promo-studio"].includes(pathname);
   const transportationLab = pathname === "/warehouse-robot" ? "warehouse-robot"
     : pathname === "/traffic-signal" ? "traffic-signal"
     : pathname === "/ride-hail" ? "ride-hail" : null;
@@ -64,6 +65,8 @@ export default function App() {
       ? <RetailDemoPage key="recommendations" kind="recommendations" />
     : transportationLab
       ? <TransportationLabPage key={transportationLab} lab={transportationLab} />
+    : pathname === "/promo-studio"
+      ? <PromoStudioPage />
     : pathname === "/forecast-reference"
       ? <ForecastPage />
     : pathname === "/recommendations-reference"

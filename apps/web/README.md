@@ -16,6 +16,7 @@ Important entry points:
 - `src/pages/MaintenancePage.tsx` — predictive-maintenance evidence and workload views
 - `src/pages/MaintenanceSimulatorPage.tsx` — dedicated sequential telemetry simulator
 - `src/pages/AskStudioPage.tsx` — sandboxed Copilot assistant
+- `src/pages/PromoStudioPage.tsx` — Module 8 image/video generation review page
 - `src/index.css` — shared application and responsive design system
 
 Build only this workspace with:

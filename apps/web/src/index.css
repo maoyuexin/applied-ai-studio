@@ -1213,7 +1213,7 @@ input[type="range"] { height: 5px; padding: 0; border: 0; accent-color: var(--or
 
 @media (max-width: 760px) {
   .app-shell { display: block; }
-  .sidebar { position: sticky; height: auto; border-right: 0; border-bottom: 1px solid var(--border); }
+  .sidebar { position: relative; top: auto; z-index: 2; height: auto; border-right: 0; border-bottom: 1px solid var(--border); }
   .brand-block { min-height: 62px; padding: 12px 14px; }
   .primary-nav { padding: 7px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: visible; }
   .nav-link { min-width: 0; min-height: 42px; padding: 7px 4px; justify-content: center; border-left: 0; border-bottom: 2px solid transparent; font-size: 8px; }

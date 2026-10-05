@@ -5,7 +5,7 @@ describe("CatalogStore seed contracts", () => {
   it("loads the syllabus-aligned showcase catalog", async () => {
     const catalog = await CatalogStore.load();
 
-    expect(catalog.list()).toHaveLength(24);
+    expect(catalog.list()).toHaveLength(25);
     expect(catalog.industries()).toHaveLength(12);
     expect(catalog.list({ industry: "retail" }).map((item) => item.id)).toEqual([
       "retail-online-order-decision-lab",
@@ -23,6 +23,10 @@ describe("CatalogStore seed contracts", () => {
     expect(pneumoniaLab?.demoStatus).toBe("available");
     expect(pneumoniaLab?.courseCaseId).toBe("healthcare-pediatric-xray-prioritization");
     expect(pneumoniaLab?.source).toBe("public-benchmark");
+    const promoStudio = catalog.get("media-promo-studio-lab");
+    expect(promoStudio?.demoStatus).toBe("available");
+    expect(promoStudio?.industry).toBe("media-creative");
+    expect(promoStudio?.workloadType).toBe("content-generation");
   });
 
   it("loads the detailed retail workflow", async () => {

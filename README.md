@@ -30,6 +30,7 @@ model's output changes a business decision, and where a person keeps authority.
 | 05 | [AI in Manufacturing](lessons/05-manufacturing/README.md) | Compressor predictive maintenance; procedure assistant | [PDF](lessons/05-manufacturing/M5_Deck_AI_in_Manufacturing.pdf) | `/maintenance`, `/procedures` |
 | 06 | [AI in Retail and Supply Chain](lessons/06-retail-supply-chain/README.md) | Demand forecasting; next best product; catalog onboarding | [PDF](lessons/06-retail-supply-chain/M6_Deck_AI_in_Retail.pdf) | `/forecast`, `/recommendations` |
 | 07 | [AI in Transportation](lessons/07-transportation/README.md) | Warehouse robot; traffic light; ride-hail driver | [PDF](lessons/07-transportation/M7_Deck_AI_in_Transportation.pdf) | `/warehouse-robot`, `/traffic-signal`, `/ride-hail` |
+| 08 | [AI Media Content & Creative](lessons/08-media-content/README.md) | Luxury car ad image + video generation review | — | `/promo-studio` |
 
 Each lesson folder lists its readings, notebook reports, interactive demos and Studio routes.
 Courses map their own modules to these lessons; see [`courses/`](courses/README.md).
@@ -217,6 +218,7 @@ A missing API can appear as a proxy error even when the web page itself loads.
 | Procedure Assistant API | <http://127.0.0.1:4390/health> |
 | Demand Forecast API | <http://127.0.0.1:4400/health> |
 | Product Recommendation API | <http://127.0.0.1:4410/health> |
+| Promo Studio Media API (optional) | <http://127.0.0.1:4420/health> |
 
 ### Lab routes
 
@@ -232,6 +234,7 @@ A missing API can appear as a proxy error even when the web page itself loads.
 | `/procedures` | Grounded procedure assistant that cites public safety regulation and refuses when unsupported | [05](lessons/05-manufacturing/README.md) |
 | `/forecast`, `/recommendations` | Demand forecasting; next best product | [06](lessons/06-retail-supply-chain/README.md) |
 | `/warehouse-robot`, `/traffic-signal`, `/ride-hail` | Reinforcement learning: warehouse robot, traffic light, ride-hail driver (run in the browser) | [07](lessons/07-transportation/README.md) |
+| `/promo-studio` | Promo Studio for Module 8 image/video generation review; recorded by default, live generation only through the optional server API | [08](lessons/08-media-content/README.md) |
 | `/workflow?courseCase=<id>` | The full business workflow behind a case | all |
 | `/ask` | Ask Studio (needs GitHub Copilot) | all |
 
@@ -323,6 +326,12 @@ Common settings:
 | `CATALOG_API_URL` | `http://127.0.0.1:4310` | Agent-to-catalog boundary |
 | `DATABASE_URL` | Project-local SQLite | Online Order database URL |
 | `ALLOWED_ORIGINS` | Local Vite origins | Order API CORS allowlist |
+| `MEDIA_LIVE_IMAGES` | `0` | Enables Promo Studio image generation/editing only when set to `1` |
+| `MEDIA_LIVE_VIDEO` | `0` | Enables the Promo Studio live Sora take button only when set to `1` |
+| `MEDIA_DAILY_IMAGE_CAP` | `40` | Daily accepted live image attempts |
+| `MEDIA_DAILY_VIDEO_CAP` | `4` | Daily accepted live video attempts |
+| `MEDIA_IMAGE_RETRY_ATTEMPTS` | `3` | MAI image retry attempts for transient provider rate limits |
+| `MEDIA_IMAGE_RETRY_BACKOFF_SECONDS` | `1` | Initial MAI image retry backoff in seconds |
 
 ## Useful Commands
 

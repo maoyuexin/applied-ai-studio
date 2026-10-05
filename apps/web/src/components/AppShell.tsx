@@ -1,6 +1,7 @@
 import {
   Bot,
   Boxes,
+  Film,
   FlaskConical,
   type LucideIcon,
 } from "lucide-react";
@@ -9,6 +10,7 @@ import { navigate } from "../router";
 
 const navigation: Array<{ to: string; label: string; icon: LucideIcon }> = [
   { to: "/showcase", label: "Industry Workflows", icon: Boxes },
+  { to: "/promo-studio", label: "Promo Studio", icon: Film },
   { to: "/fit", label: "AI Fit Analyzer", icon: FlaskConical },
   { to: "/ask", label: "Ask Studio", icon: Bot },
 ];
