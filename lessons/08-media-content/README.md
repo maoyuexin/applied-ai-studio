@@ -1,10 +1,19 @@
 # Module 8: AI Media Content & Creative
 
-Studio route: `/promo-studio`
+Studio routes: `/design-studio` (Design Studio) and `/promo-studio` (Case 3 case study)
 
-## Case 3: Promo Studio for SOLENNE GT
+## Design Studio
 
-Promo Studio is a classroom page for the Friday Oct. 9, 2026 ITAI 2372 Module 8
+Design Studio is where the class makes things with generative models and reviews every step: article
+(fact-checked against sources), voice (script, cast, per-line listen-back), image (candidates and a
+version tree of edit passes) and video (shot list, keyframes, takes, assembly, provenance). Every run
+is kept in run history with its prompts, model versions, outputs and decisions. The Module 8 round 1
+and round 2 SOLENNE GT runs are imported there, so the class can open every take and compare the
+rounds. Setup, pipelines and operations: [docs/design-studio/README.md](../../docs/design-studio/README.md).
+
+## Case 3 case study: SOLENNE GT (`/promo-studio`)
+
+The case-study page (reached from Industry Workflows) is a classroom page for the Friday Oct. 9, 2026 ITAI 2372 Module 8
 case on image and video generation for a luxury car advertisement. The vehicle
 and brand are fictional:
 

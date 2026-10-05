@@ -79,7 +79,7 @@ function ShotListReadOnly({ shots }: { shots: Shot[] }) {
   );
 }
 
-function TakeCard({ take, act, busy, openReview, onRemix, portrait }: { take: Artifact; act: RunViewProps["act"]; busy: string | null; openReview: (id: string) => void; onRemix: (take: Artifact) => void; portrait: boolean }) {
+function TakeCard({ take, act, busy, openReview, onRemix, portrait, open }: { take: Artifact; act: RunViewProps["act"]; busy: string | null; openReview: (id: string) => void; onRemix: (take: Artifact) => void; portrait: boolean; open: boolean }) {
   const motion = take.metrics.motion;
   const verdictClass = take.verdict === "keep" ? " keep" : take.verdict === "regenerate" ? " regenerate" : "";
   const ready = take.status === "ready";
@@ -97,13 +97,15 @@ function TakeCard({ take, act, busy, openReview, onRemix, portrait }: { take: Ar
         {(take.status === "failed" || take.status === "blocked") && <span className="ds-tiny" style={{ color: "var(--red)" }}>{take.error}</span>}
       </div>
       <div className="ds-acts">
-        {ready ? (
+        {ready && !open ? (
+          take.verdict ? <span className={`ds-chip ${take.verdict === "keep" ? "ok" : take.verdict === "regenerate" ? "warn" : ""}`}>{take.verdict === "keep" ? "kept" : take.verdict}</span> : null
+        ) : ready ? (
           <>
             <button type="button" className={`ds-btn sm${take.verdict === "keep" ? " good" : ""}`} disabled={busy !== null} onClick={() => void act("decide", { artifact_id: take.id, verdict: take.verdict === "keep" ? null : "keep" })}>Keep</button>
             <button type="button" className={`ds-btn sm${take.verdict === "regenerate" ? " warn" : ""}`} disabled={busy !== null} onClick={() => void act("decide", { artifact_id: take.id, verdict: "regenerate" }).then(() => act("regenerate_take", { shot_id: take.grp }))}>Regen</button>
             <button type="button" className="ds-btn sm" disabled={busy !== null || !take.vendor_job_id} onClick={() => onRemix(take)}>Remix</button>
           </>
-        ) : (take.status === "failed" || take.status === "blocked") ? (
+        ) : (take.status === "failed" || take.status === "blocked") && open ? (
           <button type="button" className="ds-btn sm" disabled={busy !== null} onClick={() => openReview(take.id)}>Reword & retry</button>
         ) : null}
       </div>
@@ -217,7 +219,7 @@ export default function VideoRun(props: RunViewProps) {
                   )}
                 </div>
                 <div className="ds-takes" style={vertical ? { gridTemplateColumns: "repeat(auto-fill, minmax(130px, 1fr))" } : undefined}>
-                  {shotTakes.map((take) => <TakeCard key={take.id} take={take} act={act} busy={busy} openReview={openReview} onRemix={(t) => { setRemix(t); setRemixNote(""); }} portrait={vertical} />)}
+                  {shotTakes.map((take) => <TakeCard key={take.id} take={take} act={act} busy={busy} openReview={openReview} onRemix={(t) => { setRemix(t); setRemixNote(""); }} portrait={vertical} open={Boolean(takesOpen)} />)}
                 </div>
               </div>
             );

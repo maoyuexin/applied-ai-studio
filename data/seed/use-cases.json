@@ -1401,12 +1401,12 @@
   },
   {
     "id": "media-promo-studio-lab",
-    "title": "Promo Studio · SOLENNE GT",
+    "title": "Generative ad production · SOLENNE GT",
     "industry": "media-creative",
     "industryLabel": "Media, Content & Creative Industries",
     "icon": "film",
     "accent": "pink",
-    "summary": "Review image and video generations for a fictional luxury car ad, compare text-only and keyframe-guided Sora takes, and export the class QC record.",
+    "summary": "How a fictional luxury car ad was made with MAI-Image and Sora, step by step: design sheet, keyframes, takes, human review, guardrails and provenance. The same runs open in Design Studio.",
     "problem": "Creative teams can generate convincing car-ad footage quickly, but design consistency, brand safety, rights review, provenance, and publishability still need explicit human checkpoints.",
     "outcomes": [
       "Build a five-shot ad from a fixed creative brief",

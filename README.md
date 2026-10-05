@@ -30,7 +30,7 @@ model's output changes a business decision, and where a person keeps authority.
 | 05 | [AI in Manufacturing](lessons/05-manufacturing/README.md) | Compressor predictive maintenance; procedure assistant | [PDF](lessons/05-manufacturing/M5_Deck_AI_in_Manufacturing.pdf) | `/maintenance`, `/procedures` |
 | 06 | [AI in Retail and Supply Chain](lessons/06-retail-supply-chain/README.md) | Demand forecasting; next best product; catalog onboarding | [PDF](lessons/06-retail-supply-chain/M6_Deck_AI_in_Retail.pdf) | `/forecast`, `/recommendations` |
 | 07 | [AI in Transportation](lessons/07-transportation/README.md) | Warehouse robot; traffic light; ride-hail driver | [PDF](lessons/07-transportation/M7_Deck_AI_in_Transportation.pdf) | `/warehouse-robot`, `/traffic-signal`, `/ride-hail` |
-| 08 | [AI Media Content & Creative](lessons/08-media-content/README.md) | Luxury car ad image + video generation review | — | `/promo-studio` |
+| 08 | [AI Media Content & Creative](lessons/08-media-content/README.md) | Luxury car ad image + video generation review | — | `/design-studio`, `/promo-studio` |
 
 Each lesson folder lists its readings, notebook reports, interactive demos and Studio routes.
 Courses map their own modules to these lessons; see [`courses/`](courses/README.md).
@@ -67,6 +67,9 @@ Copilot CLI session; authentication material remains outside the project.
 - Explainable AI impact: signals, probabilities, thresholds, workflow branches,
   counterfactuals, and human authority.
 - Sandboxed GitHub Copilot SDK gateway using only allowlisted read-only tools.
+- **Design Studio**: generative pipelines (article, voice, image, video) on your own Microsoft Foundry
+  models, with human review gates, automatic checks, run history, fork/compare and export/import bundles
+  ([docs](docs/design-studio/README.md)).
 - .NET Aspire AppHost source for local composition and observability.
 
 ## Architecture
@@ -219,6 +222,7 @@ A missing API can appear as a proxy error even when the web page itself loads.
 | Demand Forecast API | <http://127.0.0.1:4400/health> |
 | Product Recommendation API | <http://127.0.0.1:4410/health> |
 | Promo Studio Media API (optional) | <http://127.0.0.1:4420/health> |
+| Design Studio API | <http://127.0.0.1:4430/health> |
 
 ### Lab routes
 
@@ -234,7 +238,8 @@ A missing API can appear as a proxy error even when the web page itself loads.
 | `/procedures` | Grounded procedure assistant that cites public safety regulation and refuses when unsupported | [05](lessons/05-manufacturing/README.md) |
 | `/forecast`, `/recommendations` | Demand forecasting; next best product | [06](lessons/06-retail-supply-chain/README.md) |
 | `/warehouse-robot`, `/traffic-signal`, `/ride-hail` | Reinforcement learning: warehouse robot, traffic light, ride-hail driver (run in the browser) | [07](lessons/07-transportation/README.md) |
-| `/promo-studio` | Promo Studio for Module 8 image/video generation review; recorded by default, live generation only through the optional server API | [08](lessons/08-media-content/README.md) |
+| `/promo-studio` | Case study: how the SOLENNE GT ad was made, step by step (reached from Industry Workflows); recorded by default | [08](lessons/08-media-content/README.md) |
+| `/design-studio` | Design Studio: article, voice, image and video pipelines with review gates and run history (needs your Foundry resource; see [docs](docs/design-studio/README.md)) | [08](lessons/08-media-content/README.md) |
 | `/workflow?courseCase=<id>` | The full business workflow behind a case | all |
 | `/ask` | Ask Studio (needs GitHub Copilot) | all |
 
@@ -405,6 +410,8 @@ authenticated Copilot account and may use metered requests.
 - SQLite and local session data are ignored
 - Moving from loopback to a shared network requires a new authentication and
   authorization design
+- Design Studio calls Foundry with Microsoft Entra ID (`az login` or a scoped service principal);
+  it never stores keys, and daily caps limit spend
 
 See [SECURITY.md](SECURITY.md) and
 [ADR-0002](docs/adr/0002-copilot-identity-and-tools.md).
@@ -421,6 +428,7 @@ services/catalog-api/    Catalog, assessments, deterministic fit scoring
 services/agent-api/      Sandboxed GitHub Copilot SDK gateway
 services/order-api/      FastAPI, SQLAlchemy, Alembic, SQLite order vertical
 services/*-api/          Artifact-backed model services, one per lab
+services/design-api/     Design Studio pipeline engine, run store and Foundry providers
 packages/contracts/      Shared Zod schemas and TypeScript contracts
 data/seed/               Public teaching scenarios and workflows
 docs/                    Quickstart, architecture, ADRs and lab guides

@@ -829,10 +829,11 @@ export default function PromoStudioPage() {
       <header className="page-header">
         <div>
           <span className="eyebrow">ITAI 2372 · Module 8 · Case 3</span>
-          <h1>Promo Studio · {manifest.brand}</h1>
+          <h1>Case study · {manifest.brand} ad</h1>
           <p>
-            Image and video generation lab for a fictional luxury car ad. Students compare prompt-only,
-            keyframe-guided and remix workflows, then export their review decisions for the lab sheet.
+            How a fictional luxury car ad was made, step by step: brief, design sheet, keyframes, takes, review,
+            guardrails and provenance. The same runs are in Design Studio, where you can open every take, fork the
+            brief or make your own.
           </p>
         </div>
         <div className="promo-top-actions">
@@ -843,13 +844,16 @@ export default function PromoStudioPage() {
             <Gauge size={15} aria-hidden="true" />
             {status ? `${status.remaining_daily_quota.images}/${status.caps.images} images left` : "Live API offline"}
           </span>
+          <button className="promo-mode-pill" type="button" onClick={() => navigate("/design-studio/runs/run_2026-10-05_m8-round2")}>
+            <Wand2 size={15} aria-hidden="true" /> Open in Design Studio
+          </button>
           <button className="promo-export" type="button" onClick={exportReview}>
             <Download size={16} aria-hidden="true" /> Export review record
           </button>
         </div>
       </header>
 
-      <nav className="promo-tabs" aria-label="Promo Studio sections">
+      <nav className="promo-tabs" aria-label="Case study sections">
         {tabs.map(({ id, label, icon: Icon }) => (
           <button key={id} type="button" className={activeTab === id ? "active" : ""} onClick={() => setActiveTab(id)}>
             <Icon size={17} aria-hidden="true" /> {label}
