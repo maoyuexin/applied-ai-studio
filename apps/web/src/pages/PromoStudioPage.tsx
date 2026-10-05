@@ -19,6 +19,7 @@ import { navigate } from "../router";
 type TabId = "brief" | "image" | "video" | "guardrail" | "provenance";
 type Choice = "keep" | "regenerate";
 type ImageAction = "generate" | "edit";
+type InstructorVerdict = "keep" | "usable" | "regenerate" | "pending";
 
 interface PromoTake {
   id: string;
@@ -28,9 +29,14 @@ interface PromoTake {
   generation_seconds?: number;
   seconds?: number | string;
   qc?: {
-    verdict?: string;
+    verdict?: InstructorVerdict | string;
     issues?: string[];
     note?: string;
+    metrics?: {
+      motion?: number;
+      first_vs_last?: number;
+      mean_db?: number;
+    };
   };
 }
 
@@ -72,9 +78,25 @@ interface PromoManifest {
   shots: PromoShot[];
   recorded_images?: RecordedImage[];
   comparisons?: {
-    text_only?: { file?: string; poster?: string; prompt?: string; note?: string };
+    text_only?: {
+      file?: string;
+      poster?: string;
+      keyframe_guided?: string;
+      prompt?: string;
+      generation_seconds?: number;
+      note?: string;
+    };
     keyframe_guided?: { file?: string; poster?: string; prompt?: string; note?: string };
-    remix?: { from?: string; file?: string; poster?: string; prompt?: string; note?: string };
+    remix?: {
+      from?: string;
+      from_file?: string;
+      file?: string;
+      poster?: string;
+      prompt?: string;
+      generation_seconds?: number;
+      verdict?: string;
+      note?: string;
+    };
   };
   guardrail?: {
     brand_test?: {
@@ -82,26 +104,55 @@ interface PromoManifest {
       poster?: string;
       prompt?: string;
       result?: string;
+      generation_seconds?: number;
       in_class_only?: boolean;
+      note?: string;
+    };
+    over_blocking?: {
+      requests_blocked?: number;
+      shots_affected?: string[];
+      tags?: string[];
+      note?: string;
     };
   };
   final?: {
     file?: string;
     poster?: string;
+    end_card?: string;
     edit_list?: string[];
+    duration_seconds?: number;
+    label?: string;
     c2pa?: {
       raw_take?: boolean;
       after_reencode?: boolean;
       visible_label?: string;
     };
   };
+  provenance?: {
+    tool?: string;
+    steps?: Array<{
+      step: string;
+      file?: string;
+      manifest_present?: boolean;
+      state?: string | null;
+      failures?: string[];
+    }>;
+    takeaway?: string;
+  };
   stats?: {
     takes_total?: number;
     takes_usable?: number;
     usable_rate?: number;
+    keep?: number;
+    usable?: number;
+    regenerate?: number;
+    takes_passing_qc?: number;
+    pass_rate?: number;
     video_seconds_generated?: number;
     mean_generation_seconds?: number;
+    generation_seconds_known_for?: string;
     cost_usd_estimate?: number | null;
+    cost_note?: string;
   };
 }
 
@@ -137,6 +188,11 @@ const tabs: Array<{ id: TabId; label: string; icon: typeof Sparkles }> = [
   { id: "guardrail", label: "4 What the guardrail missed", icon: ShieldAlert },
   { id: "provenance", label: "5 Provenance", icon: CheckCircle2 },
 ];
+
+function initialTabFromUrl(): TabId {
+  const requested = new URLSearchParams(window.location.search).get("tab");
+  return tabs.some((tab) => tab.id === requested) ? requested as TabId : "brief";
+}
 
 const imageOptions = {
   paint: ["Moonlit graphite", "Pearl champagne", "Deep oxblood", "Ceramic white"],
@@ -356,6 +412,11 @@ const styles = `
 .promo-choice button.active.keep { color: #0f1a12; background: var(--green); border-color: var(--green); }
 .promo-choice button.active.regenerate { color: #111318; background: var(--amber); border-color: var(--amber); }
 .promo-verdict { margin: 0 10px 12px; padding: 10px; border-radius: 8px; background: rgba(126,174,184,0.08); color: var(--text-secondary); font-size: 12px; line-height: 1.5; }
+.promo-verdict strong.pass { color: var(--green); }
+.promo-verdict strong.review { color: var(--amber); }
+.promo-verdict ul { margin: 6px 0 0; padding-left: 18px; }
+.promo-metric-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.promo-metric-row span { padding: 3px 7px; border-radius: 999px; background: rgba(0,0,0,0.22); color: var(--text-muted); font-family: var(--font-mono); font-size: 10px; }
 .promo-comparison-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; }
 .promo-stat-strip { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; }
 .promo-stat-strip div { padding: 13px; border: 1px solid var(--border); border-radius: 10px; background: rgba(34,37,48,0.75); }
@@ -364,9 +425,11 @@ const styles = `
 .promo-live-video { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .promo-live-video button { min-height: 44px; border: 0; border-radius: 9px; background: var(--orange); color: #111318; padding: 0 14px; font-weight: 900; }
 .promo-guardrail { border-color: rgba(228,90,88,0.45); background: linear-gradient(135deg, rgba(228,90,88,0.1), rgba(24,26,32,0.92)); }
+.promo-overblock { border-color: rgba(245,158,11,0.42); background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(24,26,32,0.92)); }
 .promo-prompt { white-space: pre-wrap; overflow-wrap: anywhere; padding: 13px; border-radius: 10px; background: rgba(0,0,0,0.24); border: 1px solid var(--border); color: var(--text-secondary); font-family: var(--font-mono); font-size: 12px; line-height: 1.6; }
 .promo-provenance-list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
 .promo-provenance-list li { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px; border: 1px solid var(--border); border-radius: 10px; background: rgba(34,37,48,0.64); color: var(--text-secondary); }
+.promo-provenance-list small { display: block; margin-top: 4px; color: var(--text-muted); font-family: var(--font-mono); font-size: 10px; }
 .promo-provenance-list strong { color: var(--text); }
 @media (max-width: 1120px) {
   .promo-hero-grid, .promo-two-col, .promo-comparison-grid { grid-template-columns: 1fr; }
@@ -392,6 +455,10 @@ function assetUrl(path?: string): string {
   return `${mediaRoot}/captures/${path}`.replaceAll("//", "/");
 }
 
+function posterFromVideo(path?: string): string | undefined {
+  return path?.replace(/\.(?:mp4|mov|webm)$/i, ".jpg");
+}
+
 function secondsOf(take: PromoTake): number {
   const value = take.seconds ?? 4;
   const parsed = typeof value === "number" ? value : Number.parseFloat(value);
@@ -415,10 +482,24 @@ function checkedCount(values: Record<string, boolean>): number {
   return Object.values(values).filter(Boolean).length;
 }
 
+function isPassingVerdict(verdict?: string): boolean {
+  return verdict === "keep" || verdict === "usable";
+}
+
+function ratePercent(value?: number): number {
+  if (typeof value !== "number" || !Number.isFinite(value)) return 0;
+  return Math.round((value <= 1 ? value * 100 : value));
+}
+
+function formatSeconds(value?: number): string {
+  if (typeof value !== "number" || !Number.isFinite(value)) return "n/a";
+  return Number.isInteger(value) ? `${value}s` : `${value.toFixed(1)}s`;
+}
+
 export default function PromoStudioPage() {
   const [manifest, setManifest] = useState<PromoManifest>(fallbackManifest);
   const [manifestState, setManifestState] = useState<"loading" | "synced" | "fallback">("loading");
-  const [activeTab, setActiveTab] = useState<TabId>("brief");
+  const [activeTab, setActiveTab] = useState<TabId>(() => initialTabFromUrl());
   const [status, setStatus] = useState<MediaStatus | null>(null);
   const [statusError, setStatusError] = useState<string | null>(null);
   const [checklist, setChecklist] = useState<Record<string, boolean>>({});
@@ -491,22 +572,42 @@ export default function PromoStudioPage() {
   const activeModeLabel = liveImages ? "LIVE image mode" : "RECORDED image mode";
   const selectedShot = manifest.shots.find((shot) => shot.id === selectedShotId) ?? manifest.shots[0];
   const recordedImages = useMemo(() => {
-    return manifest.recorded_images?.length
-      ? manifest.recorded_images
-      : [{
+    if (manifest.recorded_images?.length) return manifest.recorded_images;
+    const keyframes = manifest.shots
+      .filter((shot) => Boolean(shot.keyframe))
+      .map((shot, index) => ({
+        id: `${shot.id}-keyframe`,
+        label: `Recorded keyframe ${index + 1}: ${shot.title}`,
+        action: "edit" as const,
+        file: shot.keyframe ?? "",
+        prompt: shot.keyframe_prompt ?? `Keyframe for ${shot.title}.`,
+        generation_seconds: 0,
+      }));
+    return [
+      {
         id: "design-reference",
         label: "Recorded design reference",
         action: "generate" as const,
         file: manifest.design.hero,
         prompt: "Design reference from manifest.",
         generation_seconds: 0,
-      }];
+      },
+      ...keyframes,
+    ];
   }, [manifest]);
   const allTakes = useMemo(() => manifest.shots.flatMap(fourTakes), [manifest]);
+  const instructorPassingTakes = allTakes.filter((take) => isPassingVerdict(take.qc?.verdict));
   const keepTakes = allTakes.filter((take) => choiceFor(choices, take.id) === "keep");
   const generationSeconds = keepTakes.reduce((sum, take) => sum + (take.generation_seconds ?? 0), 0);
   const selectedVideoSeconds = keepTakes.reduce((sum, take) => sum + secondsOf(take), 0);
   const usableRate = allTakes.length ? Math.round((keepTakes.length / allTakes.length) * 100) : 0;
+  const passingQcCount = manifest.stats?.takes_passing_qc ?? instructorPassingTakes.length;
+  const totalTakes = manifest.stats?.takes_total ?? allTakes.length;
+  const passRate = manifest.stats?.pass_rate !== undefined
+    ? ratePercent(manifest.stats.pass_rate)
+    : totalTakes ? Math.round((passingQcCount / totalTakes) * 100) : 0;
+  const generatedVideoSeconds = manifest.stats?.video_seconds_generated
+    ?? allTakes.reduce((sum, take) => sum + secondsOf(take), 0);
 
   const updateChoice = (takeId: string, choice: Choice) => {
     setChoices((current) => ({ ...current, [takeId]: choice }));
@@ -631,11 +732,15 @@ export default function PromoStudioPage() {
         instructor_verdict: take.qc?.verdict ?? null,
       })),
       totals: {
-        usable_takes: keepTakes.length,
-        usable_rate_percent: usableRate,
-        selected_generation_seconds: generationSeconds,
+        instructor_passing_qc: passingQcCount,
+        instructor_pass_rate_percent: passRate,
+        generated_video_seconds: generatedVideoSeconds,
+        student_kept_takes: keepTakes.length,
+        student_keep_rate_percent: usableRate,
+        student_selected_generation_seconds: generationSeconds,
         selected_video_seconds: selectedVideoSeconds,
       },
+      provenance: manifest.provenance ?? null,
     };
     const blob = new Blob([JSON.stringify(record, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -657,16 +762,30 @@ export default function PromoStudioPage() {
 
   const renderComparison = (
     title: string,
-    item?: { file?: string; poster?: string; prompt?: string; note?: string },
+    item?: {
+      file?: string;
+      poster?: string;
+      prompt?: string;
+      note?: string;
+      verdict?: string;
+      generation_seconds?: number;
+      from?: string;
+      from_file?: string;
+    },
   ) => (
     <article className="promo-card">
       <div className="promo-media-frame">
         {item?.file ? (
-          <video controls preload="metadata" poster={assetUrl(item.poster)} src={assetUrl(item.file)} />
+          <video controls preload="metadata" poster={assetUrl(item.poster ?? posterFromVideo(item.file))} src={assetUrl(item.file)} />
         ) : <div className="promo-placeholder">Comparison media pending.</div>}
       </div>
       <div className="promo-card padded">
         <h3>{title}</h3>
+        <div className="promo-result-meta">
+          {item?.generation_seconds ? <span><Timer size={13} aria-hidden="true" /> {item.generation_seconds}s gen</span> : null}
+          {item?.verdict ? <span><CheckCircle2 size={13} aria-hidden="true" /> {item.verdict}</span> : null}
+          {item?.from ?? item?.from_file ? <span>Source: {item.from ?? item.from_file}</span> : null}
+        </div>
         {item?.note ? <p>{item.note}</p> : null}
         {item?.prompt ? <div className="promo-prompt">{item.prompt}</div> : null}
       </div>
@@ -769,7 +888,7 @@ export default function PromoStudioPage() {
               <p className="promo-status-note">
                 {liveImages
                   ? "LIVE mode is enabled. The browser sends only class choices to the server; the server builds the prompt and calls Azure."
-                  : "RECORDED mode is active. The same buttons replay synced image generations from the manifest."}
+                  : "RECORDED mode is active. Generate replays the design image; Edit cycles the five synced keyframes from the manifest."}
               </p>
               {statusError ? <p className="promo-status-note">{statusError}</p> : null}
               <div className="promo-controls">
@@ -848,10 +967,10 @@ export default function PromoStudioPage() {
           <article className="promo-card padded">
             <h2>Recorded Sora takes</h2>
             <div className="promo-stat-strip" aria-label="Running review totals">
-              <div><strong>{keepTakes.length}/{allTakes.length}</strong><span>usable takes selected</span></div>
-              <div><strong>{usableRate}%</strong><span>usable rate</span></div>
-              <div><strong>{generationSeconds}s</strong><span>selected generation seconds</span></div>
-              <div><strong>{selectedVideoSeconds}s</strong><span>selected video seconds</span></div>
+              <div><strong>{passingQcCount}/{totalTakes}</strong><span>passing QC (keep + usable)</span></div>
+              <div><strong>{passRate}%</strong><span>pass rate</span></div>
+              <div><strong>{formatSeconds(generatedVideoSeconds)}</strong><span>video seconds generated</span></div>
+              <div><strong>{formatSeconds(manifest.stats?.mean_generation_seconds)}</strong><span>{manifest.stats?.generation_seconds_known_for ?? "mean generation seconds"}</span></div>
             </div>
             <div className="promo-button-row">
               <button type="button" onClick={() => setRevealVerdicts((current) => !current)}>
@@ -885,11 +1004,24 @@ export default function PromoStudioPage() {
                         <button className={choice === "regenerate" ? "active regenerate" : ""} type="button" onClick={() => updateChoice(take.id, "regenerate")}>Regenerate</button>
                       </div>
                       {revealVerdicts ? (
-                        <p className="promo-verdict">
-                          <strong>Instructor:</strong> {take.qc?.verdict ?? "pending"}
+                        <div className="promo-verdict">
+                          <strong className={isPassingVerdict(take.qc?.verdict) ? "pass" : "review"}>
+                            Instructor: {take.qc?.verdict ?? "pending"}
+                          </strong>
                           {take.qc?.note ? ` — ${take.qc.note}` : ""}
-                          {take.qc?.issues?.length ? ` Issues: ${take.qc.issues.join(", ")}` : ""}
-                        </p>
+                          {take.qc?.issues?.length ? (
+                            <ul>
+                              {take.qc.issues.map((issue) => <li key={issue}>{issue}</li>)}
+                            </ul>
+                          ) : null}
+                          {take.qc?.metrics ? (
+                            <span className="promo-metric-row">
+                              {typeof take.qc.metrics.motion === "number" ? <span>motion {take.qc.metrics.motion}</span> : null}
+                              {typeof take.qc.metrics.first_vs_last === "number" ? <span>first/last {take.qc.metrics.first_vs_last}</span> : null}
+                              {typeof take.qc.metrics.mean_db === "number" ? <span>mean {take.qc.metrics.mean_db} dB</span> : null}
+                            </span>
+                          ) : null}
+                        </div>
                       ) : null}
                     </article>
                   );
@@ -903,10 +1035,10 @@ export default function PromoStudioPage() {
             <div className="promo-comparison-grid">
               {renderComparison("Text-only", manifest.comparisons?.text_only)}
               {renderComparison("Keyframe-guided", manifest.comparisons?.keyframe_guided ?? {
-                file: manifest.shots[0]?.takes?.[0]?.file,
-                poster: manifest.shots[0]?.takes?.[0]?.poster,
-                prompt: manifest.shots[0]?.keyframe_prompt,
-                note: "The manifest can replace this fallback with a named comparison clip.",
+                file: manifest.comparisons?.text_only?.keyframe_guided ?? manifest.shots[0]?.takes?.[0]?.file,
+                poster: posterFromVideo(manifest.comparisons?.text_only?.keyframe_guided) ?? manifest.shots[0]?.takes?.[0]?.poster,
+                prompt: manifest.shots.find((shot) => shot.id === "s2")?.keyframe_prompt ?? manifest.shots[0]?.keyframe_prompt,
+                note: "Same shot reviewed with the keyframe guide so students can compare design drift.",
               })}
               {renderComparison("Remix", manifest.comparisons?.remix)}
             </div>
@@ -943,7 +1075,25 @@ export default function PromoStudioPage() {
               <div><span>Result</span><strong>{manifest.guardrail?.brand_test?.result ?? "Not recorded"}</strong></div>
               <div><span>Use boundary</span><strong>{manifest.guardrail?.brand_test?.in_class_only ? "In-class only" : "Manifest controlled"}</strong></div>
             </div>
+            {manifest.guardrail?.brand_test?.note ? <p>{manifest.guardrail.brand_test.note}</p> : null}
             {manifest.guardrail?.brand_test?.prompt ? <div className="promo-prompt">{manifest.guardrail.brand_test.prompt}</div> : null}
+          </article>
+          <article className="promo-card padded promo-overblock">
+            <h2>What the filter over-blocked</h2>
+            <p>
+              Guardrails can miss brand-risk prompts and also block harmless classroom prompts.
+              Both outcomes still need human review and a fallback plan.
+            </p>
+            <div className="promo-kv">
+              <div><span>Requests blocked</span><strong>{manifest.guardrail?.over_blocking?.requests_blocked ?? 0}</strong></div>
+              <div><span>Shots affected</span><strong>{manifest.guardrail?.over_blocking?.shots_affected?.join(", ") || "Not recorded"}</strong></div>
+            </div>
+            {manifest.guardrail?.over_blocking?.tags?.length ? (
+              <div className="promo-result-meta">
+                {manifest.guardrail.over_blocking.tags.map((tag, index) => <span key={`${tag}-${index}`}>{tag}</span>)}
+              </div>
+            ) : null}
+            {manifest.guardrail?.over_blocking?.note ? <p>{manifest.guardrail.over_blocking.note}</p> : null}
           </article>
           <article className="promo-card">
             <div className="promo-media-frame">
@@ -967,18 +1117,40 @@ export default function PromoStudioPage() {
             </article>
             <article className="promo-card padded">
               <h2>Final ad provenance</h2>
-              <p className="promo-disclaimer">{manifest.final?.c2pa?.visible_label ?? manifest.disclaimer}</p>
+              <p className="promo-disclaimer">{manifest.final?.label ?? manifest.final?.c2pa?.visible_label ?? manifest.disclaimer}</p>
+              <div className="promo-kv">
+                <div><span>Duration</span><strong>{manifest.final?.duration_seconds ? `${manifest.final.duration_seconds}s` : "Not recorded"}</strong></div>
+                <div><span>Credential tool</span><strong>{manifest.provenance?.tool ?? "Not recorded"}</strong></div>
+              </div>
               <ul className="promo-provenance-list">
-                <li><span>Raw Sora credential</span><strong>{manifest.final?.c2pa?.raw_take ? "Present" : "Not recorded"}</strong></li>
-                <li><span>After re-encode</span><strong>{manifest.final?.c2pa?.after_reencode ? "Present" : "Not present"}</strong></li>
-                <li><span>Manifest</span><strong>{manifestState === "synced" ? "Synced media manifest" : "Fallback until manifest is produced"}</strong></li>
+                {(manifest.provenance?.steps?.length ? manifest.provenance.steps : [
+                  { step: "Raw Sora credential", manifest_present: manifest.final?.c2pa?.raw_take, state: manifest.final?.c2pa?.raw_take ? "Present" : "Not recorded" },
+                  { step: "After re-encode", manifest_present: manifest.final?.c2pa?.after_reencode, state: manifest.final?.c2pa?.after_reencode ? "Present" : "Not present" },
+                ]).map((step) => (
+                  <li key={`${step.step}-${step.file ?? ""}`}>
+                    <span>
+                      {step.step}
+                      {step.file ? <small>{step.file}</small> : null}
+                      {step.failures?.length ? <small>Failures: {step.failures.join(", ")}</small> : null}
+                    </span>
+                    <strong>{step.manifest_present ? step.state ?? "Present" : "No manifest"}</strong>
+                  </li>
+                ))}
               </ul>
+              {manifest.provenance?.takeaway ? <p>{manifest.provenance.takeaway}</p> : null}
               <h3>Edit list</h3>
               <ul>
                 {(manifest.final?.edit_list ?? []).map((item) => <li key={item}>{item}</li>)}
               </ul>
             </article>
           </div>
+          {manifest.final?.end_card ? (
+            <article className="promo-card">
+              <div className="promo-media-frame">
+                <img src={assetUrl(manifest.final.end_card)} alt={`${manifest.brand} final end card`} />
+              </div>
+            </article>
+          ) : null}
         </section>
       ) : null}
     </div>

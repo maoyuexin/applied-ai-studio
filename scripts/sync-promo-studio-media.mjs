@@ -53,7 +53,7 @@ function assertInsideCaptures(relativePath) {
 
 function collectMediaPaths(value, result = new Set()) {
   if (typeof value === "string") {
-    if (mediaPath.test(value)) result.add(value);
+    if (mediaPath.test(value) && value.includes("/")) result.add(value);
   } else if (Array.isArray(value)) {
     for (const item of value) collectMediaPaths(item, result);
   } else if (value && typeof value === "object") {
