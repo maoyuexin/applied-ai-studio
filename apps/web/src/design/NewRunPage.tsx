@@ -25,6 +25,8 @@ const EXAMPLES: Record<PipelineKey, { title: string; brief: Partial<Brief> }> = 
     title: "SOLENNE GT · campaign poster",
     brief: {
       use_case: "poster",
+      size: "864x1536",
+      candidates: 2,
       brief: "Vertical campaign poster for SOLENNE GT, a fictional luxury electric grand tourer. The exact car from the design sheet on a wet coastal road at blue hour, city lights far away, sea mist. Premium and cinematic.",
       must_not_include: "real car brands or logos, readable license plates, people",
       title: "SOLENNE GT",
@@ -51,6 +53,8 @@ const EXAMPLES: Record<PipelineKey, { title: string; brief: Partial<Brief> }> = 
     },
   },
 };
+
+const DESIGN_SHEET_RUN = "run_2026-10-04_m8-design-sheet";
 
 const VIDEO_DEFAULTS: Brief = {
   brief: "", shots: 4, seconds: 8, takes_per_shot: 3, size: "1280x720", must_not_include: "", visible_label: "Made with AI",
@@ -491,11 +495,23 @@ export default function NewRunPage({ pipeline: rawPipeline, forkOf }: { pipeline
     }
   };
 
-  const loadExample = () => {
+  const loadExample = async () => {
     const example = EXAMPLES[pipeline];
     setTitle(example.title);
     set(example.brief);
     if (!tags) setTags("example");
+    if ((pipeline === "video" || pipeline === "image") && !refs.length) {
+      // Use the SOLENNE design sheet from run history as the subject reference, when this install has it.
+      try {
+        const sheet = await designApi.run(DESIGN_SHEET_RUN);
+        const hero = sheet.artifacts.find((a) => a.kind === "image" && a.label === "c1" && a.media_sha);
+        if (hero?.media_sha) {
+          setRefs([{ sha: hero.media_sha, thumb_sha: hero.thumb_sha ?? undefined, role: "subject", name: "SOLENNE design sheet" }]);
+        }
+      } catch {
+        // Not imported on this install: the example runs from text alone.
+      }
+    }
   };
 
   return (
@@ -512,7 +528,7 @@ export default function NewRunPage({ pipeline: rawPipeline, forkOf }: { pipeline
           </p>
         </div>
         <div className="ds-head-actions">
-          <button type="button" className="ds-btn" onClick={loadExample}><Wand2 size={14} aria-hidden="true" /> Load example</button>
+          <button type="button" className="ds-btn" onClick={() => void loadExample()}><Wand2 size={14} aria-hidden="true" /> Load example</button>
         </div>
       </header>
       {note && <div style={{ marginBottom: 12 }}><Banner kind="info">{note}</Banner></div>}

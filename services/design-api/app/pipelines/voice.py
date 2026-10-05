@@ -22,8 +22,8 @@ if TYPE_CHECKING:
 SCRIPT_SYSTEM = """You write short audio scripts for synthetic voices (Microsoft MAI-Voice). Write natural spoken \
 language: short sentences, contractions, no stage directions, no sound effects, no emojis, no markdown. Each line \
 is one speaker turn of one to three sentences. Use only the speakers given, by name. A speaker's "style" may be \
-one value from that speaker's style list, or empty. Stay within 10% of target_words in total: these voices read at about 160 words per \
-minute. Write in the language of the locale. {disclosure}Return only JSON: \
+one value from that speaker's style list, or empty. Write at most target_words words in total and count them: these voices read at about \
+150 words per minute, plus a pause between lines. Write in the language of the locale. {disclosure}Return only JSON: \
 {{"lines": [{{"speaker": "...", "text": "...", "style": ""}}]}}"""
 
 DISCLOSURE_RULE = "The last line, spoken by the first speaker, says in one short sentence that the voices are \
@@ -142,7 +142,7 @@ class VoicePipeline(Pipeline):
         speakers = [{"name": s["name"], "styles": styles.get(s["voice"], [])} for s in brief["speakers"]]
         request: dict[str, Any] = {
             "format": FORMATS[brief["format"]], "brief": brief["brief"], "target_seconds": brief["target_seconds"],
-            "target_words": round(brief["target_seconds"] * 160 / 60 * 0.95), "locale": brief["locale"],
+            "target_words": round(brief["target_seconds"] * 2.2), "locale": brief["locale"],
             "speakers": speakers,
         }
         if feedback:
@@ -157,7 +157,7 @@ class VoicePipeline(Pipeline):
                           drafts=ctx.step_data("script").get("drafts", 0) + 1, feedback=feedback or None)
         words_total = sum(len(line["text"].split()) for line in lines)
         ctx.event("info", f"{'Redrafted' if feedback else 'Drafted'} {len(lines)} lines ({words_total} words, about "
-                          f"{words_total * 60 / 160:.0f} s) with {result.deployment}.", code="drafted")
+                          f"{words_total * 60 / 150:.0f} s) with {result.deployment}.", code="drafted")
 
     def _clean_lines(self, ctx: RunContext, raw: Any, styles: dict[str, list[str]]) -> list[dict[str, Any]]:
         if not isinstance(raw, list) or not raw:

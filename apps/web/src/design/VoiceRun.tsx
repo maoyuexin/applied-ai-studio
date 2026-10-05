@@ -25,7 +25,7 @@ function ScriptEditor({ detail, act, busy, setApproveExtra, styles }: RunViewPro
   };
   return (
     <div className="ds-stack" style={{ gap: 6 }}>
-      <p className="ds-small ds-muted">{lines.length} lines · {words} words · about {Math.round((words * 60) / 160)} s at the voices' pace (target {detail.run.brief.target_seconds} s)</p>
+      <p className="ds-small ds-muted">{lines.length} lines · {words} words · about {Math.round((words * 60) / 150)} s at the voices' pace (target {detail.run.brief.target_seconds} s)</p>
       {lines.map((line, index) => {
         const voice = speakers.find((s) => s.name === line.speaker)?.voice ?? "";
         const options = styles[voice] ?? [];
