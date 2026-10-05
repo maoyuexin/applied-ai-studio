@@ -173,6 +173,7 @@ interface MediaStatus {
 interface ImageResult {
   src: string;
   label: string;
+  file?: string;
   prompt?: string;
   elapsedSeconds: number;
   mode: "live" | "recorded";
@@ -356,9 +357,10 @@ const fallbackManifest: PromoManifest = {
 
 const styles = `
 .promo-studio { --promo-accent: #f0a050; overflow-x: clip; }
+.promo-studio .page-header { display: grid; grid-template-columns: minmax(0, 1fr); }
 .promo-studio .page-header h1 { font-size: clamp(32px, 4vw, 58px); letter-spacing: -0.04em; }
 .promo-studio .page-header p { max-width: 78ch; font-size: clamp(15px, 1.15vw, 19px); line-height: 1.65; }
-.promo-top-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; }
+.promo-top-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-start; }
 .promo-mode-pill { min-height: 38px; display: inline-flex; align-items: center; gap: 9px; padding: 0 13px; border: 1px solid var(--border); border-radius: 999px; background: rgba(24, 26, 32, 0.82); color: var(--text-secondary); font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; }
 .promo-mode-pill.live { color: var(--green); border-color: rgba(74, 222, 128, 0.45); }
 .promo-export { min-height: 38px; display: inline-flex; align-items: center; gap: 8px; border: 0; border-radius: 999px; padding: 0 14px; background: var(--orange); color: #111318; font-weight: 800; }
@@ -397,8 +399,8 @@ const styles = `
 .promo-result-meta { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 12px; }
 .promo-result-meta span { display: inline-flex; align-items: center; gap: 6px; min-height: 30px; padding: 0 10px; border-radius: 999px; background: rgba(126,174,184,0.12); color: var(--text-secondary); font-family: var(--font-mono); font-size: 10px; }
 .promo-checklist { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 10px; }
-.promo-checklist label { display: flex; gap: 10px; align-items: flex-start; padding: 12px; border: 1px solid var(--border); border-radius: 10px; background: rgba(34,37,48,0.66); color: var(--text-secondary); font-size: 14px; line-height: 1.5; }
-.promo-checklist input { margin-top: 4px; accent-color: var(--orange); }
+.promo-checklist label { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 12px; align-items: start; padding: 13px; border: 1px solid var(--border); border-radius: 10px; background: rgba(34,37,48,0.66); color: var(--text-secondary); font-size: clamp(16px, 1.08vw, 18px); line-height: 1.5; text-align: left; }
+.promo-checklist input { width: 18px; height: 18px; margin: 3px 0 0; accent-color: var(--orange); justify-self: start; }
 .promo-status-note, .promo-error { padding: 12px 14px; border-radius: 10px; border: 1px solid rgba(126,174,184,0.24); background: rgba(126,174,184,0.08); color: var(--text-secondary); line-height: 1.55; }
 .promo-error { border-color: rgba(228,90,88,0.45); background: rgba(228,90,88,0.1); color: #ffd1d1; }
 .promo-shot-section { display: grid; gap: 13px; padding: 16px; border: 1px solid var(--border); border-radius: 12px; background: rgba(24,26,32,0.72); }
@@ -409,16 +411,19 @@ const styles = `
 .promo-take-card strong { font-family: var(--font-mono); font-size: 12px; }
 .promo-choice { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 10px; }
 .promo-choice button { min-height: 38px; padding: 0 8px; font-size: 12px; }
+.promo-choice button { background: transparent; color: var(--text-secondary); }
 .promo-choice button.active.keep { color: #0f1a12; background: var(--green); border-color: var(--green); }
 .promo-choice button.active.regenerate { color: #111318; background: var(--amber); border-color: var(--amber); }
 .promo-verdict { margin: 0 10px 12px; padding: 10px; border-radius: 8px; background: rgba(126,174,184,0.08); color: var(--text-secondary); font-size: 12px; line-height: 1.5; }
+.promo-verdict-badge { display: inline-flex; align-items: center; min-height: 28px; padding: 0 9px; border-radius: 999px; background: rgba(126,174,184,0.12); font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; }
 .promo-verdict strong.pass { color: var(--green); }
 .promo-verdict strong.review { color: var(--amber); }
 .promo-verdict ul { margin: 6px 0 0; padding-left: 18px; }
+.promo-verdict-issue { margin: 8px 0 0; color: var(--text-secondary); }
 .promo-metric-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
 .promo-metric-row span { padding: 3px 7px; border-radius: 999px; background: rgba(0,0,0,0.22); color: var(--text-muted); font-family: var(--font-mono); font-size: 10px; }
 .promo-comparison-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; }
-.promo-stat-strip { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; }
+.promo-stat-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
 .promo-stat-strip div { padding: 13px; border: 1px solid var(--border); border-radius: 10px; background: rgba(34,37,48,0.75); }
 .promo-stat-strip strong { display: block; font-family: var(--font-mono); font-size: clamp(20px, 2vw, 28px); }
 .promo-stat-strip span { color: var(--text-muted); font-size: 11px; }
@@ -426,6 +431,10 @@ const styles = `
 .promo-live-video button { min-height: 44px; border: 0; border-radius: 9px; background: var(--orange); color: #111318; padding: 0 14px; font-weight: 900; }
 .promo-guardrail { border-color: rgba(228,90,88,0.45); background: linear-gradient(135deg, rgba(228,90,88,0.1), rgba(24,26,32,0.92)); }
 .promo-overblock { border-color: rgba(245,158,11,0.42); background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(24,26,32,0.92)); }
+.promo-guardrail-clip { width: min(100%, 800px); justify-self: center; }
+.promo-guardrail-clip .promo-media-frame { aspect-ratio: 16 / 9; position: relative; }
+.promo-guardrail-clip video { width: 100%; height: 100%; object-fit: cover; }
+.promo-media-label { position: absolute; left: 12px; top: 12px; z-index: 1; display: inline-flex; min-height: 30px; align-items: center; padding: 0 10px; border-radius: 999px; background: rgba(10,12,16,0.82); color: var(--orange); font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; border: 1px solid rgba(232,145,60,0.4); }
 .promo-prompt { white-space: pre-wrap; overflow-wrap: anywhere; padding: 13px; border-radius: 10px; background: rgba(0,0,0,0.24); border: 1px solid var(--border); color: var(--text-secondary); font-family: var(--font-mono); font-size: 12px; line-height: 1.6; }
 .promo-provenance-list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
 .promo-provenance-list li { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px; border: 1px solid var(--border); border-radius: 10px; background: rgba(34,37,48,0.64); color: var(--text-secondary); }
@@ -437,7 +446,6 @@ const styles = `
 }
 @media (max-width: 760px) {
   .promo-studio.page { padding-inline: 14px; }
-  .promo-studio .page-header { display: grid; }
   .promo-top-actions { justify-content: flex-start; }
   .promo-tabs { position: static; padding: 8px 0; background: rgba(17,19,24,0.96); }
   .promo-tabs button { flex: 1 1 calc(50% - 8px); justify-content: center; padding-inline: 10px; }
@@ -465,8 +473,8 @@ function secondsOf(take: PromoTake): number {
   return Number.isFinite(parsed) ? parsed : 4;
 }
 
-function choiceFor(choices: Record<string, Choice>, takeId: string): Choice {
-  return choices[takeId] ?? "regenerate";
+function choiceFor(choices: Record<string, Choice>, takeId: string): Choice | undefined {
+  return choices[takeId];
 }
 
 function fourTakes(shot: PromoShot): PromoTake[] {
@@ -494,6 +502,16 @@ function ratePercent(value?: number): number {
 function formatSeconds(value?: number): string {
   if (typeof value !== "number" || !Number.isFinite(value)) return "n/a";
   return Number.isInteger(value) ? `${value}s` : `${value.toFixed(1)}s`;
+}
+
+function displayProvenanceState(step: { step: string; state?: string | null; failures?: string[] }): string {
+  if (
+    step.step === "Sora 2 raw take"
+    && step.failures?.some((failure) => failure.toLowerCase().includes("expired"))
+  ) {
+    return "Fails check (expired certificate)";
+  }
+  return step.state ?? "No manifest";
 }
 
 export default function PromoStudioPage() {
@@ -608,6 +626,13 @@ export default function PromoStudioPage() {
     : totalTakes ? Math.round((passingQcCount / totalTakes) * 100) : 0;
   const generatedVideoSeconds = manifest.stats?.video_seconds_generated
     ?? allTakes.reduce((sum, take) => sum + secondsOf(take), 0);
+  const choicesForTakes = allTakes.map((take) => choices[take.id]).filter(Boolean);
+  const keepChoiceCount = choicesForTakes.filter((choice) => choice === "keep").length;
+  const regenerateChoiceCount = choicesForTakes.filter((choice) => choice === "regenerate").length;
+  const judgedChoiceCount = keepChoiceCount + regenerateChoiceCount;
+  const takesPerShot = manifest.shots.length ? Math.round(totalTakes / manifest.shots.length) : 0;
+  const averageGenerationSeconds = manifest.stats?.mean_generation_seconds
+    ?? (totalTakes ? generatedVideoSeconds / totalTakes : undefined);
 
   const updateChoice = (takeId: string, choice: Choice) => {
     setChoices((current) => ({ ...current, [takeId]: choice }));
@@ -625,6 +650,7 @@ export default function PromoStudioPage() {
     setImageResult({
       src: assetUrl(source.file),
       label: source.label,
+      file: source.file,
       prompt: source.prompt,
       elapsedSeconds: source.generation_seconds ?? 0,
       mode: "recorded",
@@ -728,7 +754,7 @@ export default function PromoStudioPage() {
       checklist_checked: checkedCount(checklist),
       take_choices: allTakes.map((take) => ({
         take_id: take.id,
-        choice: choiceFor(choices, take.id),
+        choice: choiceFor(choices, take.id) ?? null,
         instructor_verdict: take.qc?.verdict ?? null,
       })),
       totals: {
@@ -736,6 +762,8 @@ export default function PromoStudioPage() {
         instructor_pass_rate_percent: passRate,
         generated_video_seconds: generatedVideoSeconds,
         student_kept_takes: keepTakes.length,
+        student_regenerate_takes: regenerateChoiceCount,
+        student_judged_takes: judgedChoiceCount,
         student_keep_rate_percent: usableRate,
         student_selected_generation_seconds: generationSeconds,
         selected_video_seconds: selectedVideoSeconds,
@@ -936,8 +964,11 @@ export default function PromoStudioPage() {
               <div className="promo-card padded">
                 <h3>{imageResult?.label ?? "Starting design reference"}</h3>
                 <div className="promo-result-meta">
-                  <span><Timer size={13} aria-hidden="true" /> {(imageResult?.elapsedSeconds ?? 0).toFixed(1)} sec</span>
+                  {imageResult?.elapsedSeconds ? (
+                    <span><Timer size={13} aria-hidden="true" /> {imageResult.elapsedSeconds.toFixed(1)} sec</span>
+                  ) : <span><Timer size={13} aria-hidden="true" /> recorded</span>}
                   <span><Sparkles size={13} aria-hidden="true" /> {imageResult?.mode ?? "recorded"} mode</span>
+                  <span>{imageResult?.file ?? manifest.design.hero}</span>
                 </div>
                 {imageResult?.prompt ? <div className="promo-prompt">{imageResult.prompt}</div> : null}
               </div>
@@ -967,10 +998,21 @@ export default function PromoStudioPage() {
           <article className="promo-card padded">
             <h2>Recorded Sora takes</h2>
             <div className="promo-stat-strip" aria-label="Running review totals">
-              <div><strong>{passingQcCount}/{totalTakes}</strong><span>passing QC (keep + usable)</span></div>
-              <div><strong>{passRate}%</strong><span>pass rate</span></div>
-              <div><strong>{formatSeconds(generatedVideoSeconds)}</strong><span>video seconds generated</span></div>
-              <div><strong>{formatSeconds(manifest.stats?.mean_generation_seconds)}</strong><span>{manifest.stats?.generation_seconds_known_for ?? "mean generation seconds"}</span></div>
+              {revealVerdicts ? (
+                <>
+                  <div><strong>{passingQcCount}/{totalTakes}</strong><span>passing QC (keep + usable)</span></div>
+                  <div><strong>{passRate}%</strong><span>pass rate</span></div>
+                  <div><strong>{formatSeconds(generatedVideoSeconds)}</strong><span>video seconds generated</span></div>
+                  <div><strong>{formatSeconds(manifest.stats?.mean_generation_seconds)}</strong><span>{manifest.stats?.generation_seconds_known_for ?? "mean generation seconds"}</span></div>
+                </>
+              ) : (
+                <>
+                  <div><strong>{totalTakes} takes</strong><span>{takesPerShot} per shot · avg {averageGenerationSeconds ? Math.round(averageGenerationSeconds) : "n/a"} s each</span></div>
+                  <div><strong>{manifest.shots.length} shots</strong><span>recorded Sora grid</span></div>
+                  <div><strong>{manifest.stats?.generation_seconds_known_for ?? "timed takes"}</strong><span>generation timing coverage</span></div>
+                </>
+              )}
+              <div><strong>{keepChoiceCount} / {regenerateChoiceCount}</strong><span>Your picks: {keepChoiceCount} keep / {regenerateChoiceCount} regenerate of {judgedChoiceCount} judged</span></div>
             </div>
             <div className="promo-button-row">
               <button type="button" onClick={() => setRevealVerdicts((current) => !current)}>
@@ -1005,15 +1047,11 @@ export default function PromoStudioPage() {
                       </div>
                       {revealVerdicts ? (
                         <div className="promo-verdict">
-                          <strong className={isPassingVerdict(take.qc?.verdict) ? "pass" : "review"}>
+                          <strong className={`promo-verdict-badge ${isPassingVerdict(take.qc?.verdict) ? "pass" : "review"}`}>
                             Instructor: {take.qc?.verdict ?? "pending"}
                           </strong>
-                          {take.qc?.note ? ` — ${take.qc.note}` : ""}
-                          {take.qc?.issues?.length ? (
-                            <ul>
-                              {take.qc.issues.map((issue) => <li key={issue}>{issue}</li>)}
-                            </ul>
-                          ) : null}
+                          {take.qc?.issues?.[0] ? <p className="promo-verdict-issue">First issue: {take.qc.issues[0]}</p> : null}
+                          {take.qc?.note ? <p>{take.qc.note}</p> : null}
                           {take.qc?.metrics ? (
                             <span className="promo-metric-row">
                               {typeof take.qc.metrics.motion === "number" ? <span>motion {take.qc.metrics.motion}</span> : null}
@@ -1095,13 +1133,16 @@ export default function PromoStudioPage() {
             ) : null}
             {manifest.guardrail?.over_blocking?.note ? <p>{manifest.guardrail.over_blocking.note}</p> : null}
           </article>
-          <article className="promo-card">
-            <div className="promo-media-frame">
-              {manifest.guardrail?.brand_test?.file ? (
+          {manifest.guardrail?.brand_test?.file ? (
+            <article className="promo-card promo-guardrail-clip">
+              <div className="promo-media-frame">
+                <span className="promo-media-label">In-class only</span>
                 <video controls preload="metadata" poster={assetUrl(manifest.guardrail.brand_test.poster)} src={assetUrl(manifest.guardrail.brand_test.file)} />
-              ) : <div className="promo-placeholder">Guardrail clip pending in the synced manifest.</div>}
-            </div>
-          </article>
+              </div>
+            </article>
+          ) : (
+            <p className="promo-status-note">The real-brand test clip is excluded from this build; discuss the prompt and result without projecting the media.</p>
+          )}
         </section>
       ) : null}
 
@@ -1133,10 +1174,13 @@ export default function PromoStudioPage() {
                       {step.file ? <small>{step.file}</small> : null}
                       {step.failures?.length ? <small>Failures: {step.failures.join(", ")}</small> : null}
                     </span>
-                    <strong>{step.manifest_present ? step.state ?? "Present" : "No manifest"}</strong>
+                    <strong>{step.manifest_present ? displayProvenanceState(step) : "No manifest"}</strong>
                   </li>
                 ))}
               </ul>
+              <p className="promo-status-note">
+                'untrusted' only means the checker's default trust list doesn't include Microsoft's certificate; it is not tampering.
+              </p>
               {manifest.provenance?.takeaway ? <p>{manifest.provenance.takeaway}</p> : null}
               <h3>Edit list</h3>
               <ul>
