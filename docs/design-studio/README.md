@@ -71,6 +71,7 @@ Pipelines whose roles are not configured show what is missing instead of failing
 | Topic | What to know |
 |---|---|
 | Auth | `DefaultAzureCredential`: `az login` on a laptop; `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_CLIENT_SECRET` for a server's service principal. Keys are never used or stored. |
+| Text models | Each run picks its writing model (and, for articles, its fact-check model) on the New run page from `DESIGN_TEXT_MODELS` plus the two defaults (`DESIGN_TEXT_DRAFT_DEPLOYMENT`, `DESIGN_TEXT_JUDGE_DEPLOYMENT`). The choice is stored with the run. This install: gpt-6-astra writes, gpt-6.1-sol checks. |
 | Caps | `DESIGN_CAP_VIDEO_TAKES`, `DESIGN_CAP_IMAGES`, `DESIGN_CAP_VOICE_LINES`, `DESIGN_CAP_TEXT_CALLS` per day. Blocked or failed calls give their unit back. |
 | Concurrency | Sora: `DESIGN_VIDEO_CONCURRENCY` (default 2; Sora rejects more with "too many running tasks", which the app waits out). MAI-Image: `DESIGN_IMAGE_PER_MINUTE` (default 6). |
 | Restarts | Work survives a restart: queued jobs re-run, and Sora jobs resume polling by the job id saved before polling. Sora keeps outputs 24 hours, so takes are downloaded as soon as they finish. |
