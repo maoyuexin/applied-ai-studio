@@ -1,7 +1,7 @@
 # Design Studio: end-to-end test cases
 
-Nine manual tests, run in the browser exactly as a user would: two per pipeline, plus a prompt-only
-video test (VD3). Each one checks a feature you may show in class: review steps, revisions, automatic
+Ten manual tests, run in the browser exactly as a user would: two per pipeline, plus two prompt-only
+video tests (VD3, VD4). Each one checks a feature you may show in class: review steps, revisions, automatic
 checks, labels, run history.
 Run them on **your Mac** (http://127.0.0.1:5173/design-studio) and repeat the ones marked *server* on
 the **home server** (https://applied-ai-studio.myyclabs.com/design-studio).
@@ -28,6 +28,7 @@ the **home server** (https://applied-ai-studio.myyclabs.com/design-studio).
 | VD1 | Video | 12 min | 1–2 text, 1–2 images, 5–6 Sora takes | Mac |
 | VD2 | Video | 6 min | 1 text, 1 Sora take | Mac → server |
 | VD3 | Video (prompt only) | 5 min | 2 Sora takes, no text model | Mac + server |
+| VD4 | Video (prompt only, 3-shot story) | 10 min | 6 Sora takes (3 with 1 take per shot), 1 voice | Mac + server |
 
 Sora takes are the only expensive calls (20 per day cap). Run the video tests before **Oct 15**.
 How the video pipeline works, in detail: [VIDEO_GUIDE.md](VIDEO_GUIDE.md).
@@ -252,6 +253,93 @@ shot, and the final cut joins the two kept takes with a 0.5 s crossfade.
 **Pass if:** Sora received your line unchanged, and the take you kept is the one that looks right, not the one
 with the biggest number.
 
+### VD4 · Little League comic: home run, game-saving catch, win *(Mac + server)*
+
+**Shows:** a three-shot story written as your own prompts; keeping the same players and style across shots
+that Sora generates separately (it remembers nothing between shots); a play-by-play voiceover timed to the
+shots; an end card the app draws itself; checking a kids' video before you share it.
+
+**Why the drawing is not attached:** every shot shows people, and Sora rejects input images with faces, so
+Design Studio sends shots with people as text → video (the Reference images field is hidden when prompt
+helper is off). The drawing's look goes into the prompts as words instead: watercolor-and-ink comic,
+short black hair, orange *Bellaire* jersey in white script, navy cap with an orange tiger-head emblem,
+white pants, navy socks. Expect a cartoon player in that uniform, not the drawing's exact face.
+
+**Privacy:** keep real children's names and photos out of the prompts. If you want a player's name in the
+video, put it on the **End card title**: the app draws the card itself, so the spelling is exact and the
+name never goes to Sora.
+
+Before you start: **Settings → Daily caps → Video takes** needs **6** free (3 if you choose 1 take per shot).
+
+1. **New video run** → **Shot prompts**: *Off: one shot per line, sent to Sora as written*. Paste these three
+   lines into **Shot prompts (one per line)**. Each line is one 8-second shot; the setting, uniform and
+   style are repeated on every line on purpose.
+
+   ```text
+   Hand-drawn 2D animation in a soft watercolor-and-ink comic style: bold ink outlines, cream paper texture, blue watercolor sky with puffy white clouds, warm sandy infield, comic speed lines on fast motion. A sunny Little League game, top of the last inning. A young batter with short black hair and a determined look, orange jersey with "Bellaire" in white script, navy cap with an orange tiger-head emblem, white pants and navy socks, waits in the batter's box beside the catcher and umpire. Low angle from the first-base side: the pitch arrives, he swings hard, the bat smacks the ball with a flash of speed lines, and the camera whips up to follow the ball soaring over the outfield fence while the catcher's jaw drops. The batter tosses the bat aside and starts a happy trot toward first base. Sound: crisp crack of an aluminum bat, parents cheering, playful upbeat brass-and-whistle music, no dialogue.
+   Hand-drawn 2D animation in a soft watercolor-and-ink comic style: bold ink outlines, cream paper texture, blue watercolor sky with puffy white clouds, green outfield grass, comic speed lines on fast motion. Bottom of the last inning, two outs: a batter in a gray uniform hits a long fly ball to deep center field. The center fielder, a young player with curly brown hair, orange "Bellaire" jersey with number 7 on the back, navy cap with an orange tiger-head emblem and a brown leather glove, sprints back toward the chain-link fence. The camera tracks side-on with the runner, then tilts up to a low angle against the sky as the fielder leaps at the fence; the action slows like a comic panel and the ball drops into the glove. The fielder lands and raises the glove high with the ball inside. Sound: running footsteps on grass, a crowd gasp, then a huge cheer; the same playful brass music, no dialogue.
+   Hand-drawn 2D animation in a soft watercolor-and-ink comic style: bold ink outlines, cream paper texture, blue watercolor sky with puffy white clouds, warm sandy infield, orange and white comic star bursts. The game is over and the Tigers win: the whole team in orange "Bellaire" jerseys, navy caps with an orange tiger-head emblem and white pants rushes onto the infield, jumping and high-fiving. The young batter with short black hair and the curly-haired center fielder, number 7, meet at the pitcher's mound and leap into a joyful double high-five as teammates circle around them, while a grinning coach in a navy polo gets a playful splash from a water bucket and laughs. Slow push-in at eye level, ending on a happy group pose with caps raised. Sound: cheering kids and parents, the playful brass music landing on a final triumphant note, no dialogue.
+   ```
+
+   Fill in the rest of the form:
+
+   | Field | Value |
+   |---|---|
+   | Run title / Tags | `Little League · home run and the catch` / `Module 8, example` |
+   | Seconds per shot / Takes per shot / Frame | `8 s` / `2` / `16:9 · 1280×720` |
+   | Must not include | `brand or MLB logos, other real team names, injuries or rough collisions, captions or extra on-screen text` |
+   | Visible label | `Made with AI` |
+   | End card title / tagline | `TIGERS WIN!` / `One swing. One catch. Bellaire Little League.` |
+   | Voiceover (optional) | `Tie game, last inning. Here's the pitch... he crushes it! Gone! Bottom of the inning, two outs, a deep fly to center... what a catch! That's the ballgame! The Tigers win it!` |
+   | Voiceover voice | `Ethan · en-US · Male` |
+
+   **Expect:** **Shots** reads `3 (one per line)`; no **Text model** picker and no **Reference images**; the
+   preview shows `6 video generations · 48 s video generated · ~4.8 min`.
+2. **Start run**. **Expect:** three shots, each exactly your line, each marked *text → video*, no **Redraft**
+   box, and the event log says *no text model was used*. **Approve & continue**.
+3. Takes (~5 min, 2 at a time). While they render, tell the class: the three shots are generated separately,
+   and the only thing tying them together is the description repeated in every line.
+4. Open each take and **watch all 8 seconds**. **Expect:** *Prompt sent* is your line followed by
+   *Keep it free of: brand or MLB logos, …*, the mode is text → video, and there is no input keyframe.
+   Then judge it like an editor:
+   - Shot 1: the ball leaves the bat and clears the fence (it doesn't vanish or pass through it); the bat
+     doesn't bend; hands and fingers look right.
+   - Shot 2: the ball really ends up in the glove; the fielder doesn't pass through the fence.
+   - Shot 3: nobody gets hurt in the celebration; the splash stays playful.
+   - Across shots: same orange and navy uniforms, same two players (black hair; curly brown hair with number 7),
+     the style stays watercolor comic (doesn't switch to 3D or photo-real), and *Bellaire* is spelled right.
+
+   For a take that is right except one detail, **Remix** with one change, for example
+   `the jersey reads "Bellaire" in clean white script` or `keep the ball in the glove after the catch`.
+   For a take that is wrong overall, **Regen**. Keep one take per shot.
+5. **Approve & continue**. **Expect:** the voiceover is recorded (~18 s), then a **Final cut** of about
+   25.4 s: three kept takes joined by 0.5 s crossfades, *Made with AI* in the corner, and the
+   *TIGERS WIN!* end card for the last 3 s. In the measured MAI-Voice read (Ethan, Oct 6), the calls land on
+   the shots: *he crushes it… Gone!* at about 4–6 s (shot 1), *Bottom of the inning* at 7.8 s as shot 2
+   starts, *what a catch!* at 12.5 s, and *The Tigers win it!* at about 18 s in the celebration. Sora's own
+   crowd sound plays underneath at a lower volume. The checks list shows *End card: TIGERS WIN!*.
+6. **Download MP4**. On the server: **Export bundle** on the Mac, **Import bundle…** on the server (as in VD2),
+   or repeat steps 1–5 there.
+
+Variations:
+- **Fewer Sora calls:** **Takes per shot** `1` makes 3 takes (~3.2 min) and leaves room for a Regen or Remix
+  on a day when the cap is nearly used up.
+- **Phone version for family:** **Frame** `9:16 · 720×1280`, same lines.
+- **Let the text model write it:** **Shot prompts**: *Text model writes the shot list*, **Shots** `3`, brief:
+  `A watercolor-and-ink comic highlight for a Bellaire Little League team, the Tigers: a young batter hits the
+  go-ahead home run in the last inning, the center fielder makes a leaping catch at the fence for the final
+  out, and the team celebrates.` Open its shot list: does the text model repeat the uniform and style in every
+  shot, the way your lines do? Then tick both runs in **Run history** → **Compare 2 runs** to watch the two final
+  cuts side by side.
+
+**Pass if:** the three kept takes read as one story (same uniforms, same style, the same two players), the
+ball physics in the kept takes are believable, the label and end card are burned in, and nothing in the prompts
+identifies a real child.
+
+**IP note for class:** "Little League" is a trademark, and team logos belong to their owners. A family clip is
+fine; before posting publicly or using it commercially, ask the league. The prompts ask for a generic tiger
+emblem and exclude real logos for that reason.
+
 ---
 
 ## Results log
@@ -267,6 +355,7 @@ with the biggest number.
 | VD1 | ☐ | — | |
 | VD2 | ☐ | ☐ (import) | |
 | VD3 | ☐ | ☐ | |
+| VD4 | ☐ | ☐ | |
 
 Clean up afterwards: delete test runs you don't want in class from **Run history** (trash icon). Keep the
 ones you want to show; they also work as recorded examples if the network fails in class.

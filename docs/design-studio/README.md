@@ -16,7 +16,7 @@ Video can also run **prompt only**: with *Shot prompts* set to Off, each line of
 Checks never decide. Every keep, regenerate, remix, revision and approval is stored with the run.
 
 Planning documents: [DEV_PLAN.md](DEV_PLAN.md) and the clickable [ux-mockup.html](ux-mockup.html).
-Manual end-to-end test script (two cases per pipeline, plus prompt-only video): [TEST_CASES.md](TEST_CASES.md).
+Manual end-to-end test script (two cases per pipeline, plus two prompt-only video cases): [TEST_CASES.md](TEST_CASES.md).
 How the video pipeline works, for teaching: [VIDEO_GUIDE.md](VIDEO_GUIDE.md).
 Architecture decision: [ADR-0004](../adr/0004-design-studio-service.md).
 
