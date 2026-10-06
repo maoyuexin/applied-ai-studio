@@ -24,7 +24,7 @@ const TEXT_MODEL_ROW: Row = { label: "Text model", setting: true, value: textMod
 
 const ROWS: Record<string, Row[]> = {
   video: [
-    TEXT_MODEL_ROW,
+    { label: "Text model", setting: true, value: (d) => (d.run.brief.prompt_helper === false ? "none · prompt helper off" : textModel(d)) },
     { label: "Shots", setting: true, value: (d) => `${d.run.brief.shots} × ${d.run.brief.seconds} s` },
     { label: "Takes per shot", setting: true, value: (d) => String(d.run.brief.takes_per_shot) },
     { label: "Frame", setting: true, value: (d) => d.run.brief.size ?? "" },

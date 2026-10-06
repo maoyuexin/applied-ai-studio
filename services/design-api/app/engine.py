@@ -282,8 +282,8 @@ class Engine:
             "parent_run_id": parent_run_id, "tags": sorted(set(tags or [])), "restricted": False, "source": source,
             "current_step": pipeline.steps[0].key, "counters": {}, "created_at": stamp, "updated_at": stamp,
         }
-        steps = [{"idx": index, "key": spec.key, "title": spec.title, "gate": spec.gate, "status": "pending",
-                  "data": {}} for index, spec in enumerate(pipeline.steps)]
+        steps = [{"idx": index, **plan, "status": "pending", "data": {}}
+                 for index, plan in enumerate(pipeline.plan_steps(normalized))]
         for index, ref in enumerate(normalized.get("references") or []):
             if self.store.get_media(ref["sha"]) is None or not self.media.exists(ref["sha"]):
                 raise ActionError(f"Reference image {index + 1} is missing; upload it again.")

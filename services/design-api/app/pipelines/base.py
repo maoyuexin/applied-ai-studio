@@ -61,6 +61,10 @@ class Pipeline:
         text = str(brief.get("brief", "")).strip().split(".")[0]
         return (text[:60] + "…") if len(text) > 60 else (text or f"New {self.title.lower()} run")
 
+    def plan_steps(self, brief: dict[str, Any]) -> list[dict[str, Any]]:
+        """The steps a new run stores: key, title and gate. Pipelines may retitle steps for a brief."""
+        return [{"key": spec.key, "title": spec.title, "gate": spec.gate} for spec in self.steps]
+
     # Execution hooks
 
     def should_skip(self, ctx: RunContext, step: dict[str, Any]) -> bool:

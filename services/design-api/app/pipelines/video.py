@@ -59,6 +59,8 @@ class VideoBrief(BaseModel):
     voiceover: str = Field("", max_length=800)
     voice: str = Field("", max_length=120)
     references: list[Reference] = Field(default_factory=list, max_length=5)
+    # Off: no text model. Each non-empty line of the brief is one shot, sent to Sora as written (text → video).
+    prompt_helper: bool = True
 
 
 class Shot(BaseModel):
@@ -70,6 +72,15 @@ class Shot(BaseModel):
     prompt: str = Field(min_length=10, max_length=2000)
     sound: str = Field("", max_length=300)
     on_screen_text: str = Field("", max_length=120)
+
+
+# Wall-clock seconds per take measured on Sora 2 (Module 8 runs and the Oct 6 prompt-only run).
+TAKE_SECONDS = {4: 55, 8: 97, 12: 140}
+MEASURED_TAKE_SECONDS = {4, 8, 12}
+
+
+def brief_lines(text: str) -> list[str]:
+    return [" ".join(line.split()) for line in text.splitlines() if line.strip()]
 
 
 def frame_size(size: str) -> tuple[int, int]:
@@ -143,25 +154,47 @@ class VideoPipeline(Pipeline):
 
     def normalize_brief(self, brief: dict[str, Any]) -> dict[str, Any]:
         try:
-            return VideoBrief.model_validate(brief).model_dump()
+            normalized = VideoBrief.model_validate(brief).model_dump()
         except ValidationError as error:
             raise ActionError(_first_error(error)) from error
+        if not normalized["prompt_helper"]:
+            lines = brief_lines(normalized["brief"])
+            if not lines:
+                raise ActionError("With the prompt helper off, write one shot prompt per line.")
+            if len(lines) > 8:
+                raise ActionError("With the prompt helper off, write at most 8 lines (one shot per line).")
+            short = next((index for index, line in enumerate(lines) if len(line) < 10), None)
+            if short is not None:
+                raise ActionError(f"Line {short + 1} is too short to be a shot prompt (10 characters or more).")
+            normalized["shots"] = len(lines)
+        return normalized
 
     def estimate(self, brief: dict[str, Any]) -> dict[str, Any]:
         shots, takes, seconds = brief["shots"], brief["takes_per_shot"], brief["seconds"]
-        per_take = 55 if seconds == 4 else (97 if seconds == 8 else 140)
+        per_take = TAKE_SECONDS[seconds]
         waves = -(-shots * takes // 2)
+        measured = "measured on Sora 2, Oct 2026" if seconds in MEASURED_TAKE_SECONDS else "estimated"
         return {
             "video_generations": shots * takes,
             "video_seconds": shots * takes * seconds,
-            "keyframes": shots if brief.get("references") else 0,
-            "text_calls": 1,
+            "keyframes": shots if brief.get("references") and brief.get("prompt_helper", True) else 0,
+            "text_calls": 1 if brief.get("prompt_helper", True) else 0,
             "minutes": round(waves * per_take / 60, 1),
-            "basis": f"2 takes at a time, about {per_take} s per {seconds}-second take (measured on Sora 2, Oct 2026)",
+            "basis": f"2 takes at a time, about {per_take} s per {seconds}-second take ({measured})",
         }
 
     def default_title(self, brief: dict[str, Any]) -> str:
         return super().default_title(brief)
+
+    def plan_steps(self, brief: dict[str, Any]) -> list[dict[str, Any]]:
+        steps = super().plan_steps(brief)
+        if not brief.get("prompt_helper", True):
+            for step in steps:
+                if step["key"] == "shotlist":
+                    step["title"] = "Your lines → shots"
+                elif step["key"] == "keyframes":
+                    step.update(title="Keyframes (not used: prompt helper off)", gate=False)
+        return steps
 
     # Shot list
 
@@ -174,6 +207,14 @@ class VideoPipeline(Pipeline):
 
     def shots(self, ctx: RunContext) -> list[dict[str, Any]]:
         return ctx.step_data("shotlist").get("shots", [])
+
+    def _shots_from_lines(self, ctx: RunContext) -> None:
+        shots = [Shot(id=f"s{index + 1}", title=f"Shot {index + 1}", subject="scene", mode="t2v", prompt=line).model_dump()
+                 for index, line in enumerate(brief_lines(ctx.brief["brief"]))]
+        ctx.set_step_data("shotlist", shots=shots, model=None, drafts=0,
+                          notes="Prompt helper off: one shot per line of your brief, sent to Sora as written.")
+        ctx.event("info", f"Prompt helper off: {len(shots)} shot(s) taken from your brief as written; no text model "
+                          "was used.", code="drafted")
 
     async def _draft_shots(self, ctx: RunContext, feedback: str = "") -> None:
         brief = ctx.brief
@@ -247,7 +288,10 @@ class VideoPipeline(Pipeline):
         key = step["key"]
         if key == "shotlist":
             if not self.shots(ctx):
-                await self._draft_shots(ctx)
+                if ctx.brief.get("prompt_helper", True):
+                    await self._draft_shots(ctx)
+                else:
+                    self._shots_from_lines(ctx)
         elif key == "keyframes":
             existing = {a["grp"] for a in ctx.artifacts(step_key="keyframes", kind="keyframe")}
             for shot in self.shots(ctx):
@@ -580,6 +624,8 @@ class VideoPipeline(Pipeline):
             ctx.event("info", "You edited the shot list.", code="edited")
         elif name == "redraft_shots":
             self._require_step(ctx, "shotlist")
+            if not ctx.brief.get("prompt_helper", True):
+                raise ActionError("The prompt helper is off for this run: edit the shot prompts directly.")
             note = clean_text(payload.get("note"), 1000)
             if not note:
                 raise ActionError("Say what should change in the shot list.")

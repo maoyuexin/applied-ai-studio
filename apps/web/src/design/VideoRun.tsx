@@ -10,6 +10,7 @@ function ShotListEditor({ detail, act, busy, setApproveExtra }: RunViewProps) {
   const [shots, setShots] = useState<Shot[]>(original);
   const [note, setNote] = useState("");
   const hasRefs = detail.artifacts.some((a) => a.kind === "reference");
+  const helper = detail.run.brief.prompt_helper !== false;
   const dirty = JSON.stringify(shots) !== JSON.stringify(original);
 
   useEffect(() => setShots(step.data.shots ?? []), [step.data.shots]);
@@ -21,7 +22,7 @@ function ShotListEditor({ detail, act, busy, setApproveExtra }: RunViewProps) {
   const patch = (index: number, value: Partial<Shot>) => setShots((current) => current.map((shot, i) => (i === index ? { ...shot, ...value } : shot)));
   return (
     <div className="ds-stack">
-      {step.data.notes && <p className="ds-dim ds-small"><b>Story arc:</b> {step.data.notes}</p>}
+      {step.data.notes && <p className="ds-dim ds-small">{helper && <b>Story arc: </b>}{step.data.notes}</p>}
       {shots.map((shot, index) => (
         <div key={shot.id} className="ds-shot-edit">
           <div className="head">
@@ -56,12 +57,14 @@ function ShotListEditor({ detail, act, busy, setApproveExtra }: RunViewProps) {
           {dirty && <button type="button" className="ds-btn sm ghost" onClick={() => setShots(original)}>Discard</button>}
           {dirty && <span className="ds-tiny ds-muted">Unsaved edits are included when you approve.</span>}
         </div>
-        <span className="ds-chip model">{step.data.model} · draft {step.data.drafts}</span>
+        <span className="ds-chip model">{helper ? `${step.data.model} · draft ${step.data.drafts}` : "no text model · your lines as written"}</span>
       </div>
-      <form className="ds-row" onSubmit={(event) => { event.preventDefault(); if (note.trim()) void act("redraft_shots", { note }).then(() => setNote("")); }}>
-        <input aria-label="Redraft note" value={note} onChange={(e) => setNote(e.target.value)} placeholder="Redraft with a note, e.g. “make shot 2 a drone shot; more motion in shot 4”" style={{ flex: 1 }} />
-        <button type="submit" className="ds-btn" disabled={!note.trim() || busy !== null}>{busy === "redraft_shots" ? <Spinner /> : <Sparkles size={14} aria-hidden="true" />} Redraft</button>
-      </form>
+      {helper && (
+        <form className="ds-row" onSubmit={(event) => { event.preventDefault(); if (note.trim()) void act("redraft_shots", { note }).then(() => setNote("")); }}>
+          <input aria-label="Redraft note" value={note} onChange={(e) => setNote(e.target.value)} placeholder="Redraft with a note, e.g. “make shot 2 a drone shot; more motion in shot 4”" style={{ flex: 1 }} />
+          <button type="submit" className="ds-btn" disabled={!note.trim() || busy !== null}>{busy === "redraft_shots" ? <Spinner /> : <Sparkles size={14} aria-hidden="true" />} Redraft</button>
+        </form>
+      )}
     </div>
   );
 }

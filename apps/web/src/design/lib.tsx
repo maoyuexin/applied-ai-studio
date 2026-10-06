@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { navigate } from "../router";
-import { designApi, errorMessage, type Artifact, type Brief, type PipelineKey, type Reference } from "./api";
+import { designApi, errorMessage, type Artifact, type Brief, type PipelineKey, type Reference, type StepSpec } from "./api";
 import { Banner } from "./ui";
 
 export const BASE_PATH = "/design-studio";
@@ -116,6 +116,7 @@ export function useAction() {
 
 
 const TOOLS: Record<string, string> = {
+  shotlist: "no model · your lines as written",
   assemble: "automatic · ffmpeg",
   provenance: "automatic · c2patool",
   finish: "automatic · label + Content Credentials check",
@@ -130,4 +131,11 @@ export function stepWorker(step: { key: string; role: string | null }, model: (r
   if (pipeline === "article" && step.key === "draft") return `${main} · checked by ${model("text-judge") ?? "a second model"}`;
   if (pipeline === "voice" && step.key === "lines") return `${main} · listen-back check`;
   return main;
+}
+
+/** Video steps when the prompt helper is off: no text model and no keyframes; every shot is text → video. */
+export function promptOnlySteps(steps: StepSpec[]): StepSpec[] {
+  return steps.filter((step) => step.key !== "keyframes").map((step) => step.key === "shotlist"
+    ? { ...step, title: "Your lines → shots", role: "tool", description: "Each line of your brief is one shot, sent to Sora as written. You can still edit the lines before any video is made." }
+    : step);
 }

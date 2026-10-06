@@ -181,3 +181,32 @@ def test_bad_brief_is_a_readable_409(client: TestClient) -> None:
     missing = client.post("/api/design/runs", json={"pipeline": "video", "brief": video_brief(
         [{"sha": "0" * 64, "role": "subject"}])})
     assert missing.status_code == 409 and "missing" in missing.json()["detail"]
+
+
+def test_prompt_helper_off_sends_each_line_as_written(client: TestClient) -> None:
+    lines = ["Rain streaks down a cafe window at night; the camera slowly racks focus to neon signs outside.",
+             "A barista turns, smiles and slides a steaming cup across the counter toward the camera."]
+    created = client.post("/api/design/runs", json={"pipeline": "video", "brief": video_brief(
+        brief="\n".join(lines) + "\n\n", shots=5, takes_per_shot=1, prompt_helper=False, end_title="",
+        must_not_include="")})
+    assert created.status_code == 201, created.text
+    run = created.json()["run"]
+    assert run["brief"]["shots"] == 2, "shots follow the number of lines"
+    detail = wait_for(client, run["id"], at_gate("shotlist"))
+    titles = {s["key"]: (s["title"], s["gate"]) for s in detail["steps"]}
+    assert titles["shotlist"] == ("Your lines → shots", True) and titles["keyframes"][1] is False
+    shots = next(s for s in detail["steps"] if s["key"] == "shotlist")["data"]["shots"]
+    assert [s["prompt"] for s in shots] == lines and {s["mode"] for s in shots} == {"t2v"}
+    assert any("no text model" in e["message"] for e in detail["events"])
+    assert act(client, run["id"], "redraft_shots", {"note": "more drama"}, expect=409)["detail"].startswith("The prompt helper is off")
+    act(client, run["id"], "approve", {"step": "shotlist"})
+    detail = wait_for(client, run["id"], at_gate("takes"))
+    takes = [a for a in detail["artifacts"] if a["kind"] == "take"]
+    assert [t["prompt"] for t in takes] == lines, "Sora gets the line exactly"
+    assert next(s for s in detail["steps"] if s["key"] == "keyframes")["status"] == "skipped"
+
+
+def test_prompt_helper_off_validates_lines(client: TestClient) -> None:
+    response = client.post("/api/design/runs", json={"pipeline": "video", "brief": video_brief(
+        brief="A long enough first line for a shot.\nshort", prompt_helper=False)})
+    assert response.status_code == 409 and "Line 2 is too short" in response.json()["detail"]

@@ -6,7 +6,7 @@ and checks each run completes with an output. Start the two servers first:
     DESIGN_PROVIDER_MODE=fake DESIGN_DATA_DIR=/tmp/ds-e2e DESIGN_VIDEO_POLL_SECONDS=0.5 DESIGN_CAP_VIDEO_TAKES=500 \
       .venv/bin/python -m uvicorn app.main:app --app-dir services/design-api --port 4431
     (cd apps/web && WEB_PORT=5180 services__design__http__0=http://127.0.0.1:4431 npx vite --port 5180)
-    .venv/bin/python services/design-api/e2e/browser_e2e.py [article voice image video]
+    .venv/bin/python services/design-api/e2e/browser_e2e.py [article voice image video video_prompt]
 
 Needs a Chromium-based browser (E2E_BROWSER) and the `websockets` package (installed with uvicorn[standard]).
 """
@@ -199,6 +199,31 @@ async def video(tab):
     await finish(tab, "video")
 
 
+async def video_prompt(tab):
+    """Prompt helper off: one line goes to Sora exactly as written (no text model, no keyframes)."""
+    await tab.go("/design-studio/new/video")
+    await tab.js("(()=>{const s=[...document.querySelectorAll('select')].find(e=>[...e.options].some(o=>o.value==='off'));"
+                 "Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype,'value').set.call(s,'off');"
+                 "s.dispatchEvent(new Event('change',{bubbles:true}));return 'ok'})()")
+    await tab.until("__t.has('one per line')", 10, "prompt-only form")
+    await tab.click("Load example")
+    await tab.until("__t.enabled('Start run')", 10, "prompt-only start enabled")
+    line = await tab.js("document.querySelector('textarea').value")
+    await tab.click("Start run")
+    await tab.gate()
+    await tab.until("__t.has('no text model')", 10, "no text model chip")
+    await tab.click("Approve & continue")
+    await tab.until("document.querySelectorAll('#step-takes .ds-take').length >= 2 && [...document.querySelectorAll('#step-takes .ds-take')].every(t => t.querySelector('.ds-acts button'))", 90, "prompt-only takes ready")
+    run_id = await tab.js("__t.runId()")
+    prompts = {a["prompt"] for a in run_detail(run_id)["artifacts"] if a["kind"] == "take"}
+    assert prompts == {line}, ("Sora must receive the line unchanged", prompts)
+    await tab.js("document.querySelector('#step-takes .ds-shot .ds-acts button').click()")
+    await asyncio.sleep(0.6)
+    await tab.gate()
+    await tab.click("Approve & continue")
+    await finish(tab, "video_prompt")
+
+
 async def main():
     profile = tempfile.mkdtemp()
     proc = subprocess.Popen([EDGE, "--headless=new", "--disable-gpu", "--hide-scrollbars", f"--remote-debugging-port={PORT}",
@@ -216,7 +241,7 @@ async def main():
             tab = Tab(ws)
             await tab.call("Page.enable")
             await tab.call("Emulation.setDeviceMetricsOverride", width=1440, height=1000, deviceScaleFactor=1, mobile=False)
-            flows = {f.__name__: f for f in (article, voice, image, video)}
+            flows = {f.__name__: f for f in (article, voice, image, video, video_prompt)}
             for flow in [flows[n] for n in (sys.argv[1:] or flows)]:
                 try:
                     await flow(tab)

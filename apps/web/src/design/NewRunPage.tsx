@@ -5,7 +5,7 @@ import {
   type ArticleSource, type Brief, type PipelineInfo, type TextRole, type PipelineKey, type Reference, type Speaker, type StudioStatus, type Voice,
 } from "./api";
 import { Banner, Crumbs, FlowTrack, Spinner } from "./ui";
-import { PREFILL_KEY, go, stepWorker, useUploader, type Prefill } from "./lib";
+import { PREFILL_KEY, go, promptOnlySteps, stepWorker, useUploader, type Prefill } from "./lib";
 import { STARLINER_SOURCE } from "./examples";
 
 type RefItem = Reference & { thumb_sha?: string };
@@ -54,6 +54,20 @@ const EXAMPLES: Record<PipelineKey, { title: string; brief: Partial<Brief> }> = 
   },
 };
 
+// Prompt helper off: this exact line was sent to Sora unchanged in run_2026-10-06_105110_1aa6 (docs/design-studio/TEST_CASES.md, VD3).
+const PROMPT_ONLY_EXAMPLE: { title: string; brief: Partial<Brief> } = {
+  title: "Prompt only · one 12-second clip",
+  brief: {
+    brief: "A liquid-silver fictional electric grand tourer with thin white light bars glides along a coastal highway at sunrise; a drone camera starts low beside the front wheel, rises and banks to follow from behind as the car accelerates past rocky cliffs and breaking waves, warm golden light flaring across the paint. Sound: wind rush and a soft rising synth.",
+    seconds: 12,
+    takes_per_shot: 2,
+    must_not_include: "",
+    visible_label: "Made with AI",
+    end_title: "",
+    end_tagline: "",
+  },
+};
+
 const DESIGN_SHEET_RUN = "run_2026-10-04_m8-design-sheet";
 
 const TEXT_MODEL_HINT: Record<PipelineKey, string> = {
@@ -65,7 +79,7 @@ const TEXT_MODEL_HINT: Record<PipelineKey, string> = {
 
 const VIDEO_DEFAULTS: Brief = {
   brief: "", shots: 4, seconds: 8, takes_per_shot: 3, size: "1280x720", must_not_include: "", visible_label: "Made with AI",
-  end_title: "", end_tagline: "", voiceover: "", voice: "", references: [],
+  end_title: "", end_tagline: "", voiceover: "", voice: "", references: [], prompt_helper: true,
 };
 const IMAGE_DEFAULTS: Brief = {
   brief: "", use_case: "hero", size: "1536x864", candidates: 4, prompt_helper: true, must_not_include: "", title: "",
@@ -151,18 +165,33 @@ function ReferenceList({ refs, onChange, max = 5, roles = true }: { refs: RefIte
 }
 
 function VideoForm({ brief, set, voices }: { brief: Brief; set: (patch: Partial<Brief>) => void; voices: Voice[] }) {
+  const helper = brief.prompt_helper !== false;
+  const lines = brief.brief.split("\n").filter((line) => line.trim()).length;
   return (
     <>
-      <Field label="Brief" hint="What is it for, who is in it, what happens, the mood. The text model turns this into shots you approve before any video is generated.">
-        <textarea value={brief.brief} onChange={(e) => set({ brief: e.target.value })} style={{ minHeight: 120 }} placeholder="A 30-second ad for…" />
+      <Field label="Shot prompts" hint={helper
+        ? "The text model turns your brief into a shot list with Sora-ready prompts. You review it before any video is generated."
+        : "No text model: each line of the brief is one shot, sent to Sora exactly as written (text → video)."}>
+        <select value={helper ? "on" : "off"} onChange={(e) => set({ prompt_helper: e.target.value === "on" })}>
+          <option value="on">Text model writes the shot list from my brief</option>
+          <option value="off">Off: one shot per line, sent to Sora as written</option>
+        </select>
+      </Field>
+      <Field label={helper ? "Brief" : "Shot prompts (one per line)"} hint={helper
+        ? "What is it for, who is in it, what happens, the mood."
+        : "Describe what moves, how the camera moves, the light and the sound. Each line is one clip."}>
+        <textarea value={brief.brief} onChange={(e) => set({ brief: e.target.value })} style={{ minHeight: 120 }}
+          placeholder={helper ? "A 30-second ad for…" : "A silver grand tourer glides along a coastal highway at sunrise; a drone follows from behind…"} />
       </Field>
       <div className="ds-grid4">
-        <Field label="Shots"><select value={brief.shots} onChange={(e) => set({ shots: Number(e.target.value) })}>{[1, 2, 3, 4, 5, 6, 7, 8].map((n) => <option key={n}>{n}</option>)}</select></Field>
+        <Field label="Shots">{helper
+          ? <select value={brief.shots} onChange={(e) => set({ shots: Number(e.target.value) })}>{[1, 2, 3, 4, 5, 6, 7, 8].map((n) => <option key={n}>{n}</option>)}</select>
+          : <input value={`${lines} (one per line)`} readOnly aria-readonly="true" />}</Field>
         <Field label="Seconds per shot"><select value={brief.seconds} onChange={(e) => set({ seconds: Number(e.target.value) })}>{[4, 8, 12].map((n) => <option key={n} value={n}>{n} s</option>)}</select></Field>
         <Field label="Takes per shot"><select value={brief.takes_per_shot} onChange={(e) => set({ takes_per_shot: Number(e.target.value) })}>{[1, 2, 3, 4].map((n) => <option key={n}>{n}</option>)}</select></Field>
         <Field label="Frame"><select value={brief.size} onChange={(e) => set({ size: e.target.value })}><option value="1280x720">16:9 · 1280×720</option><option value="720x1280">9:16 · 720×1280</option></select></Field>
       </div>
-      <Field label="Must not include" hint="Goes into every prompt and onto the review checklist.">
+      <Field label="Must not include" hint={helper ? "Goes into every prompt and onto the review checklist." : "If filled in, “Keep it free of: …” is added to the end of every line and to the review checklist."}>
         <input value={brief.must_not_include} onChange={(e) => set({ must_not_include: e.target.value })} placeholder="real car brands or logos, readable license plates" />
       </Field>
       <div className="ds-grid3">
@@ -388,10 +417,11 @@ function Preview({ info, status, brief, pipeline, onStart, busy, canStart, model
   }
   const cap = pipeline === "video" ? status?.caps.video : pipeline === "image" ? status?.caps.image : pipeline === "voice" ? status?.caps.voice : status?.caps.text;
   const retire = pipeline === "video" ? status?.video_retirement : null;
+  const steps = pipeline === "video" && brief.prompt_helper === false ? promptOnlySteps(info.steps) : info.steps;
   return (
     <div className="ds-card ds-ws-side" style={{ position: "sticky", top: 14 }}>
       <h3>Pipeline preview</h3>
-      <FlowTrack steps={info.steps} modelFor={(step) => stepWorker(step, (role) => roleModel(role), pipeline)} />
+      <FlowTrack steps={steps} modelFor={(step) => stepWorker(step, (role) => roleModel(role), pipeline)} />
       {kpis.length > 0 && (
         <div className="ds-grid3" style={{ marginTop: 8 }}>
           {kpis.map(([value, label]) => <div key={label} className="ds-kpi"><b>{value}</b><span>{label}</span></div>)}
@@ -474,11 +504,13 @@ export default function NewRunPage({ pipeline: rawPipeline, forkOf }: { pipeline
   }, [voices.data, pipeline]);
 
   const defaults = status.data?.text_defaults;
-  const chosenModels: Partial<Record<TextRole, string>> = {
+  const promptOnly = pipeline === "video" && brief.prompt_helper === false;
+  const chosenModels: Partial<Record<TextRole, string>> = promptOnly ? {} : {
     "text-draft": models["text-draft"] ?? defaults?.["text-draft"],
     ...(pipeline === "article" ? { "text-judge": models["text-judge"] ?? defaults?.["text-judge"] } : {}),
   };
-  const fullBrief: Brief = pipeline === "voice" || pipeline === "article" ? brief : { ...brief, references: refs.map(({ sha, role, name }) => ({ sha, role, name })) };
+  const fullBrief: Brief = pipeline === "voice" || pipeline === "article" ? brief
+    : { ...brief, references: promptOnly ? [] : refs.map(({ sha, role, name }) => ({ sha, role, name })) };
   const ready = status.data?.pipelines.find((item) => item.key === pipeline)?.ready ?? false;
   const canStart = ready && brief.brief.trim().length >= (pipeline === "image" || pipeline === "article" ? 10 : 20)
     && (pipeline !== "article" || ((brief.sources ?? []).length > 0 && (brief.sources ?? []).every((s) => s.title.trim() && s.text.trim().length >= 40)));
@@ -499,11 +531,11 @@ export default function NewRunPage({ pipeline: rawPipeline, forkOf }: { pipeline
   };
 
   const loadExample = async () => {
-    const example = EXAMPLES[pipeline];
+    const example = promptOnly ? PROMPT_ONLY_EXAMPLE : EXAMPLES[pipeline];
     setTitle(example.title);
     set(example.brief);
     if (!tags) setTags("example");
-    if ((pipeline === "video" || pipeline === "image") && !refs.length) {
+    if ((pipeline === "image" || (pipeline === "video" && !promptOnly)) && !refs.length) {
       // Use the SOLENNE design sheet from run history as the subject reference, when this install has it.
       try {
         const sheet = await designApi.run(DESIGN_SHEET_RUN);
@@ -524,7 +556,9 @@ export default function NewRunPage({ pipeline: rawPipeline, forkOf }: { pipeline
         <div>
           <h1>New {pipeline} run</h1>
           <p className="ds-sub">
-            {pipeline === "video" && "Write the brief once. The pipeline turns it into a shot list for you to approve before any video is generated."}
+            {pipeline === "video" && (promptOnly
+              ? "Write one shot prompt per line. Each line goes to Sora as written; you check the lines before any video is generated."
+              : "Write the brief once. The pipeline turns it into a shot list for you to approve before any video is generated.")}
             {pipeline === "image" && "Say what the image is for, give it references, and set the rules. Candidates come back for you to pick; then you iterate from the pick."}
             {pipeline === "voice" && "Describe the piece and cast the voices. The script comes back for you to edit, then each line is recorded and checked."}
             {pipeline === "article" && "Give it a brief and the sources. You approve the outline, then every draft is fact-checked against the sources by a second model before you approve one."}
@@ -546,7 +580,7 @@ export default function NewRunPage({ pipeline: rawPipeline, forkOf }: { pipeline
               <Field label="Run title"><input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Shown in run history" /></Field>
               <Field label="Tags" hint="Comma separated, e.g. Module 8, example"><input value={tags} onChange={(e) => setTags(e.target.value)} /></Field>
             </div>
-            {status.data && status.data.text_models.length > 0 && (
+            {status.data && status.data.text_models.length > 0 && !promptOnly && (
               <div className="ds-grid2">
                 <Field label="Text model" hint={TEXT_MODEL_HINT[pipeline]}>
                   <select value={chosenModels["text-draft"] ?? ""} onChange={(e) => setModels({ ...models, "text-draft": e.target.value })}>
@@ -566,7 +600,7 @@ export default function NewRunPage({ pipeline: rawPipeline, forkOf }: { pipeline
             {pipeline === "image" && <ImageForm brief={brief} set={set} info={info} />}
             {pipeline === "voice" && <VoiceForm brief={brief} set={set} voices={voices.data ?? []} />}
             {pipeline === "article" && <ArticleForm brief={brief} set={set} />}
-            {(pipeline === "video" || pipeline === "image") && (
+            {(pipeline === "image" || (pipeline === "video" && !promptOnly)) && (
               <>
                 <label>Reference images {pipeline === "video" ? "(optional: the product or design sheet)" : "(optional)"}</label>
                 <ReferenceList refs={refs} onChange={setRefs} />

@@ -1,7 +1,8 @@
 # Design Studio: end-to-end test cases
 
-Eight manual tests, two per pipeline, run in the browser exactly as a user would. Each one checks
-a feature you may show in class: review steps, revisions, automatic checks, labels, run history.
+Nine manual tests, run in the browser exactly as a user would: two per pipeline, plus a prompt-only
+video test (VD3). Each one checks a feature you may show in class: review steps, revisions, automatic
+checks, labels, run history.
 Run them on **your Mac** (http://127.0.0.1:5173/design-studio) and repeat the ones marked *server* on
 the **home server** (https://applied-ai-studio.myyclabs.com/design-studio).
 
@@ -26,8 +27,10 @@ the **home server** (https://applied-ai-studio.myyclabs.com/design-studio).
 | I2 | Image | 2 min | 1–2 images | Mac |
 | VD1 | Video | 12 min | 1–2 text, 1–2 images, 5–6 Sora takes | Mac |
 | VD2 | Video | 6 min | 1 text, 1 Sora take | Mac → server |
+| VD3 | Video (prompt only) | 5 min | 2 Sora takes, no text model | Mac + server |
 
 Sora takes are the only expensive calls (20 per day cap). Run the video tests before **Oct 15**.
+How the video pipeline works, in detail: [VIDEO_GUIDE.md](VIDEO_GUIDE.md).
 
 ---
 
@@ -223,6 +226,32 @@ remix, assembly with label and end card, provenance.
 
 **Pass if:** no second Sora job was created, and the server shows the same run.
 
+### VD3 · Prompt only: your words go straight to Sora *(Mac + server)*
+
+**Shows:** end-to-end video from a prompt with no text model and no images in between; why a person
+judges the takes, not the motion number.
+
+1. **New video run** → **Shot prompts**: *Off: one shot per line, sent to Sora as written* → **Load example**.
+   **Expect:** one line about the silver grand tourer on the coastal highway; **Shots** reads `1 (one per line)`,
+   **Seconds per shot** `12 s`, **Takes per shot** `2`. The **Text model** picker and **Reference images** are
+   gone. The preview starts with *Your lines → shots* (`no model · your lines as written`) and shows
+   `2 video generations · 24 s video generated · ~2.3 min`.
+2. **Start run**. **Expect:** within a second, one shot whose prompt is exactly your line, the chip
+   *no text model · your lines as written*, and no **Redraft** box. The event log says *no text model was used*.
+3. **Approve & continue**. **Expect:** two takes of `0:12` after about 2½ minutes.
+4. Open each take and **watch all 12 seconds**. Compare the `motion` numbers, then check the physics: does the
+   car stay on the road, does a badge or logo appear? In the reference run, the take with the **highest**
+   motion (7.05) drove the car onto the ocean, so it was rejected and the calmer take (5.39) kept.
+   **Expect:** the review page's *Prompt sent* is your line, word for word.
+5. **Reject** the worse take with a note, **Keep** the better one → **Approve & continue**.
+   **Expect:** a 12.0 s final cut with *Made with AI* burned in and no end card (none was set).
+
+Variation: write **two** lines (two shots). **Expect:** `Shots` reads `2 (one per line)`, each line becomes a
+shot, and the final cut joins the two kept takes with a 0.5 s crossfade.
+
+**Pass if:** Sora received your line unchanged, and the take you kept is the one that looks right, not the one
+with the biggest number.
+
 ---
 
 ## Results log
@@ -237,6 +266,7 @@ remix, assembly with label and end card, provenance.
 | I2 | ☐ | — | |
 | VD1 | ☐ | — | |
 | VD2 | ☐ | ☐ (import) | |
+| VD3 | ☐ | ☐ | |
 
 Clean up afterwards: delete test runs you don't want in class from **Run history** (trash icon). Keep the
 ones you want to show; they also work as recorded examples if the network fails in class.
