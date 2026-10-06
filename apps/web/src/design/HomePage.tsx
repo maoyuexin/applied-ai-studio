@@ -142,8 +142,7 @@ export default function HomePage() {
     <div className="page ds">
       <header className="ds-head">
         <div>
-          <span className="eyebrow">Design Studio</span>
-          <h1>Make it with models. Review every step.</h1>
+          <h1>Design Studio</h1>
           <p className="ds-sub">
             Pipelines for text, voice, images and video on your Microsoft Foundry models. Each run pauses at the review
             steps for your decision, and saves its prompts, model versions, outputs and decisions, so you can reopen, fork
