@@ -75,6 +75,8 @@
 .ds-btn.danger { border-color: rgba(228, 90, 88, 0.55); color: var(--red); background: var(--ds-red-soft); }
 .ds-btn.ghost { background: transparent; }
 .ds-btn.sm { padding: 4px 9px; font-size: 12px; min-height: 28px; border-radius: 7px; }
+.ds-btn.icon { width: 38px; height: 38px; padding: 0; }
+.ds-model-chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .ds-btn.on { border-color: var(--orange); color: var(--orange); background: var(--ds-orange-soft); }
 .ds-btn svg { flex: 0 0 auto; }
 

@@ -12,23 +12,38 @@ const TAGLINES: Record<PipelineKey, string> = {
 };
 const ORDER: PipelineKey[] = ["article", "voice", "image", "video"];
 
-export function RoleChips({ status }: { status: StudioStatus }) {
-  const show = ["text-draft", "image", "voice", "video"];
+/** Which models a card's pipeline uses, so each card shows its own connections. */
+const CARD_ROLES: Record<PipelineKey, Array<[string, string]>> = {
+  article: [["text-draft", "Writes"], ["text-judge", "Checks"]],
+  voice: [["text-draft", "Script"], ["voice", "Voice"], ["listen-back", "Listen-back"]],
+  image: [["text-draft", "Prompt"], ["image", "Image"]],
+  video: [["text-draft", "Shots"], ["image", "Keyframes"], ["video", "Video"], ["voice", "Voiceover"]],
+};
+
+function shortDate(iso: string) {
+  return new Date(`${iso}T12:00:00`).toLocaleDateString([], { month: "short", day: "numeric" });
+}
+
+function ModelChips({ pipeline, status }: { pipeline: PipelineKey; status: StudioStatus }) {
   return (
-    <div className="ds-chips-bar">
-      {status.roles.filter((role) => show.includes(role.role)).map((role) => {
-        const retiring = role.role === "video" && status.video_retirement;
-        const kind = !role.configured ? "bad" : retiring && status.video_retirement!.days_left <= 14 ? "warn" : "ok";
-        const label = role.label.replace("Text: drafting", "Text");
+    <div className="ds-model-chips" aria-label="Models this pipeline uses">
+      {CARD_ROLES[pipeline].map(([role, label]) => {
+        const info = status.roles.find((item) => item.role === role);
+        const configured = info?.configured ?? false;
+        const name = role === "text-draft" || role === "text-judge" ? status.text_defaults?.[role] ?? info?.model
+          : role === "listen-back" ? "Speech to text" : info?.model;
+        const retire = role === "video" ? status.video_retirement : null;
+        const retiring = Boolean(retire && retire.days_left >= 0 && retire.days_left <= 14);
+        const kind = !configured ? "bad" : retiring ? "warn" : "ok";
+        const title = !configured ? "Not connected on this install: see Settings"
+          : retiring && retire ? `Sora 2 (2025-12-08) retires ${retire.on}: ${retire.days_left} day(s) left. Finished videos stay in history.`
+            : `${info?.resource} / ${info?.deployment}`;
         return (
-          <span key={role.role} className={`ds-chip ${kind}`} title={`${role.resource} / ${role.deployment}`}>
-            ● {label} · {role.configured ? role.model : "not connected"}
-            {retiring && role.configured ? ` · retires ${new Date(`${status.video_retirement!.on}T12:00:00`).toLocaleDateString([], { month: "short", day: "numeric" })}` : ""}
+          <span key={role} className={`ds-chip ${kind}`} title={title}>
+            ● {label} · {configured ? name : "not connected"}{retiring && retire ? ` · retires ${shortDate(retire.on)}` : ""}
           </span>
         );
       })}
-      <Link to="/design-studio/settings" className="ds-btn sm ghost"><Settings size={13} aria-hidden="true" /> Settings</Link>
-      {status.provider_mode === "fake" && <span className="ds-chip warn">Offline demo mode: placeholder media</span>}
     </div>
   );
 }
@@ -85,7 +100,7 @@ export function PipelineGlyph({ pipeline }: { pipeline: PipelineKey }) {
   return <Icon size={16} aria-hidden="true" />;
 }
 
-function PipelineCard({ pipeline, ready, missing, model }: { pipeline: PipelineInfo; ready: boolean; missing: string[]; model: (role: string) => string | undefined }) {
+function PipelineCard({ pipeline, ready, missing, model, status }: { pipeline: PipelineInfo; ready: boolean; missing: string[]; model: (role: string) => string | undefined; status: StudioStatus | null }) {
   const Icon = ICONS[pipeline.key];
   return (
     <article className={`ds-card ds-pipe${pipeline.key === "video" ? " hl" : ""}`}>
@@ -98,6 +113,7 @@ function PipelineCard({ pipeline, ready, missing, model }: { pipeline: PipelineI
           </div>
         </div>
         <p>{pipeline.summary}</p>
+        {status && <ModelChips pipeline={pipeline.key} status={status} />}
         <div className="ds-row">
           <button type="button" className="ds-btn primary" disabled={!ready} onClick={() => go(`/design-studio/new/${pipeline.key}`)}>
             New {pipeline.title.toLowerCase()} run
@@ -135,19 +151,12 @@ export default function HomePage() {
           </p>
         </div>
         <div className="ds-head-actions">
-          <Link to="/design-studio/history" className="ds-btn"><History size={15} aria-hidden="true" /> Run history</Link>
+          {status.data?.provider_mode === "fake" && <span className="ds-chip warn">Offline demo mode: placeholder media</span>}
+          <Link to="/design-studio/history" className="ds-btn icon" title="Run history" aria-label="Run history"><History size={18} aria-hidden="true" /></Link>
+          <Link to="/design-studio/settings" className="ds-btn icon" title="Settings: models, caps, where this runs" aria-label="Settings"><Settings size={18} aria-hidden="true" /></Link>
         </div>
       </header>
       {error && <Banner kind="error">{error}</Banner>}
-      {status.data && <RoleChips status={status.data} />}
-      {status.data?.video_retirement && status.data.video_retirement.days_left >= 0 && status.data.video_retirement.days_left <= 14 && (
-        <div style={{ marginBottom: 14 }}>
-          <Banner kind="warn">
-            The video model (Sora 2, version 2025-12-08) retires on {status.data.video_retirement.on}: {status.data.video_retirement.days_left} day(s) left.
-            Runs already in history keep their videos; new video runs need a replacement model after that date.
-          </Banner>
-        </div>
-      )}
       <p className="ds-legend">
         <span>Each card lists its steps in the order they run.</span>
         <span className="ds-row" style={{ gap: 6 }}><ReviewTag /> the run pauses until you approve</span>
@@ -156,7 +165,7 @@ export default function HomePage() {
       <section className="ds-pipes" aria-label="Pipelines">
         {ordered.map((pipeline) => {
           const state = status.data?.pipelines.find((item) => item.key === pipeline.key);
-          return <PipelineCard key={pipeline.key} pipeline={pipeline} ready={state?.ready ?? false} missing={state?.missing ?? []} model={model} />;
+          return <PipelineCard key={pipeline.key} pipeline={pipeline} ready={state?.ready ?? false} missing={state?.missing ?? []} model={model} status={status.data} />;
         })}
       </section>
       <section className="ds-card" style={{ marginTop: 16 }}>

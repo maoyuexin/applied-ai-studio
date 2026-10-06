@@ -3,11 +3,15 @@ import { AlertTriangle, CheckCircle2, Info, LoaderCircle, UserCheck, XCircle } f
 import { mediaUrl, type Artifact, type Check, type RunEvent, type RunStatus, type Step, type StepSpec } from "./api";
 import { checkFlag, clockOf, go } from "./lib";
 
-export function Link({ to, children, className }: { to: string; children: ReactNode; className?: string }) {
+export function Link({ to, children, className, title, ...aria }: {
+  to: string; children: ReactNode; className?: string; title?: string; "aria-label"?: string;
+}) {
   return (
     <a
       href={to}
       className={className}
+      title={title}
+      aria-label={aria["aria-label"]}
       onClick={(event) => {
         if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
         event.preventDefault();
