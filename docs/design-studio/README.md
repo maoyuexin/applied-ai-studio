@@ -14,6 +14,7 @@ history you can reopen, fork, compare, export and import.
 Checks never decide. Every keep, regenerate, remix, revision and approval is stored with the run.
 
 Planning documents: [DEV_PLAN.md](DEV_PLAN.md) and the clickable [ux-mockup.html](ux-mockup.html).
+Manual end-to-end test script (two cases per pipeline): [TEST_CASES.md](TEST_CASES.md).
 Architecture decision: [ADR-0004](../adr/0004-design-studio-service.md).
 
 ## Run it locally

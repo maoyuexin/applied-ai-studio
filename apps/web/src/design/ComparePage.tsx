@@ -18,8 +18,13 @@ const median = (values: number[]) => {
 const takes = (detail: RunDetail) => detail.artifacts.filter((a) => a.kind === "take" && a.status !== "superseded");
 const passed = (items: Artifact[]) => items.filter((a) => a.verdict === "keep" || a.verdict === "usable").length;
 
+const textModel = (d: RunDetail) => d.run.settings?.models?.["text-draft"] ?? "install default";
+const judgeModel = (d: RunDetail) => d.run.settings?.models?.["text-judge"] ?? "install default";
+const TEXT_MODEL_ROW: Row = { label: "Text model", setting: true, value: textModel };
+
 const ROWS: Record<string, Row[]> = {
   video: [
+    TEXT_MODEL_ROW,
     { label: "Shots", setting: true, value: (d) => `${d.run.brief.shots} × ${d.run.brief.seconds} s` },
     { label: "Takes per shot", setting: true, value: (d) => String(d.run.brief.takes_per_shot) },
     { label: "Frame", setting: true, value: (d) => d.run.brief.size ?? "" },
@@ -33,6 +38,7 @@ const ROWS: Record<string, Row[]> = {
     { label: "Final cut", value: (d) => { const f = d.artifacts.find((a) => a.kind === "final" && a.status === "ready"); return f ? `${f.metrics.duration?.toFixed(1)} s` : "—"; } },
   ],
   image: [
+    TEXT_MODEL_ROW,
     { label: "Use case", setting: true, value: (d) => d.run.brief.use_case ?? "" },
     { label: "Size", setting: true, value: (d) => d.run.brief.size ?? "" },
     { label: "Prompt helper", setting: true, value: (d) => (d.run.brief.prompt_helper ? "on" : "off") },
@@ -43,6 +49,9 @@ const ROWS: Record<string, Row[]> = {
     { label: "Blocked by filter", value: (d) => String(d.artifacts.filter((a) => a.status === "blocked").length) },
   ],
   article: [
+    TEXT_MODEL_ROW,
+    { label: "Fact-check model", setting: true, value: judgeModel },
+    { label: "Must not include", setting: true, value: (d) => d.run.brief.must_not_include || "—" },
     { label: "Format", setting: true, value: (d) => d.run.brief.format ?? "" },
     { label: "Target length", setting: true, value: (d) => `${d.run.brief.target_words} words` },
     { label: "Sources", setting: true, value: (d) => String(d.run.brief.sources?.length ?? 0) },
@@ -52,6 +61,7 @@ const ROWS: Record<string, Row[]> = {
     { label: "Words", value: (d) => { const f = d.artifacts.find((a) => a.kind === "final" && a.status === "ready"); return f ? String(f.metrics.words ?? "") : "—"; } },
   ],
   voice: [
+    TEXT_MODEL_ROW,
     { label: "Format", setting: true, value: (d) => d.run.brief.format ?? "" },
     { label: "Language", setting: true, value: (d) => d.run.brief.locale ?? "" },
     { label: "Voices", setting: true, value: (d) => (d.run.brief.speakers ?? []).map((s) => s.voice.split(":")[0].split("-").pop()).join(" · ") },
