@@ -4,8 +4,8 @@ import {
   designApi, errorMessage, mediaUrl, useLoad,
   type ArticleSource, type Brief, type PipelineInfo, type TextRole, type PipelineKey, type Reference, type Speaker, type StudioStatus, type Voice,
 } from "./api";
-import { Banner, Crumbs, Spinner } from "./ui";
-import { PREFILL_KEY, go, useUploader, type Prefill } from "./lib";
+import { Banner, Crumbs, FlowTrack, Spinner } from "./ui";
+import { PREFILL_KEY, go, stepWorker, useUploader, type Prefill } from "./lib";
 import { STARLINER_SOURCE } from "./examples";
 
 type RefItem = Reference & { thumb_sha?: string };
@@ -391,21 +391,7 @@ function Preview({ info, status, brief, pipeline, onStart, busy, canStart, model
   return (
     <div className="ds-card ds-ws-side" style={{ position: "sticky", top: 14 }}>
       <h3>Pipeline preview</h3>
-      <div className="ds-stepper">
-        {info.steps.map((step, index) => (
-          <div key={step.key} className="ds-st pending">
-            <span className="n">{index + 1}</span>
-            <div>
-              <b style={{ color: "var(--text)" }}>{step.title}{step.gate ? " ✋" : ""}</b>
-              <small>
-                {step.role && roleModel(step.role) ? <span className="ds-chip model" style={{ marginRight: 6 }}>{roleModel(step.role)}</span> : null}
-                {pipeline === "article" && step.key === "draft" && roleModel("text-judge") ? <span className="ds-chip model" style={{ marginRight: 6 }}>checks: {roleModel("text-judge")}</span> : null}
-                {step.description}
-              </small>
-            </div>
-          </div>
-        ))}
-      </div>
+      <FlowTrack steps={info.steps} modelFor={(step) => stepWorker(step, (role) => roleModel(role), pipeline)} />
       {kpis.length > 0 && (
         <div className="ds-grid3" style={{ marginTop: 8 }}>
           {kpis.map(([value, label]) => <div key={label} className="ds-kpi"><b>{value}</b><span>{label}</span></div>)}
@@ -421,7 +407,7 @@ function Preview({ info, status, brief, pipeline, onStart, busy, canStart, model
         <button type="button" className="ds-btn primary" disabled={busy || !canStart || Boolean(problem)} onClick={onStart}>
           {busy ? <Spinner /> : null} Start run
         </button>
-        <span className="ds-tiny ds-muted">Nothing expensive runs before the first ✋ review.</span>
+        <span className="ds-tiny ds-muted">Nothing expensive runs before your first review.</span>
       </div>
     </div>
   );

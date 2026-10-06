@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Download, Mic, Plus, Sparkles, Trash2 } from "lucide-react";
 import { designApi, mediaUrl, useLoad, type Artifact, type ScriptLine } from "./api";
 import type { RunViewProps } from "./RunPage";
-import { Banner, Checks, Spinner } from "./ui";
+import { Banner, Checks, ReviewTag, Spinner } from "./ui";
 
 function ScriptEditor({ detail, act, busy, setApproveExtra, styles }: RunViewProps & { styles: Record<string, string[]> }) {
   const step = detail.steps.find((s) => s.key === "script")!;
@@ -147,7 +147,7 @@ export default function VoiceRun(props: RunViewProps) {
   return (
     <div className="ds-stack">
       <section id="step-script" className="ds-card">
-        <h3>Brief → script {steps.script?.status === "waiting" ? "✋" : ""}</h3>
+        <h3>Brief → script {steps.script?.status === "waiting" && <ReviewTag waiting />}</h3>
         <p className="ds-small ds-muted" style={{ marginBottom: 8 }}>
           <b>Cast:</b> {speakers.map((s) => `${s.name} (${s.voice.split(":")[0]}${s.style ? `, ${s.style}` : ""})`).join(" · ")} · {detail.run.brief.locale}
         </p>
@@ -162,7 +162,7 @@ export default function VoiceRun(props: RunViewProps) {
       {steps.lines && steps.lines.status !== "pending" && (
         <section id="step-lines" className="ds-card">
           <div className="ds-row between" style={{ marginBottom: 6 }}>
-            <h3 style={{ margin: 0 }}>Lines · synthesize + listen-back {steps.lines.status === "waiting" ? "✋" : ""}</h3>
+            <h3 style={{ margin: 0 }}>Lines · synthesize + listen-back {steps.lines.status === "waiting" && <ReviewTag waiting />}</h3>
             <span className={`ds-chip ${errors ? "warn" : "ok"}`}>{errors} word difference{errors === 1 ? "" : "s"} in kept takes</span>
           </div>
           <p className="ds-small ds-muted">Each line is its own call, so one bad line can be redone alone. The listen-back check transcribes each line and compares it with the script word by word; it flags, you decide.</p>

@@ -3,7 +3,7 @@ import ReactMarkdown from "react-markdown";
 import { Copy, Download, Pencil, Plus, Sparkles, Trash2 } from "lucide-react";
 import { mediaUrl, type Artifact, type Claim } from "./api";
 import type { RunViewProps } from "./RunPage";
-import { Banner, Checks, Spinner } from "./ui";
+import { Banner, Checks, ReviewTag, Spinner } from "./ui";
 
 type Point = { text: string; sources: number[] };
 
@@ -214,7 +214,7 @@ export default function ArticleRun(props: RunViewProps) {
         </details>
       </section>
       <section id="step-outline" className="ds-card">
-        <h3>Outline {steps.outline?.status === "waiting" ? "✋" : ""}</h3>
+        <h3>Outline {steps.outline?.status === "waiting" && <ReviewTag waiting />}</h3>
         {steps.outline?.status === "running" && !steps.outline.data.points && <p className="ds-muted"><Spinner /> Planning the outline…</p>}
         {steps.outline?.status === "waiting" ? <OutlineEditor {...props} /> : steps.outline?.data.points ? (
           <details>
@@ -225,7 +225,7 @@ export default function ArticleRun(props: RunViewProps) {
       </section>
       {steps.draft && steps.draft.status !== "pending" && (
         <section id="step-draft" className="ds-card">
-          <h3>Draft → check → revise {steps.draft.status === "waiting" ? "✋" : ""}</h3>
+          <h3>Draft → check → revise {steps.draft.status === "waiting" && <ReviewTag waiting />}</h3>
           <DraftStep {...props} />
         </section>
       )}

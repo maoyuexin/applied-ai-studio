@@ -1,6 +1,6 @@
 import { useEffect, type ReactNode } from "react";
-import { AlertTriangle, CheckCircle2, Info, LoaderCircle, XCircle } from "lucide-react";
-import { mediaUrl, type Artifact, type Check, type RunEvent, type RunStatus, type Step } from "./api";
+import { AlertTriangle, CheckCircle2, Info, LoaderCircle, UserCheck, XCircle } from "lucide-react";
+import { mediaUrl, type Artifact, type Check, type RunEvent, type RunStatus, type Step, type StepSpec } from "./api";
 import { checkFlag, clockOf, go } from "./lib";
 
 export function Link({ to, children, className }: { to: string; children: ReactNode; className?: string }) {
@@ -113,7 +113,7 @@ export function EventLog({ events, limit = 40 }: { events: RunEvent[]; limit?: n
 const STEP_SUB: Record<string, string> = {
   pending: "not started",
   running: "working…",
-  waiting: "✋ waiting for you",
+  waiting: "waiting for you",
   done: "done",
   skipped: "skipped",
   failed: "failed",
@@ -133,8 +133,9 @@ export function Stepper({ steps, detail, onSelect, selected }: {
           <>
             <span className="n">{step.status === "done" ? "✓" : step.status === "failed" ? "!" : index + 1}</span>
             <div>
-              <b>{step.title}{step.gate ? " ✋" : ""}</b>
+              <b>{step.title}</b>
               <small>{extra ?? STEP_SUB[step.status]}</small>
+              {step.gate && <ReviewTag waiting={step.status === "waiting"} done={step.status === "done"} />}
             </div>
           </>
         );
@@ -223,4 +224,38 @@ export function PipelineIcon({ pipeline, size = 18 }: { pipeline: string; size?:
   if (pipeline === "video") return <span aria-hidden="true" style={{ fontSize: size }}>▶</span>;
   if (pipeline === "image") return <span aria-hidden="true" style={{ fontSize: size }}>▣</span>;
   return <span aria-hidden="true" style={{ fontSize: size }}>♪</span>;
+}
+
+/** Marks a human review gate: the run pauses at this step until a person approves. */
+export function ReviewTag({ waiting = false, done = false }: { waiting?: boolean; done?: boolean }) {
+  const label = waiting ? "Waiting for you" : done ? "Reviewed" : "You review";
+  return (
+    <span className={`ds-review-tag${waiting ? " waiting" : ""}${done ? " done" : ""}`}
+      title="Human review: the run pauses here until you approve">
+      <UserCheck size={12} aria-hidden="true" /> {label}
+    </span>
+  );
+}
+
+/** The steps of a pipeline, in order, with who does each one: a model, a tool, or you. */
+export function FlowTrack({ steps, modelFor, compact = false }: {
+  steps: StepSpec[];
+  modelFor: (step: StepSpec) => string;
+  compact?: boolean;
+}) {
+  return (
+    <ol className={`ds-flow${compact ? " compact" : ""}`}>
+      {steps.map((step, index) => (
+        <li key={step.key} className={step.gate ? "gate" : ""}>
+          <span className="n" aria-hidden="true">{index + 1}</span>
+          <div className="t">
+            <b>{step.title}{step.optional ? <span className="ds-muted"> · optional</span> : null}</b>
+            <small className="who">{modelFor(step)}</small>
+            {!compact && step.description && <small>{step.description}</small>}
+          </div>
+          {step.gate ? <ReviewTag /> : <span />}
+        </li>
+      ))}
+    </ol>
+  );
 }

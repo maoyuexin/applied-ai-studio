@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Ban, Download, GitFork, Lock, RotateCcw, Trash2, Unlock } from "lucide-react";
 import { designApi, mediaUrl, useRun, type RunDetail } from "./api";
-import { Banner, Crumbs, Dialog, EventLog, Link, Spinner, StatusPill, Stepper } from "./ui";
+import { Banner, Crumbs, Dialog, EventLog, Link, ReviewTag, Spinner, StatusPill, Stepper } from "./ui";
 import ArticleRun from "./ArticleRun";
 import ImageRun from "./ImageRun";
 import ReviewView from "./ReviewView";
@@ -199,7 +199,7 @@ export default function RunPage({ runId, review }: { runId: string; review: stri
             {gate && waiting && (
               <div className="ds-gatebar" role="region" aria-label="Review gate">
                 <div>
-                  <b>✋ Your review: {waiting.title}.</b>{" "}
+                  <ReviewTag waiting /> <b>{waiting.title}</b>{" "}
                   <span className="ds-small ds-dim">{gate.ready ? "Approve to continue to the next step." : gate.reason}</span>
                 </div>
                 <button type="button" className="ds-btn primary" disabled={!gate.ready || busy !== null} onClick={() => void approve()}>

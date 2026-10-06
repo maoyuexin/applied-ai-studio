@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Download, Plus, RefreshCw, Sparkles } from "lucide-react";
 import { mediaUrl, type Artifact, type Shot } from "./api";
 import type { RunViewProps } from "./RunPage";
-import { Banner, Checks, Dialog, MediaPreview, Spinner } from "./ui";
+import { Banner, Checks, Dialog, MediaPreview, ReviewTag, Spinner } from "./ui";
 
 function ShotListEditor({ detail, act, busy, setApproveExtra }: RunViewProps) {
   const step = detail.steps.find((s) => s.key === "shotlist")!;
@@ -140,7 +140,7 @@ export default function VideoRun(props: RunViewProps) {
   return (
     <div className="ds-stack">
       <section id="step-shotlist" className="ds-card">
-        <h3>Shot list {steps.shotlist?.status === "waiting" ? "✋" : ""}</h3>
+        <h3>Shot list {steps.shotlist?.status === "waiting" && <ReviewTag waiting />}</h3>
         {steps.shotlist?.status === "running" && !shots.length && <p className="ds-muted"><Spinner /> The text model is writing the shot list…</p>}
         {steps.shotlist?.status === "waiting" ? <ShotListEditor {...props} /> : shots.length ? (
           <details open={!takes.length}>
@@ -152,7 +152,7 @@ export default function VideoRun(props: RunViewProps) {
 
       {steps.keyframes && steps.keyframes.status !== "pending" && steps.keyframes.status !== "skipped" && (
         <section id="step-keyframes" className="ds-card">
-          <h3>Keyframes for product shots {steps.keyframes.status === "waiting" ? "✋" : ""}</h3>
+          <h3>Keyframes for product shots {steps.keyframes.status === "waiting" && <ReviewTag waiting />}</h3>
           <p className="ds-small ds-muted" style={{ marginBottom: 10 }}>Opening frames edited from your reference images with the image model. The kept keyframe becomes the first frame of every take for that shot.</p>
           {shots.filter((shot) => shot.mode === "i2v").map((shot) => {
             const frames = keyframes.filter((k) => k.grp === shot.id);
@@ -195,7 +195,7 @@ export default function VideoRun(props: RunViewProps) {
       {steps.takes && steps.takes.status !== "pending" && (
         <section id="step-takes" className="ds-card">
           <div className="ds-row between" style={{ marginBottom: 8 }}>
-            <h3 style={{ margin: 0 }}>Takes {steps.takes.status === "waiting" ? "✋" : ""}</h3>
+            <h3 style={{ margin: 0 }}>Takes {steps.takes.status === "waiting" && <ReviewTag waiting />}</h3>
             <div className="ds-row">
               <span className="ds-chip ok">Kept {counts.kept}</span>
               <span className="ds-chip warn">Regenerate {counts.regen}</span>

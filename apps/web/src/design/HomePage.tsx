@@ -1,7 +1,7 @@
 import { Clapperboard, FileText, History, ImageIcon, Mic, Settings } from "lucide-react";
 import { designApi, mediaUrl, useLoad, type PipelineInfo, type PipelineKey, type RunSummary, type StudioStatus } from "./api";
-import { Banner, Link, Progress, StatusPill } from "./ui";
-import { go, when } from "./lib";
+import { Banner, FlowTrack, Link, Progress, ReviewTag, StatusPill } from "./ui";
+import { go, stepWorker, when } from "./lib";
 
 const ICONS: Record<PipelineKey, typeof Clapperboard> = { video: Clapperboard, image: ImageIcon, voice: Mic, article: FileText };
 const TAGLINES: Record<PipelineKey, string> = {
@@ -85,31 +85,29 @@ export function PipelineGlyph({ pipeline }: { pipeline: PipelineKey }) {
   return <Icon size={16} aria-hidden="true" />;
 }
 
-function PipelineCard({ pipeline, ready, missing }: { pipeline: PipelineInfo; ready: boolean; missing: string[] }) {
+function PipelineCard({ pipeline, ready, missing, model }: { pipeline: PipelineInfo; ready: boolean; missing: string[]; model: (role: string) => string | undefined }) {
   const Icon = ICONS[pipeline.key];
   return (
     <article className={`ds-card ds-pipe${pipeline.key === "video" ? " hl" : ""}`}>
-      <div className="ds-pipe-top">
-        <span className={`ds-pipe-badge ${pipeline.key}`}><Icon size={19} aria-hidden="true" /></span>
-        <div>
-          <b>{pipeline.title}</b>
-          <small>{TAGLINES[pipeline.key]}</small>
+      <div className="ds-pipe-main">
+        <div className="ds-pipe-top">
+          <span className={`ds-pipe-badge ${pipeline.key}`}><Icon size={19} aria-hidden="true" /></span>
+          <div>
+            <b>{pipeline.title}</b>
+            <small>{TAGLINES[pipeline.key]}</small>
+          </div>
+        </div>
+        <p>{pipeline.summary}</p>
+        <div className="ds-row">
+          <button type="button" className="ds-btn primary" disabled={!ready} onClick={() => go(`/design-studio/new/${pipeline.key}`)}>
+            New {pipeline.title.toLowerCase()} run
+          </button>
+          {!ready && <span className="ds-tiny ds-muted">Needs: {missing.join(", ")}</span>}
         </div>
       </div>
-      <p>{pipeline.summary}</p>
-      <div className="ds-steps-line" aria-label="Steps">
-        {pipeline.steps.map((step, index) => (
-          <span key={step.key} className="ds-row" style={{ gap: 5 }}>
-            <span className={step.gate ? "gate" : ""}>{step.title}{step.gate ? " ✋" : ""}</span>
-            {index < pipeline.steps.length - 1 && <em>›</em>}
-          </span>
-        ))}
-      </div>
-      <div className="ds-row">
-        <button type="button" className="ds-btn primary" disabled={!ready} onClick={() => go(`/design-studio/new/${pipeline.key}`)}>
-          New {pipeline.title.toLowerCase()} run
-        </button>
-        {!ready && <span className="ds-tiny ds-muted">Needs: {missing.join(", ")}</span>}
+      <div className="ds-pipe-flow">
+        <span className="ds-flow-label">How it runs</span>
+        <FlowTrack steps={pipeline.steps} compact modelFor={(step) => stepWorker(step, model, pipeline.key)} />
       </div>
     </article>
   );
@@ -120,6 +118,8 @@ export default function HomePage() {
   const pipelines = useLoad(designApi.pipelines, "pipelines");
   const runs = useLoad(() => designApi.runs({ limit: 6 }), "recent");
   const error = status.error ?? pipelines.error ?? runs.error;
+  const model = (role: string) => (role === "text-draft" || role === "text-judge" ? status.data?.text_defaults?.[role] : undefined)
+    ?? status.data?.roles.find((item) => item.role === role)?.model;
   const ordered = ORDER.map((key) => pipelines.data?.find((p) => p.key === key)).filter((p): p is PipelineInfo => Boolean(p));
 
   return (
@@ -129,9 +129,9 @@ export default function HomePage() {
           <span className="eyebrow">Design Studio</span>
           <h1>Make it with models. Review every step.</h1>
           <p className="ds-sub">
-            Pipelines for text, voice, images and video on your Microsoft Foundry models. Each run pauses where a person has to
-            decide (✋), and saves its prompts, model versions, outputs and your decisions, so you can reopen, fork or
-            compare it later.
+            Pipelines for text, voice, images and video on your Microsoft Foundry models. Each run pauses at the review
+            steps for your decision, and saves its prompts, model versions, outputs and decisions, so you can reopen, fork
+            or compare it later.
           </p>
         </div>
         <div className="ds-head-actions">
@@ -148,10 +148,15 @@ export default function HomePage() {
           </Banner>
         </div>
       )}
+      <p className="ds-legend">
+        <span>Each card lists its steps in the order they run.</span>
+        <span className="ds-row" style={{ gap: 6 }}><ReviewTag /> the run pauses until you approve</span>
+        <span>Other steps run on their own; the line under each step says which model or tool does it.</span>
+      </p>
       <section className="ds-pipes" aria-label="Pipelines">
         {ordered.map((pipeline) => {
           const state = status.data?.pipelines.find((item) => item.key === pipeline.key);
-          return <PipelineCard key={pipeline.key} pipeline={pipeline} ready={state?.ready ?? false} missing={state?.missing ?? []} />;
+          return <PipelineCard key={pipeline.key} pipeline={pipeline} ready={state?.ready ?? false} missing={state?.missing ?? []} model={model} />;
         })}
       </section>
       <section className="ds-card" style={{ marginTop: 16 }}>

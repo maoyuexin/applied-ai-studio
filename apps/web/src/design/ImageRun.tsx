@@ -3,7 +3,7 @@ import { Clapperboard, Download, Plus, Sparkles, Trash2 } from "lucide-react";
 import { mediaUrl, type Artifact, type Reference } from "./api";
 import { DropZone } from "./NewRunPage";
 import type { RunViewProps } from "./RunPage";
-import { Banner, Checks, MediaPreview, Spinner } from "./ui";
+import { Banner, Checks, MediaPreview, ReviewTag, Spinner } from "./ui";
 import { PREFILL_KEY, type Prefill, go, useUploader } from "./lib";
 
 type RefItem = Reference & { thumb_sha?: string };
@@ -270,14 +270,14 @@ export default function ImageRun(props: RunViewProps) {
   return (
     <div className="ds-stack">
       <section id="step-prompt" className="ds-card">
-        <h3>Brief → prompt {steps.prompt?.status === "waiting" ? "✋" : ""}</h3>
+        <h3>Brief → prompt {steps.prompt?.status === "waiting" && <ReviewTag waiting />}</h3>
         <p className="ds-small ds-muted" style={{ marginBottom: 8 }}><b>Brief:</b> {detail.run.brief.brief}</p>
         <PromptStep {...props} />
       </section>
       {steps.candidates && steps.candidates.status !== "pending" && (
         <section id="step-candidates" className="ds-card">
           <div className="ds-row between" style={{ marginBottom: 8 }}>
-            <h3 style={{ margin: 0 }}>Candidates {steps.candidates.status === "waiting" ? "✋" : ""}</h3>
+            <h3 style={{ margin: 0 }}>Candidates {steps.candidates.status === "waiting" && <ReviewTag waiting />}</h3>
             {candidatesOpen && <button type="button" className="ds-btn sm" disabled={busy !== null} onClick={() => void act("more_candidates", { count: 2 })}><Plus size={13} aria-hidden="true" /> 2 more</button>}
           </div>
           <div className="ds-takes" style={{ gridTemplateColumns: `repeat(auto-fill, minmax(${shape.portrait ? 150 : 220}px, 1fr))` }}>
