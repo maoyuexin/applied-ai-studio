@@ -6,9 +6,10 @@ decisions. It combines reusable industry workflows with an executable Online
 Order application, a transaction-fraud lab, a pediatric chest X-ray
 prioritization lab, and two finance labs backed by public teaching data.
 
-> **Students — start here.** You do not need to install anything. See
-> [docs/student-quickstart.md](docs/student-quickstart.md) to run this in your
-> browser with GitHub Codespaces.
+> **Students — start here.** You can run Applied AI Studio in GitHub
+> Codespaces (no local install required for that path). See
+> [docs/student-quickstart.md](docs/student-quickstart.md) to run in your browser
+> with Codespaces.
 
 The repository contains no private customer data, API keys, model credentials, or
 database files. GitHub Copilot features use the current user's authenticated
@@ -142,8 +143,9 @@ npm run prepare:forecast
 npm run prepare:recommendations
 ```
 
-The npm scripts locate `.venv/bin/python` on macOS/Linux and
-`.venv\Scripts\python.exe` on Windows.
+Note: the repository provides scripts/scripts/venv-python.mjs which expects a
+Python virtual environment at .venv. Create the venv (python -m venv .venv)
+before running the `npm run setup:*` and `npm run prepare:*` scripts.
 
 ### 3. Start all services
 
@@ -214,13 +216,10 @@ fallback.
 
 ## Configuration
 
-All services have safe local defaults. No credentials are required in an
-environment file. [`.env.example`](.env.example) documents optional non-secret
-port and model settings.
-
-If local overrides are needed, export environment variables in the shell or use
-an ignored `.env` file where supported. Never commit `.env`, `.env.local`,
-database files, tokens, keys, or CLI authentication state.
+All services have safe local defaults. No credentials are required to run the
+project locally. If local overrides are needed, export environment variables in
+the shell or use an ignored `.env` file where supported. Never commit `.env`,
+`.env.local`, database files, tokens, keys, or CLI authentication state.
 
 Common settings:
 
@@ -295,7 +294,7 @@ authenticated Copilot account and may use metered requests.
 
 - Public synthetic data and public educational benchmark data only
 - No API keys or model credentials in browser or source files
-- Copilot sessions use `mode: "empty"`
+- Copilot sessions use `mode: \"empty\"`
 - Shell, filesystem, browser, generic network, memory, and write permissions are
   rejected
 - Copilot can access catalog facts only through allowlisted custom tools
