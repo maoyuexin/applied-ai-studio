@@ -28,7 +28,7 @@ the **home server** (https://applied-ai-studio.myyclabs.com/design-studio).
 | VD1 | Video | 12 min | 1–2 text, 1–2 images, 5–6 Sora takes | Mac |
 | VD2 | Video | 6 min | 1 text, 1 Sora take | Mac → server |
 | VD3 | Video (prompt only) | 5 min | 2 Sora takes, no text model | Mac + server |
-| VD4 | Video (prompt only, 4-shot story) | 25 min | 12 Sora takes, plus regenerations (22 in the reference run) | Mac + server |
+| VD4 | Video (prompt only, 2-shot story) | 15 min | 6 Sora takes, plus a remix or two | Mac + server |
 
 Sora takes are the only expensive calls (20 per day cap). Run the video tests before **Oct 15**.
 How the video pipeline works, in detail: [VIDEO_GUIDE.md](VIDEO_GUIDE.md).
@@ -255,100 +255,85 @@ with the biggest number.
 
 ### VD4 · Little League anime: home run, game-saving catch, win *(Mac + server)*
 
-**Shows:** a four-shot story written as your own prompts; how many takes realistic sports action costs and
-why a person checks every one; keeping players and style consistent across shots that Sora generates
-separately; an end card the app draws itself; checking a kids' video before you share it.
+**Shows:** a two-shot story written as your own prompts in the style of OpenAI's own anime showcase prompt;
+several camera shots inside one Sora clip; checking sports action frame by frame; fixing one detail with
+**Remix**; an end card the app draws itself; checking a kids' video before you share it.
 
-**Reference run:** *Little League · home run and the catch* (Oct 6, `run_2026-10-06_164926_8952`). Its
-review notes (each starting *Copilot review:*) say why every rejected take failed.
+**Reference run:** *Little League · sakuga version* (Oct 6, `run_2026-10-06_223801_df14`), a fork of the
+earlier *Little League · home run and the catch*. Tick both in **Run history** → **Compare 2 runs** to see what
+changed.
 
-**Style without naming a show:** the look is a cute, chibi-leaning Japanese sports anime. The prompts
-describe it (cel shading, bold ink outlines, screentone, big eyes, manga speed lines) instead of naming a
-series or artist. Naming a copyrighted work invites a content-filter block and is exactly the IP question
-Module 8 asks students to think about.
+**Why the prompts look like this:** the first version (four 8 s shots, 150–190 words each, "chibi, cel-shaded,
+screentone") took 22 takes to get 4 usable ones and still looked like cheap TV animation. OpenAI's official
+Sora 2 anime prompt (*"in the style of a japanese anime … film-caliber sakuga japanese animation, close-up
+shots … beautiful fluid hand-drawn animation"*) shows a better pattern:
+- **Quality words, not technique words:** *film-caliber sakuga*, *beautiful fluid hand-drawn animation*.
+- **Mood and stakes first:** a packed small-town ballpark, a tied last inning, everything on one batter.
+- **Several shots per clip:** a close-up, a side view, a wide shot. Sora cuts between them inside one 12 s
+  clip and keeps the characters the same, so two clips leave only one seam where the style can change.
+- **Keep the hard physics simple:** the swing is a side view with *only the batter in frame*, so no catcher
+  can "catch first".
+
+The style is described, not named after a series or artist: naming a copyrighted work invites a filter block
+and is the IP question Module 8 asks students to think about.
 
 **Why the drawing is not attached:** every shot shows people, and Sora rejects input images with faces, so
-shots with people go to Sora as text → video (the Reference images field is hidden when prompt helper is
-off). The player's look is written into the prompts instead. Expect a cartoon player in that uniform, not a
-particular child's face.
+shots with people go to Sora as text → video. Expect an anime player in that uniform, not a particular child.
 
-**Privacy:** keep real children's names and photos out of the prompts. If you want a player's name in the
-video, put it on the **End card title**: the app draws the card itself, so the spelling is exact and the
-name never goes to Sora.
+**Privacy:** keep real children's names and photos out of the prompts. A player's name can go on the **End
+card title**: the app draws the card itself, so the name never goes to Sora.
 
-Before you start: **Settings → Daily caps → Video takes** needs **12** free, plus room for regenerations
-(the cap was raised to 100 on Oct 6).
+Before you start: **Settings → Daily caps → Video takes** needs **6** free, plus a few for remixes.
 
-1. **New video run** → **Shot prompts**: *Off: one shot per line, sent to Sora as written*. Paste these four
-   lines into **Shot prompts (one per line)**: the swing, the ball over the fence, the catch, the celebration.
+1. **New video run** → **Shot prompts**: *Off: one shot per line, sent to Sora as written*. Paste these two
+   lines: the home run, then the catch and the win.
 
    ```text
-   Cute Japanese sports-anime style: clean cel-shaded 2D animation, bold ink outlines, bright colors, screentone shading, chibi-leaning kids with big sparkling eyes, manga speed lines, sunny sky with white clouds. One continuous shot, no cuts. Little League, last inning, tie game. Camera: steady medium shot at the batter's height from the first-base side, framed on the batter alone; the pitcher is off-screen to the right and the catcher is out of frame. Our batter, a cute right-handed boy with short spiky black hair and big determined eyes, wears a navy batting helmet with an orange tiger-head emblem, an orange "Bellaire" jersey and white pants, and stands in the batter's box facing the camera with the bat raised. In order: a white baseball streaks in from the right; in slow motion he steps forward and swings, and the bat meets the ball squarely in front of home plate with a bright impact flash and manga speed lines; the ball shoots back out to the right and high into the sky. He follows through, watches it fly with a huge grin, drops the bat and runs toward first base. Sound: a sharp metallic bat ping, a crowd gasp then a roar, upbeat brass music, no dialogue.
-   Cute Japanese sports-anime style: clean cel-shaded 2D animation, bold ink outlines, bright colors, screentone shading, chibi-leaning kids with big sparkling eyes, manga speed lines, sunny sky with white clouds. One continuous shot, no cuts. Camera: flies right behind the white baseball as it soars up and away from a Little League field, always following it: first the green outfield grass and the visiting center fielder in a gray uniform and green cap pass far below, then the low green chain-link outfield fence, then the trees beyond, while the ball keeps climbing into the blue sky and finally becomes a tiny twinkling star, a classic anime home-run moment. Sound: wind rush, a rising crowd roar and cheering far below, the same upbeat brass music, no dialogue.
-   Cute Japanese sports-anime style: clean cel-shaded 2D animation, bold ink outlines, bright colors, screentone shading, chibi-leaning kids with big sparkling eyes, manga speed lines, sunny sky with white clouds. One continuous shot, no cuts. Bottom of the last inning, two outs. Camera: side tracking shot in deep center field. A long fly ball arcs toward the low green chain-link outfield fence. Our center fielder, a cute player with curly brown hair under a navy cap with an orange tiger-head emblem, orange "Bellaire" jersey with a big number 7 on the back and a brown leather glove, sprints back to the fence, leaps, and catches the ball just above the top of the fence; the ball clearly lands in the glove and stays there. The fielder lands on the grass on the field side of the fence, holds up the glove to show the ball and grins. The fence, field and sky stay the same throughout. Sound: running footsteps on grass, a crowd gasp then a huge cheer, the same upbeat brass music, no dialogue.
-   Cute Japanese sports-anime style: clean cel-shaded 2D animation, bold ink outlines, bright colors, screentone shading, chibi-leaning kids with big sparkling eyes, manga speed lines, sunny sky with white clouds. One continuous shot, no cuts. The game is over and the Tigers win. Camera: eye-level slow push-in at the pitcher's mound. The whole home team in orange "Bellaire" jerseys, white pants and navy caps with an orange tiger-head emblem runs in, cheering in a circle around our batter with short spiky black hair and the center fielder number 7 with curly brown hair, who share a big double high-five. A smiling coach in a navy polo laughs as a teammate tips a bucket of water over him. It ends on a happy group pose with caps raised; the art style stays the same throughout. Sound: cheering kids and parents, a splash and laughter, the brass music landing on a final triumphant note, no dialogue.
+   In the style of a Japanese anime, a hopeful scene at a small-town Little League ballpark on a golden summer evening: the bleachers are packed, the score is tied in the last inning, and everything rests on one young batter. Film-caliber sakuga Japanese animation, beautiful fluid hand-drawn animation, warm sunset light and long shadows. Close-up of the batter's determined eyes under a navy helmet with an orange tiger emblem, his orange "Bellaire" jersey catching the breeze. Side view with only the batter in frame: the pitch arrives and, in one fluid sakuga swing, the bat meets the ball in front of the plate. Wide shot: the ball soars into the sunset sky and clears the outfield fence. He drops the bat and runs toward first base as the crowd rises. Sound: the crack of the bat, the crowd erupting, a swelling orchestral anime score, no dialogue.
+   In the style of a Japanese anime, the bottom of the last inning at the same small-town Little League ballpark under a violet dusk sky, two outs, the whole crowd holding its breath. Film-caliber sakuga Japanese animation, beautiful fluid hand-drawn animation. A long fly ball arcs toward deep center field. The center fielder, a young player with curly brown hair, a navy cap with an orange tiger emblem and an orange "Bellaire" jersey with number 7, sprints back to the chain-link fence and leaps; in a breathtaking slow-motion moment the ball drops into the glove. The fielder lands on the field side of the fence and raises the glove with the ball inside. Then the whole team in orange jerseys pours onto the field, the batter with short spiky black hair runs in to hug number 7, and navy caps fly into the sky as the stadium lights flicker on. Sound: a gasp, then the crowd roaring, the anime score swelling to a triumphant finish, no dialogue.
    ```
-
-   Fill in the rest of the form:
 
    | Field | Value |
    |---|---|
-   | Run title / Tags | `Little League · home run and the catch` / `Module 8, example` |
-   | Seconds per shot / Takes per shot / Frame | `8 s` / `3` / `16:9 · 1280×720` |
+   | Run title / Tags | `Little League · sakuga version` / `Module 8, example` |
+   | Seconds per shot / Takes per shot / Frame | `12 s` / `3` / `16:9 · 1280×720` |
    | Must not include | `brand or MLB logos, other real team names, injuries or rough collisions, captions or extra on-screen text` |
    | Visible label | `Made with AI` |
    | End card title / tagline | `TIGERS WIN!` / `One swing. One catch. Bellaire Little League.` |
    | Voiceover | leave empty (see the note below) |
 
-   **Expect:** **Shots** reads `4 (one per line)`; the preview shows
-   `12 video generations · 96 s video generated · ~9.7 min`.
-2. **Start run** → **Approve & continue**. Takes take about 10 minutes, 2 at a time.
-3. Open each take and **watch all 8 seconds**, then step through the action. A take is usable only if it would
-   pass in a real game:
-   - **Swing:** the ball reaches the bat *before* anything else touches it, the bat meets it in front of
-     the plate, the ball leaves, and only then does the batter drop the bat and run to first.
-   - **Over the fence:** the ball keeps moving the whole time (no freezing, no sudden size jumps, no loops)
-     and clearly passes over the outfield fence.
-   - **Catch:** the ball goes into the glove and stays there; the fielder stays on the field side of the fence.
-   - **Celebration:** same orange and navy uniforms; nobody gets hurt; the style is still anime, not a
-     Western TV cartoon.
-4. **Reject** each failed take with a short note saying why, and **Regen** that shot. Expect to regenerate
-   shots 1 and 2. In the reference run, 22 takes gave 4 keepers:
-
-   | Shot | Takes | Kept | Failures seen |
-   |---|---|---|---|
-   | 1 · swing | 6 | 1 | ball flew before the swing; catcher's mitt first, then a second swing; pitcher beside home plate; ball hanging next to the batter |
-   | 2 · over the fence | 10 | 1 (+1 backup) | ball fell in the infield; frozen ball; looping trail; ball size jump; batter running the wrong way |
-   | 3 · catch | 3 | 1 | ball sailed past the glove; fielder ended up behind the fence |
-   | 4 · celebration | 3 | 1 (+1 backup) | switched to a Western TV-cartoon style |
-
-   The prompts above are the versions that worked. Shot 1 is the second version: the first filmed the swing
-   from center field with the catcher in frame, and none of its 3 takes passed; framing the batter alone fixed
-   it. Shot 2 is the fourth version: a high view from behind home plate (3 takes), a view behind the center
-   fielder (3), and a fixed camera with a twinkling-star exit (2) all failed before the camera *chasing* the
-   ball worked. The lesson for class: the more cause-and-effect physics a shot needs, the more takes it costs.
-   Simplify the shot instead of adding words.
-5. Keep one take per shot → **Approve & continue**. **Expect:** a **Final cut** of 32.9 s: four takes joined
-   by 0.5 s crossfades, *Made with AI* in the corner, and the *TIGERS WIN!* end card for the last 3 s. The
-   checks list the label and *End card: TIGERS WIN!*.
+   **Expect:** **Shots** reads `2 (one per line)`; the preview shows
+   `6 video generations · 72 s video generated · ~7 min`.
+2. **Start run** → **Approve & continue**. Six 12 s takes take about 9 minutes, 2 at a time.
+3. Watch each take, then step through the action. Usable only if it would pass in a real game:
+   - **Home run:** the ball reaches the bat before anything else touches it, the bat meets it in front of
+     the plate, the ball is seen leaving the park, and only then does the batter drop the bat and run.
+   - **Catch:** the ball is seen going into the glove; the fielder stays on the field side of the fence and
+     wears **one** glove.
+   - **Teams:** in shot 2 the Tigers are fielding, so the batter and catcher must not wear orange.
+   - **Celebration:** same orange-and-navy uniforms; nobody gets hurt.
+4. For a take that is right except one detail, **Remix** with only that change. In the reference run, s2_t2 had
+   the clearest catch but an orange-uniformed batter; the remix
+   `The batter and catcher at the start wear gray visiting-team uniforms with green caps instead of orange;
+   everything else stays the same.` fixed the uniforms. A remix re-renders the whole clip, though, so check it
+   again: that one briefly gave the fielder two gloves.
+5. Keep one take per shot → **Approve & continue**. **Expect:** a **Final cut** of 25.9 s: two takes joined by
+   a 0.5 s crossfade, *Made with AI* in the corner, and the *TIGERS WIN!* end card for the last 3 s.
 6. **Download MP4**. To copy it to the server: **Export bundle** on the Mac, then **Import bundle…** on the
    server (as in VD2).
 
 **Voiceover note:** a play-by-play would be fun, but in two test reads of nearly the same script MAI-Voice
-took 24.8 s for 38 words and 21.6 s for 41 words. The pacing changes from read to read, so calls such as
-*what a catch!* can drift into the wrong shot. The kept takes already carry Sora's own bat ping, crowd and
-music, which stay in sync with the action.
+took 24.8 s for 38 words and 21.6 s for 41 words. The pacing changes from read to read, so calls can drift
+into the wrong shot. The takes already carry Sora's own bat crack, crowd and score, in sync with the action.
 
 Variations:
 - **Phone version for family:** **Frame** `9:16 · 720×1280`, same lines.
-- **Let the text model write it:** **Shot prompts**: *Text model writes the shot list*, **Shots** `4`, brief:
-  `A cute Japanese sports-anime highlight for a Bellaire Little League team, the Tigers: a young batter hits
-  the go-ahead home run in the last inning, the center fielder makes a leaping catch at the fence for the
-  final out, and the team celebrates.` Do its shots avoid the failure patterns in the table? Tick both runs in
-  **Run history** → **Compare 2 runs** to watch the cuts side by side.
+- **Name the visiting team's colors up front:** in line 2, replace `A long fly ball arcs toward deep center
+  field.` with `A visiting batter in a gray uniform and green helmet lifts a long fly ball toward deep center
+  field.` Take s2_t6 in the reference run used this wording; watch it to judge whether it helps.
 
-**Pass if:** every kept take passes the step 3 checks (watched frame by frame, not just at full speed), the
-four shots read as one story in one style, the label and end card are burned in, and nothing in the prompts
+**Pass if:** every kept take passes the step 3 checks (watched frame by frame, not only at full speed), the two
+clips read as one story in one style, the label and end card are burned in, and nothing in the prompts
 identifies a real child.
 
 **IP note for class:** "Little League" is a trademark, and team logos belong to their owners. A family clip is
