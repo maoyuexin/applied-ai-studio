@@ -1,8 +1,9 @@
 # Design Studio: end-to-end test cases
 
-Ten manual tests, run in the browser exactly as a user would: two per pipeline, plus two prompt-only
-video tests (VD3, VD4). Each one checks a feature you may show in class: review steps, revisions, automatic
-checks, labels, run history.
+Fifteen manual tests, run in the browser exactly as a user would: three per pipeline for article, voice and
+image, and six for video. Each one checks a feature you may show in class: review steps, revisions, automatic
+checks, labels, run history. A3, V3, I3, VD5 and VD6 (added Oct 8) were run end to end on the Mac first; their
+"Expect" lines and reference runs come from those runs.
 Run them on **your Mac** (http://127.0.0.1:5173/design-studio) and repeat the ones marked *server* on
 the **home server** (https://applied-ai-studio.myyclabs.com/design-studio).
 
@@ -21,16 +22,22 @@ the **home server** (https://applied-ai-studio.myyclabs.com/design-studio).
 |---|---|---|---|---|
 | A1 | Article | 4 min | 8 text | Mac + server |
 | A2 | Article | 3 min | 6 text | Mac |
+| A3 | Article (two sources, explainer) | 4 min | 4 text | Mac + server |
 | V1 | Voice | 4 min | 1 text, ~14 voice | Mac + server |
 | V2 | Voice | 3 min | 1 text, ~10 voice | Mac |
+| V3 | Voice (interview, delivery styles) | 4 min | 1 text, ~16 voice | Mac + server |
 | I1 | Image | 5 min | 2 text, 4 images | Mac + server |
 | I2 | Image | 2 min | 1–2 images | Mac |
+| I3 | Image (character sheet, no reference) | 4 min | 2 text, 3 images | Mac + server |
 | VD1 | Video | 12 min | 1–2 text, 1–2 images, 5–6 Sora takes | Mac |
 | VD2 | Video | 6 min | 1 text, 1 Sora take | Mac → server |
 | VD3 | Video (prompt only) | 5 min | 2 Sora takes, no text model | Mac + server |
 | VD4 | Video (prompt only, 2-shot story) | 15 min | 6 Sora takes, plus a remix or two | Mac + server |
+| VD5 | Video (keyframes from your own character, multi-step) | 15 min | 1 text, 3–4 images, 6–7 Sora takes | Mac |
+| VD6 | Video (people, text → video, Japanese dialogue) | 10 min | 1 text, 6 Sora takes | Mac + server |
 
-Sora takes are the only expensive calls (20 per day cap). Run the video tests before **Oct 15**.
+Sora takes are the only expensive calls (daily cap: **Settings → Daily caps**, 100 since Oct 6). Run the video tests
+before **Oct 15**, when Sora 2 retires in Foundry.
 How the video pipeline works, in detail: [VIDEO_GUIDE.md](VIDEO_GUIDE.md).
 
 ---
@@ -83,6 +90,50 @@ How the video pipeline works, in detail: [VIDEO_GUIDE.md](VIDEO_GUIDE.md).
 
 **Pass if:** the exact-phrase rule caught "Boeing" in v2, and Compare shows both runs.
 
+### A3 · Explainer from two sources: a plan is not a fact *(Mac + server)*
+
+**Shows:** more than one source, a different format and audience, and the fact check catching a **subtle**
+error: turning a scheduled event into a confirmed one. It's the classic newsroom mistake when a prelaunch
+advisory and a launch-day report disagree in tense.
+
+**Sources** (both in the course folder `Module_08_AI_Media_Content_Creative/artifacts/case1/sources/`):
+
+| # | Title | Published | File |
+|---|---|---|---|
+| 1 | NASA Sets Crew-13 Launch, Docking Coverage | 2026-09-29 | `nasa_04_nasa-sets-crew-13-launch-docking-coverage.txt` |
+| 2 | NASA's SpaceX Crew-13 Launches to International Space Station | 2026-10-01 | `nasa_03_nasas-spacex-crew-13-launches-to-international-space-station.txt` |
+
+1. **New article run**. **Format** *Explainer*, **Length** *about 250 words* (or 200), **Audience**
+   `first-year college students`, **Tone** `clear, friendly, specific`. **Fact check** on.
+   Brief: `Explain what NASA's SpaceX Crew-13 mission is: who is on board, when and where it launched, what it
+   docks to, and two kinds of research the crew will do. Use both sources and cite them.`
+2. **+ Paste a source** twice: paste each file's text, its title, URL (`https://www.nasa.gov/news-release/…`)
+   and **Published** date. The date matters: it lets the checker resolve "Thursday" and "this year".
+   **Start run**.
+3. **Expect** (~10 s): an outline of 5–7 points where each point cites `[1]`, `[2]` or both. In the reference
+   run the launch time cites only `[2]` (the launch-day report) and the crew list cites both.
+   **Approve & continue**.
+4. **Expect v1** (~30 s): about 210 words with inline `[1][2]` tags and `Claims: 22 supported · 0 partly ·
+   0 unsupported`. Read the docking sentence: the reference draft wrote *"Dragon was scheduled to dock … at
+   approximately 7 p.m. That was the planned arrival—not a confirmed docking in these sources."* The model
+   kept the tense honest by itself.
+5. Plant the classic error: **Edit it myself**, add at the end
+   `Crew-13 docked with the station at 7 p.m. on Oct. 1, the fastest launch-to-docking in station history.`
+   → **Save as new version**.
+6. **Expect v2** (~25 s): `1 unsupported` and `1 partly`. The reference check said:
+   - **unsupported** *"Crew-13 docked with the station at 7 p.m. on Oct. 1"*: *"converts an approximate future
+     target into a confirmed event."*
+   - **partly** *"fastest launch-to-docking in station history"*: *"The record is predicted, not confirmed, and
+     is limited to U.S. spacecraft."* The source says "the fastest **by a U.S. spacecraft**"; the planted
+     sentence dropped that qualifier.
+7. Click **v1** → **Approve & continue**. **Expect:** *Approved: v1*, the label *AI-assisted draft, reviewed
+   by an editor.*, `214 words (target 200)`, and **Download .md** lists both sources.
+
+**Pass if:** the checker separated "planned" from "happened" and caught the dropped "U.S." qualifier, and the
+approved text is v1. **Reference run:** *Crew-13 explainer · two sources* (`run_2026-10-08_141631_5e8f`).
+
+**Ask the class:** both planted claims are *almost* right. Which one would a reader be more likely to repeat?
+
 ---
 
 ## Voice
@@ -122,6 +173,35 @@ How the video pipeline works, in detail: [VIDEO_GUIDE.md](VIDEO_GUIDE.md).
    *No spoken AI disclosure found in the last line*.
 
 **Pass if:** Spanish synthesis and transcription work, and the missing disclosure is flagged.
+
+### V3 · Interview with delivery styles: what listen-back can't hear *(Mac + server)*
+
+**Shows:** the interview format, two different voices, choosing a delivery **style** for one line and
+re-recording only that line, and the limit of the listen-back check (it checks words, not tone).
+
+1. **New voice run**. **Format** *Interview*, **Target length** 45 s, **Language** English (US).
+   **Speakers:** `Olivia` with voice *Olivia* and `Grant` with voice *Grant* (Olivia has delivery styles;
+   Grant has none, so his style menu reads *no styles*).
+2. Brief: `A short interview for a college AI class. The host asks how an AI video ad keeps the same car in
+   every shot. The guest explains it in plain words: a design sheet, a keyframe made from it, the video model
+   starting from that keyframe, and why a person still watches every take. Curious host, calm expert.`
+3. **Start run**. **Expect** (~10 s): about 7 short lines alternating Olivia (questions) and Grant (answers),
+   ending with Olivia's *These voices are AI-generated.* The reference script explained keyframes correctly:
+   *"We make a keyframe from that sheet: one still image for a shot. The video model starts from that image
+   and adds motion."* It doubles as a review of slide 25. **Approve & continue**.
+4. **Expect** (~10 s): every line *✓ matches the script*. Look at the *heard* text: line 3 came back as
+   *"How does that become?Video."* and line 4 heard *"one still image"* as *"1 still image"*, yet both count as
+   matches. Listen-back normalizes punctuation and numbers.
+5. On Olivia's first line press **Edit**, set **Style** to `whispering` → **Re-record**. **Expect:** only that
+   line is re-recorded (`line 1.2`, now kept); the take picker still offers `line 1.1`. In the reference run the
+   whispered take ran 6.8 s instead of 4.2 s and **still** showed *✓ matches the script*.
+6. Play both takes of line 1. Ask the class which one fits a classroom intro. The checker can't answer that;
+   only a person can. Pick the one you prefer in the take picker → **Approve & continue**.
+7. **Expect:** a mix of about 38 s, *Loudness normalized to -16 LUFS*, *Listen-back: 0 word difference(s)
+   across 7 checked lines*, and *Spoken AI disclosure in the last line*.
+
+**Pass if:** the style change re-recorded one line only, the checker passed both deliveries, and the final
+choice was made by ear. **Reference run:** *Keyframes explained · interview* (`run_2026-10-08_141820_3036`).
 
 ---
 
@@ -171,6 +251,38 @@ Content Credentials before and after labeling.
    history the export icon is a lock.
 
 **Pass if:** the outcome is recorded (block event or your rejection), and the run cannot be exported.
+
+### I3 · Character sheet from words, edited once: the start of VD5 *(Mac + server)*
+
+**Shows:** making your **own** reference with no reference image (text → image), the prompt gate, choosing
+between candidates, one targeted edit that must keep everything else identical, and handing the result to a
+video run. It's the image half of the multi-step video test VD5.
+
+1. **New image run**. **Use case** *Product hero / key art* (16:9), **Candidates** 2, prompt helper on, no
+   reference images. **Must not include** `real brands or logos, agency patches or flags, text, people`.
+   Brief (based on OpenAI's Sora 2 "astronaut golden retriever" showcase prompt):
+   `Character design sheet for an astronaut golden retriever named Sora: full body, three-quarter view,
+   standing on a plain light-gray studio background. A retro-futuristic white spacesuit with orange trim, a
+   clear round bubble helmet, and a tiny silver jetpack on his back. Fluffy golden fur clearly visible,
+   friendly brown eyes, photoreal, soft even studio light, 35mm film look. This image will be the reference
+   for a video, so show the whole dog clearly.`
+2. **Start run**. **Expect:** gpt-6-astra's prompt for review (it added layout: *"slightly right of center …
+   generous clean negative space on the left"*). **Approve & continue**.
+3. **Expect** (~30 s): `c1`, `c2`, both *Content Credentials: present, valid (Microsoft Corporation)*. Check
+   the whole dog is in frame (head to boots, tail visible). **Keep** one → **Approve & continue**.
+4. In **Revise**: note `Add two small blue jet flames under the jetpack and a mission patch with a paw print
+   on the chest; keep the dog and suit identical` → **Write the prompt**. **Expect:** a proposed edit prompt
+   that starts *"Edit Image 1, preserving the identical golden retriever, pose, proportions …"* and adds
+   *"without lettering or flags"* from your rules. **Make v1**.
+5. **Expect** (~22 s): `v1` under the candidate. Compare them side by side: only the patch and the two blue
+   flames are new; the face, pose, suit stripes and boots are unchanged. **Keep** v1.
+6. **Finish** with the label `Made with AI` → **Approve & continue**. **Expect:** *Original: Content
+   Credentials: present, valid* and *Labeled copy: Content Credentials: none found*.
+7. **Use in a video run**. **Expect:** a New video run with v1 attached as the **Subject** reference. Continue
+   with VD5.
+
+**Pass if:** the edit changed only what the note asked for, and the kept version opened in a video run as the
+subject. **Reference run:** *Sora the space dog · character sheet* (`run_2026-10-08_141907_17ce`, kept `v1`).
 
 ---
 
@@ -340,6 +452,117 @@ identifies a real child.
 fine; before posting publicly or using it commercially, ask the league. The prompts ask for a generic tiger
 emblem and exclude real logos for that reason.
 
+### VD5 · Space pup: keyframes from your own character, step by step *(Mac)*
+
+**Shows:** the full multi-step route, the same one the SOLENNE car ad uses: **your character sheet (I3) →
+text model writes the shot list → MAI-Image keyframes → you review → Sora takes start from those keyframes →
+you review → assembled cut**. It also shows the keyframe's limit: Sora starts **from** the picture, so if
+the picture shows the dog standing, the take tends to keep him standing.
+
+Based on OpenAI's Sora 2 showcase prompt: *"an astronaut golden retriever named Sora levitates around an
+intergalactic pup-themed space station with a tiny jet back that propels him … the doors opening to let him
+in … inside the space station, many tennis balls are flying around in zero gravity. the dog's astronaut helmet
+opens up so he can grab one. 35mm film …"* OpenAI made it as one prompt; here it is planned as three shots so
+each step can be reviewed.
+
+Before you start: finish **I3**, or use its reference run's kept `v1` as the reference image.
+
+1. From I3's finished image press **Use in a video run** (or **New video run** and add the character sheet
+   under **Reference images** as **Subject**). **Shot prompts**: *Text model writes the shot list*.
+   **Shots** 3, **Seconds per shot** 8 s, **Takes per shot** 2. **Must not include**
+   `real brands or logos, agency patches or flags, readable text, people`. **End card title** `SPACE PUP`,
+   **tagline** `One tennis ball at a time.`
+   Brief:
+
+   ```text
+   A 24-second fun teaser in three shots, based on OpenAI's Sora 2 showcase prompt: an astronaut golden retriever named Sora levitates around an intergalactic pup-themed space station with a tiny jet pack that propels him. Gorgeous specular lighting and comets fly through the sky; retro-future astro-themed music plays. Light glimmers off the dog's eyes. The dog first propels toward the space station and its doors open to let him in. Then, inside the station, many tennis balls float in zero gravity; the dog's helmet opens so he can grab one. 35mm film; the fur detail is clearly visible and the comet light shimmers on it. The dog must look exactly like the reference character sheet in every shot: white suit with orange trim, clear bubble helmet, paw-print patch, tiny silver jet pack with blue flames.
+   ```
+
+   **Expect:** the preview shows `6 video generations · 48 s video generated · ~4.8 min` and 3 keyframes.
+2. **Start run**. **Expect** (~25 s): three shots, **all** *keyframe → video* (the dog is not a person, so
+   every shot can start from a picture). Reference shot list: *Incoming Good Boy* (approach the bone-shaped
+   door), *Welcome to Fetch Orbit* (float into a playroom full of tennis balls), *One Small Fetch* (helmet
+   hinged back, catch a ball). Each shot has a **video prompt** (what moves) and a **keyframe prompt** (the
+   opening picture). Read both aloud: this is the step students usually can't see.
+   **Approve & continue**.
+3. **Keyframes** (~25 s each). **Expect:** three stills of the **same** dog (same suit stripes, paw patch,
+   blue flames) in three places, each *Content Credentials: present, valid*. Check each against the
+   character sheet.
+4. Fix one keyframe with a note. In the reference run shot 3's keyframe showed him standing with the helmet
+   **closed**, which contradicts the shot. On shot 3 type
+   `the clear bubble helmet is open and tilted back behind his head so his face and nose are uncovered; he floats in mid-air with paws reaching for one tennis ball just in front of his nose`
+   → **New keyframe**. **Expect** (~22 s): `s3_k2`, floating, helmet tipped back, ball in reach, kept
+   automatically. **Approve & continue**.
+5. **Takes** (~6 min). Open each take; frame 1 is the keyframe, and everything after it is Sora's. In the
+   reference run:
+   - **Shot 2 worked:** he tumbles through the doorway into zero gravity among the tennis balls and steadies.
+     The other take had him **standing** on the floor in zero gravity: rejected.
+   - **Shot 3 worked:** starting from the fixed keyframe, he grabs the ball **in his mouth**, does a weightless
+     somersault and ends facing the camera. The take whose helmet stayed shut couldn't grab it.
+   - **Shot 1 failed both times:** the keyframe showed him **standing** on the station's hull, and Sora kept
+     him standing; he never flew to the door, and it never opened. A **Remix**
+     (`He lifts off and jets forward toward the bone-shaped door with blue flames; the door slides open as he arrives.`)
+     added a little motion but not the flight.
+6. **The fix for shot 1 (the lesson):** change the **picture**, not the words. Go back to **Keyframes**, type
+   `he is already flying toward the open bone-shaped door, body horizontal, blue flames trailing, the door sliding open`
+   → **New keyframe**, then **Another take**. (The reference run kept the remix only as a placeholder, so this
+   step is yours to try.)
+7. Keep one take per shot → **Approve & continue**. **Expect:** a final cut of about 25 s with *Made with AI*
+   and the *SPACE PUP* end card.
+
+**Pass if:** the same dog appears in all three shots (the keyframes did their job), at least two shots show the
+action the prompt asked for, and you can explain shot 1's failure: a keyframe fixes frame 1, so a standing
+picture tends to give a standing take. **Reference run:** *Space pup · keyframes from a character sheet*
+(`run_2026-10-08_142156_7f6f`). Every verdict note starts with *Copilot review:*.
+
+### VD6 · Festival fireworks: two people, three shots, Japanese dialogue *(Mac + server)*
+
+**Shows:** the other route, **text → video for people**. Sora rejects input images with faces, so there are
+no keyframes, and the shot list has to keep two characters consistent with **words alone**. It also shows
+Sora generating spoken dialogue in another language, which the app can check with speech-to-text.
+
+Based on OpenAI's Sora 2 showcase prompt: *"in the style of a japanese anime, a melancholy scene under the
+fireworks of a night sky. the world is so happy, but not the two star-crossed protagonists of this gorgeous
+japanese town in the middle of a festival. film-caliber sakuga japanese animation, close-up shots of the
+characters having a conversation in japanese, beautiful fluid hand-drawn animation."*
+
+1. **New video run**, no reference images. **Shot prompts**: *Text model writes the shot list*. **Shots** 3,
+   **Seconds** 8 s, **Takes per shot** 2. **Must not include**
+   `real people, real brands or logos, readable text, subtitles`. Leave the end card empty. Brief:
+
+   ```text
+   A 24-second three-shot anime scene based on OpenAI's Sora 2 showcase prompt: in the style of a Japanese anime, a melancholy scene under the fireworks of a night sky. The world is so happy, but not the two star-crossed protagonists of this gorgeous Japanese town in the middle of a festival. Film-caliber sakuga Japanese animation, close-up shots of the characters having a conversation in Japanese, beautiful fluid hand-drawn animation. Shot 1 establishes the festival town and the two of them; shot 2 is their quiet conversation in close-ups; shot 3 ends the scene as they part under the last fireworks. The two must look the same in every shot: describe their faces, hair and festival clothes the same way each time.
+   ```
+
+   **Expect:** `6 video generations · 48 s` and **0 keyframes**.
+2. **Start run**. **Expect** (~20 s): three shots, all *text → video (people)*. The text model named the two
+   (Aiko and Ren in the reference) and repeated **the same description word for word in every shot**:
+   *"Aiko is a young adult woman with an oval face, brown eyes, chin-length black bob, red hairpin, indigo yukata
+   with white cranes, and crimson obi. Ren is … tousled dark-brown hair, charcoal yukata, and slate obi."* That
+   repetition is the only thing holding the characters together. Shot 2 includes the actual Japanese lines:
+   「もう、行かなきゃ。」 / 「わかってる。」 ("I have to go now." / "I know.").
+   **Approve & continue**. **Expect:** keyframes are skipped.
+3. **Takes** (~6 min). Review for **character consistency** across shots. In the reference run:
+   - Shot 1: one take showed both characters as described; the other was a wide crane shot where they were tiny
+     silhouettes: rejected, since it never establishes who they are.
+   - Shot 2: both takes **spoke the two Japanese lines**. Speech-to-text (ja-JP) heard exactly
+     *もう、行かなきゃ。わかってる。* in both. But one take gave her **brown hair and no hairpin**, which drifts
+     from shot 1, so the take with the red hairpin and tears was kept.
+   - Shot 3: one take had them walk away **together** (wrong story); the kept one has their fingertips part
+     and her walk away alone as the last fireworks fade.
+4. Keep one per shot → **Approve & continue**. **Expect:** a 23 s cut with *Made with AI* and no end card.
+
+**Pass if:** the kept takes show the same two characters (bob and red hairpin, crane yukata; dark yukata) in all
+three shots, shot 2 speaks the Japanese lines, and the rejections name the drift. **Reference run:** *Festival
+fireworks · anime scene in three shots* (`run_2026-10-08_143205_cc50`).
+
+**Compare with VD5 in class:** VD5's dog stayed identical because every shot **started from the same
+picture**. VD6's people drifted (hair color in shot 2) because they had only words. Same model, two routes,
+and the car ad uses both: keyframes for the car, words for the family.
+
+**IP note:** the prompts describe a style ("film-caliber sakuga Japanese animation") and never name a studio,
+series or artist.
+
 ---
 
 ## Results log
@@ -348,14 +571,19 @@ emblem and exclude real logos for that reason.
 |---|---|---|---|
 | A1 | ☐ | ☐ | |
 | A2 | ☐ | — | |
+| A3 | ☐ | ☐ | |
 | V1 | ☐ | ☐ | |
 | V2 | ☐ | — | |
+| V3 | ☐ | ☐ | |
 | I1 | ☐ | ☐ | |
 | I2 | ☐ | — | |
+| I3 | ☐ | ☐ | |
 | VD1 | ☐ | — | |
 | VD2 | ☐ | ☐ (import) | |
 | VD3 | ☐ | ☐ | |
 | VD4 | ☐ | ☐ | |
+| VD5 | ☐ | — | |
+| VD6 | ☐ | ☐ | |
 
 Clean up afterwards: delete test runs you don't want in class from **Run history** (trash icon). Keep the
 ones you want to show; they also work as recorded examples if the network fails in class.
