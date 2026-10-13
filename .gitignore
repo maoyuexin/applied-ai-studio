@@ -62,3 +62,7 @@ apps/web/public/media/m8/
 
 # Built by npm run build:site (GitHub Pages teaching library)
 _site/
+
+# Agent Workflows: machine-specific settings and ad-hoc live runs (curated replays live in recordings/)
+services/agent-workflow-api/settings.local.json
+data/agent-workflows/live-runs/

@@ -53,6 +53,16 @@ export default defineConfig({
         },
       },
       "/api/catalog": process.env["services__catalog__http__0"] ?? "http://127.0.0.1:4310",
+      // Must precede "/api/agent": Vite matches proxy keys as plain prefixes, in order.
+      "/api/agent-workflows": {
+        target: process.env["services__agentworkflows__http__0"] ?? "http://127.0.0.1:4440",
+        configure: (proxy) => {
+          proxy.on("proxyRes", (proxyResponse) => {
+            proxyResponse.headers["x-accel-buffering"] = "no";
+            proxyResponse.headers["cache-control"] = "no-cache";
+          });
+        },
+      },
       "/api/agent": {
         target: process.env["services__agent__http__0"] ?? "http://127.0.0.1:4320",
         configure: (proxy) => {

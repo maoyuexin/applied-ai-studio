@@ -1,0 +1,704 @@
+{
+ "schema": "agent-workflows.run/1",
+ "id": "0e530a46bc0e",
+ "scenario": "holiday-promo",
+ "pattern": "group_chat",
+ "task": {
+  "id": "homepage-week-48",
+  "label": "Homepage promotion, week of 28 Nov 2011",
+  "prompt": "Plan the homepage promotion for our online gift shop for the week of 2011-11-28. The offer is 15% off the two featured products, from 28 Nov to 4 Dec 2011. Pick the products from our demand data, write the banner, and make sure every claim is supported before it goes to the marketing manager.",
+  "truth": "Historical data: the week of 28 Nov 2011 is the last week in the dataset."
+ },
+ "mode": "recorded",
+ "model": "gpt-5.6-sol",
+ "framework": "Microsoft Agent Framework 1.20.0",
+ "started_at": "2026-10-13T03:38:43+00:00",
+ "seconds": 51.12,
+ "status": "completed",
+ "error": null,
+ "stats": {
+  "model_calls": 15,
+  "tool_calls": 8,
+  "input_tokens": 12435,
+  "output_tokens": 1898,
+  "approvals": 1,
+  "handoffs": 0,
+  "messages": 5,
+  "per_agent": {
+   "chair": {
+    "model_calls": 5,
+    "tool_calls": 0,
+    "tokens": 5387
+   },
+   "merchandiser": {
+    "model_calls": 3,
+    "tool_calls": 5,
+    "tokens": 2809
+   },
+   "copywriter": {
+    "model_calls": 2,
+    "tool_calls": 0,
+    "tokens": 1166
+   },
+   "brand_reviewer": {
+    "model_calls": 5,
+    "tool_calls": 3,
+    "tokens": 4971
+   }
+  }
+ },
+ "result": {
+  "headline": "Brief approved",
+  "fields": [
+   {
+    "label": "Speaking turns",
+    "value": "5"
+   },
+   {
+    "label": "Claims checks",
+    "value": "2 (0 issues flagged)"
+   },
+   {
+    "label": "Last check",
+    "value": "passed"
+   }
+  ],
+  "document": {
+   "action": "submit_brief",
+   "products": [
+    "Chocolate Hot Water Bottle",
+    "Red Woolly Hottie White Heart."
+   ],
+   "headline": "Winter Warmers, Ready to Gift",
+   "body": "Chocolate Hot Water Bottle and Red Woolly Hottie White Heart.\nSave from 28 November to 4 December 2011.\n\nExplore the Offer",
+   "offer": "15% off"
+  },
+  "final": "SUBMITTED — Approved by the marketing manager (reference #1).",
+  "copy": "**Winter Warmers, Ready to Gift**\n\nChocolate Hot Water Bottle and Red Woolly Hottie White Heart.  \nSave from 28 November to 4 December 2011.\n\n**15% off**\n\n**Explore the Offer**",
+  "products": [
+   {
+    "product_id": "22197",
+    "product": "Small Popcorn Holder",
+    "unit_price": 0.85
+   },
+   {
+    "product_id": "85099B",
+    "product": "Jumbo Bag Red Retrospot",
+    "unit_price": 1.95
+   },
+   {
+    "product_id": "84879",
+    "product": "Assorted Colour Bird Ornament",
+    "unit_price": 1.69
+   },
+   {
+    "product_id": "84029E",
+    "product": "Red Woolly Hottie White Heart.",
+    "unit_price": 3.75
+   },
+   {
+    "product_id": "22112",
+    "product": "Chocolate Hot Water Bottle",
+    "unit_price": 4.95
+   },
+   {
+    "product_id": "21484",
+    "product": "Chick Grey Hot Water Bottle",
+    "unit_price": 3.45
+   },
+   {
+    "product_id": "35961",
+    "product": "Folkart Zinc Heart Christmas Dec",
+    "unit_price": 0.85
+   },
+   {
+    "product_id": "22188",
+    "product": "Black Heart Card Holder",
+    "unit_price": 3.95
+   },
+   {
+    "product_id": "22084",
+    "product": "Paper Chain Kit Empire",
+    "unit_price": 2.95
+   },
+   {
+    "product_id": "82494L",
+    "product": "Wooden Frame Antique White",
+    "unit_price": 2.95
+   }
+  ],
+  "outbox": [
+   {
+    "action": "submit_brief",
+    "products": [
+     "Chocolate Hot Water Bottle",
+     "Red Woolly Hottie White Heart."
+    ],
+    "headline": "Winter Warmers, Ready to Gift",
+    "body": "Chocolate Hot Water Bottle and Red Woolly Hottie White Heart.\nSave from 28 November to 4 December 2011.\n\nExplore the Offer",
+    "offer": "15% off"
+   }
+  ]
+ },
+ "events": [
+  {
+   "seq": 1,
+   "t": 0.46,
+   "type": "run_start",
+   "task": "homepage-week-48",
+   "prompt": "Plan the homepage promotion for our online gift shop for the week of 2011-11-28. The offer is 15% off the two featured products, from 28 Nov to 4 Dec 2011. Pick the products from our demand data, write the banner, and make sure every claim is supported before it goes to the marketing manager."
+  },
+  {
+   "seq": 2,
+   "t": 0.47,
+   "type": "model_call",
+   "agent": "chair"
+  },
+  {
+   "seq": 3,
+   "t": 0.8,
+   "type": "agent_start",
+   "agent": "chair"
+  },
+  {
+   "seq": 4,
+   "t": 3.3,
+   "type": "speaker",
+   "agent": "merchandiser",
+   "round": 0
+  },
+  {
+   "seq": 5,
+   "t": 3.3,
+   "type": "model_call",
+   "agent": "merchandiser"
+  },
+  {
+   "seq": 6,
+   "t": 3.3,
+   "type": "agent_start",
+   "agent": "merchandiser"
+  },
+  {
+   "seq": 7,
+   "t": 5.33,
+   "type": "tool_call",
+   "agent": "merchandiser",
+   "tool": "list_products",
+   "call_id": "call_jgcfE6TlBEzPvXCaUh6rOOlR",
+   "args": {},
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 8,
+   "t": 5.43,
+   "type": "model_call",
+   "agent": "merchandiser"
+  },
+  {
+   "seq": 9,
+   "t": 5.43,
+   "type": "tool_result",
+   "agent": "merchandiser",
+   "tool": "list_products",
+   "call_id": "call_jgcfE6TlBEzPvXCaUh6rOOlR",
+   "ok": true,
+   "result": [
+    {
+     "product_id": "22197",
+     "product": "Small Popcorn Holder",
+     "unit_price": 0.85
+    },
+    {
+     "product_id": "85099B",
+     "product": "Jumbo Bag Red Retrospot",
+     "unit_price": 1.95
+    },
+    {
+     "product_id": "84879",
+     "product": "Assorted Colour Bird Ornament",
+     "unit_price": 1.69
+    },
+    {
+     "product_id": "84029E",
+     "product": "Red Woolly Hottie White Heart.",
+     "unit_price": 3.75
+    },
+    {
+     "product_id": "22112",
+     "product": "Chocolate Hot Water Bottle",
+     "unit_price": 4.95
+    },
+    {
+     "product_id": "21484",
+     "product": "Chick Grey Hot Water Bottle",
+     "unit_price": 3.45
+    },
+    {
+     "product_id": "35961",
+     "product": "Folkart Zinc Heart Christmas Dec",
+     "unit_price": 0.85
+    },
+    {
+     "product_id": "22188",
+     "product": "Black Heart Card Holder",
+     "unit_price": 3.95
+    },
+    {
+     "product_id": "22084",
+     "product": "Paper Chain Kit Empire",
+     "unit_price": 2.95
+    },
+    {
+     "product_id": "82494L",
+     "product": "Wooden Frame Antique White",
+     "unit_price": 2.95
+    }
+   ]
+  },
+  {
+   "seq": 10,
+   "t": 7.73,
+   "type": "tool_call",
+   "agent": "merchandiser",
+   "tool": "forecast_demand",
+   "call_id": "call_exvgkcYk6cQOBvepsnZR68Mv",
+   "args": {
+    "product_id": "84029E"
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 11,
+   "t": 7.74,
+   "type": "tool_call",
+   "agent": "merchandiser",
+   "tool": "forecast_demand",
+   "call_id": "call_SJRgVHE2OLYOEL016a7ApfcT",
+   "args": {
+    "product_id": "22112"
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 12,
+   "t": 7.74,
+   "type": "tool_call",
+   "agent": "merchandiser",
+   "tool": "forecast_demand",
+   "call_id": "call_bmPb31DJuHDo9QN0i16kOiRR",
+   "args": {
+    "product_id": "35961"
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 13,
+   "t": 7.85,
+   "type": "tool_call",
+   "agent": "merchandiser",
+   "tool": "forecast_demand",
+   "call_id": "call_0VYhFBhSlWU9WKZ1mEOYguAq",
+   "args": {
+    "product_id": "22084"
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 14,
+   "t": 8.01,
+   "type": "model_call",
+   "agent": "merchandiser"
+  },
+  {
+   "seq": 15,
+   "t": 8.01,
+   "type": "tool_result",
+   "agent": "merchandiser",
+   "tool": "forecast_demand",
+   "call_id": "call_exvgkcYk6cQOBvepsnZR68Mv",
+   "ok": true,
+   "result": {
+    "product": "Red Woolly Hottie White Heart.",
+    "unit_price": 3.75,
+    "week": "2011-11-28",
+    "forecast_units": 226,
+    "range_units": [
+     79,
+     317
+    ],
+    "expected_sales_usd": 846,
+    "method": "Mean of the last eight weeks, with a range; a starting point, not a promise."
+   }
+  },
+  {
+   "seq": 16,
+   "t": 8.01,
+   "type": "tool_result",
+   "agent": "merchandiser",
+   "tool": "forecast_demand",
+   "call_id": "call_SJRgVHE2OLYOEL016a7ApfcT",
+   "ok": true,
+   "result": {
+    "product": "Chocolate Hot Water Bottle",
+    "unit_price": 4.95,
+    "week": "2011-11-28",
+    "forecast_units": 278,
+    "range_units": [
+     154,
+     379
+    ],
+    "expected_sales_usd": 1374,
+    "method": "Mean of the last eight weeks, with a range; a starting point, not a promise."
+   }
+  },
+  {
+   "seq": 17,
+   "t": 8.01,
+   "type": "tool_result",
+   "agent": "merchandiser",
+   "tool": "forecast_demand",
+   "call_id": "call_bmPb31DJuHDo9QN0i16kOiRR",
+   "ok": true,
+   "result": {
+    "product": "Folkart Zinc Heart Christmas Dec",
+    "unit_price": 0.85,
+    "week": "2011-11-28",
+    "forecast_units": 52,
+    "range_units": [
+     0,
+     326
+    ],
+    "expected_sales_usd": 44,
+    "method": "Mean of the last eight weeks, with a range; a starting point, not a promise."
+   }
+  },
+  {
+   "seq": 18,
+   "t": 8.01,
+   "type": "tool_result",
+   "agent": "merchandiser",
+   "tool": "forecast_demand",
+   "call_id": "call_0VYhFBhSlWU9WKZ1mEOYguAq",
+   "ok": true,
+   "result": {
+    "product": "Paper Chain Kit Empire",
+    "unit_price": 2.95,
+    "week": "2011-11-28",
+    "forecast_units": 0,
+    "range_units": [
+     0,
+     177
+    ],
+    "expected_sales_usd": 0,
+    "method": "Mean of the last eight weeks, with a range; a starting point, not a promise."
+   }
+  },
+  {
+   "seq": 19,
+   "t": 15.98,
+   "type": "message",
+   "agent": "merchandiser",
+   "text": "| Product | Listed price | Forecast units for week (range) | Expected sales |\n|---|---:|---:|---:|\n| Chocolate Hot Water Bottle | $4.95 | 278 (154–379) | $1,374 |\n| Red Woolly Hottie White Heart. | $3.75 | 226 (79–317) | $846 |\n\nThese had the strongest expected demand among the winter/Christmas candidates and fit winter gifting. Forecasts are ranges, not promises; expected sales use listed prices and do not incorporate the proposed 15% discount.\n\n**Copywriter handoff:** Feature these two products at 15% off from 28 Nov to 4 Dec 2011; banner wording should be produced by the copywriter.",
+   "step": "plan"
+  },
+  {
+   "seq": 20,
+   "t": 15.98,
+   "type": "model_call",
+   "agent": "chair"
+  },
+  {
+   "seq": 21,
+   "t": 15.98,
+   "type": "agent_start",
+   "agent": "chair"
+  },
+  {
+   "seq": 22,
+   "t": 18.82,
+   "type": "speaker",
+   "agent": "copywriter",
+   "round": 1
+  },
+  {
+   "seq": 23,
+   "t": 18.82,
+   "type": "model_call",
+   "agent": "copywriter"
+  },
+  {
+   "seq": 24,
+   "t": 18.83,
+   "type": "agent_start",
+   "agent": "copywriter"
+  },
+  {
+   "seq": 25,
+   "t": 22.54,
+   "type": "message",
+   "agent": "copywriter",
+   "text": "**Winter Warmers, Ready to Gift**\n\nChocolate Hot Water Bottle and Red Woolly Hottie White Heart.  \nSave from 28 November to 4 December 2011.\n\n**15% off**\n\n**Shop Now**",
+   "step": "act"
+  },
+  {
+   "seq": 26,
+   "t": 22.54,
+   "type": "model_call",
+   "agent": "chair"
+  },
+  {
+   "seq": 27,
+   "t": 22.54,
+   "type": "agent_start",
+   "agent": "chair"
+  },
+  {
+   "seq": 28,
+   "t": 26.3,
+   "type": "speaker",
+   "agent": "brand_reviewer",
+   "round": 2
+  },
+  {
+   "seq": 29,
+   "t": 26.3,
+   "type": "model_call",
+   "agent": "brand_reviewer"
+  },
+  {
+   "seq": 30,
+   "t": 26.3,
+   "type": "agent_start",
+   "agent": "brand_reviewer"
+  },
+  {
+   "seq": 31,
+   "t": 30.39,
+   "type": "tool_call",
+   "agent": "brand_reviewer",
+   "tool": "check_claims",
+   "call_id": "call_jSJqTy2owYLAmhhAhwCiOhwJ",
+   "args": {
+    "banner_text": "Winter Warmers, Ready to Gift\n\nChocolate Hot Water Bottle and Red Woolly Hottie White Heart.\nSave from 28 November to 4 December 2011.\n\n15% off\n\nShop Now"
+   },
+   "step": "check",
+   "approval": false
+  },
+  {
+   "seq": 32,
+   "t": 30.55,
+   "type": "model_call",
+   "agent": "brand_reviewer"
+  },
+  {
+   "seq": 33,
+   "t": 30.55,
+   "type": "tool_result",
+   "agent": "brand_reviewer",
+   "tool": "check_claims",
+   "call_id": "call_jSJqTy2owYLAmhhAhwCiOhwJ",
+   "ok": true,
+   "result": {
+    "passed": true,
+    "issues": []
+   }
+  },
+  {
+   "seq": 34,
+   "t": 33.74,
+   "type": "message",
+   "agent": "brand_reviewer",
+   "text": "Tone issue: **“Shop Now”** uses urgency language and feels pushy for the warm, calm brand voice.\n\nCopywriter, please revise the call to action and resubmit the full banner text.",
+   "step": "check"
+  },
+  {
+   "seq": 35,
+   "t": 33.74,
+   "type": "model_call",
+   "agent": "chair"
+  },
+  {
+   "seq": 36,
+   "t": 33.74,
+   "type": "agent_start",
+   "agent": "chair"
+  },
+  {
+   "seq": 37,
+   "t": 38.96,
+   "type": "speaker",
+   "agent": "copywriter",
+   "round": 3
+  },
+  {
+   "seq": 38,
+   "t": 38.96,
+   "type": "model_call",
+   "agent": "copywriter"
+  },
+  {
+   "seq": 39,
+   "t": 38.96,
+   "type": "agent_start",
+   "agent": "copywriter"
+  },
+  {
+   "seq": 40,
+   "t": 41.44,
+   "type": "message",
+   "agent": "copywriter",
+   "text": "**Winter Warmers, Ready to Gift**\n\nChocolate Hot Water Bottle and Red Woolly Hottie White Heart.  \nSave from 28 November to 4 December 2011.\n\n**15% off**\n\n**Explore the Offer**",
+   "step": "act"
+  },
+  {
+   "seq": 41,
+   "t": 41.45,
+   "type": "model_call",
+   "agent": "chair"
+  },
+  {
+   "seq": 42,
+   "t": 41.45,
+   "type": "agent_start",
+   "agent": "chair"
+  },
+  {
+   "seq": 43,
+   "t": 43.77,
+   "type": "speaker",
+   "agent": "brand_reviewer",
+   "round": 4
+  },
+  {
+   "seq": 44,
+   "t": 43.77,
+   "type": "model_call",
+   "agent": "brand_reviewer"
+  },
+  {
+   "seq": 45,
+   "t": 43.78,
+   "type": "agent_start",
+   "agent": "brand_reviewer"
+  },
+  {
+   "seq": 46,
+   "t": 46.15,
+   "type": "tool_call",
+   "agent": "brand_reviewer",
+   "tool": "check_claims",
+   "call_id": "call_CBUc4jA1DrtQ6XGqUHpTF8SY",
+   "args": {
+    "banner_text": "Winter Warmers, Ready to Gift\n\nChocolate Hot Water Bottle and Red Woolly Hottie White Heart.\nSave from 28 November to 4 December 2011.\n\n15% off\n\nExplore the Offer"
+   },
+   "step": "check",
+   "approval": false
+  },
+  {
+   "seq": 47,
+   "t": 46.24,
+   "type": "model_call",
+   "agent": "brand_reviewer"
+  },
+  {
+   "seq": 48,
+   "t": 46.24,
+   "type": "tool_result",
+   "agent": "brand_reviewer",
+   "tool": "check_claims",
+   "call_id": "call_CBUc4jA1DrtQ6XGqUHpTF8SY",
+   "ok": true,
+   "result": {
+    "passed": true,
+    "issues": []
+   }
+  },
+  {
+   "seq": 49,
+   "t": 49.32,
+   "type": "tool_call",
+   "agent": "brand_reviewer",
+   "tool": "submit_brief",
+   "call_id": "call_dwJQMAa5YZX8eGXQGpjj9nR3",
+   "args": {
+    "products": [
+     "Chocolate Hot Water Bottle",
+     "Red Woolly Hottie White Heart."
+    ],
+    "headline": "Winter Warmers, Ready to Gift",
+    "body": "Chocolate Hot Water Bottle and Red Woolly Hottie White Heart.\nSave from 28 November to 4 December 2011.\n\nExplore the Offer",
+    "offer": "15% off"
+   },
+   "step": "act",
+   "approval": true
+  },
+  {
+   "seq": 50,
+   "t": 49.4,
+   "type": "approval_request",
+   "request_id": "af-call-40fbb36a38234f3ea69a5641eb6bc1da",
+   "agent": "brand_reviewer",
+   "tool": "submit_brief",
+   "args": {
+    "products": [
+     "Chocolate Hot Water Bottle",
+     "Red Woolly Hottie White Heart."
+    ],
+    "headline": "Winter Warmers, Ready to Gift",
+    "body": "Chocolate Hot Water Bottle and Red Woolly Hottie White Heart.\nSave from 28 November to 4 December 2011.\n\nExplore the Offer",
+    "offer": "15% off"
+   }
+  },
+  {
+   "seq": 51,
+   "t": 49.4,
+   "type": "approval_response",
+   "request_id": "af-call-40fbb36a38234f3ea69a5641eb6bc1da",
+   "approved": true,
+   "by": "person"
+  },
+  {
+   "seq": 52,
+   "t": 49.4,
+   "type": "model_call",
+   "agent": "brand_reviewer"
+  },
+  {
+   "seq": 53,
+   "t": 49.4,
+   "type": "tool_result",
+   "agent": "brand_reviewer",
+   "tool": "submit_brief",
+   "call_id": "call_dwJQMAa5YZX8eGXQGpjj9nR3",
+   "ok": true,
+   "result": "Approved by a person and completed: submit_brief (reference #1)."
+  },
+  {
+   "seq": 54,
+   "t": 51.12,
+   "type": "message",
+   "agent": "brand_reviewer",
+   "text": "SUBMITTED — Approved by the marketing manager (reference #1).",
+   "step": "check"
+  },
+  {
+   "seq": 55,
+   "t": 51.12,
+   "type": "agent_start",
+   "agent": "chair"
+  },
+  {
+   "seq": 56,
+   "t": 51.12,
+   "type": "run_end",
+   "status": "completed",
+   "error": null
+  }
+ ]
+}

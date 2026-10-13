@@ -1,0 +1,250 @@
+{
+ "schema": "agent-workflows.run/1",
+ "id": "2ad7681e3c12",
+ "scenario": "card-alert",
+ "pattern": "single",
+ "task": {
+  "id": "caught-fraud-2",
+  "label": "$1,026 online purchase at 11:06 PM",
+  "prompt": "New card alert: transaction 00d98f6d319ddee3b61bea07843952f1 on the card ending 0161. Review it and decide whether to hold the card.",
+  "truth": "Labeled fraud in the data."
+ },
+ "mode": "recorded",
+ "model": "gpt-5.6-sol",
+ "framework": "Microsoft Agent Framework 1.20.0",
+ "started_at": "2026-10-13T03:33:19+00:00",
+ "seconds": 12.01,
+ "status": "completed",
+ "error": null,
+ "stats": {
+  "model_calls": 4,
+  "tool_calls": 3,
+  "input_tokens": 3006,
+  "output_tokens": 376,
+  "approvals": 1,
+  "handoffs": 0,
+  "messages": 1,
+  "per_agent": {
+   "card_alert_agent": {
+    "model_calls": 4,
+    "tool_calls": 3,
+    "tokens": 3382
+   }
+  }
+ },
+ "result": {
+  "headline": "Hold requested",
+  "fields": [
+   {
+    "label": "Model decision",
+    "value": "review"
+   },
+   {
+    "label": "Score / cutoff",
+    "value": "1.0 / 0.729"
+   },
+   {
+    "label": "Hold placed",
+    "value": "Yes"
+   }
+  ],
+  "final": "Decision: Review; temporary hold approved and placed on card ending 0161.  \nScore: 1.0, above the 0.729 review threshold.  \nTop reasons: High $1,026.44 purchase amount and late 11:06 PM transaction time.  \nNext: Verify the purchase with the cardholder; the score ranks risk and does not prove fraud.",
+  "outbox": [
+   {
+    "action": "hold_card",
+    "card_last4": "0161",
+    "transaction_id": "00d98f6d319ddee3b61bea07843952f1",
+    "reason": "Temporary hold requested because the high $1,026.44 purchase amount and late 11:06 PM transaction time were the model's top risk reasons."
+   }
+  ]
+ },
+ "events": [
+  {
+   "seq": 1,
+   "t": 0.53,
+   "type": "run_start",
+   "task": "caught-fraud-2",
+   "prompt": "New card alert: transaction 00d98f6d319ddee3b61bea07843952f1 on the card ending 0161. Review it and decide whether to hold the card."
+  },
+  {
+   "seq": 2,
+   "t": 0.54,
+   "type": "model_call",
+   "agent": "card_alert_agent"
+  },
+  {
+   "seq": 3,
+   "t": 0.95,
+   "type": "agent_start",
+   "agent": "card_alert_agent"
+  },
+  {
+   "seq": 4,
+   "t": 3.32,
+   "type": "tool_call",
+   "agent": "card_alert_agent",
+   "tool": "get_transaction",
+   "call_id": "call_u8SyiTysxTh14JpQvsYtsrIY",
+   "args": {
+    "transaction_id": "00d98f6d319ddee3b61bea07843952f1"
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 5,
+   "t": 3.48,
+   "type": "model_call",
+   "agent": "card_alert_agent"
+  },
+  {
+   "seq": 6,
+   "t": 3.48,
+   "type": "tool_result",
+   "agent": "card_alert_agent",
+   "tool": "get_transaction",
+   "call_id": "call_u8SyiTysxTh14JpQvsYtsrIY",
+   "ok": true,
+   "result": {
+    "transaction_id": "00d98f6d319ddee3b61bea07843952f1",
+    "card_last4": "0161",
+    "merchant": "Greenholt, O'Hara and Balistreri",
+    "location": "Battle Creek, MI",
+    "amount_usd": 1026.44,
+    "category": "shopping net",
+    "occurred_at": "2026-05-04T23:06:12",
+    "amount_vs_card_average": "14.9x",
+    "card_transactions_last_24h": 3,
+    "distance_from_home_km": 95
+   }
+  },
+  {
+   "seq": 7,
+   "t": 5.83,
+   "type": "tool_call",
+   "agent": "card_alert_agent",
+   "tool": "score_transaction",
+   "call_id": "call_DyRJbNikUw0d2gfWeFETtZvG",
+   "args": {
+    "transaction_id": "00d98f6d319ddee3b61bea07843952f1"
+   },
+   "step": "check",
+   "approval": false
+  },
+  {
+   "seq": 8,
+   "t": 5.96,
+   "type": "model_call",
+   "agent": "card_alert_agent"
+  },
+  {
+   "seq": 9,
+   "t": 5.96,
+   "type": "tool_result",
+   "agent": "card_alert_agent",
+   "tool": "score_transaction",
+   "call_id": "call_DyRJbNikUw0d2gfWeFETtZvG",
+   "ok": true,
+   "result": {
+    "model": "Random forest",
+    "fraud_score": 1.0,
+    "review_threshold": 0.729,
+    "decision": "review",
+    "top_reasons": [
+     {
+      "feature": "Purchase amount",
+      "value": "$1,026.44",
+      "pushes": "toward review",
+      "weight": 0.493
+     },
+     {
+      "feature": "Purchase date and time",
+      "value": "Mon, 11:06 PM",
+      "pushes": "toward review",
+      "weight": 0.115
+     },
+     {
+      "feature": "Merchant category",
+      "value": "shopping net",
+      "pushes": "toward review",
+      "weight": 0.071
+     },
+     {
+      "feature": "Earlier transactions in 1 hour",
+      "value": "3",
+      "pushes": "toward review",
+      "weight": 0.023
+     }
+    ],
+    "note": "An uncalibrated model estimate used to rank transactions. It is not proof that fraud occurred; a reviewer makes the final determination."
+   }
+  },
+  {
+   "seq": 10,
+   "t": 9.08,
+   "type": "tool_call",
+   "agent": "card_alert_agent",
+   "tool": "hold_card",
+   "call_id": "call_kJoUcaWro9zpjzyH5SjjR17W",
+   "args": {
+    "card_last4": "0161",
+    "transaction_id": "00d98f6d319ddee3b61bea07843952f1",
+    "reason": "Temporary hold requested because the high $1,026.44 purchase amount and late 11:06 PM transaction time were the model's top risk reasons."
+   },
+   "step": "act",
+   "approval": true
+  },
+  {
+   "seq": 11,
+   "t": 9.2,
+   "type": "approval_request",
+   "request_id": "af-call-3a607c77d58342e79b1638ac1a743c10",
+   "agent": "card_alert_agent",
+   "tool": "hold_card",
+   "args": {
+    "card_last4": "0161",
+    "transaction_id": "00d98f6d319ddee3b61bea07843952f1",
+    "reason": "Temporary hold requested because the high $1,026.44 purchase amount and late 11:06 PM transaction time were the model's top risk reasons."
+   }
+  },
+  {
+   "seq": 12,
+   "t": 9.2,
+   "type": "approval_response",
+   "request_id": "af-call-3a607c77d58342e79b1638ac1a743c10",
+   "approved": true,
+   "by": "person"
+  },
+  {
+   "seq": 13,
+   "t": 9.2,
+   "type": "model_call",
+   "agent": "card_alert_agent"
+  },
+  {
+   "seq": 14,
+   "t": 9.2,
+   "type": "tool_result",
+   "agent": "card_alert_agent",
+   "tool": "hold_card",
+   "call_id": "call_kJoUcaWro9zpjzyH5SjjR17W",
+   "ok": true,
+   "result": "Approved by a person and completed: hold_card (reference #1)."
+  },
+  {
+   "seq": 15,
+   "t": 12.01,
+   "type": "message",
+   "agent": "card_alert_agent",
+   "text": "Decision: Review; temporary hold approved and placed on card ending 0161.  \nScore: 1.0, above the 0.729 review threshold.  \nTop reasons: High $1,026.44 purchase amount and late 11:06 PM transaction time.  \nNext: Verify the purchase with the cardholder; the score ranks risk and does not prove fraud.",
+   "step": "plan"
+  },
+  {
+   "seq": 16,
+   "t": 12.01,
+   "type": "run_end",
+   "status": "completed",
+   "error": null
+  }
+ ]
+}

@@ -1,0 +1,237 @@
+{
+ "schema": "agent-workflows.run/1",
+ "id": "001e4a4d7aed",
+ "scenario": "card-alert",
+ "pattern": "single",
+ "task": {
+  "id": "reviewed-normal-1",
+  "label": "$284 kids & pets purchase, 2:43 PM",
+  "prompt": "New card alert: transaction 942bb9e03c995db22e4753be999d53ee on the card ending 0070. Review it and decide whether to hold the card.",
+  "truth": "Labeled normal in the data: the model's review flag is a false alarm."
+ },
+ "mode": "recorded",
+ "model": "gpt-5.6-sol",
+ "framework": "Microsoft Agent Framework 1.20.0",
+ "started_at": "2026-10-13T03:33:32+00:00",
+ "seconds": 11.42,
+ "status": "completed",
+ "error": null,
+ "stats": {
+  "model_calls": 3,
+  "tool_calls": 3,
+  "input_tokens": 2399,
+  "output_tokens": 436,
+  "approvals": 1,
+  "handoffs": 0,
+  "messages": 1,
+  "per_agent": {
+   "card_alert_agent": {
+    "model_calls": 3,
+    "tool_calls": 3,
+    "tokens": 2835
+   }
+  }
+ },
+ "result": {
+  "headline": "Hold requested",
+  "fields": [
+   {
+    "label": "Model decision",
+    "value": "review"
+   },
+   {
+    "label": "Score / cutoff",
+    "value": "0.729 / 0.729"
+   },
+   {
+    "label": "Hold placed",
+    "value": "No"
+   }
+  ],
+  "final": "Decision: Review; risk score is not proof of fraud.  \nScore: 0.729, equal to the 0.729 review threshold.  \nTop reasons: $284.12 purchase amount and the kids/pets merchant category.  \nNext: Temporary hold was not approved; verify the purchase with the cardholder.",
+  "outbox": []
+ },
+ "events": [
+  {
+   "seq": 1,
+   "t": 0.48,
+   "type": "run_start",
+   "task": "reviewed-normal-1",
+   "prompt": "New card alert: transaction 942bb9e03c995db22e4753be999d53ee on the card ending 0070. Review it and decide whether to hold the card."
+  },
+  {
+   "seq": 2,
+   "t": 0.49,
+   "type": "model_call",
+   "agent": "card_alert_agent"
+  },
+  {
+   "seq": 3,
+   "t": 0.84,
+   "type": "agent_start",
+   "agent": "card_alert_agent"
+  },
+  {
+   "seq": 4,
+   "t": 3.76,
+   "type": "tool_call",
+   "agent": "card_alert_agent",
+   "tool": "get_transaction",
+   "call_id": "call_hbYTX7siV7evJzCcSAOfMzkL",
+   "args": {
+    "transaction_id": "942bb9e03c995db22e4753be999d53ee"
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 5,
+   "t": 3.88,
+   "type": "tool_call",
+   "agent": "card_alert_agent",
+   "tool": "score_transaction",
+   "call_id": "call_v68JdN2O5Wr7pb64bNFLZ9b7",
+   "args": {
+    "transaction_id": "942bb9e03c995db22e4753be999d53ee"
+   },
+   "step": "check",
+   "approval": false
+  },
+  {
+   "seq": 6,
+   "t": 4.03,
+   "type": "model_call",
+   "agent": "card_alert_agent"
+  },
+  {
+   "seq": 7,
+   "t": 4.03,
+   "type": "tool_result",
+   "agent": "card_alert_agent",
+   "tool": "get_transaction",
+   "call_id": "call_hbYTX7siV7evJzCcSAOfMzkL",
+   "ok": true,
+   "result": {
+    "transaction_id": "942bb9e03c995db22e4753be999d53ee",
+    "card_last4": "0070",
+    "merchant": "Barton LLC",
+    "location": "Bakersfield, CA",
+    "amount_usd": 284.12,
+    "category": "kids pets",
+    "occurred_at": "2026-05-18T14:43:39",
+    "amount_vs_card_average": "5.1x",
+    "card_transactions_last_24h": 1,
+    "distance_from_home_km": 81
+   }
+  },
+  {
+   "seq": 8,
+   "t": 4.03,
+   "type": "tool_result",
+   "agent": "card_alert_agent",
+   "tool": "score_transaction",
+   "call_id": "call_v68JdN2O5Wr7pb64bNFLZ9b7",
+   "ok": true,
+   "result": {
+    "model": "Random forest",
+    "fraud_score": 0.729,
+    "review_threshold": 0.729,
+    "decision": "review",
+    "top_reasons": [
+     {
+      "feature": "Purchase amount",
+      "value": "$284.12",
+      "pushes": "toward review",
+      "weight": 0.395
+     },
+     {
+      "feature": "Merchant category",
+      "value": "kids pets",
+      "pushes": "toward review",
+      "weight": 0.08
+     },
+     {
+      "feature": "Compared with card average",
+      "value": "5.1x usual",
+      "pushes": "toward review",
+      "weight": 0.04
+     },
+     {
+      "feature": "Purchase date and time",
+      "value": "Mon, 2:43 PM",
+      "pushes": "toward normal",
+      "weight": -0.033
+     }
+    ],
+    "note": "An uncalibrated model estimate used to rank transactions. It is not proof that fraud occurred; a reviewer makes the final determination."
+   }
+  },
+  {
+   "seq": 9,
+   "t": 7.4,
+   "type": "tool_call",
+   "agent": "card_alert_agent",
+   "tool": "hold_card",
+   "call_id": "call_evktBVSqBh1q7cDvjyxJfXiC",
+   "args": {
+    "card_last4": "0070",
+    "transaction_id": "942bb9e03c995db22e4753be999d53ee",
+    "reason": "The model recommends review primarily because of the $284.12 purchase amount and the kids pets merchant category."
+   },
+   "step": "act",
+   "approval": true
+  },
+  {
+   "seq": 10,
+   "t": 7.52,
+   "type": "approval_request",
+   "request_id": "af-call-f534edfbd6a442b188aaef513b9a353a",
+   "agent": "card_alert_agent",
+   "tool": "hold_card",
+   "args": {
+    "card_last4": "0070",
+    "transaction_id": "942bb9e03c995db22e4753be999d53ee",
+    "reason": "The model recommends review primarily because of the $284.12 purchase amount and the kids pets merchant category."
+   }
+  },
+  {
+   "seq": 11,
+   "t": 7.52,
+   "type": "approval_response",
+   "request_id": "af-call-f534edfbd6a442b188aaef513b9a353a",
+   "approved": false,
+   "by": "person"
+  },
+  {
+   "seq": 12,
+   "t": 7.52,
+   "type": "model_call",
+   "agent": "card_alert_agent"
+  },
+  {
+   "seq": 13,
+   "t": 7.53,
+   "type": "tool_result",
+   "agent": "card_alert_agent",
+   "tool": "hold_card",
+   "call_id": "call_evktBVSqBh1q7cDvjyxJfXiC",
+   "ok": true,
+   "result": "Error: Tool call invocation was rejected by user."
+  },
+  {
+   "seq": 14,
+   "t": 11.42,
+   "type": "message",
+   "agent": "card_alert_agent",
+   "text": "Decision: Review; risk score is not proof of fraud.  \nScore: 0.729, equal to the 0.729 review threshold.  \nTop reasons: $284.12 purchase amount and the kids/pets merchant category.  \nNext: Temporary hold was not approved; verify the purchase with the cardholder.",
+   "step": "plan"
+  },
+  {
+   "seq": 15,
+   "t": 11.42,
+   "type": "run_end",
+   "status": "completed",
+   "error": null
+  }
+ ]
+}

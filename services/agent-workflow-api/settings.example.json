@@ -1,0 +1,6 @@
+{
+  "foundry_project_endpoint": "https://<resource>.services.ai.azure.com/api/projects/<project>",
+  "foundry_model": "<model deployment name>",
+  "trial_finder_mcp_url": "https://<trial-finder-host>/mcp",
+  "trial_finder_key_file": "~/.config/<folder>/trialfinder-api-key"
+}
