@@ -34,6 +34,15 @@ export default defineConfig({
       "/api/procedures": process.env["services__procedures__http__0"] ?? "http://127.0.0.1:4390",
       "/api/forecast": process.env["services__forecast__http__0"] ?? "http://127.0.0.1:4400",
       "/api/recommend": process.env["services__recommend__http__0"] ?? "http://127.0.0.1:4410",
+      "/api/media": process.env["services__media__http__0"] ?? "http://127.0.0.1:4420",
+      "/api/design": {
+        target: process.env["services__design__http__0"] ?? "http://127.0.0.1:4430",
+        configure: (proxy) => {
+          proxy.on("proxyRes", (proxyResponse) => {
+            proxyResponse.headers["x-accel-buffering"] = "no";
+          });
+        },
+      },
       "/api/orders": {
         target: process.env["services__orders__http__0"] ?? "http://127.0.0.1:4330",
         configure: (proxy) => {

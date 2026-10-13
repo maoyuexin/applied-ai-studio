@@ -57,6 +57,8 @@ notebooks/product-recommendations/artifacts/*
 !notebooks/product-recommendations/artifacts/operating_policy.json
 !notebooks/product-recommendations/artifacts/sample_manifest.parquet
 
+# Synced Module 8 media are local teaching assets and can include in-class-only clips.
+apps/web/public/media/m8/
 
 # Built by npm run build:site (GitHub Pages teaching library)
 _site/

@@ -1,0 +1,692 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design Studio · UX mockup (for review)</title>
+<style>
+:root {
+  --bg: #111318; --panel: #171a21; --panel2: #1d2129; --panel3: #232834; --line: #2e3140; --line2: #3a3f50;
+  --text: #f5f3f0; --dim: #b9bcc8; --muted: #9396a6; --faint: #6f7385;
+  --orange: #e8913c; --orange-soft: rgba(232,145,60,.13); --steel: #7eaeb8; --steel-soft: rgba(126,174,184,.12);
+  --green: #6fcf97; --green-soft: rgba(111,207,151,.13); --red: #e45a58; --red-soft: rgba(228,90,88,.13);
+  --amber: #f2c14e; --amber-soft: rgba(242,193,78,.13); --violet: #a78bfa;
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.45 Inter, -apple-system, "Segoe UI", Roboto, sans-serif; }
+button { font: inherit; color: inherit; cursor: pointer; }
+a { color: var(--steel); }
+
+.reflist { display: grid; gap: 8px; }
+.ref { display: grid; grid-template-columns: 72px minmax(0,1fr) auto; gap: 10px; align-items: center; padding: 8px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel2); }
+.ref img { width: 72px; height: 44px; object-fit: cover; border-radius: 6px; display: block; }
+.ref .drop { width: 72px; height: 44px; border: 1px dashed var(--line2); border-radius: 6px; display: grid; place-items: center; color: var(--faint); font-size: 18px; }
+.seg { display: inline-flex; border: 1px solid var(--line2); border-radius: 8px; overflow: hidden; }
+.seg span { padding: 6px 10px; font-size: 12.5px; color: var(--dim); border-right: 1px solid var(--line2); }
+.seg span:last-child { border-right: 0; }
+.seg span.on { background: var(--orange-soft); color: var(--orange); }
+.tree { display: grid; gap: 6px; }
+.node { display: grid; grid-template-columns: 64px minmax(0,1fr); gap: 10px; align-items: center; padding: 6px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel2); }
+.node img { width: 64px; height: 40px; object-fit: cover; border-radius: 6px; display: block; }
+.node b { font-size: 12.5px; display: block; }
+.node small { color: var(--muted); font-size: 11.5px; }
+.node.sel { border-color: var(--orange); box-shadow: 0 0 0 1px var(--orange) inset; }
+.node.kept { border-color: rgba(111,207,151,.55); }
+.node.d1 { margin-left: 18px; } .node.d2 { margin-left: 36px; } .node.d3 { margin-left: 54px; }
+.bigimg { border-radius: 12px; overflow: hidden; border: 1px solid var(--line); background: #000; }
+.bigimg img { width: 100%; display: block; aspect-ratio: 16/9; object-fit: cover; }
+.promptbox { font-size: 12.5px; color: var(--dim); background: var(--panel2); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+
+/* Mockup chrome (not part of the app) */
+.mock-bar { position: sticky; top: 0; z-index: 30; display: flex; gap: 6px; align-items: center; flex-wrap: wrap;
+  padding: 8px 14px; background: #0b0d11; border-bottom: 1px solid var(--line); }
+.mock-bar .label { font: 700 11px/1 var(--mono); letter-spacing: .08em; color: var(--orange); margin-right: 6px; }
+.mock-bar button { border: 1px solid var(--line2); background: var(--panel); border-radius: 999px; padding: 5px 11px; font-size: 12.5px; color: var(--dim); }
+.mock-bar button.on { border-color: var(--orange); color: var(--orange); background: var(--orange-soft); }
+.mock-bar .spacer { flex: 1; }
+.mock-bar .toggle { border-style: dashed; }
+
+/* App shell */
+.app { display: grid; grid-template-columns: 220px minmax(0, 1fr); min-height: calc(100vh - 44px); }
+.side { border-right: 1px solid var(--line); background: #0f1116; padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; }
+.brand { display: flex; gap: 10px; align-items: center; margin: 0 4px 16px; }
+.brand .logo { display: flex; gap: 3px; align-items: flex-end; height: 26px; }
+.brand .logo i { width: 7px; border-radius: 2px; display: block; }
+.brand b { display: block; font-size: 15px; }
+.brand small { font: 600 10px/1 var(--mono); color: var(--steel); letter-spacing: .06em; }
+.nav { display: flex; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 8px; color: var(--dim); font-size: 13.5px; }
+.nav.on { background: var(--orange-soft); color: var(--orange); border-left: 2px solid var(--orange); }
+.nav .ico { width: 16px; text-align: center; opacity: .9; }
+.side .foot { margin-top: auto; font-size: 11.5px; color: var(--muted); padding: 10px; border-top: 1px solid var(--line); }
+.dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-right: 6px; }
+.dot.warn { background: var(--amber); } .dot.bad { background: var(--red); } .dot.off { background: var(--faint); }
+
+main { padding: 18px 26px 40px; min-width: 0; }
+.screen { display: none; }
+.screen.on { display: block; }
+.crumbs { font: 600 11px/1 var(--mono); letter-spacing: .08em; color: var(--orange); text-transform: uppercase; margin-bottom: 6px; }
+h1 { font-size: 28px; line-height: 1.15; margin: 0 0 4px; letter-spacing: -.01em; }
+h2 { font-size: 18px; margin: 0 0 10px; }
+h3 { font-size: 14px; margin: 0 0 8px; color: var(--dim); text-transform: uppercase; letter-spacing: .06em; font-weight: 700; }
+.sub { color: var(--dim); margin: 0 0 14px; max-width: 900px; }
+.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.between { justify-content: space-between; }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.grid4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+.card.tight { padding: 10px 12px; }
+.card.hl { border-color: var(--orange); }
+.muted { color: var(--muted); } .dim { color: var(--dim); } .small { font-size: 12.5px; } .tiny { font-size: 11.5px; }
+.mono { font-family: var(--mono); font-size: 12px; }
+.btn { border: 1px solid var(--line2); background: var(--panel2); border-radius: 8px; padding: 7px 12px; font-weight: 600; font-size: 13px; }
+.btn.primary { background: var(--orange); color: #16120e; border-color: var(--orange); }
+.btn.ghost { background: transparent; }
+.btn.good { border-color: var(--green); color: var(--green); background: var(--green-soft); }
+.btn.warn { border-color: var(--amber); color: var(--amber); background: var(--amber-soft); }
+.btn.sm { padding: 4px 9px; font-size: 12px; }
+.chip { display: inline-flex; gap: 6px; align-items: center; border: 1px solid var(--line2); border-radius: 999px; padding: 3px 9px; font-size: 12px; color: var(--dim); background: var(--panel2); white-space: nowrap; }
+.chip.ok { border-color: rgba(111,207,151,.5); color: var(--green); background: var(--green-soft); }
+.chip.warn { border-color: rgba(242,193,78,.5); color: var(--amber); background: var(--amber-soft); }
+.chip.bad { border-color: rgba(228,90,88,.5); color: var(--red); background: var(--red-soft); }
+.chip.info { border-color: rgba(126,174,184,.5); color: var(--steel); background: var(--steel-soft); }
+.chip.or { border-color: rgba(232,145,60,.55); color: var(--orange); background: var(--orange-soft); }
+.chip.model { font-family: var(--mono); font-size: 11.5px; }
+.status { font: 700 11px/1 var(--mono); letter-spacing: .05em; text-transform: uppercase; padding: 4px 8px; border-radius: 6px; }
+.status.done { color: var(--green); background: var(--green-soft); }
+.status.wait { color: var(--orange); background: var(--orange-soft); }
+.status.run { color: var(--steel); background: var(--steel-soft); }
+.status.fail { color: var(--red); background: var(--red-soft); }
+.status.lock { color: var(--violet); background: rgba(167,139,250,.13); }
+
+/* Pipeline cards */
+.pipe { display: flex; flex-direction: column; gap: 10px; }
+.pipe .top { display: flex; gap: 10px; align-items: center; }
+.pipe .badge { width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; font-weight: 800; }
+.pipe p { margin: 0; color: var(--dim); font-size: 13px; }
+.steps { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; font-size: 11.5px; color: var(--muted); }
+.steps span { border: 1px solid var(--line); border-radius: 6px; padding: 2px 6px; background: var(--panel2); }
+.steps span.gate { border-color: rgba(232,145,60,.6); color: var(--orange); }
+.steps em { font-style: normal; color: var(--faint); }
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; font: 700 11px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding: 9px 10px; border-bottom: 1px solid var(--line); }
+td { padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+tr:hover td { background: rgba(255,255,255,.015); }
+.thumb { width: 72px; height: 41px; object-fit: cover; border-radius: 6px; border: 1px solid var(--line); display: block; }
+.tx { width: 72px; height: 41px; border-radius: 6px; border: 1px solid var(--line); display: grid; place-items: center; font: 700 10px var(--mono); color: var(--muted); background: var(--panel2); }
+
+/* Workspace */
+.ws { display: grid; grid-template-columns: 240px minmax(0, 1fr) 270px; gap: 14px; align-items: start; }
+.stepper { display: flex; flex-direction: column; gap: 2px; }
+.st { display: grid; grid-template-columns: 24px 1fr; gap: 8px; padding: 8px; border-radius: 8px; }
+.st .n { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font: 700 11px var(--mono); border: 1px solid var(--line2); color: var(--muted); }
+.st.done .n { background: var(--green-soft); border-color: var(--green); color: var(--green); }
+.st.cur { background: var(--orange-soft); }
+.st.cur .n { border-color: var(--orange); color: var(--orange); }
+.st b { font-size: 13px; display: block; }
+.st small { color: var(--muted); font-size: 11.5px; }
+.st.skip { opacity: .55; }
+.shotrow { display: grid; grid-template-columns: 150px repeat(3, minmax(0, 1fr)); gap: 10px; align-items: start; padding: 10px 0; border-top: 1px solid var(--line); }
+.shotrow:first-of-type { border-top: 0; }
+.take { background: var(--panel2); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.take.keep { border-color: var(--green); } .take.regen { border-color: var(--amber); }
+.take .media { position: relative; aspect-ratio: 16 / 9; background: #000; }
+.take .media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.take .media .play { position: absolute; left: 8px; bottom: 8px; background: rgba(0,0,0,.65); border-radius: 6px; padding: 2px 7px; font: 600 11px var(--mono); }
+.take .media .flag { position: absolute; left: 6px; top: 6px; background: rgba(12,14,18,.88) !important; font-weight: 700; box-shadow: 0 1px 4px rgba(0,0,0,.5); }
+.take .meta { padding: 7px 8px; display: flex; flex-direction: column; gap: 6px; }
+.take .acts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; }
+.take .acts button { border: 1px solid var(--line2); background: transparent; border-radius: 6px; padding: 3px 0; font-size: 11.5px; color: var(--dim); }
+.take .acts button.on-keep { border-color: var(--green); color: var(--green); background: var(--green-soft); }
+.take .acts button.on-regen { border-color: var(--amber); color: var(--amber); background: var(--amber-soft); }
+.gen { aspect-ratio: 16 / 9; display: grid; place-items: center; background: repeating-linear-gradient(45deg, #1a1e26, #1a1e26 10px, #1d222b 10px, #1d222b 20px); color: var(--steel); font: 600 12px var(--mono); }
+.bar { height: 6px; border-radius: 99px; background: #0b0d11; overflow: hidden; border: 1px solid var(--line); }
+.bar i { display: block; height: 100%; background: var(--orange); }
+.log { font: 12px/1.5 var(--mono); color: var(--dim); display: flex; flex-direction: column; gap: 6px; }
+.log .t { color: var(--faint); margin-right: 6px; }
+.log .w { color: var(--amber); } .log .e { color: var(--red); } .log .g { color: var(--green); }
+
+/* Drawer */
+.drawer { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 16px; }
+.player { position: relative; aspect-ratio: 16/9; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); background: #000; }
+.player img { width: 100%; height: 100%; object-fit: cover; }
+.player .ctl { position: absolute; left: 0; right: 0; bottom: 0; padding: 10px 12px; background: linear-gradient(transparent, rgba(0,0,0,.75)); display: flex; gap: 10px; align-items: center; font: 600 12px var(--mono); }
+.player .ctl .bar { flex: 1; }
+.kv { display: grid; grid-template-columns: 120px 1fr; gap: 6px 10px; font-size: 13px; }
+.kv dt { color: var(--muted); } .kv dd { margin: 0; }
+.check { display: flex; gap: 8px; align-items: flex-start; padding: 6px 0; border-bottom: 1px dashed var(--line); font-size: 13px; }
+.check:last-child { border-bottom: 0; }
+.box { width: 16px; height: 16px; border-radius: 4px; border: 1px solid var(--line2); flex: none; margin-top: 2px; display: grid; place-items: center; font-size: 11px; }
+.box.y { background: var(--green-soft); border-color: var(--green); color: var(--green); }
+.box.n { background: var(--red-soft); border-color: var(--red); color: var(--red); }
+textarea, input, select { width: 100%; background: var(--panel2); border: 1px solid var(--line2); border-radius: 8px; color: var(--text); padding: 8px 10px; font: inherit; }
+textarea { min-height: 96px; resize: vertical; }
+label { display: block; font-size: 12px; color: var(--muted); margin: 10px 0 4px; font-weight: 600; }
+
+/* Diff */
+.diff { font-size: 14px; line-height: 1.65; }
+.diff del { background: var(--red-soft); color: #f2a3a2; text-decoration: line-through; border-radius: 3px; padding: 0 2px; }
+.diff ins { background: var(--green-soft); color: #a9e7c3; text-decoration: none; border-radius: 3px; padding: 0 2px; }
+.ver { display: flex; gap: 6px; align-items: center; }
+.ver span { border: 1px solid var(--line2); border-radius: 999px; padding: 3px 10px; font: 600 12px var(--mono); color: var(--dim); }
+.ver span.on { border-color: var(--orange); color: var(--orange); background: var(--orange-soft); }
+
+/* Voice */
+.line { display: grid; grid-template-columns: 120px minmax(0, 1fr) 210px 70px; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.wave { height: 30px; display: flex; gap: 2px; align-items: center; }
+.wave i { width: 3px; border-radius: 2px; background: var(--steel); display: block; opacity: .85; }
+.spk { font-weight: 700; font-size: 12.5px; } .spk small { display: block; color: var(--muted); font: 500 11px var(--mono); }
+
+/* Notes */
+.notes { margin-top: 18px; border: 1px dashed rgba(232,145,60,.5); background: rgba(232,145,60,.05); border-radius: 12px; padding: 12px 16px; }
+.notes h4 { margin: 0 0 6px; color: var(--orange); font: 700 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+.notes ol { margin: 0; padding-left: 18px; color: var(--dim); font-size: 13px; }
+.notes li { margin: 3px 0; }
+body.no-notes .notes { display: none; }
+.pin { display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: var(--orange); color: #16120e; font: 800 10.5px var(--mono); vertical-align: middle; margin-left: 4px; }
+body.no-notes .pin { display: none; }
+hr.sep { border: 0; border-top: 1px solid var(--line); margin: 14px 0; }
+.kpi b { display: block; font-size: 22px; } .kpi span { color: var(--muted); font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="mock-bar" role="tablist" aria-label="Mockup screens">
+  <span class="label">MOCKUP · DESIGN STUDIO</span>
+  <button data-go="home" class="on">1 Home</button>
+  <button data-go="new">2 New video run</button>
+  <button data-go="ws">3 Video workspace</button>
+  <button data-go="take">4 Review take</button>
+  <button data-go="article">5 Article</button>
+  <button data-go="voice">6 Voice</button>
+  <button data-go="imgnew">7a Image brief</button>
+  <button data-go="image">7b Image iterate</button>
+  <button data-go="history">8 History</button>
+  <button data-go="compare">9 Compare</button>
+  <button data-go="settings">10 Settings</button>
+  <span class="spacer"></span>
+  <button class="toggle" id="notes-toggle">Design notes: on</button>
+</div>
+
+<div class="app">
+  <aside class="side" aria-label="Applied AI Studio navigation">
+    <div class="brand"><span class="logo"><i style="height:12px;background:#e45a58"></i><i style="height:24px;background:#e8913c"></i><i style="height:18px;background:#7eaeb8"></i></span>
+      <span><b>Applied AI Studio</b><small>APPLIED AI WORKBENCH</small></span></div>
+    <div class="nav"><span class="ico">◇</span>Industry Workflows</div>
+    <div class="nav"><span class="ico">⚗</span>AI Fit Analyzer</div>
+    <div class="nav"><span class="ico">◎</span>Ask Studio</div>
+    <div class="nav on"><span class="ico">✦</span>Design Studio</div>
+    <div class="foot"><div><span class="dot"></span>Local · Mac (az login)</div><div class="tiny" style="margin-top:4px">Foundry: 4 of 5 roles ready</div></div>
+  </aside>
+
+  <main>
+  <!-- 1 HOME -->
+  <section class="screen on" id="s-home">
+    <div class="row between">
+      <div>
+        <div class="crumbs">Design Studio</div>
+        <h1>Make it with models. Review every step.</h1>
+        <p class="sub">Pipelines for articles, voice, images and video. Each run saves its prompts, model versions, outputs and your decisions, so you can reopen, fork or compare it later.</p>
+      </div>
+      <div class="row">
+        <span class="chip ok">● Text · gpt-5.4-mini</span>
+        <span class="chip ok">● Image · MAI-Image-2.6</span>
+        <span class="chip ok">● Voice · MAI-Voice-2.1</span>
+        <span class="chip warn">● Video · Sora 2 · retires Oct 15</span>
+        <button class="btn ghost sm" data-go="settings">Settings</button>
+      </div>
+    </div>
+
+    <div class="grid4" style="margin-top:6px">
+      <div class="card pipe">
+        <div class="top"><span class="badge" style="background:var(--steel-soft);color:var(--steel)">Aa</span><div><b>Article</b><div class="tiny muted">Text · iterate to a report</div></div></div>
+        <p>From a brief and sources to a reviewed article, with a critique and revision loop you can see version by version.</p>
+        <div class="steps"><span>Brief + sources</span><em>›</em><span>Outline</span><em>›</em><span class="gate">Draft ✋</span><em>›</em><span>Critique</span><em>›</em><span class="gate">Revise ✋</span><em>›</em><span>Label</span></div>
+        <div class="row tiny muted"><span class="chip model">gpt-5.4-mini</span><span class="chip model">judge: gpt-5.4</span></div>
+        <div class="row"><button class="btn primary sm" data-go="article">New article</button><span class="tiny muted">~1 min · cents</span></div>
+      </div>
+      <div class="card pipe">
+        <div class="top"><span class="badge" style="background:rgba(167,139,250,.14);color:var(--violet)">♪</span><div><b>Voice</b><div class="tiny muted">Audio · script to finished track</div></div></div>
+        <p>An LLM writes the script, you cast voices and emotions, MAI-Voice reads it, and a listen-back check catches wrong words.</p>
+        <div class="steps"><span>Brief</span><em>›</em><span class="gate">Script ✋</span><em>›</em><span>Cast</span><em>›</em><span>Synthesize</span><em>›</em><span>Listen-back</span><em>›</em><span>Mix + label</span></div>
+        <div class="row tiny muted"><span class="chip model">gpt-5.4-mini</span><span class="chip model">MAI-Voice-2.1</span></div>
+        <div class="row"><button class="btn primary sm" data-go="voice">New voice track</button><span class="tiny muted">~2 min</span></div>
+      </div>
+      <div class="card pipe">
+        <div class="top"><span class="badge" style="background:var(--green-soft);color:var(--green)">▣</span><div><b>Image</b><div class="tiny muted">Stills · multi-step recipes</div></div></div>
+        <p>Generate candidates, pick one, then edit in passes with reference images: the image-studio recipe, saved step by step.</p>
+        <div class="steps"><span>Brief + refs</span><em>›</em><span class="gate">Candidates ✋</span><em>›</em><span class="gate">Edit passes ✋</span><em>›</em><span>Title</span><em>›</em><span>Provenance</span></div>
+        <div class="row tiny muted"><span class="chip model">MAI-Image-2.6</span><span class="chip model">+ optional compare</span></div>
+        <div class="row"><button class="btn primary sm" data-go="image">New image</button><span class="tiny muted">~1–3 min</span></div>
+      </div>
+      <div class="card pipe hl">
+        <div class="top"><span class="badge" style="background:var(--orange-soft);color:var(--orange)">▶</span><div><b>Video</b><div class="tiny muted">Ads · promos · previz</div></div></div>
+        <p>Brief to shot list, keyframes for product shots, several takes per shot, your keep/regenerate calls, then the assembled, labeled cut.</p>
+        <div class="steps"><span>Brief</span><em>›</em><span class="gate">Shot list ✋</span><em>›</em><span class="gate">Keyframes ✋</span><em>›</em><span class="gate">Takes ✋</span><em>›</em><span>Assemble</span><em>›</em><span>Label + C2PA</span></div>
+        <div class="row tiny muted"><span class="chip model">MAI-Image-2.6</span><span class="chip model">sora-2 (2025-12-08)</span></div>
+        <div class="row"><button class="btn primary sm" data-go="new">New video</button><span class="tiny muted">~12 min · 4 shots × 3 takes</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <div class="row between"><h2 style="margin:0">Recent runs</h2><button class="btn ghost sm" data-go="history">View all runs →</button></div>
+      <table style="margin-top:6px">
+        <thead><tr><th></th><th>Run</th><th>Pipeline</th><th>Status</th><th>Progress</th><th>Updated</th><th>Cost</th></tr></thead>
+        <tbody>
+          <tr data-go="ws" style="cursor:pointer"><td><img class="thumb" src="{{v2_t2}}" alt=""></td><td><b>SOLENNE GT · family drive</b><div class="tiny muted">30-s ad · 4 shots × 3 takes</div></td><td>Video</td><td><span class="status wait">Waiting for review</span></td><td><div class="bar" style="width:120px"><i style="width:57%"></i></div><span class="tiny muted">step 3 of 6</span></td><td class="small">Today 10:46</td><td class="mono">$ —</td></tr>
+          <tr><td><span class="tx">Aa</span></td><td><b>Starliner update · newsroom summary</b><div class="tiny muted">NASA release · v3 approved</div></td><td>Article</td><td><span class="status done">Completed</span></td><td><span class="tiny muted">3 versions · 2 claims fixed</span></td><td class="small">Today 09:20</td><td class="mono">$0.01</td></tr>
+          <tr><td><span class="tx" style="color:var(--violet)">♪</span></td><td><b>Module 8 welcome · two hosts</b><div class="tiny muted">42 s · Harper + Andrew</div></td><td>Voice</td><td><span class="status done">Completed</span></td><td><span class="tiny muted">listen-back: 0 word errors</span></td><td class="small">Yesterday</td><td class="mono">$0.02</td></tr>
+          <tr><td><img class="thumb" src="{{hero}}" alt=""></td><td><b>SOLENNE GT · design sheet</b><div class="tiny muted">4 candidates · 3 edit passes</div></td><td>Image</td><td><span class="status done">Completed</span></td><td><span class="tiny muted">kept 1 of 4</span></td><td class="small">Oct 4</td><td class="mono">$ —</td></tr>
+          <tr><td><img class="thumb" src="{{r1_s3}}" alt=""></td><td><b>SOLENNE GT · round 1 (imported)</b><div class="tiny muted">20 takes · 4 s each · "looked like slides"</div></td><td>Video</td><td><span class="status done">Completed</span></td><td><span class="tiny muted">14 of 20 passed</span></td><td class="small">Oct 5</td><td class="mono">$ —</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="notes"><h4>Design notes</h4><ol>
+      <li>Four pipelines, one pattern: each card shows its steps; ✋ marks a <b>human gate</b> where the run pauses for your decision. That's what the Foundry playground doesn't do.</li>
+      <li>Connection chips show which <b>model role</b> is ready. Video is amber because Sora 2 retires in Foundry on Oct 15; the engine can be swapped later without changing the pipeline.</li>
+      <li>Recent runs open straight into the run workspace. Runs made before the app existed (Module 8 round 1 and round 2) are imported as history.</li>
+      <li>Cost column: estimates from a rate table you set in Settings; "$ —" until rates are entered (we don't invent prices).</li>
+    </ol></div>
+  </section>
+
+  <!-- 2 NEW RUN -->
+  <section class="screen" id="s-new">
+    <div class="crumbs">Design Studio › Video › New run</div>
+    <h1>New video run</h1>
+    <p class="sub">Write the brief once. The pipeline turns it into a shot list for you to approve before anything expensive runs.</p>
+    <div class="grid2" style="grid-template-columns: minmax(0,1.1fr) minmax(0,.9fr)">
+      <div class="card">
+        <div class="grid2"><div><label>Template</label><select><option>30-second product ad (4 × 8 s)</option><option>15-second social promo (3 × 5 s)</option><option>Storyboard previz (6 × 4 s)</option><option>Blank</option></select></div>
+        <div><label>Run title</label><input value="SOLENNE GT · family drive"></div></div>
+        <label>Brief</label>
+        <textarea style="min-height:120px">A 30-second ad for SOLENNE GT, a fictional luxury electric grand tourer. A family drive: the car on a coastal highway at sunrise, dad at the wheel, two kids laughing in the back, arriving home at dusk. Warm, cinematic, quiet confidence. End card: SOLENNE GT · Drive the quiet.</textarea>
+        <div class="grid3">
+          <div><label>Length</label><select><option>30 s (4 shots × 8 s)</option></select></div>
+          <div><label>Takes per shot</label><select><option>3</option><option>2</option><option>4</option></select></div>
+          <div><label>Frame</label><select><option>16:9 · 1280×720</option><option>9:16 · 720×1280</option></select></div>
+        </div>
+        <label>Must not include <span class="pin">1</span></label>
+        <input value="real car brands or logos · real people · readable license plates · copyrighted music">
+        <label>Visible label</label>
+        <input value="Fictional vehicle. Made with AI.">
+        <label>Reference images (optional)</label>
+        <div class="row"><img class="thumb" src="{{hero}}" alt="design sheet" style="width:96px;height:54px"><span class="chip">design_hero_v1.png · car design sheet</span><button class="btn sm ghost">+ Add</button></div>
+        <div class="tiny muted" style="margin-top:8px">ⓘ Images with real people need their consent. Sora rejects input images that contain human faces, so shots with people are made from text.</div>
+      </div>
+      <div class="card">
+        <h3>Pipeline preview</h3>
+        <div class="stepper">
+          <div class="st"><span class="n">1</span><div><b>Brief → shot list</b><small><span class="chip model">gpt-5.4-mini</span> ✋ you approve or edit the shots</small></div></div>
+          <div class="st"><span class="n">2</span><div><b>Keyframes for car shots</b><small><span class="chip model">MAI-Image-2.6</span> edits of your design sheet · ✋ pick</small></div></div>
+          <div class="st"><span class="n">3</span><div><b>Takes</b><small><span class="chip model">sora-2</span> keyframe→video for car shots, text→video for people · ✋ keep / regenerate / remix</small></div></div>
+          <div class="st"><span class="n">4</span><div><b>Voiceover (optional)</b><small><span class="chip model">MAI-Voice-2.1</span> off</small></div></div>
+          <div class="st"><span class="n">5</span><div><b>Assemble</b><small>ffmpeg · crossfades · label overlay · end card</small></div></div>
+          <div class="st"><span class="n">6</span><div><b>Label + provenance</b><small>c2patool on raw takes and final cut</small></div></div>
+        </div>
+        <hr class="sep">
+        <div class="grid3">
+          <div class="kpi"><b>12</b><span>Sora generations</span></div>
+          <div class="kpi"><b>~12 min</b><span>2 at a time, ~97 s each</span></div>
+          <div class="kpi"><b>96 s</b><span>video billed</span></div>
+        </div>
+        <div class="row" style="margin-top:10px"><span class="chip warn">Sora 2 (2025-12-08) retires Oct 15, 2026</span><span class="chip info">Daily cap: 3 of 20 video takes used</span></div>
+        <div class="row" style="margin-top:14px"><button class="btn primary" data-go="ws">Start run</button><button class="btn">Save as template</button><button class="btn ghost">Estimate only</button></div>
+      </div>
+    </div>
+    <div class="notes"><h4>Design notes</h4><ol>
+      <li><span class="pin">1</span> "Must not include" becomes part of every prompt <i>and</i> of the review checklist, so the brand rule is checked by a person, not just hoped for (the Ferrari lesson).</li>
+      <li>Nothing expensive runs before the first gate: the shot list costs cents; you approve it before 12 video generations start.</li>
+      <li>The preview shows which model each step uses; each chip is a dropdown limited to deployments configured in Settings.</li>
+    </ol></div>
+  </section>
+
+  <!-- 3 RUN WORKSPACE -->
+  <section class="screen" id="s-ws">
+    <div class="row between">
+      <div><div class="crumbs">Design Studio › Video › run_2026-10-05_1042</div><h1>SOLENNE GT · family drive</h1>
+      <div class="row small"><span class="status wait">Waiting for your review · step 3 of 6</span><span class="muted">Started 10:42 · 9 of 12 takes done · 2 generating · 1 queued</span></div></div>
+      <div class="row"><button class="btn ghost sm">Pause</button><button class="btn ghost sm">Fork run</button><button class="btn ghost sm">Export bundle</button><button class="btn sm">Cancel</button></div>
+    </div>
+    <div class="ws" style="margin-top:12px">
+      <div class="card tight">
+        <div class="stepper">
+          <div class="st done"><span class="n">✓</span><div><b>Brief → shot list</b><small>approved by you · 10:43</small></div></div>
+          <div class="st done"><span class="n">✓</span><div><b>Keyframes</b><small>2 of 2 kept · 1 blocked by filter, reworded</small></div></div>
+          <div class="st cur"><span class="n">3</span><div><b>Takes</b><small>review 9 · 2 generating · 1 queued</small></div></div>
+          <div class="st skip"><span class="n">4</span><div><b>Voiceover</b><small>skipped</small></div></div>
+          <div class="st"><span class="n">5</span><div><b>Assemble</b><small>needs 1 kept take per shot</small></div></div>
+          <div class="st"><span class="n">6</span><div><b>Label + provenance</b><small>after assembly</small></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="row between"><h2 style="margin:0">Takes <span class="pin">1</span></h2><div class="row small"><span class="chip ok">Kept 3</span><span class="chip warn">Regenerate 1</span><span class="chip">Undecided 5</span><button class="btn primary sm" disabled style="opacity:.5">Assemble (needs shot 4)</button></div></div>
+        <div class="shotrow">
+          <div><b>1 · Coast road</b><div class="tiny muted">keyframe → video</div><div class="tiny muted" style="margin-top:4px">Drone follows the car accelerating at sunrise</div></div>
+          <div class="take keep"><div class="media"><img src="{{v1_t1}}" alt=""><span class="play">▶ 0:08</span></div><div class="meta"><div class="row tiny muted"><span>v1_t1 · 97 s</span><span class="chip ok" style="padding:1px 6px">motion 2.6</span></div><div class="acts"><button class="on-keep">Keep</button><button>Regen</button><button>Remix</button></div></div></div>
+          <div class="take" data-go="take" style="cursor:pointer"><div class="media"><img src="{{v1_t2}}" alt=""><span class="play">▶ 0:08</span><span class="flag chip warn" style="padding:1px 6px">physics?</span></div><div class="meta"><div class="row tiny muted"><span>v1_t2 · 92 s</span><span class="chip ok" style="padding:1px 6px">motion 3.1</span></div><div class="acts"><button>Keep</button><button>Regen</button><button>Remix</button></div></div></div>
+          <div class="take"><div class="media"><img src="{{v1_t3}}" alt=""><span class="play">▶ 0:08</span></div><div class="meta"><div class="row tiny muted"><span>v1_t3 · 97 s</span><span class="chip ok" style="padding:1px 6px">motion 2.1</span></div><div class="acts"><button>Keep</button><button>Regen</button><button>Remix</button></div></div></div>
+        </div>
+        <div class="shotrow">
+          <div><b>2 · Dad at the wheel</b><div class="tiny muted">text → video (people)</div></div>
+          <div class="take keep"><div class="media"><img src="{{v2_t2}}" alt=""><span class="play">▶ 0:08</span></div><div class="meta"><div class="row tiny muted"><span>v2_t2 · 91 s</span><span class="chip ok" style="padding:1px 6px">motion 4.8</span></div><div class="acts"><button class="on-keep">Keep</button><button>Regen</button><button>Remix</button></div></div></div>
+          <div class="take"><div class="gen">generating… 62%</div><div class="meta"><div class="bar"><i style="width:62%"></i></div><div class="tiny muted">v2_t3 · started 10:51</div></div></div>
+          <div class="take"><div class="gen">queued</div><div class="meta"><div class="tiny muted">v2_t4 · regenerate of v2_t1</div></div></div>
+        </div>
+        <div class="shotrow">
+          <div><b>3 · Kids in the back</b><div class="tiny muted">text → video (people)</div></div>
+          <div class="take keep"><div class="media"><img src="{{v3_t1}}" alt=""><span class="play">▶ 0:08</span></div><div class="meta"><div class="row tiny muted"><span>v3_t1 · 94 s</span><span class="chip ok" style="padding:1px 6px">motion 2.0</span></div><div class="acts"><button class="on-keep">Keep</button><button>Regen</button><button>Remix</button></div></div></div>
+          <div class="take"><div class="media"><img src="{{v3_t2}}" alt=""><span class="play">▶ 0:08</span></div><div class="meta"><div class="row tiny muted"><span>v3_t2 · 91 s</span></div><div class="acts"><button>Keep</button><button>Regen</button><button>Remix</button></div></div></div>
+          <div class="take regen"><div class="media"><img src="{{v3_t3}}" alt=""><span class="play">▶ 0:08</span><span class="flag chip bad" style="padding:1px 6px">cast changed</span></div><div class="meta"><div class="row tiny muted"><span>v3_t3 · 97 s</span></div><div class="acts"><button>Keep</button><button class="on-regen">Regen</button><button>Remix</button></div></div></div>
+        </div>
+        <div class="shotrow">
+          <div><b>4 · Home at dusk</b><div class="tiny muted">keyframe → video</div></div>
+          <div class="take"><div class="media"><img src="{{v4_t1}}" alt=""><span class="play">▶ 0:08</span><span class="flag chip bad" style="padding:1px 6px">design drift?</span></div><div class="meta"><div class="row tiny muted"><span>v4_t1 · 96 s</span></div><div class="acts"><button>Keep</button><button>Regen</button><button>Remix</button></div></div></div>
+          <div class="take"><div class="media"><img src="{{v4_t2}}" alt=""><span class="play">▶ 0:08</span></div><div class="meta"><div class="row tiny muted"><span>v4_t2 · 100 s</span></div><div class="acts"><button>Keep</button><button>Regen</button><button>Remix</button></div></div></div>
+          <div class="take"><div class="gen">generating… 18%</div><div class="meta"><div class="bar"><i style="width:18%"></i></div><div class="tiny muted">v4_t3</div></div></div>
+        </div>
+      </div>
+      <div class="flexcol" style="display:flex;flex-direction:column;gap:12px">
+        <div class="card tight"><h3>This run</h3>
+          <dl class="kv"><dt>Pipeline</dt><dd>Video · 30-s ad</dd><dt>Models</dt><dd class="mono">gpt-5.4-mini · mai-image-2-6 · sora-2</dd><dt>Generated</dt><dd>72 s of video</dd><dt>Est. cost</dt><dd>$ — <span class="tiny muted">(set rates)</span></dd><dt>Cap</dt><dd>12 of 20 takes today</dd></dl>
+        </div>
+        <div class="card tight"><h3>Event log <span class="pin">2</span></h3>
+          <div class="log">
+            <div><span class="t">10:51</span>v2_t3 started (2 running)</div>
+            <div class="g"><span class="t">10:50</span>v4_t2 completed · 100 s</div>
+            <div class="w"><span class="t">10:49</span>Sora: too many running tasks · waiting for a slot</div>
+            <div><span class="t">10:47</span>auto-check v3_t3: 2 girls detected? → flagged</div>
+            <div class="w"><span class="t">10:44</span>MAI-Image blocked keyframe s4 (BingBlockList) · reworded · ok</div>
+            <div class="g"><span class="t">10:43</span>shot list approved by you</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="notes"><h4>Design notes</h4><ol>
+      <li><span class="pin">1</span> One row per shot, one card per take. Keep / Regenerate / Remix are neutral until you click. "Assemble" unlocks only when every shot has a kept take: the pipeline enforces the human gate.</li>
+      <li>Auto-checks (motion, silent audio, design drift, cast mismatch) <b>flag</b> takes for attention; they never decide. Flags come from measurements and an optional vision-model check, and say what they're based on.</li>
+      <li><span class="pin">2</span> The event log records vendor behavior as teachable events: rate limits, "too many running tasks", content-filter blocks, retries.</li>
+      <li>Runs survive a browser refresh or server restart: jobs resume polling by video id; interrupted steps show "resume".</li>
+    </ol></div>
+  </section>
+
+  <!-- 4 TAKE REVIEW -->
+  <section class="screen" id="s-take">
+    <div class="crumbs">Run › Takes › Shot 1 · take 2</div>
+    <h1>Review take v1_t2</h1>
+    <div class="drawer" style="margin-top:10px">
+      <div>
+        <div class="player"><img src="{{v1_t2}}" alt=""><div class="ctl">▶ 0:03 / 0:08<div class="bar"><i style="width:38%"></i></div>🔊 −15.8 dB</div></div>
+        <div class="card tight" style="margin-top:10px"><h3>Prompt sent</h3><div class="small dim">"The silver car accelerates quickly along the seaside highway and drives out of the frame toward the sun; the drone camera speeds forward and banks to follow it, the road and seawall rushing past underneath. Strong forward motion throughout, wheels clearly turning. Sound: wind rush, rising music." + <span class="chip">must-not-include rules</span></div>
+          <div class="row tiny muted" style="margin-top:8px"><span class="chip">input: keyframe s4_keyframe_v2_1280.png</span><span class="chip model">sora-2 · 2025-12-08</span><span class="chip mono">video_6ac3…f1c2</span></div></div>
+      </div>
+      <div class="card">
+        <h3>Automatic checks</h3>
+        <div class="check"><span class="box y">✓</span><div>Motion 3.12 (strong) <span class="muted tiny">frame-to-frame change</span></div></div>
+        <div class="check"><span class="box y">✓</span><div>Sound present, no silent gaps</div></div>
+        <div class="check"><span class="box n">!</span><div>Content Credentials: present, <b>fails check</b> (signing certificate expired)</div></div>
+        <h3 style="margin-top:12px">Your review <span class="pin">1</span></h3>
+        <div class="check"><span class="box y">✓</span><div>Same car as the design sheet?</div></div>
+        <div class="check"><span class="box n">✗</span><div>Does the action match the brief? <span class="muted">— car swings across the lane and rotates</span></div></div>
+        <div class="check"><span class="box y">✓</span><div>No real brand, logo, face or plate?</div></div>
+        <div class="check"><span class="box"></span><div>Sound fits? (listen, don't just look)</div></div>
+        <label>Note (saved with the run)</label><input value="Physics wrong mid-shot; keep t1.">
+        <div class="row" style="margin-top:12px"><button class="btn good">Keep</button><button class="btn warn">Regenerate</button><button class="btn">Remix with note…</button><button class="btn ghost" data-go="ws">Back to takes</button></div>
+      </div>
+    </div>
+    <div class="notes"><h4>Design notes</h4><ol>
+      <li><span class="pin">1</span> The checklist comes from the brief (brand rules, cast, label). Every tick, note and decision is stored with the take, so run history doubles as a QC record you can export.</li>
+      <li>"Remix with note" sends a targeted change to Sora's remix endpoint; the remix appears as a new take linked to its parent.</li>
+    </ol></div>
+  </section>
+
+  <!-- 5 ARTICLE -->
+  <section class="screen" id="s-article">
+    <div class="row between"><div><div class="crumbs">Design Studio › Article › run_2026-10-05_0910</div><h1>Starliner update · newsroom summary</h1>
+      <div class="row small"><span class="status wait">Waiting for your review · revise step</span><span class="muted">source: NASA release, Sept 28, 2026</span></div></div>
+      <div class="ver"><span>v1 draft</span><span>v2 revised</span><span class="on">v3 revised</span><button class="btn sm ghost">Compare v1 ↔ v3</button></div></div>
+    <div class="grid2" style="grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);margin-top:12px">
+      <div class="card">
+        <h3>v2 → v3 changes <span class="pin">1</span></h3>
+        <div class="diff">
+          <p><b>NASA, Boeing update Starliner plans</b></p>
+          <p>• NASA and Boeing will certify the Vulcan rocket for crew flights after Atlas V.</p>
+          <p>• Uncrewed Starliner-1 could fly in December <del>2024</del> <ins>2026</ins> or January 2027.</p>
+          <p>• The crewed Starliner-2 flight is targeted for 2028 <del>after all issues are resolved</del> <ins>after thruster and thermal changes are verified</ins>.</p>
+        </div>
+        <hr class="sep">
+        <div class="row"><label style="margin:0;flex:1">Revise with a note <input value="Keep under 60 words; add the Vulcan certification date only if the release gives one." style="margin-top:4px"></label></div>
+        <div class="row" style="margin-top:10px"><button class="btn">Revise again</button><button class="btn good">Approve v3</button><span class="chip info">Label: "AI-assisted summary, reviewed by an editor"</span></div>
+      </div>
+      <div class="card">
+        <h3>Critique of v2 <span class="pin">2</span></h3>
+        <table><thead><tr><th>Claim</th><th>Judge</th></tr></thead><tbody>
+          <tr><td class="small">Starliner-1 in December 2024</td><td><span class="chip bad">Unsupported</span><div class="tiny muted">"December of this year" · published 2026</div></td></tr>
+          <tr><td class="small">Starliner-2 after all issues resolved</td><td><span class="chip warn">Partly</span><div class="tiny muted">source names thruster + thermal changes</div></td></tr>
+          <tr><td class="small">Vulcan certification for crew</td><td><span class="chip ok">Supported</span></td></tr>
+        </tbody></table>
+        <div class="row tiny muted" style="margin-top:8px"><span class="chip model">draft: gpt-5.4-mini</span><span class="chip model">judge: gpt-5.4</span><span class="chip">rubric: newsroom brief</span></div>
+      </div>
+    </div>
+    <div class="notes"><h4>Design notes</h4><ol>
+      <li><span class="pin">1</span> Every version is kept. The diff shows exactly what the revision changed, which is the "iteration" the playground can't show.</li>
+      <li><span class="pin">2</span> The critique is a second model checking claims against the source (Case 1's checker). It flags; the editor decides. Draft and judge models are chosen separately.</li>
+    </ol></div>
+  </section>
+
+  <!-- 6 VOICE -->
+  <section class="screen" id="s-voice">
+    <div class="row between"><div><div class="crumbs">Design Studio › Voice › run_2026-10-04_2110</div><h1>Module 8 welcome · two hosts</h1>
+      <div class="row small"><span class="status done">Completed</span><span class="muted">42 s · listen-back: 0 word errors · 1 line regenerated</span></div></div>
+      <div class="row"><button class="btn ghost sm">Fork</button><button class="btn ghost sm">Download MP3</button></div></div>
+    <div class="card" style="margin-top:12px">
+      <div class="line" style="border-bottom:1px solid var(--line2)"><span class="tiny muted">SPEAKER</span><span class="tiny muted">LINE</span><span class="tiny muted">AUDIO</span><span class="tiny muted">CHECK</span></div>
+      <div class="line"><span class="spk">Host A<small>Harper · cheerful</small></span><span>Welcome to Module 8. Tonight a machine makes the content.</span><span class="wave">{{wave1}}</span><span class="chip ok">✓</span></div>
+      <div class="line"><span class="spk">Host B<small>Andrew · calm</small></span><span>And we decide where people have to stand.</span><span class="wave">{{wave2}}</span><span class="chip ok">✓</span></div>
+      <div class="line"><span class="spk">Host A<small>Harper · excited</small></span><span>We'll build a car ad with Sora, then check every take.</span><span class="wave">{{wave3}}</span><span class="chip warn" title="regenerated">↻ ✓</span></div>
+      <div class="line"><span class="spk">Host B<small>Andrew · calm</small></span><span>Including the ones the model got wrong.</span><span class="wave">{{wave4}}</span><span class="chip ok">✓</span></div>
+      <div class="row" style="margin-top:10px"><span class="chip model">script: gpt-5.4-mini</span><span class="chip model">voices: MAI-Voice-2.1</span><span class="chip model">listen-back: gpt-4o-transcribe</span><span class="chip">pause 350 ms · music bed −22 dB</span></div>
+    </div>
+    <div class="notes"><h4>Design notes</h4><ol>
+      <li>Each line is its own synthesis call, so one bad line can be regenerated without re-recording the track.</li>
+      <li><b>Listen-back check</b>: the track is transcribed and compared with the script; word mismatches are flagged. It's the audio version of Case 1's checker.</li>
+      <li>Voices are prebuilt and licensed. Voice cloning is gated by Microsoft and stays out of scope.</li>
+    </ol></div>
+  </section>
+
+  <!-- 7a NEW IMAGE RUN -->
+  <section class="screen" id="s-imgnew">
+    <div class="crumbs">Design Studio › Image › New run</div>
+    <h1>New image run</h1>
+    <p class="sub">Say what the image is for, give it references, and set the rules. Candidates come back for you to pick; then you iterate from the pick.</p>
+    <div class="grid2" style="grid-template-columns: minmax(0,1.15fr) minmax(0,.85fr)">
+      <div class="card">
+        <div class="grid2"><div><label>Use case <span class="pin">1</span></label><select><option>Product hero / key art</option><option>Campaign poster with title</option><option>Social post (1:1 or 9:16)</option><option>Storyboard frame / keyframe</option><option>Character or person study</option><option>Blank</option></select></div>
+        <div><label>Run title</label><input value="SOLENNE GT · design sheet"></div></div>
+        <label>Brief</label>
+        <textarea style="min-height:96px">Hero studio shot of SOLENNE GT, a fictional luxury electric grand tourer: long hood, low fastback roofline, liquid-silver paint, thin light-bar headlamps, no badges. Three-quarter front view on a dark reflective floor, soft rim light. This image is the design sheet every later shot must match.</textarea>
+        <label>Reference images <span class="pin">2</span></label>
+        <div class="reflist">
+          <div class="ref"><img src="{{hero}}" alt=""><div><b class="small">design_hero_v1.png</b><div class="tiny muted">uploaded · 1536×864</div></div><div class="seg"><span class="on">Subject</span><span>Style</span><span>Scene</span></div></div>
+          <div class="ref"><img src="{{kf_s2}}" alt=""><div><b class="small">night_waterfront.png</b><div class="tiny muted">from run "Night set" · kept v2</div></div><div class="seg"><span>Subject</span><span>Style</span><span class="on">Scene</span></div></div>
+          <div class="ref"><span class="drop">+</span><div class="tiny muted">Drop images, paste, or pick a kept image from history. Up to 5.</div><span></span></div>
+        </div>
+        <label>Must not include</label>
+        <input value="real car brands or logos · readable license plates · real people's faces">
+        <div class="grid3">
+          <div><label>Size</label><select><option>16:9 · 1536×864</option><option>1:1 · 1024×1024</option><option>9:16 · 864×1536</option></select></div>
+          <div><label>Candidates</label><select><option>4</option><option>2</option><option>6</option></select></div>
+          <div><label>Prompt helper</label><select><option>gpt-5.4-mini expands the brief</option><option>Off: send my words as-is</option></select></div>
+        </div>
+        <div class="tiny muted" style="margin-top:8px">ⓘ References with real people need their consent; the run records who supplied them.</div>
+      </div>
+      <div class="card">
+        <h3>Pipeline preview</h3>
+        <div class="stepper">
+          <div class="st"><span class="n">1</span><div><b>Brief → prompt</b><small><span class="chip model">gpt-5.4-mini</span> writes the full prompt from your brief + rules · ✋ you can edit it</small></div></div>
+          <div class="st"><span class="n">2</span><div><b>Candidates</b><small><span class="chip model">MAI-Image-2.6</span> 4 images; with references it uses <i>edits</i>, without them <i>generations</i> · ✋ keep one or more</small></div></div>
+          <div class="st"><span class="n">3</span><div><b>Iterate <span class="pin">3</span></b><small>revise any version with a note + references → new version on the tree · ✋ keep / branch / regenerate</small></div></div>
+          <div class="st"><span class="n">4</span><div><b>Finish</b><small>optional title overlay · label · Content Credentials check · export or send to a video run</small></div></div>
+        </div>
+        <div class="grid3" style="margin-top:12px">
+          <div class="kpi"><b>4</b><div class="tiny muted">image calls to start</div></div>
+          <div class="kpi"><b>~1 min</b><div class="tiny muted">6 per minute limit</div></div>
+          <div class="kpi"><b>0 of 60</b><div class="tiny muted">daily images used</div></div>
+        </div>
+        <div class="row" style="margin-top:14px"><button class="btn primary" data-go="image">Start run</button><button class="btn ghost">Save as template</button></div>
+      </div>
+    </div>
+    <div class="notes"><h4>Design notes</h4><ol>
+      <li><span class="pin">1</span> The <b>use case</b> picks a template: default size, prompt scaffold and the review checklist (a poster checks title spelling; a keyframe checks it matches the design sheet).</li>
+      <li><span class="pin">2</span> Each reference gets a <b>role</b>. Subject = keep this thing the same; Style = borrow the look; Scene = put the subject here. The roles become instructions in the prompt; it's the image-studio recipe as a form.</li>
+      <li><span class="pin">3</span> Iteration happens on the next screen, after you keep a candidate.</li>
+    </ol></div>
+  </section>
+
+  <!-- 7b IMAGE ITERATE -->
+  <section class="screen" id="s-image">
+    <div class="row between"><div><div class="crumbs">Design Studio › Image › run_2026-10-04_0011</div><h1>SOLENNE GT · design sheet</h1>
+      <div class="row small"><span class="status wait">Iterating · step 3 of 4</span><span class="muted">4 candidates · 5 versions · 1 kept</span></div></div>
+      <div class="row"><button class="btn ghost sm">Fork</button><button class="btn ghost sm">Finish →</button><button class="btn ghost sm">Use as keyframe in a video run →</button></div></div>
+    <div class="ws" style="grid-template-columns: 290px minmax(0,1fr) 330px; margin-top:12px">
+      <div class="card tight"><h3>Versions <span class="pin">1</span></h3>
+        <div class="tree">
+          <div class="tiny muted">Candidates</div>
+          <div class="node kept"><img src="{{hero}}" alt=""><div><b>c1 · kept</b><small>studio hero · 31 s</small></div></div>
+          <div class="node d1"><img src="{{kf_s2}}" alt=""><div><b>v1 · night waterfront</b><small>blocked → reworded → ok</small></div></div>
+          <div class="node d1 sel"><img src="{{kf_s4}}" alt=""><div><b>v2 · seaside sunrise</b><small>refs c1 · 19 s · selected</small></div></div>
+          <div class="node d2"><img src="{{v1_t3}}" alt=""><div><b>v4 · lower camera</b><small>from v2 · 22 s</small></div></div>
+          <div class="node d1"><img src="{{kf_s5}}" alt=""><div><b>v3 · glass house, dusk</b><small>refs c1 · 49 s</small></div></div>
+          <div class="node" style="opacity:.6"><div class="drop" style="width:64px;height:40px;border:1px dashed var(--line2);border-radius:6px"></div><div><b>c2–c4</b><small>not kept · 3 more</small></div></div>
+        </div></div>
+      <div class="card tight">
+        <div class="bigimg"><img src="{{kf_s4}}" alt="Selected version v2"></div>
+        <div class="row between" style="margin-top:8px"><div class="row small"><b>v2 · seaside sunrise</b><span class="muted">parent c1 · MAI-Image-2.6 (edits) · 1536×864</span></div>
+          <div class="row"><button class="btn good sm">Keep</button><button class="btn ghost sm">Compare with c1</button></div></div>
+        <div class="promptbox" style="margin-top:8px"><b>Prompt sent:</b> "Place the exact car from image 1 on a coastal highway at sunrise, seen from a drone behind and above; keep its silhouette, paint and light bar unchanged; long shadows, sea on the right…" <span class="chip">+ must-not-include rules</span></div>
+        <div class="row" style="margin-top:8px"><span class="chip ok">C2PA: valid (Microsoft)</span><span class="chip">no text detected</span><span class="chip warn">checklist: 2 of 3 ticked</span></div>
+      </div>
+      <div class="card tight"><h3>Revise v2 <span class="pin">2</span></h3>
+        <label>What should change?</label>
+        <textarea style="min-height:84px">Lower the camera to road level and add motion blur on the road; keep the car identical.</textarea>
+        <label>References for this pass</label>
+        <div class="row"><img class="thumb" src="{{kf_s4}}" alt="" style="width:64px;height:36px"><span class="chip">v2 · base</span><img class="thumb" src="{{hero}}" alt="" style="width:64px;height:36px"><span class="chip">c1 · subject</span><button class="btn sm ghost">+</button></div>
+        <label>How</label>
+        <div class="seg"><span class="on">Edit this version</span><span>Regenerate from prompt</span></div>
+        <div class="check tiny" style="margin-top:6px"><span class="box y">✓</span>Let gpt-5.4-mini rewrite my note into a full prompt (shown before sending)</div>
+        <div class="row" style="margin-top:10px"><button class="btn primary">Make v5 from v2</button><button class="btn ghost">Variations ×2</button></div>
+        <div class="tiny muted" style="margin-top:8px">Each pass = 1 image call · 5 of 60 today</div>
+        <h3 style="margin-top:14px">Review checklist</h3>
+        <div class="check"><span class="box y">✓</span>Same car as the design sheet?</div>
+        <div class="check"><span class="box y">✓</span>No real brand, logo, plate or face?</div>
+        <div class="check"><span class="box"></span>Fits the use case (hero / keyframe)?</div>
+      </div>
+    </div>
+    <div class="notes"><h4>Design notes</h4><ol>
+      <li><span class="pin">1</span> Every revision is a <b>version on a tree</b>, never an overwrite. Click any version to select it; revising it makes a child, so you can go back to v2 and try something different (that's a branch). Kept versions are green.</li>
+      <li><span class="pin">2</span> <b>The iteration loop:</b> select a version → write what should change → pick references (the version itself is the base; add the design sheet as "subject" to stop drift) → the app shows the exact prompt → new version appears under its parent. "Regenerate" tries the same prompt again; "Variations" makes 2 at once.</li>
+      <li>Image and video are <b>separate pipelines</b> on the same engine. They connect: the video pipeline's keyframe step uses this same edit-and-pick component, and any kept image can be sent to a video run as a reference.</li>
+    </ol></div>
+  </section>
+
+  <!-- 8 HISTORY -->
+  <section class="screen" id="s-history">
+    <div class="row between"><div><div class="crumbs">Design Studio › Run history</div><h1>Run history</h1><p class="sub">Every run on this machine, with its prompts, models, outputs and decisions. Open one to replay it, fork it to try a change, or export it to another machine.</p></div>
+      <div class="row"><button class="btn ghost sm">Import bundle…</button><button class="btn primary sm" data-go="home">New run</button></div></div>
+    <div class="card tight row" style="gap:8px">
+      <input placeholder="Search titles, briefs, prompts…" style="max-width:280px">
+      <select style="max-width:150px"><option>All pipelines</option></select><select style="max-width:150px"><option>Any status</option></select><select style="max-width:170px"><option>Any model</option></select><select style="max-width:150px"><option>Last 30 days</option></select>
+      <span class="chip">Tag: Module 8</span><span class="spacer" style="flex:1"></span><span class="tiny muted">Storage: 1.4 GB · ~/Library/Application Support/AppliedAIStudio/design</span>
+    </div>
+    <div class="card" style="margin-top:10px">
+      <table><thead><tr><th></th><th>Run</th><th>Pipeline</th><th>Status</th><th>Outputs</th><th>Models</th><th>Created</th><th></th></tr></thead><tbody>
+        <tr><td><img class="thumb" src="{{v2_t2}}" alt=""></td><td><b>SOLENNE GT · family drive</b><div class="tiny muted">round 2 · forked from round 1</div></td><td>Video</td><td><span class="status done">Completed</span></td><td class="small">30.5 s ad · 12 takes · 9 passed</td><td class="mono tiny">sora-2 · mai-image-2-6</td><td class="small">Oct 5 11:06</td><td class="row"><button class="btn sm ghost" data-go="ws">Open</button><button class="btn sm ghost" data-go="compare">Compare</button></td></tr>
+        <tr><td><img class="thumb" src="{{r1_s3}}" alt=""></td><td><b>SOLENNE GT · round 1</b><div class="tiny muted">imported from Module 8 captures</div></td><td>Video</td><td><span class="status done">Completed</span></td><td class="small">18.4 s ad · 20 takes · 14 passed</td><td class="mono tiny">sora-2 · mai-image-2-6</td><td class="small">Oct 5 08:08</td><td class="row"><button class="btn sm ghost">Open</button><button class="btn sm ghost">Fork</button></td></tr>
+        <tr><td><span class="tx">Aa</span></td><td><b>Starliner update · newsroom summary</b><div class="tiny muted">3 versions</div></td><td>Article</td><td><span class="status done">Completed</span></td><td class="small">58 words · 2 claims fixed</td><td class="mono tiny">gpt-5.4-mini · gpt-5.4</td><td class="small">Oct 5 09:20</td><td class="row"><button class="btn sm ghost" data-go="article">Open</button><button class="btn sm ghost">Fork</button></td></tr>
+        <tr><td><span class="tx" style="color:var(--violet)">♪</span></td><td><b>Module 8 welcome · two hosts</b></td><td>Voice</td><td><span class="status done">Completed</span></td><td class="small">42 s MP3 · 0 word errors</td><td class="mono tiny">mai-voice-2.1</td><td class="small">Oct 4 21:10</td><td class="row"><button class="btn sm ghost" data-go="voice">Open</button><button class="btn sm ghost">Fork</button></td></tr>
+        <tr><td><img class="thumb" src="{{hero}}" alt=""></td><td><b>SOLENNE GT · design sheet</b></td><td>Image</td><td><span class="status done">Completed</span></td><td class="small">1 kept · 3 edit passes</td><td class="mono tiny">mai-image-2-6</td><td class="small">Oct 4 00:11</td><td class="row"><button class="btn sm ghost" data-go="image">Open</button><button class="btn sm ghost">Fork</button></td></tr>
+        <tr><td><span class="tx" style="color:var(--red)">!</span></td><td><b>Brand-name test</b><div class="tiny muted">in-class only · excluded from exports</div></td><td>Video</td><td><span class="status lock">Restricted</span></td><td class="small">1 take · not refused</td><td class="mono tiny">sora-2</td><td class="small">Oct 4 23:57</td><td class="row"><button class="btn sm ghost">Open</button></td></tr>
+        <tr><td><span class="tx">—</span></td><td><b>Comic cover test</b><div class="tiny muted">stopped: content filter on step 2</div></td><td>Image</td><td><span class="status fail">Failed</span></td><td class="small">0 kept</td><td class="mono tiny">mai-image-2-6</td><td class="small">Oct 3 18:40</td><td class="row"><button class="btn sm ghost">Open</button><button class="btn sm ghost">Retry</button></td></tr>
+      </tbody></table>
+    </div>
+    <div class="notes"><h4>Design notes</h4><ol>
+      <li>History is local to each install (Mac or home server). <b>Export bundle</b> / <b>Import bundle</b> (one .zip per run: run.json + media) copies runs between them, which is how the home server becomes a backup of Friday's examples.</li>
+      <li>Fork copies a run's brief and settings into a new run, linked to its parent: "round 2" is a fork of "round 1".</li>
+      <li>Runs can be marked <b>Restricted</b> (like the brand test): visible here, never exported or published.</li>
+      <li>Failed runs stay in history with the exact error, because failures are teaching material too.</li>
+    </ol></div>
+  </section>
+
+  <!-- 9 COMPARE -->
+  <section class="screen" id="s-compare">
+    <div class="crumbs">Run history › Compare</div>
+    <h1>Round 1 vs round 2</h1>
+    <div class="grid2" style="margin-top:10px">
+      <div class="card"><div class="row between"><b>SOLENNE GT · round 1</b><span class="status done">Completed</span></div>
+        <div class="player" style="margin-top:8px"><img src="{{r1_s3}}" alt=""><div class="ctl">▶ 0:00 / 0:18<div class="bar"><i style="width:5%"></i></div></div></div>
+        <dl class="kv" style="margin-top:10px"><dt>Shots</dt><dd>5 × 4 s</dd><dt>Prompt style</dt><dd>"the car stays still", light sweeps</dd><dt>People</dt><dd>hand only</dd><dt>Takes</dt><dd>20 · 14 passed (70%)</dd><dt>Median motion</dt><dd><b>0.35</b></dd><dt>Verdict</dt><dd>Looked like slides</dd></dl></div>
+      <div class="card hl"><div class="row between"><b>SOLENNE GT · family drive</b><span class="status done">Completed</span></div>
+        <div class="player" style="margin-top:8px"><img src="{{v2_t2}}" alt=""><div class="ctl">▶ 0:00 / 0:30<div class="bar"><i style="width:5%"></i></div></div></div>
+        <dl class="kv" style="margin-top:10px"><dt>Shots</dt><dd>4 × 8 s <span class="chip or">changed</span></dd><dt>Prompt style</dt><dd>specific actions <span class="chip or">changed</span></dd><dt>People</dt><dd>dad + two kids (text→video) <span class="chip or">changed</span></dd><dt>Takes</dt><dd>12 · 9 passed (75%)</dd><dt>Median motion</dt><dd><b>2.02</b></dd><dt>New failures</dt><dd>cast changed · design drift</dd></dl></div>
+    </div>
+    <div class="notes"><h4>Design notes</h4><ol><li>Compare shows what changed in the settings (orange) next to what changed in the results. It's the classroom version of an A/B test, built from run history.</li></ol></div>
+  </section>
+
+  <!-- 10 SETTINGS -->
+  <section class="screen" id="s-settings">
+    <div class="crumbs">Design Studio › Settings</div>
+    <h1>Connections and limits</h1>
+    <p class="sub">Design Studio uses <b>your</b> Microsoft Foundry deployments. Nothing is shared: on your Mac it uses <span class="mono">az login</span>; on the home server it uses a service principal with access to these resources only.</p>
+    <div class="grid2" style="grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr)">
+      <div class="card">
+        <h3>Model roles <span class="pin">1</span></h3>
+        <table><thead><tr><th>Role</th><th>Resource / deployment</th><th>Status</th><th></th></tr></thead><tbody>
+          <tr><td>Text: drafting</td><td class="mono tiny">kestrel-ai / gpt-5.4-mini</td><td><span class="chip ok">ready · 1.8 s</span></td><td><button class="btn sm ghost">Test</button></td></tr>
+          <tr><td>Text: judge</td><td class="mono tiny">kestrel-ai / gpt-5.4</td><td><span class="chip ok">ready</span></td><td><button class="btn sm ghost">Test</button></td></tr>
+          <tr><td>Text: local (optional)</td><td class="mono tiny">LM Studio · gpt-oss-20b</td><td><span class="chip">local only</span></td><td><button class="btn sm ghost">Test</button></td></tr>
+          <tr><td>Image</td><td class="mono tiny">aifoundry-image-studio-ymao / mai-image-2-6</td><td><span class="chip ok">ready · 6 RPM</span></td><td><button class="btn sm ghost">Test</button></td></tr>
+          <tr><td>Voice</td><td class="mono tiny">kestrel-ai · Speech · MAI-Voice-2.1-Flash</td><td><span class="chip ok">ready</span></td><td><button class="btn sm ghost">Test</button></td></tr>
+          <tr><td>Listen-back</td><td class="mono tiny">gpt-4o-transcribe (not deployed)</td><td><span class="chip off">not set</span></td><td><button class="btn sm ghost">Set…</button></td></tr>
+          <tr><td>Video</td><td class="mono tiny">kestrel-ai / sora-2 (2025-12-08)</td><td><span class="chip warn">retires Oct 15</span></td><td><button class="btn sm ghost">Test</button></td></tr>
+        </tbody></table>
+        <div class="row tiny muted" style="margin-top:8px">Tests make one tiny call and show latency; they count toward caps.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="card"><h3>Where this runs</h3><dl class="kv"><dt>Install</dt><dd>Local · Mac</dd><dt>Auth</dt><dd>Azure CLI (az login) <span class="chip ok">ok</span></dd><dt>Data</dt><dd class="mono tiny">~/Library/Application Support/AppliedAIStudio/design</dd><dt>Backup</dt><dd>Home server · import bundles</dd></dl></div>
+        <div class="card"><h3>Daily caps <span class="pin">2</span></h3><dl class="kv"><dt>Video takes</dt><dd>20 / day · 2 at a time</dd><dt>Images</dt><dd>60 / day · 6 per min</dd><dt>Voice</dt><dd>200 lines / day</dd><dt>Text</dt><dd>500 calls / day</dd></dl></div>
+        <div class="card"><h3>Students</h3><p class="small dim" style="margin:0">To use Design Studio, students connect <b>their own</b> Foundry resource (like the AI Fit Analyzer needs Copilot). Setup guide + .env template →</p></div>
+      </div>
+    </div>
+    <div class="notes"><h4>Design notes</h4><ol>
+      <li><span class="pin">1</span> Pipelines ask for a <b>role</b> (e.g. "video"), not a model name. Swapping Sora for a future model is a settings change; runs record the exact deployment and version used.</li>
+      <li><span class="pin">2</span> Caps protect your subscription when the app is reachable from the home server, and they're shown before a run starts.</li>
+      <li>Keys never reach the browser. Configuration lives in server environment variables; this page shows status and tests, not secrets.</li>
+    </ol></div>
+  </section>
+  </main>
+</div>
+<script>
+(() => {
+  const go = id => {
+    document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === 's-' + id));
+    document.querySelectorAll('.mock-bar [data-go]').forEach(b => b.classList.toggle('on', b.dataset.go === id));
+    history.replaceState(null, '', '#' + id);
+    window.scrollTo({top: 0});
+  };
+  document.addEventListener('click', e => {
+    const t = e.target.closest('[data-go]');
+    if (t) { e.preventDefault(); go(t.dataset.go); }
+  });
+  const toggle = document.getElementById('notes-toggle');
+  toggle.addEventListener('click', () => {
+    const off = document.body.classList.toggle('no-notes');
+    toggle.textContent = off ? 'Design notes: off' : 'Design notes: on';
+  });
+  const start = location.hash.slice(1);
+  if (start && document.getElementById('s-' + start)) go(start);
+})();
+</script>
+</body>
+</html>

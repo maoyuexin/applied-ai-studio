@@ -1,0 +1,1947 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Train a Traffic Light</title>
+<style>
+:root {
+  --bg: #111318;
+  --panel: #181a20;
+  --panel-2: #222530;
+  --line: #2e323d;
+  --text: #f5f3f0;
+  --dim: #b9bdc6;
+  --faint: #858a97;
+  --orange: #e8913c;
+  --orange-soft: #3a2a17;
+  --teal: #7eaeb8;
+  --teal-bright: #a8d4dd;
+  --red: #e5675f;
+  --green: #7cc59a;
+  color-scheme: dark;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--text); }
+body { font-size: 17px; line-height: 1.45; }
+button, select, input { font: inherit; }
+[hidden] { display: none !important; }
+
+.top {
+  display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+  max-width: 1440px; margin: 0 auto; padding: 18px 32px 14px;
+  border-bottom: 1px solid var(--line);
+}
+.brand { flex: 1 1 380px; }
+.kicker { margin: 0; color: var(--teal); font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.brand h1 { margin: 2px 0 0; font-size: 28px; line-height: 1.15; }
+.modes { display: flex; gap: 6px; }
+.modes button, .speed select {
+  min-height: 44px; padding: 8px 16px; border-radius: 10px; border: 1px solid var(--line);
+  background: var(--panel); color: var(--dim); cursor: pointer;
+}
+.modes button[aria-selected="true"] { background: var(--panel-2); color: var(--text); border-color: var(--teal); }
+.speed { color: var(--dim); font-size: 15px; }
+.speed select { margin-left: 6px; min-height: 40px; padding: 6px 10px; }
+
+main { max-width: 1440px; margin: 0 auto; padding: 14px 32px 28px; }
+
+.chapters { display: flex; gap: 6px; list-style: none; margin: 0 0 14px; padding: 0; flex-wrap: wrap; }
+.chapters button {
+  display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 6px 12px 6px 6px;
+  border-radius: 999px; border: 1px solid var(--line); background: var(--panel); color: var(--dim); cursor: pointer; font-size: 15px;
+}
+.chapters .num {
+  display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%;
+  border: 1px solid var(--faint); font-size: 14px; font-weight: 700;
+}
+.chapters button[aria-current="step"] { color: var(--text); border-color: var(--orange); }
+.chapters button[aria-current="step"] .num { background: var(--orange); border-color: var(--orange); color: #1b1206; }
+.chapters button.done .num { border-color: var(--teal); color: var(--teal); }
+
+.step-kicker { margin: 0; color: var(--orange); font-size: 14px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+.step-head h2 { margin: 4px 0 6px; font-size: 32px; line-height: 1.15; }
+.lead { margin: 0 0 14px; color: var(--dim); font-size: 19px; max-width: 1000px; }
+
+.step-body { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.95fr); gap: 22px; align-items: start; }
+.stage-col { min-width: 0; }
+.floor-wrap {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 12px;
+  display: grid; place-items: center;
+}
+.floor-wrap.pair { grid-template-columns: 1fr 1fr; gap: 10px; }
+svg.floor { width: 100%; height: auto; max-height: 440px; display: block; user-select: none; }
+svg.floor.big { max-height: 470px; }
+.floor-caption { margin: 8px 4px 0; color: var(--faint); font-size: 14px; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; margin: 8px 4px 0; color: var(--dim); font-size: 14px; }
+.legend span::before { content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; background: var(--swatch); }
+
+.controls { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; align-items: center; }
+.btn {
+  min-height: 46px; padding: 9px 18px; border-radius: 11px; border: 1px solid var(--line);
+  background: var(--panel-2); color: var(--text); cursor: pointer; font-weight: 600;
+}
+.btn:hover:not(:disabled) { border-color: var(--teal); }
+.btn.primary { background: var(--orange); border-color: var(--orange); color: #1b1206; }
+.btn.primary:hover:not(:disabled) { filter: brightness(1.07); }
+.btn:disabled { opacity: .42; cursor: not-allowed; }
+.btn:focus-visible, .chapters button:focus-visible, .modes button:focus-visible, .pad button:focus-visible { outline: 3px solid var(--teal-bright); outline-offset: 2px; }
+.btn .n { display: inline-grid; place-items: center; width: 22px; height: 22px; margin-right: 6px; border-radius: 50%; background: rgba(0,0,0,.25); font-size: 13px; }
+
+.pad { display: grid; grid-template-columns: repeat(3, 54px); grid-template-rows: repeat(2, 48px); gap: 6px; }
+.pad button { border-radius: 10px; border: 1px solid var(--line); background: var(--panel-2); color: var(--text); font-size: 22px; cursor: pointer; }
+.pad button:disabled { opacity: .4; }
+.pad .up { grid-column: 2; grid-row: 1; }
+.pad .left { grid-column: 1; grid-row: 2; }
+.pad .down { grid-column: 2; grid-row: 2; }
+.pad .right { grid-column: 3; grid-row: 2; }
+
+.status { min-height: 26px; margin: 10px 4px 0; color: var(--dim); font-size: 16px; }
+.status strong { color: var(--text); }
+
+.explain { display: grid; gap: 12px; min-width: 0; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; }
+.card h3 { margin: 0 0 8px; font-size: 14px; color: var(--teal); letter-spacing: .07em; text-transform: uppercase; }
+.card p { margin: 0 0 8px; }
+.card p:last-child { margin-bottom: 0; }
+.card.accent { border-color: var(--orange); background: linear-gradient(0deg, rgba(232,145,60,.06), rgba(232,145,60,.06)), var(--panel); }
+.card.good { border-color: var(--teal); }
+.card.warn { border-color: var(--red); }
+.muted { color: var(--dim); }
+.small { font-size: 15px; }
+.big-number { font-size: 34px; font-weight: 800; color: var(--orange); line-height: 1.1; }
+
+.points { width: 100%; border-collapse: collapse; }
+.points td { padding: 6px 0; border-bottom: 1px solid var(--line); }
+.points tr:last-child td { border-bottom: 0; }
+.points td:last-child { text-align: right; font-weight: 800; font-size: 20px; white-space: nowrap; }
+.plus { color: var(--green); }
+.minus { color: var(--red); }
+
+.formula {
+  font-size: 19px; font-weight: 700; padding: 10px 12px; border-radius: 10px; background: var(--panel-2);
+  display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+}
+.formula .term { padding: 2px 8px; border-radius: 7px; background: var(--bg); }
+.formula .t-new { color: var(--orange); }
+.formula .t-now { color: var(--red); }
+.formula .t-next { color: var(--teal-bright); }
+
+.moveline { display: grid; grid-template-columns: 150px 1fr; gap: 3px 10px; font-size: 16px; }
+.moveline dt { color: var(--faint); }
+.moveline dd { margin: 0; }
+.calc { margin-top: 8px; font-size: 21px; font-weight: 800; }
+.calc .eq { color: var(--orange); }
+
+.compass { display: grid; grid-template-columns: repeat(3, 64px); grid-template-rows: repeat(3, 40px); gap: 4px; justify-content: start; }
+.compass div { display: grid; place-items: center; border-radius: 8px; background: var(--panel-2); font-weight: 700; }
+.compass .c { background: transparent; color: var(--faint); font-size: 14px; }
+.compass .hl { outline: 2px solid var(--orange); }
+.compass .blank { color: var(--faint); }
+
+table.data { width: 100%; border-collapse: collapse; font-size: 15px; }
+table.data th { text-align: left; color: var(--faint); font-weight: 600; padding: 4px 6px; border-bottom: 1px solid var(--line); }
+table.data td { padding: 4px 6px; border-bottom: 1px solid var(--line); }
+table.data td.num, table.data th.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.data tr.new td { background: rgba(126,174,184,.12); }
+table.q { font-size: 14px; }
+table.q td, table.q th { padding: 2px 6px; }
+table.q td { text-align: center; }
+table.q td:first-child, table.q th:first-child { text-align: left; }
+table.q th { text-align: center; }
+
+.terms { display: grid; grid-template-columns: max-content 1fr; gap: 5px 12px; margin: 0; font-size: 16px; }
+.terms dt { font-weight: 800; color: var(--text); }
+.terms dd { margin: 0; color: var(--dim); }
+
+.checklist { margin: 0; padding-left: 20px; }
+.checklist li { margin: 4px 0; }
+.steps-list { margin: 0; padding-left: 22px; }
+.steps-list li { margin: 5px 0; }
+
+.log { display: grid; gap: 8px; }
+.log .entry { border-left: 3px solid var(--line); padding: 2px 0 2px 10px; }
+.log .entry.bad { border-color: var(--red); }
+.log .entry.ok { border-color: var(--teal); }
+.log .entry strong { display: block; }
+
+.chart { width: 100%; height: auto; display: block; }
+.chart text { font-family: inherit; }
+
+.stepnav { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line); }
+.stepnav .count { color: var(--faint); }
+
+/* Floor drawing */
+.tile { fill: #1d2028; stroke: #2c303a; stroke-width: 2; }
+.tile.clickable { cursor: pointer; }
+.tile.clickable:hover { stroke: var(--teal); }
+.shelf-body { fill: #2a3446; stroke: #3a4760; stroke-width: 2; }
+.shelf-line { stroke: #43506a; stroke-width: 3; }
+.shelf-box { fill: #6a5238; }
+.station-body { fill: var(--orange-soft); stroke: var(--orange); stroke-width: 3; }
+.station-label { fill: var(--orange); font-size: 15px; font-weight: 800; letter-spacing: 1px; }
+.coord { fill: var(--faint); font-size: 18px; font-weight: 700; }
+.start-label { fill: var(--faint); font-size: 12px; font-weight: 700; letter-spacing: 1px; }
+.score-tint { fill: var(--teal); }
+.score-num { fill: var(--text); font-size: 30px; font-weight: 800; }
+.score-num.low { fill: var(--faint); font-size: 22px; font-weight: 700; }
+.score-arrow { fill: var(--teal-bright); font-size: 24px; font-weight: 800; }
+.score-arrow.low { fill: var(--faint); font-size: 18px; }
+.slot { fill: var(--faint); font-size: 16px; font-weight: 800; }
+.slot.filled { fill: var(--text); }
+.slot-box { fill: none; stroke: #4d5362; stroke-width: 2; stroke-dasharray: 4 3; }
+.slot-box.filled { fill: #2b3140; stroke: var(--teal); stroke-dasharray: none; }
+.flash { fill: none; stroke: var(--orange); stroke-width: 5; }
+.path-test { fill: none; stroke: var(--orange); stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; opacity: .9; }
+.path-map { fill: none; stroke: var(--text); stroke-width: 4; stroke-dasharray: 10 10; stroke-linecap: round; stroke-linejoin: round; opacity: .85; }
+.robot { transition-property: transform; transition-timing-function: ease-in-out; }
+.robot-body { fill: var(--teal); stroke: #d9eef2; stroke-width: 2; }
+.robot-face { fill: #173038; }
+.robot-eye { fill: #e8fbff; }
+.robot-load { fill: var(--orange); }
+.robot.bumped .robot-body { fill: var(--red); }
+.pallet-body { fill: #7a4e24; stroke: #c98a4b; stroke-width: 3; }
+.pallet-strap { stroke: #c98a4b; stroke-width: 4; }
+.pallet-label { fill: #fbe3c8; font-size: 14px; font-weight: 800; letter-spacing: .5px; }
+
+/* Lab */
+.lab-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.95fr); gap: 22px; align-items: start; }
+.settings { display: grid; grid-template-columns: max-content 1fr; gap: 10px 14px; align-items: center; }
+.settings label { color: var(--dim); font-size: 15px; }
+.settings > div { display: flex; align-items: center; gap: 10px; }
+.settings input[type="range"] { flex: 1; min-width: 0; accent-color: var(--orange); }
+.settings select, .settings input[type="number"] {
+  min-height: 40px; padding: 6px 10px; border-radius: 9px; border: 1px solid var(--line); background: var(--panel-2); color: var(--text);
+}
+.value-out { color: var(--text); font-weight: 700; min-width: 44px; text-align: right; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+.stat { background: var(--panel-2); border-radius: 10px; padding: 8px 10px; }
+.stat b { display: block; font-size: 24px; }
+.stat span { color: var(--faint); font-size: 13px; }
+.toggle { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.toggle button { min-height: 40px; padding: 6px 14px; border: 0; background: var(--panel); color: var(--dim); cursor: pointer; }
+.toggle button[aria-pressed="true"] { background: var(--panel-2); color: var(--text); box-shadow: inset 0 -3px 0 var(--orange); }
+
+/* Live labs: header gear, settings pop-up, play button, live panel */
+.lab-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.gear-btn { flex: none; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 14px; border: 1px solid var(--line);
+  border-radius: 12px; background: var(--panel); color: var(--text); font: inherit; font-weight: 600; cursor: pointer; }
+.gear-btn svg { width: 22px; height: 22px; color: var(--orange); }
+.gear-btn:hover { border-color: var(--teal); }
+.gear-btn:focus-visible, .pop-close:focus-visible, .toggle button:focus-visible { outline: 3px solid var(--teal-bright); outline-offset: 2px; }
+dialog.settings-pop { position: fixed; inset: 88px 24px auto auto; margin: 0; width: min(470px, calc(100vw - 32px)); max-height: calc(100vh - 112px);
+  padding: 0; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); color: var(--text); box-shadow: 0 18px 50px rgba(0,0,0,.5); overflow: auto; }
+dialog.settings-pop::backdrop { background: rgba(8,9,12,.55); }
+.pop-inner { padding: 16px 18px 18px; }
+.pop-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.pop-head h3 { margin: 0; font-size: 19px; }
+.pop-inner h4 { margin: 18px 0 6px; font-size: 15px; color: var(--dim); }
+.pop-close { width: 40px; height: 40px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel-2); color: var(--text); font-size: 22px; cursor: pointer; }
+.pop-note { color: var(--faint); font-size: 13px; margin: 12px 0 0; }
+.help-btn { flex: none; width: 34px; height: 34px; margin-left: auto; border: 1px solid var(--line); border-radius: 50%; background: var(--panel);
+  color: var(--orange); font: inherit; font-size: 18px; font-weight: 800; line-height: 1; cursor: pointer; }
+.help-btn:hover { border-color: var(--teal); }
+.help-btn:focus-visible { outline: 3px solid var(--teal-bright); outline-offset: 2px; }
+.card h3.with-help { display: flex; align-items: center; gap: 8px; }
+.card h3.with-help .help-btn { width: 28px; height: 28px; font-size: 15px; }
+dialog.settings-pop.help-pop { inset: 0; margin: auto; height: fit-content; width: min(780px, calc(100vw - 32px)); max-height: calc(100vh - 48px); }
+.help-pop p { margin: 0 0 10px; }
+.help-pop .formula { font-size: 16px; margin-bottom: 12px; }
+.help-pop .terms { font-size: 15px; }
+.help-pop .steps-list { font-size: 15px; }
+.play-btn { min-width: 124px; }
+.live-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.live-now { border-left: 3px solid var(--orange); padding-left: 10px; margin: 0 0 8px; color: var(--dim); font-size: 14px; }
+.live-log { list-style: none; margin: 0; padding: 0; font-size: 14px; max-height: 150px; overflow: auto; }
+.live-log li { padding: 4px 0; border-bottom: 1px solid var(--line); color: var(--dim); }
+.live-log li:first-child { color: var(--text); }
+
+/* One-screen live lab: scene across the top, one control bar, then a row of panels. */
+body.lab-mode .top .speed { display: none; }
+body.lab-mode main { padding-bottom: 0; }
+.live-lab { display: flex; flex-direction: column; gap: 10px; }
+.live-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.live-head .step-kicker { margin: 0; }
+.live-head h2 { margin: 2px 0 0; font-size: 24px; line-height: 1.2; }
+.live-head .lead { margin: 3px 0 0; font-size: 15px; max-width: none; }
+.live-stage { flex: 1 1 auto; min-height: 0; display: flex; gap: 12px; align-items: stretch;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 10px; }
+.live-stage .legend { flex: 0 0 170px; flex-direction: column; align-self: flex-start; gap: 7px; margin: 4px 0 0; font-size: 13px; }
+.live-stage .scene { flex: 1 1 auto; min-width: 0; min-height: 0; display: flex; align-items: center; justify-content: center; }
+.live-stage .scene > svg { width: 100%; height: 100%; max-height: none; }
+.live-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.live-bar .controls { margin: 0; }
+.live-bar .status { flex: 1 1 320px; margin: 0; min-height: 0; font-size: 15px; }
+.live-panels { flex: 0 0 clamp(210px, 29vh, 290px); display: flex; gap: 10px; min-height: 0; }
+.live-panels > * { flex: 1 1 0; min-width: 0; min-height: 0; overflow: auto; }
+.live-panels > .wide { flex-grow: 1.35; }
+.live-panels > .wider { flex-grow: 1.7; }
+.live-panels > .widest { flex-grow: 2; }
+.live-panels > .narrow { flex-grow: 0.8; }
+.live-panels > .stack { display: flex; flex-direction: column; gap: 10px; }
+.live-panels .card { height: 100%; overflow: auto; padding: 10px 12px; }
+.live-panels > .stack > .card { height: auto; flex: 0 0 auto; }
+.live-panels .card h3 { font-size: 12.5px; margin-bottom: 6px; }
+.live-panels .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.live-panels .stat { padding: 5px 8px; }
+.live-panels .stat b { font-size: 18px; }
+.live-panels .stat span { font-size: 12px; }
+.live-panels .moveline { grid-template-columns: 112px 1fr; gap: 4px 10px; font-size: 13.5px; }
+.live-panels .calc { font-size: 15px; margin-top: 6px; }
+.live-panels .live-log { max-height: none; font-size: 13px; }
+.live-panels table.data { font-size: 13px; }
+.live-panels .pgrids { gap: 8px; }
+.live-panels .pgrid h4 { font-size: 12.5px; margin-bottom: 4px; }
+.live-panels .pgrid table { font-size: 11.5px; border-spacing: 2px; }
+.live-panels .pgrid td { padding: 3px 1px; }
+.live-panels .axis-note { display: none; }
+.live-panels table.qd td, .live-panels table.qd th { padding: 3px 4px; font-size: 12px; }
+.live-panels .steps-list { margin: 0 0 8px; }
+/* Side layout (square scenes such as the New York map): columns of panels left and right of a full-height scene. */
+.live-main { flex: 1 1 auto; min-height: 0; display: flex; gap: 10px; }
+.live-side { flex: 1 1 0; min-width: 0; min-height: 0; overflow: auto; display: flex; flex-direction: column; gap: 10px; }
+.live-side.right { flex-grow: 1.2; }
+.live-side .card { flex: 0 0 auto; padding: 10px 12px; }
+.live-side .card h3 { font-size: 12.5px; margin-bottom: 6px; }
+.live-side .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.live-side .stat { padding: 5px 8px; }
+.live-side .stat b { font-size: 18px; }
+.live-side .stat span { font-size: 12px; }
+.live-side .moveline { grid-template-columns: 112px 1fr; gap: 4px 10px; font-size: 13.5px; }
+.live-side .calc { font-size: 15px; margin-top: 6px; }
+.live-side .live-log { max-height: 96px; font-size: 13px; }
+.live-side table.data { font-size: 13px; }
+.live-side table.qd td, .live-side table.qd th { padding: 3px 4px; font-size: 12px; }
+.live-side .steps-list { margin: 0 0 8px; }
+.live-main > .live-stage { flex: 0 0 auto; position: relative; padding: 6px; }
+.live-main > .live-stage .legend { position: absolute; top: 12px; left: 12px; z-index: 1; margin: 0; padding: 8px 10px; border-radius: 10px;
+  background: rgba(14, 24, 34, .86); flex-direction: column; gap: 5px; font-size: 12.5px; }
+@media (max-width: 900px) {
+  .live-main { flex: none; flex-direction: column; }
+  .live-main > .live-stage .legend { position: static; flex-direction: row; background: none; padding: 0 0 6px; }
+  .live-side { flex: none; overflow: visible; }
+}
+.rule-list { list-style: none; margin: 0 0 8px; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px 12px; font-size: 13px; color: var(--dim); }
+.rule-list strong { color: var(--text); }
+
+/* Guided lesson on one screen: controls column + scene, then explanation cards in a row ('top')
+   or a column beside a height-sized square scene ('side'). Narrow screens keep the stacked page. */
+.fit-stage { display: contents; }
+.explain > div:empty { display: none; }
+@media (max-width: 900px) {
+  .fit-stage > .floor-wrap { order: -1; }
+}
+@media (min-width: 901px) {
+  #lesson .chapters { margin-bottom: 8px; }
+  #lesson .chapters button { min-height: 34px; padding: 3px 10px 3px 4px; font-size: 14px; }
+  #lesson .chapters .num { width: 24px; height: 24px; font-size: 13px; }
+  #lesson .step-head h2 { font-size: 25px; margin: 2px 0 4px; }
+  #lesson .lead { font-size: 16px; margin-bottom: 8px; max-width: none; }
+  #lesson .stepnav { margin-top: 10px; padding-top: 10px; }
+  .step-body.fit-top, .step-body.fit-side { display: flex; gap: 10px; min-height: 0; align-items: stretch; }
+  .step-body.fit-top { flex-direction: column; }
+  .fit-stage { display: flex; gap: 14px; min-height: 0; min-width: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 10px; position: relative; }
+  .fit-top .fit-stage { flex: 1 1 0; }
+  .fit-side .fit-stage { flex: 0 0 auto; }
+  .fit-stage > .stage-col { flex: 0 0 300px; min-width: 0; min-height: 0; overflow: auto; display: flex; flex-direction: column; gap: 10px; }
+  .fit-stage > .stage-col .controls { margin: 0; flex-direction: column; align-items: stretch; }
+  .fit-stage > .stage-col .controls > .btn, .fit-stage > .stage-col .play-pad .btn { width: 100%; }
+  .fit-stage > .stage-col .play-pad { grid-template-columns: minmax(0, 1fr); }
+  .fit-stage > .stage-col .legend { margin: 0; flex-direction: row; flex-wrap: wrap; gap: 4px 12px; font-size: 12.5px; }
+  .fit-top .fit-stage > .stage-col .legend { position: absolute; top: 12px; right: 14px; z-index: 1; max-width: 230px; flex-direction: column;
+    padding: 8px 10px; border-radius: 10px; background: rgba(24, 26, 32, .88); }
+  .fit-stage > .stage-col .btn { min-height: 40px; padding: 6px 12px; font-size: 14.5px; }
+  .fit-stage > .stage-col .play-pad .btn { min-height: 44px; }
+  .fit-stage > .stage-col .floor-caption { margin: 0; }
+  .fit-stage > .stage-col .status { margin: 0; font-size: 15px; }
+  .fit-stage > .floor-wrap { flex: 1 1 auto; min-width: 0; min-height: 0; display: flex; align-items: center; justify-content: center; gap: 10px;
+    background: none; border: 0; border-radius: 0; padding: 0; }
+  .fit-side .fit-stage > .floor-wrap { flex: 0 0 auto; }
+  .fit-stage > .floor-wrap > svg { width: 100%; height: 100%; max-height: none; }
+  .fit-stage > .floor-wrap > div:not(.wide) { max-height: 100%; overflow: auto; }
+  .fit-stage > .floor-wrap > .wide { display: flex; gap: 14px; width: 100%; height: 100%; align-items: center; }
+  .fit-stage > .floor-wrap > .wide > * { flex: 1 1 0; min-width: 0; max-height: 100%; overflow: auto; }
+  .fit-stage > .floor-wrap.trio { align-items: stretch; }
+  .fit-stage > .floor-wrap.trio > figure { flex: 1 1 0; min-width: 0; min-height: 0; display: flex; flex-direction: column; justify-content: center; }
+  .fit-stage > .floor-wrap.trio > figure > svg { flex: 0 1 auto; min-height: 0; height: auto; }
+  .fit-top .explain { flex: 0 0 auto; max-height: clamp(200px, 31vh, 310px); display: flex; gap: 10px; overflow-x: auto; min-height: 0; }
+  .fit-top .explain > * { flex: 1 1 0; min-width: 250px; overflow: auto; }
+  .fit-top .explain > div:not(:empty) { display: flex; flex-direction: column; gap: 10px; }
+  .fit-top .explain > div > .card:only-child { flex: 1 1 auto; }
+  .fit-side .explain { flex: 1 1 0; min-width: 0; overflow: auto; display: flex; flex-direction: column; gap: 10px; }
+  .fit-side .explain > * { flex: 0 0 auto; }
+  .fit-side .shiftlog { max-height: 110px; }
+  .fit-top .explain .card, .fit-side .explain .card { padding: 11px 13px; }
+  .step-body .explain .card h3 { font-size: 12.5px; margin-bottom: 6px; }
+  .fit-top .explain .moveline, .fit-side .explain .moveline { grid-template-columns: 118px 1fr; font-size: 14px; }
+  .fit-top .explain .calc, .fit-side .explain .calc { font-size: 16px; }
+}
+@media (max-width: 900px) {
+  .live-stage { flex-direction: column; }
+  .live-stage .legend { flex: none; flex-direction: row; }
+  .live-stage .scene > svg { height: auto; }
+  .live-panels { flex: none; flex-direction: column; }
+  .live-panels > * { flex: none; overflow: visible; }
+  .live-panels .card { height: auto; }
+}
+
+#error-banner { position: fixed; left: 16px; right: 16px; bottom: 16px; padding: 12px 16px; border-radius: 10px; background: #4a1d1b; border: 1px solid var(--red); color: var(--text); z-index: 10; }
+
+@media (max-width: 960px) {
+  .step-body, .lab-grid { grid-template-columns: 1fr; }
+  .top, main { padding-left: 16px; padding-right: 16px; }
+  .step-head h2 { font-size: 26px; }
+  .lead { font-size: 17px; }
+  .floor-wrap.pair { grid-template-columns: 1fr; }
+}
+@media (max-width: 520px) {
+  body { font-size: 16px; }
+  .chapters button { padding-right: 8px; font-size: 13px; }
+  .chapters .label { display: none; }
+  .chapters button[aria-current="step"] .label { display: inline; }
+  .moveline { grid-template-columns: 120px 1fr; }
+  .lab-head, .live-head { flex-direction: column; align-items: flex-start; }
+  dialog.settings-pop { inset: 12px 12px auto 12px; width: auto; max-height: calc(100vh - 24px); }
+  .settings { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .robot { transition: none !important; }
+}
+@media print {
+  .top .modes, .speed, .controls, .stepnav, .chapters { display: none; }
+}
+
+/* Traffic signal lesson additions (loaded after the shared robot-lab stylesheet). */
+svg.junction { width: 100%; height: auto; max-height: 440px; display: block; user-select: none; }
+.floor-wrap > .wide { width: 100%; }
+.floor-wrap.trio { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; align-items: start; }
+.step-body.wide-stage { grid-template-columns: minmax(0, 1fr); }
+.step-body.wide-stage .explain { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; align-items: start; }
+.trio figure { margin: 0; width: 100%; }
+.trio figcaption { color: var(--dim); font-size: 14px; text-align: center; margin-top: 4px; }
+.trio figcaption b { color: var(--text); display: block; font-size: 15px; }
+.car-main, .car-side { transition: opacity .2s; }
+.pgrids { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.pgrid h4 { margin: 0 0 6px; font-size: 14px; color: var(--dim); font-weight: 600; }
+.pgrid table { border-collapse: separate; border-spacing: 3px; width: 100%; font-size: 13px; }
+.pgrid th { color: var(--faint); font-weight: 600; padding: 2px; text-align: center; }
+.pgrid th.corner { text-align: left; font-size: 11px; line-height: 1.2; }
+.pgrid td { text-align: center; border-radius: 6px; padding: 7px 2px; font-weight: 700; background: #262a33; color: var(--faint); }
+.pgrid td.keep { background: rgba(126,174,184,.28); color: #d9eef2; }
+.pgrid td.switch { background: rgba(232,145,60,.32); color: #ffe2c4; }
+.pgrid td.hl { outline: 2px solid var(--text); }
+.pgrid td small { display: block; font-weight: 400; font-size: 11px; opacity: .85; }
+.axis-note { color: var(--faint); font-size: 12px; margin: 4px 0 0; }
+.play-pad { display: flex; gap: 10px; flex-wrap: wrap; }
+.play-pad .btn { min-width: 150px; }
+.kbd { display: inline-block; border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; font-size: 12px; color: var(--dim); }
+@media (max-width: 960px) {
+  .floor-wrap.trio { grid-template-columns: 1fr; }
+  .step-body, .lab-grid { grid-template-columns: minmax(0, 1fr); }
+}
+.card { overflow-x: auto; }
+.formula .term { white-space: normal; }
+.settings input[type="range"] { min-width: 0; max-width: 100%; }
+@media (max-width: 520px) {
+  .pgrids { grid-template-columns: 1fr; }
+  .settings { grid-template-columns: minmax(0, 1fr); }
+}
+
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <p class="kicker">AI in Transportation · Learning by reward</p>
+    <h1>Train a traffic light</h1>
+  </div>
+  <nav class="modes" role="tablist" aria-label="View">
+    <button id="mode-lesson" role="tab" aria-selected="true" aria-controls="lesson">Guided lesson</button>
+    <button id="mode-lab" role="tab" aria-selected="false" aria-controls="lab">Signal lab</button>
+  </nav>
+  <label class="speed">Speed
+    <select id="speed" aria-label="Animation speed">
+      <option value="slow">Slow</option>
+      <option value="normal" selected>Normal</option>
+      <option value="fast">Fast</option>
+    </select>
+  </label>
+</header>
+<main>
+  <section id="lesson" role="tabpanel" aria-labelledby="mode-lesson">
+    <nav aria-label="Lesson steps"><ol class="chapters" id="chapters"></ol></nav>
+    <article id="step" aria-live="off"></article>
+    <footer class="stepnav">
+      <button class="btn" id="back">&larr; Back</button>
+      <span class="count" id="count"></span>
+      <button class="btn primary" id="next">Next &rarr;</button>
+    </footer>
+  </section>
+  <section id="lab" role="tabpanel" aria-labelledby="mode-lab" hidden></section>
+</main>
+<div id="error-banner" role="alert" hidden></div>
+<script type="module">
+
+// Seeded random numbers (mulberry32), identical to src/robot-lab/rl.js and the notebooks' Python port.
+function seededRandom(seed) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+// Shared page pieces for the transportation lesson pages: DOM helpers, small SVG charts and the step/lab navigation.
+const SVGNS = 'http://www.w3.org/2000/svg';
+const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const SPEEDS = {
+  slow: {move: 700, trip: 150, batch: 70},
+  normal: {move: 360, trip: 70, batch: 28},
+  fast: {move: 120, trip: 18, batch: 4},
+};
+const page = {speed: 'normal', generation: 0, keyHandler: null, current: 0, steps: [], mountLab: null};
+const timing = () => SPEEDS[page.speed];
+const wait = ms => new Promise(resolve => setTimeout(resolve, REDUCED ? 0 : ms));
+
+function h(tag, props = {}, ...children) {
+  const node = document.createElement(tag);
+  for (const [key, value] of Object.entries(props || {})) {
+    if (value === false || value === null || value === undefined) continue;
+    if (key === 'class') node.className = value;
+    else if (key === 'text') node.textContent = value;
+    else if (key === 'html') node.innerHTML = value;
+    else if (key.startsWith('on')) node.addEventListener(key.slice(2), value);
+    else node.setAttribute(key, value === true ? '' : value);
+  }
+  for (const child of children.flat()) {
+    if (child === null || child === undefined || child === false) continue;
+    node.append(child.nodeType ? child : document.createTextNode(String(child)));
+  }
+  return node;
+}
+
+function s(tag, attrs = {}, content) {
+  const node = document.createElementNS(SVGNS, tag);
+  for (const [key, value] of Object.entries(attrs)) node.setAttribute(key, value);
+  if (content !== undefined) node.textContent = content;
+  return node;
+}
+
+const minus = n => (n < 0 ? `\u2212${Math.abs(n)}` : String(n));
+const signed = n => (n > 0 ? `+${n}` : minus(n));
+const money = n => `${n < 0 ? '\u2212' : ''}$${Math.abs(n).toFixed(2)}`;
+const round1 = n => Math.round(n * 10) / 10;
+
+function button(label, onclick, {primary = false, title} = {}) {
+  return h('button', {class: `btn${primary ? ' primary' : ''}`, type: 'button', onclick, title}, label);
+}
+
+function card(title, ...children) {
+  return h('section', {class: 'card'}, title ? h('h3', {}, title) : null, ...children);
+}
+
+function accent(title, ...children) {
+  return h('section', {class: 'card accent'}, h('h3', {}, title), ...children);
+}
+
+function legend(items) {
+  return h('div', {class: 'legend'}, ...items.map(([label, color]) => h('span', {style: `--swatch:${color}`}, label)));
+}
+
+function terms(pairs) {
+  return h('dl', {class: 'terms'}, ...pairs.flatMap(([term, meaning]) => [h('dt', {}, term), h('dd', {}, meaning)]));
+}
+
+function dataTable(headers, rows, {numeric = []} = {}) {
+  return h('table', {class: 'data'},
+    h('thead', {}, h('tr', {}, ...headers.map((t, i) => h('th', {class: numeric.includes(i) ? 'num' : null}, t)))),
+    h('tbody', {}, ...rows.map(row => h('tr', {class: row.className || null},
+      ...row.cells.map((c, i) => h('td', {class: numeric.includes(i) ? 'num' : null}, c))))));
+}
+
+/* ── Small charts ───────────────────────────────────────────────────── */
+
+function niceMax(value) {
+  const steps = [5, 10, 20, 25, 50, 100, 150, 200, 250, 300, 400, 500, 600, 800, 1000];
+  return steps.find(step => step >= value) || Math.ceil(value / 100) * 100;
+}
+
+function chartFrame(title, width, height) {
+  return s('svg', {viewBox: `0 0 ${width} ${height}`, class: 'chart', role: 'img', 'aria-label': title});
+}
+
+function axes(chart, {left, top, plotW, plotH, yMax, yLabel, xLabel, width}) {
+  for (const fraction of [0, 0.5, 1]) {
+    const y = top + plotH - fraction * plotH;
+    chart.append(s('line', {x1: left, y1: y, x2: left + plotW, y2: y, stroke: '#2e323d', 'stroke-width': 1}));
+    chart.append(s('text', {x: left - 8, y: y + 5, 'text-anchor': 'end', fill: '#858a97', 'font-size': 13}, String(Math.round(fraction * yMax))));
+  }
+  if (yLabel) chart.append(s('text', {x: left, y: top - 9, fill: '#b9bdc6', 'font-size': 13}, yLabel));
+  if (xLabel) chart.append(s('text', {x: width - 12, y: top + plotH + 32, 'text-anchor': 'end', fill: '#b9bdc6', 'font-size': 13}, xLabel));
+}
+
+function barChart({values, ref = null, refLabel = '', max, title, yLabel = '', xLabel = '', color = '#7eaeb8', height = 210, firstIndex = 1, labels = null, valueLabels = false, width = 560}) {
+  const left = 44, right = ref === null ? 14 : 96, top = 26, bottom = 38;
+  const plotW = width - left - right, plotH = height - top - bottom;
+  const yMax = niceMax(max ?? Math.max(1, ...values, ref ?? 0));
+  const chart = chartFrame(title, width, height);
+  axes(chart, {left, top, plotW, plotH, yMax, yLabel, xLabel, width});
+  const slot = plotW / Math.max(values.length, 1);
+  values.forEach((v, index) => {
+    const barH = Math.max(1.5, (Math.min(v, yMax) / yMax) * plotH);
+    const fill = Array.isArray(color) ? color[index] : color;
+    chart.append(s('rect', {x: left + index * slot + slot * 0.15, y: top + plotH - barH, width: slot * 0.7, height: barH, rx: 2, fill}));
+    if (valueLabels) chart.append(s('text', {x: left + index * slot + slot / 2, y: top + plotH - barH - 6, 'text-anchor': 'middle', fill: '#f5f3f0', 'font-size': 13, 'font-weight': 700}, typeof valueLabels === 'function' ? valueLabels(v) : String(v)));
+    const label = labels ? labels[index] : firstIndex + index;
+    if (labels || values.length <= 20 || label === firstIndex || label % 10 === 0) {
+      chart.append(s('text', {x: left + index * slot + slot / 2, y: top + plotH + 17, 'text-anchor': 'middle', fill: '#858a97', 'font-size': 12}, String(label)));
+    }
+  });
+  if (ref !== null) {
+    const y = top + plotH - (ref / yMax) * plotH;
+    chart.append(s('line', {x1: left, y1: y, x2: left + plotW + 4, y2: y, stroke: '#e8913c', 'stroke-width': 2, 'stroke-dasharray': '7 6'}));
+    chart.append(s('text', {x: left + plotW + 8, y: y + 5, fill: '#e8913c', 'font-size': 13, 'font-weight': 700}, refLabel));
+  }
+  return chart;
+}
+
+function lineChart({series, xMax, yMax, title, yLabel, xLabel, height = 240, refs = []}) {
+  const width = 560;
+  const left = 44, right = refs.length ? 110 : 18, top = 40, bottom = 38;
+  const plotW = width - left - right, plotH = height - top - bottom;
+  const chart = chartFrame(title, width, height);
+  axes(chart, {left, top, plotW, plotH, yMax, yLabel, xLabel, width});
+  for (const x of [0, xMax / 2, xMax]) {
+    chart.append(s('text', {x: left + (x / xMax) * plotW, y: top + plotH + 17, 'text-anchor': 'middle', fill: '#858a97', 'font-size': 12}, String(x)));
+  }
+  for (const ref of refs) {
+    const y = top + plotH - (Math.min(ref.value, yMax) / yMax) * plotH;
+    chart.append(s('line', {x1: left, y1: y, x2: left + plotW + 4, y2: y, stroke: ref.color, 'stroke-width': 2, 'stroke-dasharray': '7 6'}));
+    chart.append(s('text', {x: left + plotW + 8, y: y + 5, fill: ref.color, 'font-size': 12, 'font-weight': 700}, ref.label));
+  }
+  for (const line of series) {
+    if (!line.points.length) continue;
+    const pts = line.points.map(([x, y]) => `${left + (x / xMax) * plotW},${top + plotH - (Math.min(y, yMax) / yMax) * plotH}`);
+    chart.append(s('polyline', {points: pts.join(' '), fill: 'none', stroke: line.color, 'stroke-width': 3, 'stroke-linejoin': 'round', 'stroke-dasharray': line.dash || ''}));
+  }
+  let lx = width - right;
+  for (const line of [...series].reverse()) {
+    lx -= 26 + line.name.length * 7.4;
+    chart.append(s('rect', {x: lx, y: 9, width: 16, height: 5, fill: line.color}));
+    chart.append(s('text', {x: lx + 21, y: 16, fill: '#b9bdc6', 'font-size': 13}, line.name));
+  }
+  return chart;
+}
+
+/* ── Lesson and lab navigation ─────────────────────────────────────── */
+
+function renderChapters() {
+  const list = document.getElementById('chapters');
+  list.replaceChildren(...page.steps.map((step, index) => h('li', {},
+    h('button', {type: 'button', 'aria-current': index === page.current ? 'step' : null, class: index < page.current ? 'done' : '',
+      onclick: () => renderStep(index)}, h('span', {class: 'num'}, String(index + 1)), h('span', {class: 'label'}, step.label)))));
+}
+
+function renderStep(index) {
+  page.generation += 1;
+  page.keyHandler = null;
+  page.current = Math.max(0, Math.min(page.steps.length - 1, index));
+  const step = page.steps[page.current];
+  const layout = step.layout || page.layout;
+  const article = document.getElementById('step');
+  const floorWrap = h('div', {class: 'floor-wrap'});
+  const controls = h('div', {class: 'controls'});
+  const status = h('p', {class: 'status', 'aria-live': 'polite'});
+  const stageCol = h('div', {class: 'stage-col'}, controls, status);
+  const explain = h('aside', {class: 'explain', 'aria-label': 'Explanation'});
+  const body = h('div', {class: `step-body fit-${layout}`}, h('div', {class: 'fit-stage'}, stageCol, floorWrap), explain);
+  article.replaceChildren(
+    h('div', {class: 'step-head'}, h('p', {class: 'step-kicker'}, `Step ${page.current + 1} of ${page.steps.length} \u00b7 ${step.stage}`),
+      h('h2', {}, step.title), h('p', {class: 'lead'}, step.lead)),
+    body);
+  step.mount({floorWrap, controls, status, explain, stageCol, g: page.generation});
+  live.fitLesson(body, floorWrap, {layout, ratio: page.ratio});
+  renderChapters();
+  document.getElementById('count').textContent = `${page.current + 1} / ${page.steps.length}`;
+  document.getElementById('back').disabled = page.current === 0;
+  document.getElementById('next').disabled = page.current === page.steps.length - 1;
+  if (location.hash !== `#${step.id}`) history.replaceState(null, '', `#${step.id}`);
+}
+
+function showMode(mode) {
+  const lab = mode === 'lab';
+  document.getElementById('lesson').hidden = lab;
+  document.getElementById('lab').hidden = !lab;
+  document.getElementById('mode-lesson').setAttribute('aria-selected', String(!lab));
+  document.getElementById('mode-lab').setAttribute('aria-selected', String(lab));
+  document.body.classList.toggle('lab-mode', lab);
+  if (lab) {
+    page.generation += 1;
+    page.keyHandler = null;
+    page.mountLab(document.getElementById('lab'));
+    history.replaceState(null, '', '#lab');
+  } else renderStep(page.current);
+}
+
+function routeFromHash() {
+  const hash = location.hash.slice(1);
+  if (hash === 'lab') { showMode('lab'); return; }
+  const index = page.steps.findIndex(step => step.id === hash);
+  page.current = index >= 0 ? index : 0;
+  showMode('lesson');
+}
+
+function showError(message) {
+  const banner = document.getElementById('error-banner');
+  banner.textContent = `Something went wrong (${message}). Reload the page before continuing; do not trust the current result.`;
+  banner.hidden = false;
+}
+
+function startPage(steps, mountLab, {layout = 'top', ratio = 1} = {}) {
+  page.steps = steps;
+  page.mountLab = mountLab;
+  page.layout = layout;
+  page.ratio = ratio;
+  document.getElementById('mode-lesson').addEventListener('click', () => showMode('lesson'));
+  document.getElementById('mode-lab').addEventListener('click', () => showMode('lab'));
+  document.getElementById('back').addEventListener('click', () => { renderStep(page.current - 1); window.scrollTo({top: 0}); });
+  document.getElementById('next').addEventListener('click', () => { renderStep(page.current + 1); window.scrollTo({top: 0}); });
+  document.getElementById('speed').addEventListener('change', event => { page.speed = event.target.value; });
+  window.addEventListener('keydown', event => {
+    const tag = (event.target.tagName || '').toLowerCase();
+    if (['input', 'select', 'textarea'].includes(tag)) return;
+    if (page.keyHandler) page.keyHandler(event);
+  });
+  window.addEventListener('hashchange', routeFromHash);
+  window.addEventListener('error', event => showError(event.message));
+  window.addEventListener('unhandledrejection', event => showError(String(event.reason)));
+  routeFromHash();
+}
+
+const sig = (() => {
+// One intersection, two roads, and a traffic light that learns when to switch (tabular Q-learning).
+// Shared by the lesson page, the build checks, the deck and (as a Python port) the notebook.
+
+const TICK_SECONDS = 5;
+const HOUR_TICKS = 720;
+const ROADS = [{key: 'main', label: 'Main St'}, {key: 'side', label: 'Side St'}];
+const ACTIONS = [{key: 'keep', label: 'Keep'}, {key: 'switch', label: 'Switch'}];
+const LEVELS = ['0', '1\u20132', '3\u20135', '6+'];
+const STATES = 32;
+const DEFAULTS = {mainRate: 0.4, sideRate: 0.15, alpha: 0.1, gamma: 0.9, exploration: 0.1, reward: 'all', minGreen: 2, maxGreen: 12};
+
+const level = n => (n === 0 ? 0 : n <= 2 ? 1 : n <= 5 ? 2 : 3);
+
+// State = which road is green (2) x cars waiting on Main St (4 levels) x cars waiting on Side St (4 levels).
+function stateOf(world) {
+  return world.green * 16 + level(world.queues[0].length) * 4 + level(world.queues[1].length);
+}
+
+function describeState(s) {
+  return {green: Math.floor(s / 16), main: Math.floor(s / 4) % 4, side: s % 4};
+}
+
+function stateLabel(s) {
+  const d = describeState(s);
+  return `${ROADS[d.green].label} green \u00b7 Main ${LEVELS[d.main]} \u00b7 Side ${LEVELS[d.side]}`;
+}
+
+// Cars that arrive in each 5-second tick: [main, side], each 0 or 1.
+function makeArrivals(random, ticks, rates) {
+  const out = [];
+  for (let t = 0; t < ticks; t += 1) out.push([random() < rates.mainRate ? 1 : 0, random() < rates.sideRate ? 1 : 0]);
+  return out;
+}
+
+function arrivalsForSeed(seed, ticks = HOUR_TICKS, rates = DEFAULTS) {
+  return makeArrivals(seededRandom(seed), ticks, rates);
+}
+
+function createWorld() {
+  return {t: 0, green: 0, since: 0, queues: [[], []], waits: [[], []], switches: 0, waitingTicks: 0};
+}
+
+// Timing rules the learner cannot override. rules = {minGreen, maxGreen} in ticks; 0 turns a rule off.
+// Too soon to switch: keep. Green too long while a car waits on red: switch.
+function applyRules(world, chosen, rules = DEFAULTS) {
+  if (chosen === 1 && rules.minGreen > 0 && world.since < rules.minGreen) return {action: 0, rule: 'min'};
+  if (chosen === 0 && rules.maxGreen > 0 && world.since >= rules.maxGreen && world.queues[1 - world.green].length > 0) {
+    return {action: 1, rule: 'max'};
+  }
+  return {action: chosen, rule: null};
+}
+
+// One tick. Keep: the green road lets one car through. Switch: yellow then all-red for the whole tick
+// (a fixed safety rule), nobody moves, and the other road is green from the next tick.
+function tick(world, chosen, arriving, reward = 'all', rules = DEFAULTS) {
+  let released = null;
+  const {action, rule} = applyRules(world, chosen, rules);
+  const switched = action === 1;
+  if (switched) {
+    world.green = 1 - world.green;
+    world.since = 0;
+    world.switches += 1;
+  } else {
+    world.since += 1;
+    const queue = world.queues[world.green];
+    if (queue.length) {
+      world.waits[world.green].push(world.t - queue.shift());
+      released = world.green;
+    }
+  }
+  world.t += 1;
+  arriving.forEach((n, road) => { if (n) world.queues[road].push(world.t); });
+  const waiting = world.queues[0].length + world.queues[1].length;
+  world.waitingTicks += waiting;
+  const counted = reward === 'main' ? world.queues[0].length : waiting;
+  return {points: -counted, action, rule, released, switched, waiting};
+}
+
+function createTable() {
+  return new Array(STATES * 2).fill(null);
+}
+
+// Untried choices count as 0; every real outcome is negative, so untried choices look attractive early on.
+const scoreOf = (table, s, a) => (table[s * 2 + a] === null ? 0 : table[s * 2 + a]);
+const bestScore = (table, s) => Math.max(scoreOf(table, s, 0), scoreOf(table, s, 1));
+
+function greedy(table, s) {
+  return scoreOf(table, s, 1) > scoreOf(table, s, 0) ? 1 : 0;
+}
+
+function choose(table, s, exploration, random) {
+  if (random() < exploration) return {action: random() < 0.5 ? 0 : 1, explored: true, tie: false};
+  const keep = scoreOf(table, s, 0);
+  const change = scoreOf(table, s, 1);
+  if (keep === change) return {action: random() < 0.5 ? 0 : 1, explored: false, tie: true};
+  return {action: change > keep ? 1 : 0, explored: false, tie: false};
+}
+
+// new score = old score + alpha x (points now + gamma x best score in the next situation - old score)
+function learn(table, s, a, points, next, alpha, gamma) {
+  const old = scoreOf(table, s, a);
+  const target = points + gamma * bestScore(table, next);
+  const updated = old + alpha * (target - old);
+  table[s * 2 + a] = updated;
+  return {old, target, updated};
+}
+
+function createSession({seed = 1, mainRate = DEFAULTS.mainRate, sideRate = DEFAULTS.sideRate, alpha = DEFAULTS.alpha,
+  gamma = DEFAULTS.gamma, exploration = DEFAULTS.exploration, reward = DEFAULTS.reward, minGreen = DEFAULTS.minGreen,
+  maxGreen = DEFAULTS.maxGreen} = {}) {
+  return {seed, random: seededRandom(seed), rates: {mainRate, sideRate}, alpha, gamma, exploration, reward,
+    rules: {minGreen, maxGreen}, table: createTable(), hours: []};
+}
+
+// One practice tick: look, choose, act, receive points, update the score of the action actually taken.
+function practiceTick(session, world, arriving) {
+  const s = stateOf(world);
+  const {action: chosen, explored, tie} = choose(session.table, s, session.exploration, session.random);
+  const result = tick(world, chosen, arriving, session.reward, session.rules);
+  const next = stateOf(world);
+  const change = learn(session.table, s, result.action, result.points, next, session.alpha, session.gamma);
+  return {s, chosen, explored, tie, next, ...result, ...change};
+}
+
+// One practice hour of fresh random traffic, starting from an empty intersection, one tick at a time.
+function* hourTicks(session) {
+  const arrivals = makeArrivals(session.random, HOUR_TICKS, session.rates);
+  const world = createWorld();
+  for (const arriving of arrivals) yield {world, step: practiceTick(session, world, arriving)};
+  const summary = summarize(world);
+  session.hours.push(summary);
+  return summary;
+}
+
+function trainHour(session) {
+  const hour = hourTicks(session);
+  let next = hour.next();
+  while (!next.done) next = hour.next();
+  return next.value;
+}
+
+function train(session, hours) {
+  let last = null;
+  for (let k = 0; k < hours; k += 1) last = trainHour(session);
+  return last;
+}
+
+/* Controllers used in tests: each looks at the world and returns 0 (keep) or 1 (switch). */
+
+const controllers = {
+  fixed: (mainTicks, sideTicks) => world => (world.since + 1 >= (world.green === 0 ? mainTicks : sideTicks) ? 1 : 0),
+  longerLine: () => world => (world.queues[1 - world.green].length > world.queues[world.green].length ? 1 : 0),
+  learned: table => world => greedy(table, stateOf(world)),
+};
+
+function runHour(controller, arrivals, {reward = 'all', rules = DEFAULTS, onTick = null} = {}) {
+  const world = createWorld();
+  arrivals.forEach((arriving, index) => {
+    const result = tick(world, controller(world), arriving, reward, rules);
+    if (onTick) onTick(world, result, index);
+  });
+  return summarize(world);
+}
+
+function summarize(world) {
+  const served = world.waits[0].length + world.waits[1].length;
+  const stillWaiting = world.queues.map(q => q.map(arrived => world.t - arrived));
+  const allWaits = [...world.waits[0], ...world.waits[1], ...stillWaiting[0], ...stillWaiting[1]];
+  const longest = allWaits.length ? Math.max(...allWaits) : 0;
+  const longestSide = Math.max(0, ...world.waits[1], ...stillWaiting[1]);
+  return {
+    ticks: world.t,
+    served,
+    servedMain: world.waits[0].length,
+    servedSide: world.waits[1].length,
+    leftWaiting: world.queues[0].length + world.queues[1].length,
+    switches: world.switches,
+    waitingTicks: world.waitingTicks,
+    // Average seconds of waiting per car that arrived, counting cars still in line at the end.
+    avgWait: Math.round((world.waitingTicks * TICK_SECONDS / Math.max(1, served + world.queues[0].length + world.queues[1].length)) * 10) / 10,
+    longestWait: longest * TICK_SECONDS,
+    longestSideWait: longestSide * TICK_SECONDS,
+  };
+}
+
+return {TICK_SECONDS, HOUR_TICKS, ROADS, ACTIONS, LEVELS, STATES, DEFAULTS, level, stateOf, describeState, stateLabel, makeArrivals, arrivalsForSeed, createWorld, applyRules, tick, createTable, scoreOf, bestScore, greedy, choose, learn, createSession, practiceTick, hourTicks, trainHour, train, controllers, runHour, summarize};
+})();
+// Settings and every number the traffic lesson, the notebook check and the deck quote.
+
+const SIGNAL_LESSON = {
+  seed: 1,
+  trainHours: 30,
+  testSeeds: [101, 102, 103, 104, 105],
+  playSeed: 5,
+  playTicks: 24,
+  fixedMain: 7,
+  fixedSide: 4,
+  stepTicks: 12,
+};
+
+function signalSession(options = {}) {
+  return sig.createSession({seed: SIGNAL_LESSON.seed, ...options});
+}
+
+const fixedController = () => sig.controllers.fixed(SIGNAL_LESSON.fixedMain, SIGNAL_LESSON.fixedSide);
+
+// Average over the five test hours; every controller sees exactly the same cars.
+function testControllers(entries, rates = sig.DEFAULTS, reward = 'all', rules = sig.DEFAULTS) {
+  const hours = SIGNAL_LESSON.testSeeds.map(seed => sig.arrivalsForSeed(seed, sig.HOUR_TICKS, rates));
+  return Object.fromEntries(entries.map(([name, controller]) => {
+    const rows = hours.map(arrivals => sig.runHour(controller, arrivals, {reward, rules}));
+    const mean = key => Math.round(10 * rows.reduce((a, r) => a + r[key], 0) / rows.length) / 10;
+    return [name, {avgWait: mean('avgWait'), longestWait: mean('longestWait'), longestSideWait: mean('longestSideWait'),
+      served: mean('served'), leftWaiting: mean('leftWaiting'), switches: mean('switches')}];
+  }));
+}
+
+function policyGrid(table) {
+  return Array.from({length: sig.STATES}, (_, s) => {
+    const keep = table[s * 2];
+    const change = table[s * 2 + 1];
+    return {s, keep, change, choice: keep === null && change === null ? null : sig.greedy(table, s)};
+  });
+}
+
+function computeSignalFacts() {
+  const L = SIGNAL_LESSON;
+  const facts = {lesson: L, defaults: sig.DEFAULTS, tickSeconds: sig.TICK_SECONDS, hourTicks: sig.HOUR_TICKS,
+    carsPerMinute: {main: sig.DEFAULTS.mainRate * 12, side: sig.DEFAULTS.sideRate * 12}};
+
+  const play = sig.arrivalsForSeed(L.playSeed, L.playTicks);
+  facts.play = {cars: play.reduce((a, [m, s]) => a + m + s, 0), fixed: sig.runHour(fixedController(), play)};
+
+  const session = signalSession();
+  const world = sig.createWorld();
+  const firstHour = sig.makeArrivals(session.random, sig.HOUR_TICKS, session.rates);
+  facts.firstTicks = firstHour.slice(0, L.stepTicks).map(arriving => {
+    const t = sig.practiceTick(session, world, arriving);
+    return {state: sig.stateLabel(t.s), chosen: sig.ACTIONS[t.chosen].label, action: sig.ACTIONS[t.action].label, rule: t.rule,
+      explored: t.explored, points: t.points, old: t.old, target: Math.round(t.target * 1000) / 1000,
+      updated: Math.round(t.updated * 1000) / 1000};
+  });
+
+  const trained = signalSession();
+  const curve = [];
+  for (let h = 1; h <= L.trainHours; h += 1) {
+    const hour = sig.trainHour(trained);
+    const test = testControllers([['learned', sig.controllers.learned(trained.table)]]).learned;
+    curve.push({hour: h, practiceAvgWait: hour.avgWait, testAvgWait: test.avgWait});
+  }
+  facts.curve = curve;
+  const grid = policyGrid(trained.table);
+  facts.policy = grid.map(c => c.choice);
+  facts.policySwitchCount = grid.filter(c => c.choice === 1).length;
+  facts.policyUnvisited = grid.filter(c => c.choice === null).length;
+
+  facts.test = testControllers([
+    ['fixed', fixedController()],
+    ['longerLine', sig.controllers.longerLine()],
+    ['learned', sig.controllers.learned(trained.table)],
+  ]);
+
+  const mainOnly = signalSession({reward: 'main'});
+  sig.train(mainOnly, L.trainHours);
+  facts.mainOnly = testControllers([['learned', sig.controllers.learned(mainOnly.table)]]).learned;
+  const noRules = {minGreen: 0, maxGreen: 0};
+  const mainOnlyNoRules = signalSession({reward: 'main', ...noRules});
+  sig.train(mainOnlyNoRules, L.trainHours);
+  facts.mainOnlyNoRules = testControllers([['learned', sig.controllers.learned(mainOnlyNoRules.table)]], sig.DEFAULTS, 'all', noRules).learned;
+
+  const busySide = {mainRate: sig.DEFAULTS.mainRate, sideRate: 0.3};
+  facts.busySide = {rates: busySide, ...testControllers([
+    ['fixed', fixedController()],
+    ['longerLine', sig.controllers.longerLine()],
+    ['learned', sig.controllers.learned(trained.table)],
+  ], busySide)};
+  return facts;
+}
+
+// Isometric ("3D-style") intersection for the traffic-light lesson. Pure SVG, no libraries, works offline.
+// Same interface as before: new Junction({label, compact}); junction.update(world, result).
+
+const ISO_COS = Math.cos(Math.PI / 6);
+const ISO_SIN = Math.sin(Math.PI / 6);
+const ROAD = 7;          // half road width (ground units)
+const REACH = 62;        // how far each road runs from the centre
+const GAP = 6.2;         // space between queued cars
+const MAIN_LANE = 3.4;   // Main St cars drive east (+x) in the lane at y = +3.4
+const SIDE_LANE = 3.4;   // Side St cars drive north (-y) in the lane at x = +3.4
+const STOP_MAIN = -ROAD - 1.5;
+const STOP_SIDE = ROAD + 1.5;
+const VISIBLE = 8;
+const COLORS = {green: '#5fd38d', yellow: '#f2c94c', red: '#ff5d5d', off: '#2a2f38'};
+
+class Junction {
+  constructor({label = 'Intersection', compact = false} = {}) {
+    this.compact = compact;
+    this.k = compact ? 3.7 : 4.4;
+    this.cx = 330;
+    this.cy = compact ? 200 : 214;
+    this.cars = new Map();
+    this.moveMs = 320;
+    this.el = s('svg', {viewBox: compact ? '70 0 590 380' : '0 0 660 430', class: 'junction iso', role: 'img', 'aria-label': label});
+    const defs = s('defs');
+    defs.innerHTML = '<filter id="glow" x="-1" y="-1" width="3" height="3"><feGaussianBlur stdDeviation="2.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>'
+      + '<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2230"/><stop offset="1" stop-color="#11141b"/></linearGradient>';
+    this.el.append(defs, s('rect', {x: 0, y: 0, width: 660, height: 440, fill: 'url(#sky)', rx: 14}));
+    this.drawGround();
+    this.back = s('g');
+    this.carLayer = s('g');
+    this.front = s('g');
+    this.hud = s('g');
+    this.el.append(this.back, this.carLayer, this.front, this.hud);
+    this.drawBuildings();
+    this.heads = [this.drawSignal(STOP_MAIN - 2.5, ROAD + 3, 'Main St'), this.drawSignal(ROAD + 3, STOP_SIDE + 2.5, 'Side St')];
+    this.drawLabels();
+  }
+
+  p(x, y, z = 0) {
+    return [this.cx + (x - y) * ISO_COS * this.k, this.cy + (x + y) * ISO_SIN * this.k - z * this.k];
+  }
+
+  poly(points, attrs) {
+    return s('polygon', {points: points.map(([x, y, z]) => this.p(x, y, z).map(v => v.toFixed(1)).join(',')).join(' '), ...attrs});
+  }
+
+  drawGround() {
+    const g = s('g');
+    const L = REACH + 6;
+    g.append(this.poly([[-L, -L], [L, -L], [L, L], [-L, L]], {fill: '#1f2a24', stroke: '#26332c'}));
+    // Sidewalks, roads, intersection box.
+    g.append(this.poly([[-REACH, -ROAD - 2.5], [REACH, -ROAD - 2.5], [REACH, ROAD + 2.5], [-REACH, ROAD + 2.5]], {fill: '#4a4f58'}));
+    g.append(this.poly([[-ROAD - 2.5, -REACH], [ROAD + 2.5, -REACH], [ROAD + 2.5, REACH], [-ROAD - 2.5, REACH]], {fill: '#4a4f58'}));
+    g.append(this.poly([[-REACH, -ROAD], [REACH, -ROAD], [REACH, ROAD], [-REACH, ROAD]], {fill: '#2b2f37'}));
+    g.append(this.poly([[-ROAD, -REACH], [ROAD, -REACH], [ROAD, REACH], [-ROAD, REACH]], {fill: '#2b2f37'}));
+    g.append(this.poly([[-ROAD, -ROAD], [ROAD, -ROAD], [ROAD, ROAD], [-ROAD, ROAD]], {fill: '#30353e'}));
+    // Centre lines.
+    for (let x = -REACH + 2; x < -ROAD - 3; x += 7) g.append(this.poly([[x, -0.25], [x + 3.5, -0.25], [x + 3.5, 0.25], [x, 0.25]], {fill: '#d9c46a'}));
+    for (let x = ROAD + 3; x < REACH - 3; x += 7) g.append(this.poly([[x, -0.25], [x + 3.5, -0.25], [x + 3.5, 0.25], [x, 0.25]], {fill: '#d9c46a'}));
+    for (let y = -REACH + 2; y < -ROAD - 3; y += 7) g.append(this.poly([[-0.25, y], [0.25, y], [0.25, y + 3.5], [-0.25, y + 3.5]], {fill: '#d9c46a'}));
+    for (let y = ROAD + 3; y < REACH - 3; y += 7) g.append(this.poly([[-0.25, y], [0.25, y], [0.25, y + 3.5], [-0.25, y + 3.5]], {fill: '#d9c46a'}));
+    // Stop lines and crosswalks on the two approaches the lesson uses.
+    g.append(this.poly([[STOP_MAIN - 0.6, 0.3], [STOP_MAIN, 0.3], [STOP_MAIN, ROAD], [STOP_MAIN - 0.6, ROAD]], {fill: '#f5f3f0'}));
+    g.append(this.poly([[0.3, STOP_SIDE], [ROAD, STOP_SIDE], [ROAD, STOP_SIDE + 0.6], [0.3, STOP_SIDE + 0.6]], {fill: '#f5f3f0'}));
+    for (let y = -ROAD + 0.6; y < ROAD; y += 2.2) g.append(this.poly([[-ROAD - 1.2, y], [-ROAD, y], [-ROAD, y + 1.2], [-ROAD - 1.2, y + 1.2]], {fill: '#8f949d'}));
+    for (let x = -ROAD + 0.6; x < ROAD; x += 2.2) g.append(this.poly([[x, ROAD], [x + 1.2, ROAD], [x + 1.2, ROAD + 1.2], [x, ROAD + 1.2]], {fill: '#8f949d'}));
+    this.el.append(g);
+  }
+
+  box(x0, y0, x1, y1, h, colors) {
+    const g = s('g');
+    g.append(this.poly([[x0, y1, 0], [x1, y1, 0], [x1, y1, h], [x0, y1, h]], {fill: colors[1]}));
+    g.append(this.poly([[x1, y0, 0], [x1, y1, 0], [x1, y1, h], [x1, y0, h]], {fill: colors[2]}));
+    g.append(this.poly([[x0, y0, h], [x1, y0, h], [x1, y1, h], [x0, y1, h]], {fill: colors[0]}));
+    return g;
+  }
+
+  drawBuildings() {
+    const blocks = [
+      [-60, -60, -16, -40, 24, ['#6b7486', '#4b5263', '#3a404d']],
+      [-38, -60, -16, -16, 14, ['#7b6f62', '#5a5046', '#463e37']],
+      [16, -60, 60, -34, 30, ['#5e6f7e', '#43505c', '#343e48']],
+      [-60, 16, -34, 44, 10, ['#6d6259', '#4f4740', '#3e3833']],
+    ];
+    for (const [x0, y0, x1, y1, h, colors] of blocks) {
+      const b = this.box(x0, y0, x1, y1, h, colors);
+      for (let row = 1; row < h / 4; row += 1) {
+        for (let col = x0 + 3; col < x1 - 2; col += 4) {
+          b.append(this.poly([[col, y1, row * 4], [col + 1.8, y1, row * 4], [col + 1.8, y1, row * 4 + 1.6], [col, y1, row * 4 + 1.6]], {fill: '#e8c983', opacity: (col * 7 + row * 13) % 5 ? 0.18 : 0.6}));
+        }
+      }
+      this.back.append(b);
+    }
+    // Low trees in the front corner keep cars visible.
+    for (const [x, y] of [[26, 22], [40, 30], [22, 44], [50, 48]]) {
+      const [px, py] = this.p(x, y);
+      this.front.append(s('ellipse', {cx: px, cy: py + 2, rx: 11, ry: 5, fill: '#0e1410', opacity: 0.5}),
+        s('circle', {cx: px, cy: py - 8, r: 9, fill: '#3f7a52'}), s('circle', {cx: px - 3, cy: py - 11, r: 5, fill: '#5a9a6b'}));
+    }
+  }
+
+  drawSignal(x, y, name) {
+    const g = s('g');
+    const [bx, by] = this.p(x, y, 0);
+    const [tx, ty] = this.p(x, y, 13);
+    g.append(s('line', {x1: bx, y1: by, x2: tx, y2: ty, stroke: '#1a1d23', 'stroke-width': 3.5}));
+    const w = this.compact ? 15 : 18, hgt = this.compact ? 40 : 48;
+    g.append(s('rect', {x: tx - w / 2, y: ty - hgt, width: w, height: hgt, rx: 4, fill: '#0b0c10', stroke: '#3b404b'}));
+    const lamps = ['red', 'yellow', 'green'].map((color, i) => {
+      const lamp = s('circle', {cx: tx, cy: ty - hgt + (i + 0.5) * (hgt / 3), r: w * 0.32, fill: COLORS.off});
+      g.append(lamp);
+      return {color, lamp};
+    });
+    const tag = s('text', {x: tx, y: ty - hgt - 6, 'text-anchor': 'middle', fill: '#b9bdc6', 'font-size': this.compact ? 11 : 12, 'font-weight': 700}, name);
+    g.append(tag);
+    this.front.append(g);
+    return {lamps};
+  }
+
+  drawLabels() {
+    const big = this.compact ? 14 : 17;
+    const [mx, my] = this.p(-REACH + 8, ROAD + 7);
+    const [sx, sy] = this.p(ROAD + 8, REACH - 6);
+    this.mainLabel = s('text', {x: mx, y: my, fill: '#f5f3f0', 'font-size': big, 'font-weight': 700}, 'Main St');
+    this.sideLabel = s('text', {x: sx, y: sy, fill: '#f5f3f0', 'font-size': big, 'font-weight': 700}, 'Side St');
+    this.mainCount = s('text', {x: mx, y: my + big + 3, fill: '#a8d4dd', 'font-size': big - 2}, '');
+    this.sideCount = s('text', {x: sx, y: sy + big + 3, fill: '#e8c983', 'font-size': big - 2}, '');
+    this.clock = s('text', {x: 640, y: 34, 'text-anchor': 'end', fill: '#f5f3f0', 'font-size': this.compact ? 20 : 24, 'font-weight': 700}, '0:00');
+    this.phase = s('text', {x: 640, y: 56, 'text-anchor': 'end', fill: '#b9bdc6', 'font-size': this.compact ? 12 : 14}, '');
+    this.more = [s('text', {fill: '#e8913c', 'font-size': 14, 'font-weight': 700}), s('text', {fill: '#e8913c', 'font-size': 14, 'font-weight': 700})];
+    const pill = (x, y, w, h) => s('rect', {x, y, width: w, height: h, rx: 8, fill: '#0d1016', opacity: 0.78});
+    this.hud.append(pill(mx - 8, my - big - 2, 108, big * 2 + 14), pill(sx - 8, sy - big - 2, 108, big * 2 + 14),
+      pill(this.compact ? 470 : 420, 10, this.compact ? 180 : 230, this.compact ? 54 : 58));
+    this.hud.append(this.mainLabel, this.sideLabel, this.mainCount, this.sideCount, this.clock, this.phase, ...this.more);
+  }
+
+  carShape(road, color) {
+    const g = s('g', {class: 'iso-car'});
+    // Built at the origin; a car on Main St is long along x, on Side St long along y.
+    const [l, w, h] = road === 0 ? [4.6, 2.3, 1.5] : [2.3, 4.6, 1.5];
+    const shade = road === 0 ? ['#a8d4dd', '#5e8f99', '#4a747d'] : ['#f1d19b', '#b99456', '#9a7a45'];
+    const body = this.box(-l / 2, -w / 2, l / 2, w / 2, h, color ? [color, color, color] : shade);
+    const roof = road === 0 ? this.box(-1.2, -w / 2 + 0.3, 1.1, w / 2 - 0.3, h + 0.9, ['#dff1f5', '#6f9aa3', '#58808a'])
+      : this.box(-w / 2 + 0.3 - 0.3, -1.1, w / 2 - 0.6, 1.2, h + 0.9, ['#fbe8c6', '#c7a369', '#a8874f']);
+    g.append(s('ellipse', {cx: this.cx, cy: this.cy + this.k * 0.8, rx: this.k * 3, ry: this.k * 1.3, fill: '#000', opacity: 0.35}), body, roof);
+    return g;
+  }
+
+  // Ground position of the i-th queued car (0 = at the stop line).
+  slot(road, index) {
+    return road === 0 ? [STOP_MAIN - 3 - index * GAP, MAIN_LANE] : [SIDE_LANE, STOP_SIDE + 3 + index * GAP];
+  }
+
+  moveCar(car, ground, ms) {
+    const [px, py] = this.p(ground[0], ground[1]);
+    car.depth = py;
+    car.el.style.transition = ms ? `transform ${ms}ms linear, opacity ${ms}ms` : 'none';
+    car.el.style.transform = `translate(${(px - this.cx).toFixed(1)}px, ${(py - this.cy).toFixed(1)}px)`;
+  }
+
+  setLamps(road, state) {
+    for (const {color, lamp} of this.heads[road].lamps) {
+      const on = color === state;
+      lamp.setAttribute('fill', on ? COLORS[color] : COLORS.off);
+      if (on) lamp.setAttribute('filter', 'url(#glow)'); else lamp.removeAttribute('filter');
+    }
+  }
+
+  update(world, result = null, {ms = this.moveMs} = {}) {
+    const switching = result && result.switched;
+    const oldGreen = switching ? 1 - world.green : world.green;
+    this.setLamps(oldGreen, switching ? 'yellow' : 'green');
+    this.setLamps(1 - oldGreen, 'red');
+    this.clock.textContent = `${Math.floor((world.t * 5) / 60)}:${String((world.t * 5) % 60).padStart(2, '0')}`;
+    this.phase.textContent = switching ? 'Yellow + all-red: nobody moves' : `${world.green === 0 ? 'Main St' : 'Side St'} green for ${world.since * 5} s`;
+    this.mainCount.textContent = `${world.queues[0].length} waiting`;
+    this.sideCount.textContent = `${world.queues[1].length} waiting`;
+
+    const seen = new Set();
+    [0, 1].forEach(road => {
+      world.queues[road].forEach((arrived, index) => {
+        const id = `${road}-${arrived}`;
+        seen.add(id);
+        let car = this.cars.get(id);
+        const hidden = index >= VISIBLE;
+        if (!car) {
+          car = {el: this.carShape(road), road};
+          this.cars.set(id, car);
+          this.carLayer.append(car.el);
+          const entry = road === 0 ? [-REACH, MAIN_LANE] : [SIDE_LANE, REACH];
+          this.moveCar(car, entry, 0);
+          car.el.getBoundingClientRect();
+        }
+        car.el.style.opacity = hidden ? '0' : '1';
+        this.moveCar(car, this.slot(road, Math.min(index, VISIBLE)), ms);
+      });
+      const extra = world.queues[road].length - VISIBLE;
+      const label = this.more[road];
+      if (extra > 0) {
+        const [x, y] = this.slot(road, VISIBLE);
+        const [px, py] = this.p(x, y);
+        label.setAttribute('x', px - 20); label.setAttribute('y', py - 12);
+        label.textContent = `+${extra} more`;
+      } else label.textContent = '';
+    });
+
+    if (result && result.released !== null && result.released !== undefined) {
+      const road = result.released;
+      const id = `${road}-${world.t - 1 - world.waits[road].at(-1)}`;
+      const car = this.cars.get(id);
+      if (car) {
+        this.cars.delete(id);
+        const exit = road === 0 ? [REACH, MAIN_LANE] : [SIDE_LANE, -REACH];
+        this.moveCar(car, exit, Math.max(ms * 2, 200));
+        car.el.style.opacity = '0';
+        setTimeout(() => car.el.remove(), Math.max(ms * 2, 200) + 50);
+      }
+    }
+    for (const [id, car] of this.cars) {
+      if (!seen.has(id)) { car.el.remove(); this.cars.delete(id); }
+    }
+    // Cars nearer the viewer must be drawn last.
+    [...this.cars.values()].sort((a, b) => a.depth - b.depth).forEach(car => this.carLayer.append(car.el));
+  }
+}
+
+const live = (() => {
+// Shared controls for the three "watch it learn" labs: play/pause loop, speed switch and a gear-button settings pop-up.
+// Self-contained (no imports) so every lesson page can include it.
+
+const make = (tag, props = {}, ...children) => {
+  const node = document.createElement(tag);
+  for (const [key, value] of Object.entries(props)) {
+    if (value === null || value === undefined || value === false) continue;
+    if (key === 'class') node.className = value;
+    else if (key.startsWith('on')) node.addEventListener(key.slice(2), value);
+    else node.setAttribute(key, value === true ? '' : value);
+  }
+  for (const child of children.flat()) if (child !== null && child !== undefined && child !== false) node.append(child.nodeType ? child : String(child));
+  return node;
+};
+
+const SPEEDS = {watch: 'Watch', fast: 'Fast'};
+const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const frame = () => new Promise(resolve => requestAnimationFrame(() => resolve()));
+const pause = ms => new Promise(resolve => setTimeout(resolve, REDUCED ? 0 : ms));
+
+function gearIcon() {
+  const ns = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(ns, 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('aria-hidden', 'true');
+  for (let k = 0; k < 8; k += 1) {
+    const tooth = document.createElementNS(ns, 'rect');
+    Object.entries({x: 10, y: 1.5, width: 4, height: 5, rx: 1, fill: 'currentColor', transform: `rotate(${k * 45} 12 12)`}).forEach(([a, v]) => tooth.setAttribute(a, v));
+    svg.append(tooth);
+  }
+  const ring = document.createElementNS(ns, 'circle');
+  Object.entries({cx: 12, cy: 12, r: 6.2, fill: 'none', stroke: 'currentColor', 'stroke-width': 3.6}).forEach(([a, v]) => ring.setAttribute(a, v));
+  svg.append(ring);
+  return svg;
+}
+
+// A pop-up panel on a native <dialog>: Esc closes it, focus is managed by the browser.
+function popup(title, content, closeLabel) {
+  const close = make('button', {type: 'button', class: 'pop-close', 'aria-label': closeLabel}, '\u00d7');
+  const dialog = make('dialog', {class: 'settings-pop', 'aria-label': title},
+    make('div', {class: 'pop-inner'}, make('div', {class: 'pop-head'}, make('h3', {}, title), close), ...content));
+  close.addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+  return dialog;
+}
+
+function settingsPopup(title, ...content) {
+  const dialog = popup(title, content, 'Close settings');
+  const gear = make('button', {type: 'button', class: 'gear-btn', 'aria-haspopup': 'dialog', title: 'Settings'}, gearIcon(), make('span', {}, 'Settings'));
+  gear.addEventListener('click', () => dialog.showModal());
+  return {gear, dialog};
+}
+
+function helpPopup(title, ...content) {
+  const dialog = popup(title, content, 'Close explanation');
+  dialog.classList.add('help-pop');
+  const button = make('button', {type: 'button', class: 'help-btn', 'aria-haspopup': 'dialog', 'aria-label': `Explain: ${title}`, title: 'Explain this'}, '?');
+  button.addEventListener('click', () => dialog.showModal());
+  return {button, dialog};
+}
+
+function speedSwitch(value, onChange) {
+  const group = make('div', {class: 'toggle live-speed', role: 'group', 'aria-label': 'Speed'});
+  const render = () => group.replaceChildren(...Object.entries(SPEEDS).map(([key, label]) =>
+    make('button', {type: 'button', 'aria-pressed': String(key === value), onclick: () => { value = key; render(); onChange(key); }}, label)));
+  render();
+  return group;
+}
+
+// Sizes a lab to exactly fill the window below its top edge, so scene, controls and panels fit on one screen.
+// Narrow screens keep the normal stacked page.
+let refit = null;
+function fillWindow(el, {minHeight = 620, bottom = 28, narrow = 900} = {}) {
+  const fit = () => {
+    if (!el.isConnected) return;
+    if (window.innerWidth <= narrow) { el.style.height = ''; return; }
+    const top = el.getBoundingClientRect().top + window.scrollY;
+    el.style.height = `${Math.max(minHeight, Math.floor(window.innerHeight - top - bottom))}px`;
+  };
+  if (refit) window.removeEventListener('resize', refit);
+  refit = fit;
+  window.addEventListener('resize', fit);
+  fit();
+  requestAnimationFrame(fit);
+}
+
+// Keeps a stage as wide as its scene needs at the row's full height, leaving at least `reserve` px for the side columns.
+let stageObserver = null;
+function sizeStage(stage, row, {ratio = 1, reserve = 560, inset = 0, narrow = 900} = {}) {
+  const fit = () => {
+    if (window.innerWidth <= narrow) { stage.style.width = ''; return; }
+    stage.style.width = `${Math.floor(Math.max(300, Math.min((row.clientHeight - inset) * ratio, row.clientWidth - reserve)))}px`;
+  };
+  if (stageObserver) stageObserver.disconnect();
+  stageObserver = new ResizeObserver(fit);
+  stageObserver.observe(row);
+  fit();
+}
+
+// Guided-lesson steps: fill the window above the Back/Next bar; square scenes (layout 'side') get a height-sized stage.
+function fitLesson(body, floorWrap, {layout = 'top', ratio = 1} = {}) {
+  const footer = document.querySelector('.stepnav');
+  fillWindow(body, {minHeight: 380, bottom: (footer ? footer.offsetHeight : 50) + 40});
+  if (layout === 'side') sizeStage(floorWrap, body, {ratio, reserve: 730, inset: 24});
+}
+
+// Runs `unit` again and again while playing. Each unit must await a frame or a timer so the page stays responsive,
+// and should change the model before its last await, so a pause never leaves half a step behind.
+function player({unit, alive, onChange = () => {}}) {
+  let playing = false, token = 0;
+  const button = make('button', {type: 'button', class: 'btn primary play-btn'});
+  const draw = () => { button.textContent = playing ? '\u275a\u275a Pause' : '\u25b6 Play'; button.setAttribute('aria-pressed', String(playing)); };
+  const loop = async mine => {
+    while (playing && mine === token && alive()) await unit();
+    if (playing && mine === token) { playing = false; draw(); onChange(false); }
+  };
+  const api = {
+    button,
+    get playing() { return playing; },
+    play() { if (playing) return; playing = true; draw(); onChange(true); loop(++token); },
+    stop() { if (!playing) return; playing = false; token += 1; draw(); onChange(false); },
+  };
+  button.addEventListener('click', () => (playing ? api.stop() : api.play()));
+  draw();
+  return api;
+}
+
+return {SPEEDS, REDUCED, frame, pause, settingsPopup, helpPopup, speedSwitch, fillWindow, sizeStage, fitLesson, player};
+})();
+
+const L = SIGNAL_LESSON;
+const RULES = {minGreen: sig.DEFAULTS.minGreen, maxGreen: sig.DEFAULTS.maxGreen};
+const clock = ticks => `${Math.floor((ticks * sig.TICK_SECONDS) / 60)}:${String((ticks * sig.TICK_SECONDS) % 60).padStart(2, '0')}`;
+const secs = v => `${round1(v)} s`;
+const round2 = v => { const r = Math.round(v * 100) / 100; return r === 0 ? '0' : minus(r); };
+const minutesText = v => (v >= 120 ? `${round1(v / 60)} min` : `${Math.round(v)} s`);
+
+/* ── The intersection drawing lives in iso.js (class Junction) ─────── */
+
+const junctionLegend = () => legend([['Main St car', '#a8d4dd'], ['Side St car', '#f1d19b'], ['Green', '#5fd38d'], ['Yellow + all-red (5 s)', '#f2c94c'], ['Red', '#ff5d5d']]);
+
+/* ── The score table drawn as two decision grids ───────────────────── */
+
+function policyGrids(table, {highlight = null, scores = false} = {}) {
+  const cells = policyGrid(table);
+  const grid = green => {
+    const rows = [0, 1, 2, 3].map(main => h('tr', {}, h('th', {}, sig.LEVELS[main]),
+      ...[0, 1, 2, 3].map(side => {
+        const c = cells[green * 16 + main * 4 + side];
+        const cls = c.choice === null ? '' : c.choice === 1 ? 'switch' : 'keep';
+        const label = c.choice === null ? '\u2014' : c.choice === 1 ? 'Switch' : 'Keep';
+        const fmt = v => (v === null ? 'blank' : round1(v));
+        return h('td', {class: `${cls}${highlight === c.s ? ' hl' : ''}`, title: `Keep ${fmt(c.keep)}, Switch ${fmt(c.change)}`},
+          label, scores && c.choice !== null ? h('small', {}, `K ${fmt(c.keep)} \u00b7 S ${fmt(c.change)}`) : null);
+      })));
+    return h('div', {class: 'pgrid'}, h('h4', {}, `When ${sig.ROADS[green].label} is green`),
+      h('table', {}, h('tr', {}, h('th', {class: 'corner'}, 'Main \u2193 / Side \u2192'), ...sig.LEVELS.map(l => h('th', {}, l))), ...rows));
+  };
+  return h('div', {}, h('div', {class: 'pgrids'}, grid(0), grid(1)),
+    h('p', {class: 'axis-note'}, 'Rows: cars waiting on Main St. Columns: cars waiting on Side St. \u2014 = never seen in practice yet.'));
+}
+
+const gridLegend = () => legend([['Keep: stay green', 'rgba(126,174,184,.6)'], ['Switch: change the light', 'rgba(232,145,60,.7)'], ['Not seen yet', '#3b3f4a']]);
+
+function describeTick(t, index, {title = null, exploration = 0.1} = {}) {
+  const ruleText = t.rule === 'min' ? ' The rule overrode it: a green lasts at least 10 seconds, so it kept.'
+    : t.rule === 'max' ? ' The rule overrode it: this green had lasted 60 seconds with a car waiting on red, so it switched.' : '';
+  return card(title || `Tick ${index} \u00b7 ${clock(index - 1)} to ${clock(index)}`,
+    h('dl', {class: 'moveline'},
+      h('dt', {}, 'Situation'), h('dd', {}, sig.stateLabel(t.s)),
+      h('dt', {}, 'Chose'), h('dd', {}, `${sig.ACTIONS[t.chosen].label}${t.explored ? ` (a random try: ${Math.round(exploration * 100)}% of ticks)`
+        : t.tie ? ' (a coin flip: both scores are equal, and a blank counts as 0)' : ' (the higher score; a blank counts as 0)'}.${ruleText}`),
+      h('dt', {}, 'Points'), h('dd', {}, `${minus(t.points)} (one point off for each car still waiting)`),
+      h('dt', {}, 'Next situation'), h('dd', {}, sig.stateLabel(t.next))),
+    h('p', {class: 'calc'}, `New score = ${round2(t.old)} + 0.1 \u00d7 (${minus(t.points)} + 0.9 \u00d7 ${round2((t.target - t.points) / 0.9)} \u2212 ${round2(t.old)}) `,
+      h('span', {class: 'eq'}, `= ${round2(t.updated)}`)));
+}
+
+const resultRows = (results, names) => Object.entries(names).map(([key, label]) => ({
+  className: key === 'learned' ? 'new' : '',
+  cells: [label, secs(results[key].avgWait), minutesText(results[key].longestWait), String(Math.round(results[key].served))],
+}));
+
+/* ── Lesson steps ───────────────────────────────────────────────────── */
+
+const steps = [
+  {id: 'step-1', label: 'Be the light', stage: 'Stage 1 \u00b7 The world and its points',
+    title: 'You are the traffic light. Keep the cars moving.',
+    lead: 'Each press is 5 seconds. Keep lets one car through on the green road. Switch changes the light, and nobody moves during the yellow and all-red.',
+    mount: mountPlay},
+  {id: 'step-2', label: 'What it sees', stage: 'Stage 2 \u00b7 The model',
+    title: 'The light sees 32 situations and has 2 choices.',
+    lead: 'A situation is: which road is green, plus how many cars wait on each road. For every situation the light keeps two scores: one for Keep, one for Switch.',
+    mount: mountModel},
+  {id: 'step-3', label: 'One tick', stage: 'Stage 3 \u00b7 Training',
+    title: 'Every 5 seconds, it nudges one score.',
+    lead: 'A traffic light never finishes a trip, so there is no finish line to learn from. Instead, each tick it moves one score a little toward what just happened plus what it expects next.',
+    mount: mountTicks},
+  {id: 'step-4', label: 'Practice hours', stage: 'Stage 3 \u00b7 Training',
+    title: 'Hours of simulated traffic turn the grid into a rule.',
+    lead: 'Each practice hour is new random traffic. After every hour we test the light on the same five test hours, with no random tries and no learning.',
+    mount: mountHours},
+  {id: 'step-5', label: 'Test it', stage: 'Stage 4 \u00b7 Validation',
+    title: 'Same cars, three lights: is learning worth it?',
+    lead: 'A fair test compares the learned light with good simple options on exactly the same cars: the best fixed timer we could find, and a rule that serves the longer line.',
+    mount: mountTest},
+  {id: 'step-6', label: 'What you count', stage: 'Stage 5 \u00b7 Use and limits',
+    title: 'You get what you measure.',
+    lead: 'Suppose the city only has car sensors on Main St, so the points only count Main St cars. Same light, same practice. What happens to Side St?',
+    mount: mountReward},
+  {id: 'step-7', label: 'Use it safely', stage: 'Stage 5 \u00b7 Use and limits',
+    title: 'Before a city switches it on.',
+    lead: 'The learner only decides inside rules people wrote. People also choose what it counts, test it on traffic it never saw, and answer for what it does.',
+    mount: mountUse},
+];
+
+function mountPlay(ctx) {
+  const arrivals = sig.arrivalsForSeed(L.playSeed, L.playTicks);
+  const view = new Junction({label: 'Intersection of Main St and Side St'});
+  ctx.floorWrap.append(view.el);
+  ctx.stageCol.insertBefore(junctionLegend(), ctx.controls);
+  let world = sig.createWorld();
+  let points = 0;
+  view.update(world);
+  const readout = h('p', {class: 'big-number'}, '0 points');
+  const detail = h('p', {class: 'muted'}, `Tick 0 of ${L.playTicks}`);
+  const resultSlot = h('div');
+  const keep = button('Keep green (5 s)', () => press(0), {primary: true});
+  const change = button('Switch (5 s)', () => press(1));
+  const again = button('Start again', () => renderStep(0));
+  const watchTimer = button('Watch the fixed timer on the same cars', async () => {
+    if (world.t > 0 && world.t < L.playTicks) return;
+    keep.disabled = true; change.disabled = true; watchTimer.disabled = true;
+    const g = ctx.g;
+    const timerWorld = sig.createWorld();
+    const controller = fixedController();
+    view.update(timerWorld, null, {ms: 0});
+    for (const arriving of arrivals) {
+      const result = sig.tick(timerWorld, controller(timerWorld), arriving, 'all');
+      view.update(timerWorld, result, {ms: timing().move});
+      ctx.status.textContent = `Fixed timer: ${result.switched ? 'switching (yellow + all-red)' : `${sig.ROADS[timerWorld.green].label} green`}, ${result.waiting} waiting.`;
+      await wait(Math.max(timing().move * 1.6, 250));
+      if (g !== page.generation) return;
+    }
+    ctx.status.textContent = `The fixed timer switches every ${L.fixedMain * 5} s / ${L.fixedSide * 5} s whether or not cars are waiting. Press Start again to play yourself.`;
+    watchTimer.disabled = false;
+  });
+  ctx.controls.append(h('div', {class: 'play-pad'}, keep, change), watchTimer, again);
+
+  function press(a) {
+    if (world.t >= L.playTicks) return;
+    const result = sig.tick(world, a, arrivals[world.t], 'all');
+    points += result.points;
+    view.update(world, result, {ms: timing().move});
+    readout.textContent = `${minus(points)} points`;
+    detail.textContent = `Tick ${world.t} of ${L.playTicks} \u00b7 ${result.waiting} car${result.waiting === 1 ? '' : 's'} waiting now`;
+    ctx.status.innerHTML = result.rule === 'min' ? '<strong>Too soon.</strong> A green light always lasts at least 10 seconds, so the light kept.'
+      : result.rule === 'max' ? '<strong>The rule switched it.</strong> A car waited on red and this green had lasted 60 seconds.'
+        : result.switched ? `Yellow, then all-red: nobody moves for 5 seconds. ${minus(result.points)} points.`
+          : `${result.released === null ? 'Nobody was waiting on green.' : `One ${sig.ROADS[result.released].label} car went through.`} ${minus(result.points)} points.`;
+    if (world.t >= L.playTicks) finish();
+  }
+
+  function finish() {
+    keep.disabled = true; change.disabled = true;
+    const mine = sig.summarize(world);
+    const fixed = sig.runHour(fixedController(), arrivals);
+    resultSlot.replaceChildren(accent('Two minutes are up',
+      h('p', {}, `Your points: ${minus(points)}. Each point is one car waiting for 5 seconds.`),
+      dataTable(['', 'Average wait per car', 'Longest wait'], [
+        {cells: ['You', secs(mine.avgWait), `${mine.longestWait} s`], className: 'new'},
+        {cells: [`Fixed timer (${L.fixedMain * 5} s Main, ${L.fixedSide * 5} s Side)`, secs(fixed.avgWait), `${fixed.longestWait} s`]},
+      ], {numeric: [1, 2]}),
+      h('p', {class: 'small muted', style: 'margin-top:8px'}, 'Same 13 cars for both. Can you beat the timer? Press Start again to retry.')));
+  }
+
+  page.keyHandler = event => {
+    if (event.key === 'k' || event.key === 'K') { event.preventDefault(); press(0); }
+    if (event.key === 's' || event.key === 'S') { event.preventDefault(); press(1); }
+  };
+
+  ctx.explain.append(
+    card('The points',
+      h('table', {class: 'points'},
+        h('tr', {}, h('td', {}, 'Every car still waiting at the end of a 5-second tick'), h('td', {class: 'minus'}, '\u22121 each')),
+        h('tr', {}, h('td', {}, 'A car that goes through'), h('td', {}, '0'))),
+      h('p', {class: 'small muted', style: 'margin-top:8px'}, 'So fewer points lost = less waiting. The best possible score is 0.')),
+    card('This run', readout, detail, h('p', {class: 'small muted'}, 'Keyboard: ', h('span', {class: 'kbd'}, 'K'), ' keep, ', h('span', {class: 'kbd'}, 'S'), ' switch.')),
+    resultSlot,
+    card('Where the cars come from',
+      h('p', {}, 'Every 5 seconds the computer rolls two dice: a Main St car arrives with a 40% chance (about 5 a minute) and a Side St car with a 15% chance (about 2 a minute). While a road is green, one car drives through every 5 seconds.'),
+      h('p', {class: 'small muted'}, 'The traffic is simulated, not counted at a real corner. A city would use its own detector counts.')),
+    card('How traffic lights are run today',
+      h('ul', {class: 'steps-list small'},
+        h('li', {}, h('strong', {}, 'Fixed-time: '), 'engineers set how long each green lasts, often one plan per time of day. It ignores the cars actually waiting.'),
+        h('li', {}, h('strong', {}, 'Actuated: '), 'sensors in the road or cameras detect waiting cars and extend or end a green, within set limits.'),
+        h('li', {}, h('strong', {}, 'Adaptive: '), 'software adjusts timings across many intersections from live counts.'),
+        h('li', {}, h('strong', {}, 'Learning by reward: '), 'what this lesson builds. Mostly research and pilot projects so far.'))),
+    card('Three words',
+      terms([['State', 'what the light can see: which road is green and how many cars wait on each'],
+        ['Action', 'Keep or Switch'], ['Reward', 'minus one point for every waiting car, every 5 seconds']]),
+      h('p', {class: 'small muted', style: 'margin-top:8px'}, 'State, action, reward: the same three words describe any job learned by reward.')));
+  ctx.status.textContent = 'Main St is green. Cars arrive at random: about 5 a minute on Main St, 2 a minute on Side St.';
+}
+
+function mountModel(ctx) {
+  const blank = sig.createTable();
+  const trained = signalSession();
+  sig.train(trained, L.trainHours);
+  let showing = false;
+  const slot = h('div');
+  const draw = () => slot.replaceChildren(policyGrids(showing ? trained.table : blank, {scores: showing}));
+  draw();
+  ctx.floorWrap.append(slot);
+  ctx.stageCol.insertBefore(gridLegend(), ctx.controls);
+  const toggle = button('Show the grids after 30 practice hours', () => {
+    showing = !showing;
+    draw();
+    toggle.textContent = showing ? 'Back to the blank grids' : 'Show the grids after 30 practice hours';
+    ctx.status.innerHTML = showing
+      ? 'After practice, each square holds a choice. <strong>K</strong> and <strong>S</strong> are the two scores; the higher one wins.'
+      : 'Before practice, all 64 scores are blank.';
+  });
+  ctx.controls.append(toggle);
+  ctx.status.textContent = 'Before practice, all 64 scores are blank.';
+  ctx.explain.append(
+    card('Why only 4 levels per road?',
+      h('p', {}, 'Cars waiting are grouped: 0, 1\u20132, 3\u20135, 6 or more. Two roads \u00d7 4 levels \u00d7 4 levels = 32 situations. Grouping keeps the table small enough to learn quickly.'),
+      h('p', {class: 'small muted'}, 'In a real city the "situation" could also include time of day, pedestrians and the next intersection. More detail means a bigger table and more practice.')),
+    card('What a score means',
+      h('p', {}, 'How many points the light expects to lose from now on if it makes this choice here. All points are negative, so the score closer to zero is the better choice.')),
+    card('Rules it cannot break',
+      h('ol', {class: 'steps-list'},
+        h('li', {}, 'Every change goes through yellow and all-red (5 seconds, nobody moves).'),
+        h('li', {}, 'A green lasts at least 10 seconds.'),
+        h('li', {}, 'If a car waits on red, a green lasts at most 60 seconds.')),
+      h('p', {class: 'small muted', style: 'margin-top:8px'}, 'Engineers write these rules. The learner only chooses inside them. Safety is never left to the points.')));
+}
+
+function mountTicks(ctx) {
+  const session = signalSession();
+  const world = sig.createWorld();
+  const arrivals = sig.makeArrivals(session.random, sig.HOUR_TICKS, session.rates);
+  const view = new Junction({label: 'The intersection during the first practice ticks'});
+  ctx.floorWrap.append(view.el);
+  view.update(world);
+  const gridSlot = h('div');
+  const tickSlot = h('div');
+  gridSlot.append(policyGrids(session.table, {scores: true}));
+  let busy = false;
+  const one = button('One tick', () => step(), {primary: true});
+  const run = button(`Run to tick ${L.stepTicks}`, async () => { while (world.t < L.stepTicks && await step()); });
+  ctx.controls.append(one, run, button('Start over', () => renderStep(2)));
+
+  async function step() {
+    if (busy || world.t >= L.stepTicks) return false;
+    busy = true;
+    const g = ctx.g;
+    const t = sig.practiceTick(session, world, arrivals[world.t]);
+    view.update(world, t, {ms: timing().move});
+    gridSlot.replaceChildren(policyGrids(session.table, {highlight: t.s, scores: true}));
+    tickSlot.replaceChildren(describeTick(t, world.t));
+    ctx.status.innerHTML = `Tick ${world.t}: ${sig.ACTIONS[t.action].label}. Points ${minus(t.points)}. New score <strong>${round2(t.updated)}</strong>.`;
+    await wait(timing().move);
+    busy = false;
+    if (g !== page.generation) return false;
+    if (world.t >= L.stepTicks) { one.disabled = true; run.disabled = true; }
+    return world.t < L.stepTicks;
+  }
+
+  ctx.explain.append(
+    card('The update rule',
+      h('div', {class: 'formula'}, h('span', {class: 'term t-new'}, 'new score'), '=', 'old +', h('span', {class: 'term t-now'}, '0.1 \u00d7 (points now'), '+',
+        h('span', {class: 'term t-next'}, '0.9 \u00d7 best score next'), '\u2212 old)'),
+      h('p', {class: 'small muted', style: 'margin-top:8px'}, '0.1: traffic is random, so it only moves a tenth of the way each time. 0.9: points further in the future count a little less.')),
+    tickSlot, card('Score grid (K = Keep, S = Switch)', gridSlot),
+    card('Why the first ticks look random',
+      h('p', {}, 'Each of the 32 situations has its own two scores. In a situation it has never met, both are blank (0), so it flips a coin. Once it has tried one, that score turns negative (waiting cars cost points), so next time the untried one (still 0) looks better. That is how it gets to try both.'),
+      h('p', {class: 'small muted'}, 'On top of that, 1 tick in 10 is a deliberate random try, and the timing rules can override a choice. After a few practice hours most situations have real scores, and the choices stop looking random.')));
+  tickSlot.append(card('Before the first tick', h('p', {}, 'The intersection is empty and all scores are blank. Press One tick.')));
+  ctx.status.textContent = 'Practice hour 1, tick 0.';
+}
+
+function mountHours(ctx) {
+  const session = signalSession();
+  const baseline = testControllers([['fixed', fixedController()], ['longerLine', sig.controllers.longerLine()]]);
+  const points = [];
+  const chartSlot = h('div', {class: 'wide'});
+  const gridSlot = h('div');
+  const summary = h('div');
+  let busy = false;
+  const draw = () => {
+    chartSlot.replaceChildren(lineChart({series: [{name: 'learned light', color: '#7eaeb8', points}], xMax: L.trainHours, yMax: 100,
+      title: 'Average wait per car on the five test hours, after each practice hour', yLabel: 'Seconds', xLabel: 'Practice hours',
+      refs: [{value: baseline.fixed.avgWait, label: 'fixed timer', color: '#e8913c'}, {value: baseline.longerLine.avgWait, label: 'longer line', color: '#b9bdc6'}]}));
+    gridSlot.replaceChildren(policyGrids(session.table));
+  };
+  draw();
+  ctx.floorWrap.append(chartSlot);
+  const one = button('Practice 1 hour', () => practice(1), {primary: true});
+  const all = button(`Practice to ${L.trainHours} hours`, () => practice(L.trainHours - session.hours.length));
+  ctx.controls.append(one, all, button('Start over', () => renderStep(3)));
+
+  async function practice(count) {
+    if (busy || session.hours.length >= L.trainHours) return;
+    busy = true;
+    const g = ctx.g;
+    for (let k = 0; k < count; k += 1) {
+      sig.trainHour(session);
+      const test = testControllers([['learned', sig.controllers.learned(session.table)]]).learned;
+      points.push([session.hours.length, test.avgWait]);
+      draw();
+      ctx.status.innerHTML = `After ${session.hours.length} practice hour${session.hours.length === 1 ? '' : 's'}: test average wait <strong>${secs(test.avgWait)}</strong> per car.`;
+      await wait(timing().trip * 3);
+      if (g !== page.generation) return;
+    }
+    if (session.hours.length >= L.trainHours) {
+      one.disabled = true; all.disabled = true;
+      const last = points.at(-1)[1];
+      summary.replaceChildren(accent(`${L.trainHours} practice hours`,
+        h('p', {}, `Test average wait: ${secs(last)} per car. The fixed timer: ${secs(baseline.fixed.avgWait)}. Serving the longer line: ${secs(baseline.longerLine.avgWait)}.`),
+        h('p', {class: 'small muted'}, 'The line jumps around early and even later on: one changed square in the grid can change a whole hour. That is why we test after training, never just trust it.')));
+    }
+    busy = false;
+  }
+
+  ctx.explain.append(card('The rule it has learned so far', gridSlot, gridLegend()), summary,
+    card('Practice versus test',
+      h('p', {}, 'Practice uses random tries (1 tick in 10) and keeps learning. The test turns both off and uses five fixed hours of traffic, the same for every light we compare.')));
+  ctx.status.textContent = 'No practice yet. Press Practice 1 hour.';
+}
+
+function mountTest(ctx) {
+  const trained = signalSession();
+  sig.train(trained, L.trainHours);
+  const entries = [['fixed', fixedController()], ['longerLine', sig.controllers.longerLine()], ['learned', sig.controllers.learned(trained.table)]];
+  const names = {fixed: `Fixed timer: ${L.fixedMain * 5} s Main, ${L.fixedSide * 5} s Side`, longerLine: 'Simple rule: serve the longer line', learned: `Learned light (${L.trainHours} practice hours)`};
+  const short = {fixed: 'Fixed timer', longerLine: 'Longer line', learned: 'Learned'};
+  ctx.floorWrap.classList.add('trio');
+  const figs = entries.map(([key]) => {
+    const view = new Junction({label: short[key], compact: true});
+    const caption = h('figcaption', {}, h('b', {}, short[key]), '\u2014');
+    ctx.floorWrap.append(h('figure', {}, view.el, caption));
+    return {key, view, caption};
+  });
+  const arrivals = sig.arrivalsForSeed(L.testSeeds[0]);
+  const tableSlot = h('div');
+  let busy = false;
+  const play = button('Play test hour 1 (fast)', async () => {
+    if (busy) return;
+    busy = true; play.disabled = true;
+    const g = ctx.g;
+    const worlds = entries.map(() => sig.createWorld());
+    const batch = page.speed === 'slow' ? 2 : page.speed === 'fast' ? 12 : 6;
+    for (let t = 0; t < arrivals.length; t += 1) {
+      entries.forEach(([, controller], i) => {
+        const result = sig.tick(worlds[i], controller(worlds[i]), arrivals[t]);
+        if ((t + 1) % batch === 0 || t === arrivals.length - 1) {
+          figs[i].view.update(worlds[i], result, {ms: 60});
+          const sum = sig.summarize(worlds[i]);
+          figs[i].caption.replaceChildren(h('b', {}, short[entries[i][0]]), `${secs(sum.avgWait)} average so far`);
+        }
+      });
+      if ((t + 1) % batch === 0) { await wait(40); if (g !== page.generation) return; }
+    }
+    ctx.status.textContent = 'Test hour 1 done. The table averages all five test hours.';
+    busy = false; play.disabled = false;
+  }, {primary: true});
+  figs.forEach(f => f.view.update(sig.createWorld()));
+  ctx.controls.append(play);
+  const results = testControllers(entries);
+  tableSlot.append(dataTable(['Light', 'Average wait', 'Longest wait', 'Cars served'], resultRows(results, names), {numeric: [1, 2, 3]}));
+  const gainFixed = Math.round((1 - results.learned.avgWait / results.fixed.avgWait) * 100);
+  const gainRule = Math.round((1 - results.learned.avgWait / results.longerLine.avgWait) * 100);
+  const tableCard = card('Five test hours, same cars for all three', tableSlot);
+  tableCard.style.flexGrow = '1.7';
+  ctx.explain.append(tableCard,
+    card('Average wait per car', barChart({values: ['fixed', 'longerLine', 'learned'].map(k => results[k].avgWait), labels: ['Fixed timer', 'Longer line', 'Learned'],
+      color: ['#e8913c', '#b9bdc6', '#7eaeb8'], title: 'Average wait per car, seconds', height: 190, width: 340, valueLabels: v => `${v} s`})),
+    accent('What the test says',
+      h('p', {}, `The learned light cut waiting by about ${gainFixed}% compared with the best fixed timer, but only about ${gainRule}% compared with the simple longer-line rule.`),
+      h('p', {class: 'small muted'}, 'Honest conclusion: most of the gain comes from reacting to the cars at all. Learning adds a little more. A city would weigh that against the cost and risk of a learning system.')));
+  ctx.status.textContent = 'Press Play to watch the first test hour on all three lights at once.';
+}
+
+function mountReward(ctx) {
+  const view = new Junction({label: 'Test hour with the light trained on the chosen points'});
+  ctx.floorWrap.append(view.el);
+  view.update(sig.createWorld());
+  const noRules = {minGreen: 0, maxGreen: 0};
+  const options = [
+    {key: 'all', label: 'Count every waiting car', reward: 'all', rules: RULES},
+    {key: 'main', label: 'Count only Main St cars', reward: 'main', rules: RULES},
+    {key: 'noRules', label: 'Main St only, and no timing rules', reward: 'main', rules: noRules},
+  ];
+  const rows = h('tbody');
+  const done = new Set();
+  let busy = false;
+  const note = h('div');
+  async function run(option) {
+    if (busy) return;
+    busy = true;
+    const g = ctx.g;
+    const session = signalSession({reward: option.reward, ...option.rules});
+    sig.train(session, L.trainHours);
+    const controller = sig.controllers.learned(session.table);
+    const result = testControllers([['learned', controller]], sig.DEFAULTS, 'all', option.rules).learned;
+    const world = sig.createWorld();
+    const arrivals = sig.arrivalsForSeed(L.testSeeds[0]);
+    const batch = page.speed === 'fast' ? 24 : 12;
+    for (let t = 0; t < arrivals.length; t += 1) {
+      const r = sig.tick(world, controller(world), arrivals[t], 'all', option.rules);
+      if ((t + 1) % batch === 0) { view.update(world, r, {ms: 40}); await wait(30); if (g !== page.generation) return; }
+    }
+    if (!done.has(option.key)) {
+      done.add(option.key);
+      rows.append(h('tr', {class: option.key === 'all' ? '' : 'new'}, h('td', {}, option.label), h('td', {class: 'num'}, secs(result.avgWait)),
+        h('td', {class: 'num'}, minutesText(result.longestSideWait))));
+    }
+    ctx.status.innerHTML = `${option.label}: average wait <strong>${secs(result.avgWait)}</strong>, longest Side St wait <strong>${minutesText(result.longestSideWait)}</strong>.`;
+    if (done.size === options.length) {
+      note.replaceChildren(accent('The light did exactly what it was paid to do',
+        h('p', {}, 'Counting only Main St cars, the light learned that Side St does not matter. The timing rules stopped the worst of it; without them, Side St waited almost the whole hour.'),
+        h('p', {class: 'small muted'}, 'Rules can limit the damage, but the fix is in the points: count everyone who waits.')));
+    }
+    busy = false;
+  }
+  options.forEach((o, i) => ctx.controls.append(button(`${i + 1}. ${o.label}`, () => run(o), {primary: i === 0})));
+  ctx.explain.append(
+    card('Train with different points, then test on every car',
+      h('table', {class: 'data'}, h('thead', {}, h('tr', {}, h('th', {}, 'Points count'), h('th', {class: 'num'}, 'Average wait'), h('th', {class: 'num'}, 'Longest Side St wait'))), rows),
+      h('p', {class: 'small muted', style: 'margin-top:8px'}, `Each button trains a fresh light for ${L.trainHours} hours, then tests it on all cars.`)),
+    note,
+    card('Where this happens in real life',
+      h('p', {}, 'Sensors are often installed on the busy road first. Buses, cyclists and pedestrians may not be counted at all. Whatever is not in the points is invisible to the learner.')));
+  ctx.status.textContent = 'Press the buttons in order.';
+}
+
+function mountUse(ctx) {
+  const trained = signalSession();
+  sig.train(trained, L.trainHours);
+  const busy = {mainRate: sig.DEFAULTS.mainRate, sideRate: 0.3};
+  const results = testControllers([['fixed', fixedController()], ['longerLine', sig.controllers.longerLine()], ['learned', sig.controllers.learned(trained.table)]], busy);
+  ctx.floorWrap.append(h('div', {class: 'wide'},
+    h('div', {},
+      h('h3', {style: 'margin:4px 0 8px'}, 'Traffic it never practiced on: Side St twice as busy'),
+      dataTable(['Light', 'Average wait', 'Longest wait', 'Cars served'], resultRows(results, {fixed: 'Fixed timer (same timings)', longerLine: 'Serve the longer line', learned: 'Learned light (practiced on normal traffic)'}), {numeric: [1, 2, 3]}),
+      h('p', {class: 'small muted', style: 'margin-top:8px'}, 'A school opens on Side St: about 4 cars a minute instead of 2. Nobody retrained anything.')),
+    barChart({values: ['fixed', 'longerLine', 'learned'].map(k => results[k].avgWait), labels: ['Fixed timer', 'Longer line', 'Learned'],
+      color: ['#e8913c', '#b9bdc6', '#7eaeb8'], title: 'Average wait per car on the busier side street, seconds', height: 200, valueLabels: v => `${v} s`})));
+  ctx.status.textContent = 'Both lights that look at the queues cope far better than the timer. The learned light is no longer ahead of the simple rule.';
+  ctx.explain.append(
+    card('A checklist before switching it on',
+      h('ol', {class: 'steps-list'},
+        h('li', {}, 'Safety rules written by engineers, outside the learner (yellow, all-red, minimum and maximum green, pedestrians, emergency vehicles).'),
+        h('li', {}, 'Points that count everyone: every road, buses, bikes, people walking.'),
+        h('li', {}, 'A fair test against the timer and a simple rule, on real recorded traffic.'),
+        h('li', {}, 'Watch it after launch; retrain or fall back when traffic changes.'),
+        h('li', {}, 'A named person or office that answers for its decisions.'))),
+    card('Where this stands today',
+      h('p', {}, 'Many cities already run adaptive signals that react to sensors using engineered rules and optimisation. Signals that learn by reinforcement are mostly in research and pilot projects. Treat claims of "AI traffic lights" with the questions on this page.')),
+    card('The recipe, one more time',
+      terms([['State', 'which road is green + cars waiting on each'], ['Action', 'Keep or Switch'], ['Reward', '\u22121 per waiting car per 5 s'],
+        ['Q-table', '64 scores: the whole model'], ['Policy', 'pick the higher score, inside the rules'], ['Test', 'fixed traffic, no random tries, no learning']])));
+}
+
+/* ── Free lab: watch the light learn ───────────────────────────────────────── */
+
+function mountLab(root) {
+  const settings = {main: 4.8, side: 1.8, reward: 'all', rules: 'on', exploration: 0.1, seed: 1};
+  // Ticks per screen update, car animation time and pause between updates for each speed.
+  const PACE = {watch: {ticks: 1, ms: 380, wait: 480}, fast: {ticks: 4, ms: 110, wait: 90}};
+  const g = page.generation;
+  let session, hour, speed = 'watch', latest = null, drawnAt = 0;
+  const status = h('p', {class: 'status', 'aria-live': 'off'});
+  const stats = h('div', {class: 'stats'});
+  const nowSlot = h('div', {class: 'widest'});
+  const testSlot = h('div');
+  const testCard = card('Test result', testSlot);
+  const chartSlot = h('div');
+  const log = h('ol', {class: 'live-log', 'aria-label': 'Finished practice hours'});
+  const gridSlot = h('div');
+  const view = new Junction({label: 'Lab intersection: the light practising'});
+  const rulesOf = () => (settings.rules === 'on' ? RULES : {minGreen: 0, maxGreen: 0});
+  const rates = () => ({mainRate: settings.main / 12, sideRate: settings.side / 12});
+  const hourNo = () => session.hours.length + 1;
+
+  function fresh() {
+    session = sig.createSession({seed: settings.seed, ...rates(), reward: settings.reward, exploration: settings.exploration, ...rulesOf()});
+    hour = sig.hourTicks(session);
+    latest = null;
+    view.update(sig.createWorld(), null, {ms: 0});
+    log.replaceChildren();
+    testSlot.replaceChildren(h('p', {class: 'small muted'}, 'Test compares the light as it is now with the fixed timer and the longer-line rule on 5 fixed test hours.'));
+    nowSlot.replaceChildren(card('What just happened', h('p', {class: 'small muted'}, 'Every 5 seconds the light looks at both queues, chooses Keep or Switch, gets points (\u22121 per waiting car) and nudges the score of what it chose. The latest tick appears here.')));
+    drawHours();
+    drawLive(true);
+  }
+
+  function drawHours() {
+    const hours = session.hours;
+    chartSlot.replaceChildren(hours.length ? barChart({values: hours.slice(-20).map(x => Math.round(x.avgWait)), title: 'Average wait in each practice hour (seconds)',
+      firstIndex: Math.max(1, hours.length - 19), yLabel: 'Seconds', xLabel: 'Hour', width: 280, height: 220})
+      : h('p', {class: 'small muted'}, 'The first bar appears when practice hour 1 ends (720 ticks, about 18 seconds at Fast).'));
+  }
+
+  // The live panels. At Fast they are redrawn a few times a second, not on every tick.
+  function drawLive(force = false) {
+    if (!force && speed !== 'watch' && performance.now() - drawnAt < 350) return;
+    drawnAt = performance.now();
+    const hours = session.hours;
+    stats.replaceChildren(
+      h('div', {class: 'stat'}, h('b', {}, `Hour ${hourNo()}`), h('span', {}, `practising, clock ${clock(latest ? latest.world.t : 0)}`)),
+      h('div', {class: 'stat'}, h('b', {}, String(hours.length)), h('span', {}, 'practice hours finished')),
+      h('div', {class: 'stat'}, h('b', {}, hours.length ? secs(hours.at(-1).avgWait) : '\u2014'), h('span', {}, 'average wait, last hour')),
+      h('div', {class: 'stat'}, h('b', {}, `${Math.round(settings.exploration * 100)}%`), h('span', {}, 'random tries')));
+    if (latest) {
+      nowSlot.replaceChildren(describeTick(latest.step, latest.world.t, {title: `What just happened \u00b7 hour ${hourNo()}, ${clock(latest.world.t - 1)} to ${clock(latest.world.t)}`, exploration: settings.exploration}));
+    }
+    gridSlot.replaceChildren(policyGrids(session.table));
+  }
+
+  function hourDone(summary) {
+    log.prepend(h('li', {}, `Hour ${session.hours.length}: average wait ${secs(summary.avgWait)}, longest ${minutesText(summary.longestWait)}, ${summary.served} cars served`));
+    drawHours();
+  }
+
+  async function unit() {
+    const pace = PACE[speed];
+    let shown = null;
+    for (let k = 0; k < pace.ticks; k += 1) {
+      const next = hour.next();
+      if (next.done) { hourDone(next.value); hour = sig.hourTicks(session); break; }
+      shown = next.value;
+    }
+    if (shown) {
+      latest = shown;
+      const t = shown.step;
+      view.update(shown.world, t, {ms: pace.ms});
+      status.textContent = `Hour ${hourNo()}, ${clock(shown.world.t)}: ${sig.ACTIONS[t.chosen].label}${t.explored ? ' (random try)' : t.tie ? ' (coin flip)' : ''}${t.rule ? ' \u2192 the timing rule overrode it' : ''}. ${t.waiting} waiting, ${minus(t.points)} points.`;
+    }
+    drawLive();
+    await wait(pace.wait);
+  }
+
+  const player = live.player({unit, alive: () => g === page.generation});
+
+  function test() {
+    const r = testControllers([['fixed', fixedController()], ['longerLine', sig.controllers.longerLine()], ['learned', sig.controllers.learned(session.table)]], rates(), 'all', rulesOf());
+    testSlot.replaceChildren(dataTable(['Light', 'Avg wait', 'Longest', 'Served'], resultRows(r, {fixed: 'Fixed timer', longerLine: 'Longer line', learned: `Yours (${session.hours.length} h)`}), {numeric: [1, 2, 3]}));
+    status.textContent = `Tested on five fixed hours of traffic after ${session.hours.length} practice hours.`;
+    testCard.scrollIntoView({block: 'nearest', behavior: live.REDUCED ? 'auto' : 'smooth'});
+  }
+
+  const changed = () => { fresh(); status.textContent = 'Setting changed: the light starts again from a blank table.'; };
+  const range = (label, min, max, step, key, format) => {
+    const out = h('span', {class: 'value-out'}, format(settings[key]));
+    const input = h('input', {type: 'range', min, max, step, value: key === 'exploration' ? settings[key] * 100 : settings[key], 'aria-label': label,
+      oninput: e => { out.textContent = format(key === 'exploration' ? Number(e.target.value) / 100 : Number(e.target.value)); },
+      onchange: e => { settings[key] = key === 'exploration' ? Number(e.target.value) / 100 : Number(e.target.value); changed(); }});
+    return [h('label', {}, label), h('div', {}, input, out)];
+  };
+  const pick = (label, key, options) => {
+    const group = h('div', {class: 'toggle', role: 'group', 'aria-label': label});
+    const render = () => group.replaceChildren(...options.map(([value, text]) => h('button', {type: 'button', 'aria-pressed': String(settings[key] === value),
+      onclick: () => { settings[key] = value; render(); changed(); }}, text)));
+    render();
+    return [h('label', {}, label), group];
+  };
+  const seedInput = h('input', {type: 'number', min: 1, max: 9999, value: settings.seed, 'aria-label': 'Random seed',
+    onchange: e => { settings.seed = Math.max(1, Math.min(9999, Math.round(Number(e.target.value) || 1))); e.target.value = settings.seed; changed(); }});
+  const popup = live.settingsPopup('Signal lab settings',
+    h('div', {class: 'settings'},
+      ...range('Main St cars per minute', 0.6, 6, 0.6, 'main', v => String(round1(v))),
+      ...range('Side St cars per minute', 0.6, 6, 0.6, 'side', v => String(round1(v))),
+      ...pick('Points count', 'reward', [['all', 'Every car'], ['main', 'Main St only']]),
+      ...pick('Timing rules', 'rules', [['on', 'On'], ['off', 'Off']]),
+      ...range('Random tries', 0, 50, 5, 'exploration', v => `${Math.round(v * 100)}%`),
+      h('label', {}, 'Random seed'), seedInput),
+    h('p', {class: 'pop-note'}, 'Any change starts the light again from a blank table. The test always counts every car, whatever the practice points count.'),
+    h('h4', {}, 'Experiments to try'),
+    h('ol', {class: 'steps-list small'},
+      h('li', {}, 'Let it practise about 10 hours at Fast, then Test. Try seeds 2 and 3: same result?'),
+      h('li', {}, 'Side St 3.6 cars a minute. Practise about 10 hours and Test. Does learning now beat the simple rule?'),
+      h('li', {}, 'Points count Main St only, rules Off. Watch Side St.'),
+      h('li', {}, 'Random tries 0%. Does it still learn? (Blank scores count as 0, better than any real outcome.)')));
+  const layout = h('div', {class: 'live-lab'},
+    h('div', {class: 'live-head'},
+      h('div', {}, h('p', {class: 'step-kicker'}, 'Signal lab \u00b7 watch it learn'),
+        h('h2', {}, 'Watch the light learn, 5 seconds at a time.'),
+        h('p', {class: 'lead'}, 'It starts knowing nothing and practises on random traffic while you watch. Test it whenever you like; the gear changes the traffic and the points.')),
+      popup.gear),
+    popup.dialog,
+    h('div', {class: 'live-stage'}, junctionLegend(), h('div', {class: 'scene'}, view.el)),
+    h('div', {class: 'live-bar'},
+      h('div', {class: 'controls live-controls'}, player.button, live.speedSwitch(speed, value => { speed = value; drawLive(true); }),
+        button('Test', test), button('Restart', () => { fresh(); status.textContent = 'Restarted: blank table, practice hour 1.'; })),
+      status),
+    h('div', {class: 'live-panels'},
+      h('div', {class: 'stack'}, card('Training, live', stats), testCard),
+      nowSlot,
+      h('div', {class: 'narrow'}, card('Practice hours', chartSlot, log)),
+      h('div', {class: 'wider'}, card('What the light does now', gridSlot, gridLegend()))));
+  root.replaceChildren(layout);
+  live.fillWindow(layout);
+  fresh();
+  status.textContent = live.REDUCED ? 'Press Play to start practice.' : 'Practice has started. Pause any time, or switch to Fast.';
+  if (!live.REDUCED) player.play();
+}
+
+startPage(steps, mountLab);
+
+</script>
+</body>
+</html>

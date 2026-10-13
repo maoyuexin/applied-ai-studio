@@ -1,0 +1,1068 @@
+{
+  "lesson": {
+    "miniSeed": 7,
+    "bigSeed": 35,
+    "exploration": 0.2,
+    "miniMaxMoves": 200,
+    "bigMaxMoves": 400,
+    "trainedTrips": 20,
+    "bigCheckEvery": 10,
+    "bigTrips": 200,
+    "palletCell": "C3",
+    "changeTrips": 10,
+    "noCostTrips": 20
+  },
+  "rewards": {
+    "delivery": 20,
+    "moveCost": 1
+  },
+  "mini": {
+    "rows": 3,
+    "cols": 5,
+    "squares": 11,
+    "start": "A3",
+    "station": "E3",
+    "shortest": 4,
+    "topRoute": 8
+  },
+  "firstTrip": {
+    "moves": 12,
+    "points": 8,
+    "random": 2,
+    "bumps": 4,
+    "log": [
+      {
+        "from": "A3",
+        "arrow": "↑",
+        "to": "A2",
+        "bumped": false,
+        "explored": true,
+        "points": -1,
+        "landedBest": 0,
+        "after": -1
+      },
+      {
+        "from": "A2",
+        "arrow": "↓",
+        "to": "A3",
+        "bumped": false,
+        "explored": false,
+        "points": -1,
+        "landedBest": 0,
+        "after": -1
+      },
+      {
+        "from": "A3",
+        "arrow": "↓",
+        "to": "A3",
+        "bumped": true,
+        "explored": false,
+        "points": -1,
+        "landedBest": 0,
+        "after": -1
+      },
+      {
+        "from": "A3",
+        "arrow": "→",
+        "to": "B3",
+        "bumped": false,
+        "explored": false,
+        "points": -1,
+        "landedBest": 0,
+        "after": -1
+      },
+      {
+        "from": "B3",
+        "arrow": "↓",
+        "to": "B3",
+        "bumped": true,
+        "explored": false,
+        "points": -1,
+        "landedBest": 0,
+        "after": -1
+      },
+      {
+        "from": "B3",
+        "arrow": "↑",
+        "to": "B3",
+        "bumped": true,
+        "explored": false,
+        "points": -1,
+        "landedBest": 0,
+        "after": -1
+      },
+      {
+        "from": "B3",
+        "arrow": "←",
+        "to": "A3",
+        "bumped": false,
+        "explored": false,
+        "points": -1,
+        "landedBest": 0,
+        "after": -1
+      },
+      {
+        "from": "A3",
+        "arrow": "→",
+        "to": "B3",
+        "bumped": false,
+        "explored": true,
+        "points": -1,
+        "landedBest": 0,
+        "after": -1
+      },
+      {
+        "from": "B3",
+        "arrow": "→",
+        "to": "C3",
+        "bumped": false,
+        "explored": false,
+        "points": -1,
+        "landedBest": 0,
+        "after": -1
+      },
+      {
+        "from": "C3",
+        "arrow": "→",
+        "to": "D3",
+        "bumped": false,
+        "explored": false,
+        "points": -1,
+        "landedBest": 0,
+        "after": -1
+      },
+      {
+        "from": "D3",
+        "arrow": "↑",
+        "to": "D3",
+        "bumped": true,
+        "explored": false,
+        "points": -1,
+        "landedBest": 0,
+        "after": -1
+      },
+      {
+        "from": "D3",
+        "arrow": "→",
+        "to": "E3",
+        "bumped": false,
+        "explored": false,
+        "points": 19,
+        "landedBest": 0,
+        "after": 19
+      }
+    ]
+  },
+  "trips": [
+    {
+      "trip": 1,
+      "moves": 12,
+      "points": 8,
+      "trail": [
+        {
+          "cell": 13,
+          "name": "D3",
+          "score": 19,
+          "arrow": "→"
+        }
+      ]
+    },
+    {
+      "trip": 2,
+      "moves": 47,
+      "points": -27,
+      "trail": [
+        {
+          "cell": 12,
+          "name": "C3",
+          "score": 18,
+          "arrow": "→"
+        },
+        {
+          "cell": 13,
+          "name": "D3",
+          "score": 19,
+          "arrow": "→"
+        }
+      ]
+    },
+    {
+      "trip": 3,
+      "moves": 32,
+      "points": -12,
+      "trail": [
+        {
+          "cell": 9,
+          "name": "E2",
+          "score": 19,
+          "arrow": "↓"
+        },
+        {
+          "cell": 12,
+          "name": "C3",
+          "score": 18,
+          "arrow": "→"
+        },
+        {
+          "cell": 13,
+          "name": "D3",
+          "score": 19,
+          "arrow": "→"
+        }
+      ]
+    },
+    {
+      "trip": 4,
+      "moves": 4,
+      "points": 16,
+      "trail": [
+        {
+          "cell": 9,
+          "name": "E2",
+          "score": 19,
+          "arrow": "↓"
+        },
+        {
+          "cell": 11,
+          "name": "B3",
+          "score": 17,
+          "arrow": "→"
+        },
+        {
+          "cell": 12,
+          "name": "C3",
+          "score": 18,
+          "arrow": "→"
+        },
+        {
+          "cell": 13,
+          "name": "D3",
+          "score": 19,
+          "arrow": "→"
+        }
+      ]
+    },
+    {
+      "trip": 5,
+      "moves": 6,
+      "points": 14,
+      "trail": [
+        {
+          "cell": 9,
+          "name": "E2",
+          "score": 19,
+          "arrow": "↓"
+        },
+        {
+          "cell": 10,
+          "name": "A3",
+          "score": 16,
+          "arrow": "→"
+        },
+        {
+          "cell": 11,
+          "name": "B3",
+          "score": 17,
+          "arrow": "→"
+        },
+        {
+          "cell": 12,
+          "name": "C3",
+          "score": 18,
+          "arrow": "→"
+        },
+        {
+          "cell": 13,
+          "name": "D3",
+          "score": 19,
+          "arrow": "→"
+        }
+      ]
+    },
+    {
+      "trip": 6,
+      "moves": 4,
+      "points": 16,
+      "trail": [
+        {
+          "cell": 9,
+          "name": "E2",
+          "score": 19,
+          "arrow": "↓"
+        },
+        {
+          "cell": 10,
+          "name": "A3",
+          "score": 16,
+          "arrow": "→"
+        },
+        {
+          "cell": 11,
+          "name": "B3",
+          "score": 17,
+          "arrow": "→"
+        },
+        {
+          "cell": 12,
+          "name": "C3",
+          "score": 18,
+          "arrow": "→"
+        },
+        {
+          "cell": 13,
+          "name": "D3",
+          "score": 19,
+          "arrow": "→"
+        }
+      ]
+    },
+    {
+      "trip": 7,
+      "moves": 4,
+      "points": 16,
+      "trail": [
+        {
+          "cell": 9,
+          "name": "E2",
+          "score": 19,
+          "arrow": "↓"
+        },
+        {
+          "cell": 10,
+          "name": "A3",
+          "score": 16,
+          "arrow": "→"
+        },
+        {
+          "cell": 11,
+          "name": "B3",
+          "score": 17,
+          "arrow": "→"
+        },
+        {
+          "cell": 12,
+          "name": "C3",
+          "score": 18,
+          "arrow": "→"
+        },
+        {
+          "cell": 13,
+          "name": "D3",
+          "score": 19,
+          "arrow": "→"
+        }
+      ]
+    },
+    {
+      "trip": 8,
+      "moves": 5,
+      "points": 15,
+      "trail": [
+        {
+          "cell": 9,
+          "name": "E2",
+          "score": 19,
+          "arrow": "↓"
+        },
+        {
+          "cell": 10,
+          "name": "A3",
+          "score": 16,
+          "arrow": "→"
+        },
+        {
+          "cell": 11,
+          "name": "B3",
+          "score": 17,
+          "arrow": "→"
+        },
+        {
+          "cell": 12,
+          "name": "C3",
+          "score": 18,
+          "arrow": "→"
+        },
+        {
+          "cell": 13,
+          "name": "D3",
+          "score": 19,
+          "arrow": "→"
+        }
+      ]
+    },
+    {
+      "trip": 9,
+      "moves": 5,
+      "points": 15,
+      "trail": [
+        {
+          "cell": 9,
+          "name": "E2",
+          "score": 19,
+          "arrow": "↓"
+        },
+        {
+          "cell": 10,
+          "name": "A3",
+          "score": 16,
+          "arrow": "→"
+        },
+        {
+          "cell": 11,
+          "name": "B3",
+          "score": 17,
+          "arrow": "→"
+        },
+        {
+          "cell": 12,
+          "name": "C3",
+          "score": 18,
+          "arrow": "→"
+        },
+        {
+          "cell": 13,
+          "name": "D3",
+          "score": 19,
+          "arrow": "→"
+        }
+      ]
+    },
+    {
+      "trip": 10,
+      "moves": 5,
+      "points": 15,
+      "trail": [
+        {
+          "cell": 9,
+          "name": "E2",
+          "score": 19,
+          "arrow": "↓"
+        },
+        {
+          "cell": 10,
+          "name": "A3",
+          "score": 16,
+          "arrow": "→"
+        },
+        {
+          "cell": 11,
+          "name": "B3",
+          "score": 17,
+          "arrow": "→"
+        },
+        {
+          "cell": 12,
+          "name": "C3",
+          "score": 18,
+          "arrow": "→"
+        },
+        {
+          "cell": 13,
+          "name": "D3",
+          "score": 19,
+          "arrow": "→"
+        }
+      ]
+    },
+    {
+      "trip": 11,
+      "moves": 4,
+      "points": 16,
+      "trail": [
+        {
+          "cell": 9,
+          "name": "E2",
+          "score": 19,
+          "arrow": "↓"
+        },
+        {
+          "cell": 10,
+          "name": "A3",
+          "score": 16,
+          "arrow": "→"
+        },
+        {
+          "cell": 11,
+          "name": "B3",
+          "score": 17,
+          "arrow": "→"
+        },
+        {
+          "cell": 12,
+          "name": "C3",
+          "score": 18,
+          "arrow": "→"
+        },
+        {
+          "cell": 13,
+          "name": "D3",
+          "score": 19,
+          "arrow": "→"
+        }
+      ]
+    },
+    {
+      "trip": 12,
+      "moves": 4,
+      "points": 16,
+      "trail": [
+        {
+          "cell": 9,
+          "name": "E2",
+          "score": 19,
+          "arrow": "↓"
+        },
+        {
+          "cell": 10,
+          "name": "A3",
+          "score": 16,
+          "arrow": "→"
+        },
+        {
+          "cell": 11,
+          "name": "B3",
+          "score": 17,
+          "arrow": "→"
+        },
+        {
+          "cell": 12,
+          "name": "C3",
+          "score": 18,
+          "arrow": "→"
+        },
+        {
+          "cell": 13,
+          "name": "D3",
+          "score": 19,
+          "arrow": "→"
+        }
+      ]
+    },
+    {
+      "trip": 13,
+      "moves": 4,
+      "points": 16,
+      "trail": [
+        {
+          "cell": 9,
+          "name": "E2",
+          "score": 19,
+          "arrow": "↓"
+        },
+        {
+          "cell": 10,
+          "name": "A3",
+          "score": 16,
+          "arrow": "→"
+        },
+        {
+          "cell": 11,
+          "name": "B3",
+          "score": 17,
+          "arrow": "→"
+        },
+        {
+          "cell": 12,
+          "name": "C3",
+          "score": 18,
+          "arrow": "→"
+        },
+        {
+          "cell": 13,
+          "name": "D3",
+          "score": 19,
+          "arrow": "→"
+        }
+      ]
+    },
+    {
+      "trip": 14,
+      "moves": 4,
+      "points": 16,
+      "trail": [
+        {
+          "cell": 9,
+          "name": "E2",
+          "score": 19,
+          "arrow": "↓"
+        },
+        {
+          "cell": 10,
+          "name": "A3",
+          "score": 16,
+          "arrow": "→"
+        },
+        {
+          "cell": 11,
+          "name": "B3",
+          "score": 17,
+          "arrow": "→"
+        },
+        {
+          "cell": 12,
+          "name": "C3",
+          "score": 18,
+          "arrow": "→"
+        },
+        {
+          "cell": 13,
+          "name": "D3",
+          "score": 19,
+          "arrow": "→"
+        }
+      ]
+    },
+    {
+      "trip": 15,
+      "moves": 5,
+      "points": 15,
+      "trail": [
+        {
+          "cell": 9,
+          "name": "E2",
+          "score": 19,
+          "arrow": "↓"
+        },
+        {
+          "cell": 10,
+          "name": "A3",
+          "score": 16,
+          "arrow": "→"
+        },
+        {
+          "cell": 11,
+          "name": "B3",
+          "score": 17,
+          "arrow": "→"
+        },
+        {
+          "cell": 12,
+          "name": "C3",
+          "score": 18,
+          "arrow": "→"
+        },
+        {
+          "cell": 13,
+          "name": "D3",
+          "score": 19,
+          "arrow": "→"
+        }
+      ]
+    },
+    {
+      "trip": 16,
+      "moves": 5,
+      "points": 15,
+      "trail": [
+        {
+          "cell": 9,
+          "name": "E2",
+          "score": 19,
+          "arrow": "↓"
+        },
+        {
+          "cell": 10,
+          "name": "A3",
+          "score": 16,
+          "arrow": "→"
+        },
+        {
+          "cell": 11,
+          "name": "B3",
+          "score": 17,
+          "arrow": "→"
+        },
+        {
+          "cell": 12,
+          "name": "C3",
+          "score": 18,
+          "arrow": "→"
+        },
+        {
+          "cell": 13,
+          "name": "D3",
+          "score": 19,
+          "arrow": "→"
+        }
+      ]
+    },
+    {
+      "trip": 17,
+      "moves": 4,
+      "points": 16,
+      "trail": [
+        {
+          "cell": 9,
+          "name": "E2",
+          "score": 19,
+          "arrow": "↓"
+        },
+        {
+          "cell": 10,
+          "name": "A3",
+          "score": 16,
+          "arrow": "→"
+        },
+        {
+          "cell": 11,
+          "name": "B3",
+          "score": 17,
+          "arrow": "→"
+        },
+        {
+          "cell": 12,
+          "name": "C3",
+          "score": 18,
+          "arrow": "→"
+        },
+        {
+          "cell": 13,
+          "name": "D3",
+          "score": 19,
+          "arrow": "→"
+        }
+      ]
+    },
+    {
+      "trip": 18,
+      "moves": 4,
+      "points": 16,
+      "trail": [
+        {
+          "cell": 9,
+          "name": "E2",
+          "score": 19,
+          "arrow": "↓"
+        },
+        {
+          "cell": 10,
+          "name": "A3",
+          "score": 16,
+          "arrow": "→"
+        },
+        {
+          "cell": 11,
+          "name": "B3",
+          "score": 17,
+          "arrow": "→"
+        },
+        {
+          "cell": 12,
+          "name": "C3",
+          "score": 18,
+          "arrow": "→"
+        },
+        {
+          "cell": 13,
+          "name": "D3",
+          "score": 19,
+          "arrow": "→"
+        }
+      ]
+    },
+    {
+      "trip": 19,
+      "moves": 4,
+      "points": 16,
+      "trail": [
+        {
+          "cell": 9,
+          "name": "E2",
+          "score": 19,
+          "arrow": "↓"
+        },
+        {
+          "cell": 10,
+          "name": "A3",
+          "score": 16,
+          "arrow": "→"
+        },
+        {
+          "cell": 11,
+          "name": "B3",
+          "score": 17,
+          "arrow": "→"
+        },
+        {
+          "cell": 12,
+          "name": "C3",
+          "score": 18,
+          "arrow": "→"
+        },
+        {
+          "cell": 13,
+          "name": "D3",
+          "score": 19,
+          "arrow": "→"
+        }
+      ]
+    },
+    {
+      "trip": 20,
+      "moves": 6,
+      "points": 14,
+      "trail": [
+        {
+          "cell": 9,
+          "name": "E2",
+          "score": 19,
+          "arrow": "↓"
+        },
+        {
+          "cell": 10,
+          "name": "A3",
+          "score": 16,
+          "arrow": "→"
+        },
+        {
+          "cell": 11,
+          "name": "B3",
+          "score": 17,
+          "arrow": "→"
+        },
+        {
+          "cell": 12,
+          "name": "C3",
+          "score": 18,
+          "arrow": "→"
+        },
+        {
+          "cell": 13,
+          "name": "D3",
+          "score": 19,
+          "arrow": "→"
+        }
+      ]
+    }
+  ],
+  "test": {
+    "moves": 4,
+    "delivered": true,
+    "points": 16,
+    "path": [
+      "A3",
+      "B3",
+      "C3",
+      "D3",
+      "E3"
+    ]
+  },
+  "firstTestAtShortest": 5,
+  "change": {
+    "blocked": {
+      "delivered": false,
+      "stuck": "bump",
+      "path": [
+        "A3",
+        "B3",
+        "B3",
+        "B3",
+        "B3"
+      ]
+    },
+    "retrain": {
+      "tripMoves": [
+        48,
+        119,
+        32,
+        18,
+        18,
+        9,
+        10,
+        14,
+        11,
+        9
+      ],
+      "testMoves": 8,
+      "delivered": true,
+      "path": [
+        "A3",
+        "A2",
+        "A1",
+        "B1",
+        "C1",
+        "D1",
+        "E1",
+        "E2",
+        "E3"
+      ]
+    },
+    "reopened": {
+      "testMoves": 8,
+      "delivered": true,
+      "startScores": [
+        12,
+        -7,
+        -7,
+        11
+      ]
+    },
+    "fresh": {
+      "testMoves": 4,
+      "delivered": true
+    }
+  },
+  "big": {
+    "rows": 7,
+    "cols": 11,
+    "squares": 52,
+    "curve": [
+      {
+        "trips": 10,
+        "squares": 52,
+        "delivered": 28,
+        "shortest": 17
+      },
+      {
+        "trips": 20,
+        "squares": 52,
+        "delivered": 35,
+        "shortest": 26
+      },
+      {
+        "trips": 30,
+        "squares": 52,
+        "delivered": 39,
+        "shortest": 36
+      },
+      {
+        "trips": 40,
+        "squares": 52,
+        "delivered": 48,
+        "shortest": 44
+      },
+      {
+        "trips": 50,
+        "squares": 52,
+        "delivered": 43,
+        "shortest": 41
+      },
+      {
+        "trips": 60,
+        "squares": 52,
+        "delivered": 43,
+        "shortest": 41
+      },
+      {
+        "trips": 70,
+        "squares": 52,
+        "delivered": 46,
+        "shortest": 43
+      },
+      {
+        "trips": 80,
+        "squares": 52,
+        "delivered": 46,
+        "shortest": 44
+      },
+      {
+        "trips": 90,
+        "squares": 52,
+        "delivered": 46,
+        "shortest": 46
+      },
+      {
+        "trips": 100,
+        "squares": 52,
+        "delivered": 48,
+        "shortest": 48
+      },
+      {
+        "trips": 110,
+        "squares": 52,
+        "delivered": 49,
+        "shortest": 49
+      },
+      {
+        "trips": 120,
+        "squares": 52,
+        "delivered": 52,
+        "shortest": 51
+      },
+      {
+        "trips": 130,
+        "squares": 52,
+        "delivered": 52,
+        "shortest": 52
+      },
+      {
+        "trips": 140,
+        "squares": 52,
+        "delivered": 52,
+        "shortest": 52
+      },
+      {
+        "trips": 150,
+        "squares": 52,
+        "delivered": 52,
+        "shortest": 52
+      },
+      {
+        "trips": 160,
+        "squares": 52,
+        "delivered": 52,
+        "shortest": 52
+      },
+      {
+        "trips": 170,
+        "squares": 52,
+        "delivered": 52,
+        "shortest": 52
+      },
+      {
+        "trips": 180,
+        "squares": 52,
+        "delivered": 52,
+        "shortest": 52
+      },
+      {
+        "trips": 190,
+        "squares": 52,
+        "delivered": 52,
+        "shortest": 52
+      },
+      {
+        "trips": 200,
+        "squares": 52,
+        "delivered": 52,
+        "shortest": 52
+      }
+    ],
+    "firstAllShortest": 130,
+    "meanFirst50": 32.5,
+    "meanNext50": 8.4,
+    "firstTrip": 270
+  },
+  "noCost": {
+    "tripMoves": [
+      78,
+      40,
+      60,
+      10,
+      7,
+      15,
+      9,
+      12,
+      11,
+      19,
+      40,
+      84,
+      77,
+      30,
+      19,
+      63,
+      29,
+      124,
+      43,
+      11
+    ],
+    "testDelivered": false,
+    "testStuck": "bump",
+    "startScores": [
+      20,
+      20,
+      20,
+      20
+    ]
+  }
+}

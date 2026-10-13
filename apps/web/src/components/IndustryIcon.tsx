@@ -1,6 +1,7 @@
 import {
   Building2,
   Factory,
+  Film,
   GraduationCap,
   HardHat,
   HeartPulse,
@@ -13,7 +14,9 @@ import {
 
 const iconMap: Record<string, LucideIcon> = {
   "building-2": Building2,
+  clapperboard: Film,
   factory: Factory,
+  film: Film,
   "graduation-cap": GraduationCap,
   "hard-hat": HardHat,
   "heart-pulse": HeartPulse,

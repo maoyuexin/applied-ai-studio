@@ -1,0 +1,28 @@
+[project]
+name = "applied-ai-studio-media-api"
+version = "0.1.0"
+description = "Opt-in Promo Studio media generation API for Module 8 image and video generation"
+requires-python = ">=3.11"
+dependencies = [
+  "azure-identity>=1.25,<2",
+  "fastapi>=0.116,<1",
+  "httpx>=0.28,<1",
+  "pydantic-settings>=2.10,<3",
+  "uvicorn[standard]>=0.35,<1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.4,<10",
+]
+
+[tool.setuptools]
+packages = ["app"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
