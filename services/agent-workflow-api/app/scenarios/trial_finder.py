@@ -45,7 +45,7 @@ SCENARIO = Scenario(
     ],
     agents=[
         AgentSpec(
-            "trial_finder", "Trial Finder", "Finds recruiting trials worth a coordinator's review", "#e8913c",
+            "trial_finder", "Trial Finder", "Finds trials worth a coordinator's review", "#e8913c",
             INSTRUCTIONS, ["get_patient", "search_trials", "check_basics", "get_trial", "send_referral"], "plan",
         )
     ],

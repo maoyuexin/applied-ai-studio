@@ -71,7 +71,7 @@ SCENARIO = Scenario(
         AgentSpec("product_owner", "Product owner", "Turns the ticket into a spec", "#7eaeb8", PRODUCT_OWNER, [], "plan"),
         AgentSpec("developer", "Developer", "Writes the function", "#e8913c", DEVELOPER, [], "act"),
         AgentSpec("tester", "Tester", "Runs the hidden acceptance tests", "#a3be8c", TESTER, ["get_acceptance_tests", "run_python"], "check"),
-        AgentSpec("reviewer", "Reviewer", "Reviews the code and requests the merge", "#b48ead", REVIEWER, ["merge_change"], "check"),
+        AgentSpec("reviewer", "Reviewer", "Reviews code, asks to merge", "#b48ead", REVIEWER, ["merge_change"], "check"),
     ],
     tools=[
         ToolSpec("get_acceptance_tests", "Acceptance tests", "sense", "lookup",

@@ -38,7 +38,7 @@ SCENARIO = Scenario(
         AgentSpec(
             id="card_alert_agent",
             label="Card Alert agent",
-            role="Reviews a card transaction and decides whether to request a hold",
+            role="Reviews the alert; may request a hold",
             color="#e8913c",
             instructions=INSTRUCTIONS,
             tools=["get_transaction", "score_transaction", "hold_card"],

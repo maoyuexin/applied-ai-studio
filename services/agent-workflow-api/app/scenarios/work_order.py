@@ -55,10 +55,10 @@ SCENARIO = Scenario(
         "The check verifies that every citation came from the procedure search, not from memory.",
     ],
     agents=[
-        AgentSpec("monitor", "Monitor", "Reads the compressor's anomaly score", "#7eaeb8", MONITOR, ["score_machine"], "sense"),
-        AgentSpec("diagnose", "Diagnose", "Finds the relevant maintenance procedures", "#b48ead", DIAGNOSE, ["search_procedures"], "plan"),
+        AgentSpec("monitor", "Monitor", "Reads the anomaly score", "#7eaeb8", MONITOR, ["score_machine"], "sense"),
+        AgentSpec("diagnose", "Diagnose", "Finds the right procedures", "#b48ead", DIAGNOSE, ["search_procedures"], "plan"),
         AgentSpec("planner", "Planner", "Drafts the work order", "#e8913c", PLANNER, [], "plan"),
-        AgentSpec("dispatcher", "Dispatcher", "Files the work order once checked and approved", "#a3be8c", DISPATCHER, ["create_work_order"], "act"),
+        AgentSpec("dispatcher", "Dispatcher", "Files it once checked", "#a3be8c", DISPATCHER, ["create_work_order"], "act"),
     ],
     tools=[
         ToolSpec("score_machine", "Anomaly score", "sense", "model",
@@ -88,7 +88,7 @@ SCENARIO = Scenario(
     ],
     layout={
         "task": (80, 170), "monitor": (330, 170), "diagnose": (580, 170), "planner": (830, 170),
-        "field_check": (830, 430), "dispatcher": (580, 430), "result": (310, 430), "person": (330, 640),
+        "field_check": (830, 430), "dispatcher": (580, 430), "result": (310, 430), "person": (840, 640),
     },
     tasks=[
         TaskSpec("W-1104", "Score climbs 14 hours before a reported air leak",
