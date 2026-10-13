@@ -1,0 +1,257 @@
+{
+ "schema": "agent-workflows.run/1",
+ "id": "b1bb21e00922",
+ "scenario": "work-order",
+ "pattern": "sequential",
+ "task": {
+  "id": "W-0215",
+  "label": "A quiet, normal week",
+  "prompt": "Sensor alert for APU-1 air compressor: review sensor window W-0215 and prepare maintenance work if it is needed.",
+  "truth": "A clean week from the training months."
+ },
+ "mode": "recorded",
+ "model": "gpt-5.6-sol",
+ "framework": "Microsoft Agent Framework 1.20.0",
+ "started_at": "2026-10-13T03:36:45+00:00",
+ "seconds": 16.62,
+ "status": "completed",
+ "error": null,
+ "stats": {
+  "model_calls": 5,
+  "tool_calls": 1,
+  "input_tokens": 3425,
+  "output_tokens": 632,
+  "approvals": 0,
+  "handoffs": 0,
+  "messages": 4,
+  "per_agent": {
+   "monitor": {
+    "model_calls": 2,
+    "tool_calls": 1,
+    "tokens": 896
+   },
+   "diagnose": {
+    "model_calls": 1,
+    "tool_calls": 0,
+    "tokens": 875
+   },
+   "planner": {
+    "model_calls": 1,
+    "tool_calls": 0,
+    "tokens": 1039
+   },
+   "dispatcher": {
+    "model_calls": 1,
+    "tool_calls": 0,
+    "tokens": 1247
+   }
+  }
+ },
+ "result": {
+  "headline": "No work order filed",
+  "fields": [
+   {
+    "label": "Peak score",
+    "value": "1.82 (No action)"
+   },
+   {
+    "label": "Field check",
+    "value": "passed"
+   },
+   {
+    "label": "Priority",
+    "value": "low"
+   }
+  ],
+  "document": {
+   "work_order_needed": false,
+   "asset": "APU-1 air compressor",
+   "priority": "low",
+   "problem": "No actionable anomaly identified in sensor window W-0215.",
+   "evidence": [],
+   "steps": [],
+   "safety": [],
+   "citations": [],
+   "due_within_hours": 0
+  },
+  "final": "No work order was needed, so nothing was filed and the supervisor-approval tool was not called.",
+  "outbox": []
+ },
+ "events": [
+  {
+   "seq": 1,
+   "t": 0.45,
+   "type": "run_start",
+   "task": "W-0215",
+   "prompt": "Sensor alert for APU-1 air compressor: review sensor window W-0215 and prepare maintenance work if it is needed."
+  },
+  {
+   "seq": 2,
+   "t": 0.46,
+   "type": "model_call",
+   "agent": "monitor"
+  },
+  {
+   "seq": 3,
+   "t": 0.8,
+   "type": "agent_start",
+   "agent": "monitor"
+  },
+  {
+   "seq": 4,
+   "t": 2.58,
+   "type": "tool_call",
+   "agent": "monitor",
+   "tool": "score_machine",
+   "call_id": "call_D0f1m2LKJHZ2DoYkQDDi81K5",
+   "args": {
+    "window_id": "W-0215"
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 5,
+   "t": 2.67,
+   "type": "model_call",
+   "agent": "monitor"
+  },
+  {
+   "seq": 6,
+   "t": 2.68,
+   "type": "tool_result",
+   "agent": "monitor",
+   "tool": "score_machine",
+   "call_id": "call_D0f1m2LKJHZ2DoYkQDDi81K5",
+   "ok": true,
+   "result": {
+    "asset": "APU-1 air compressor",
+    "window": "2020-02-15 00:00:00 to 2020-02-21 23:00:00",
+    "hours_with_data": 154,
+    "policy": "work order at a score of 6.0 or more; watch from 3.0",
+    "peak_score": 1.82,
+    "peak_at": "2020-02-18 15:00:00",
+    "median_score": 0.15,
+    "route_at_peak": "No action",
+    "hours_at_work_order_level": 0,
+    "hours_in_watch_band": 0,
+    "first_alert_hour": null,
+    "drivers": [
+     {
+      "signal": "Minutes of rest between working bursts",
+      "reading": "18.0 minutes of rest per start",
+      "normal": "28.0 minutes of rest per start",
+      "meaning": "Lower than usual means trouble"
+     },
+     {
+      "signal": "Share of the hour the compressor is working hard",
+      "reading": "10% of the hour",
+      "normal": "7% of the hour",
+      "meaning": "Higher than usual means trouble"
+     },
+     {
+      "signal": "Compressor starts per hour",
+      "reading": "3 starts in the hour",
+      "normal": "2 starts in the hour",
+      "meaning": "Higher than usual means trouble"
+     }
+    ],
+    "note": "A distance from this compressor's own quiet-months normal, used to rank hours for attention. It is not a diagnosis and not a prediction that the machine will fail. A technician inspects the machine and decides."
+   }
+  },
+  {
+   "seq": 7,
+   "t": 5.92,
+   "type": "message",
+   "agent": "monitor",
+   "text": "Peak score: 1.82 at 2020-02-18 15:00:00.  \nPolicy route at peak: No action; no work order needed.  \nHours alerted: 0.  \nStrongest drivers: shorter rest between starts and more time working hard than usual.  \nThe score ranks unusual behavior; it is not a diagnosis.",
+   "step": "sense"
+  },
+  {
+   "seq": 8,
+   "t": 5.92,
+   "type": "model_call",
+   "agent": "diagnose"
+  },
+  {
+   "seq": 9,
+   "t": 5.92,
+   "type": "agent_start",
+   "agent": "diagnose"
+  },
+  {
+   "seq": 10,
+   "t": 9.04,
+   "type": "message",
+   "agent": "diagnose",
+   "text": "Route: **No action**. Peak score was **1.82**, with **0 hours** in watch or work-order bands. The increased starts, shorter rest periods, and higher workload did not reach an alert threshold.\n\n**No procedure search is needed, and no maintenance work order is indicated for W-0215.**",
+   "step": "plan"
+  },
+  {
+   "seq": 11,
+   "t": 9.04,
+   "type": "model_call",
+   "agent": "planner"
+  },
+  {
+   "seq": 12,
+   "t": 9.04,
+   "type": "agent_start",
+   "agent": "planner"
+  },
+  {
+   "seq": 13,
+   "t": 12.35,
+   "type": "message",
+   "agent": "planner",
+   "text": "```json\n{\n  \"work_order_needed\": false,\n  \"asset\": \"APU-1 air compressor\",\n  \"priority\": \"low\",\n  \"problem\": \"No actionable anomaly identified in sensor window W-0215.\",\n  \"evidence\": [],\n  \"steps\": [],\n  \"safety\": [],\n  \"citations\": [],\n  \"due_within_hours\": 0\n}\n```",
+   "step": "plan"
+  },
+  {
+   "seq": 14,
+   "t": 12.35,
+   "type": "code_step",
+   "node": "field_check",
+   "title": "Field check",
+   "passed": true,
+   "checks": [
+    {
+     "check": "Planner produced a JSON work order",
+     "ok": true
+    },
+    {
+     "check": "States whether a work order is needed",
+     "ok": true
+    }
+   ],
+   "step": "check"
+  },
+  {
+   "seq": 15,
+   "t": 12.35,
+   "type": "model_call",
+   "agent": "dispatcher"
+  },
+  {
+   "seq": 16,
+   "t": 12.35,
+   "type": "agent_start",
+   "agent": "dispatcher"
+  },
+  {
+   "seq": 17,
+   "t": 16.62,
+   "type": "message",
+   "agent": "dispatcher",
+   "text": "No work order was needed, so nothing was filed and the supervisor-approval tool was not called.",
+   "step": "act"
+  },
+  {
+   "seq": 18,
+   "t": 16.62,
+   "type": "run_end",
+   "status": "completed",
+   "error": null
+  }
+ ]
+}

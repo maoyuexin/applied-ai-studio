@@ -1,0 +1,466 @@
+{
+ "schema": "agent-workflows.run/1",
+ "id": "fa18bac4ef27",
+ "scenario": "work-order",
+ "pattern": "sequential",
+ "task": {
+  "id": "W-0708",
+  "label": "High score on a busy but healthy week",
+  "prompt": "Sensor alert for APU-1 air compressor: review sensor window W-0708 and prepare maintenance work if it is needed.",
+  "truth": "No documented failure: the machine was simply busier than in the training months (a false alarm caused by drift)."
+ },
+ "mode": "recorded",
+ "model": "gpt-5.6-sol",
+ "framework": "Microsoft Agent Framework 1.20.0",
+ "started_at": "2026-10-13T03:36:15+00:00",
+ "seconds": 29.68,
+ "status": "completed",
+ "error": null,
+ "stats": {
+  "model_calls": 7,
+  "tool_calls": 4,
+  "input_tokens": 11884,
+  "output_tokens": 1722,
+  "approvals": 1,
+  "handoffs": 0,
+  "messages": 4,
+  "per_agent": {
+   "monitor": {
+    "model_calls": 2,
+    "tool_calls": 1,
+    "tokens": 948
+   },
+   "diagnose": {
+    "model_calls": 2,
+    "tool_calls": 2,
+    "tokens": 3366
+   },
+   "planner": {
+    "model_calls": 1,
+    "tool_calls": 0,
+    "tokens": 2950
+   },
+   "dispatcher": {
+    "model_calls": 2,
+    "tool_calls": 1,
+    "tokens": 6342
+   }
+  }
+ },
+ "result": {
+  "headline": "Work order filed",
+  "fields": [
+   {
+    "label": "Peak score",
+    "value": "12.07 (Raise a work order)"
+   },
+   {
+    "label": "Field check",
+    "value": "passed"
+   },
+   {
+    "label": "Priority",
+    "value": "high"
+   }
+  ],
+  "document": {
+   "work_order_needed": true,
+   "asset": "APU-1 air compressor",
+   "priority": "high",
+   "problem": "Abnormal continuous hard running with no rest between starts and minimal panel air-pressure swing; inspect pressure controls, drive, and cooling system.",
+   "evidence": [
+    "Peak unusual-behaviour score was 12.07 at 2020-05-20 01:00:00, above the 6.0 work-order threshold.",
+    "The compressor worked hard for 100% of the hour versus a normal 7%.",
+    "Rest between working bursts was 0.0 minutes per start versus a normal 28.0 minutes.",
+    "Panel air-pressure swing was 0.01 bar versus a normal 0.56 bar.",
+    "The asset remained at work-order level for 22 hours."
+   ],
+   "steps": [
+    "Verify pressure-switch cut-in and cut-out operation, calibration, and set points.",
+    "Inspect V-belts for wear or slippage, chains for looseness, and shaft couplings for excessive runout or misalignment.",
+    "Check coolant flow through the compressor and aftercooler.",
+    "Record findings and repair or adjust confirmed defects using the site-specific compressor procedure."
+   ],
+   "safety": [
+    "Follow the site-specific hazardous-energy control procedure and apply personal lockout/tagout at each energy-isolation device.",
+    "Verify de-energization and release of stored energy before beginning work.",
+    "Bleed pressure from the compressor, receiver, and affected compressed-air system before attempting pressure-system repairs."
+   ],
+   "citations": [
+    "USBR FIST 2-6 p. 57",
+    "USBR FIST 2-6 p. 56",
+    "30 CFR 56.13019",
+    "USBR FIST 1-1 p. 37"
+   ],
+   "due_within_hours": 24
+  },
+  "final": "Work order **#1** was approved by a person and filed successfully for the **APU-1 air compressor**.",
+  "outbox": [
+   {
+    "action": "create_work_order",
+    "asset": "APU-1 air compressor",
+    "priority": "high",
+    "problem": "Abnormal continuous hard running with no rest between starts and minimal panel air-pressure swing; inspect pressure controls, drive, and cooling system.",
+    "due_within_hours": 24
+   }
+  ]
+ },
+ "events": [
+  {
+   "seq": 1,
+   "t": 0.47,
+   "type": "run_start",
+   "task": "W-0708",
+   "prompt": "Sensor alert for APU-1 air compressor: review sensor window W-0708 and prepare maintenance work if it is needed."
+  },
+  {
+   "seq": 2,
+   "t": 0.47,
+   "type": "model_call",
+   "agent": "monitor"
+  },
+  {
+   "seq": 3,
+   "t": 0.81,
+   "type": "agent_start",
+   "agent": "monitor"
+  },
+  {
+   "seq": 4,
+   "t": 2.75,
+   "type": "tool_call",
+   "agent": "monitor",
+   "tool": "score_machine",
+   "call_id": "call_jLoAUea2ezvXSguVI906gX3t",
+   "args": {
+    "window_id": "W-0708"
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 5,
+   "t": 2.85,
+   "type": "model_call",
+   "agent": "monitor"
+  },
+  {
+   "seq": 6,
+   "t": 2.86,
+   "type": "tool_result",
+   "agent": "monitor",
+   "tool": "score_machine",
+   "call_id": "call_jLoAUea2ezvXSguVI906gX3t",
+   "ok": true,
+   "result": {
+    "asset": "APU-1 air compressor",
+    "window": "2020-05-19 16:00:00 to 2020-05-21 01:00:00",
+    "hours_with_data": 29,
+    "policy": "work order at a score of 6.0 or more; watch from 3.0",
+    "peak_score": 12.07,
+    "peak_at": "2020-05-20 01:00:00",
+    "median_score": 11.78,
+    "route_at_peak": "Raise a work order",
+    "hours_at_work_order_level": 22,
+    "hours_in_watch_band": 6,
+    "first_alert_hour": "2020-05-19 22:00:00",
+    "drivers": [
+     {
+      "signal": "Share of the hour the compressor is working hard",
+      "reading": "100% of the hour",
+      "normal": "7% of the hour",
+      "meaning": "Higher than usual means trouble"
+     },
+     {
+      "signal": "Minutes of rest between working bursts",
+      "reading": "0.0 minutes of rest per start",
+      "normal": "28.0 minutes of rest per start",
+      "meaning": "Lower than usual means trouble"
+     },
+     {
+      "signal": "Swing in panel air pressure (bar)",
+      "reading": "0.01 bar of swing",
+      "normal": "0.56 bar of swing",
+      "meaning": "Lower than usual means trouble"
+     }
+    ],
+    "note": "A distance from this compressor's own quiet-months normal, used to rank hours for attention. It is not a diagnosis and not a prediction that the machine will fail. A technician inspects the machine and decides."
+   }
+  },
+  {
+   "seq": 7,
+   "t": 6.2,
+   "type": "message",
+   "agent": "monitor",
+   "text": "- Peak unusual-behaviour score: **12.07** at **2020-05-20 01:00:00**.\n- Policy route at peak: **Raise a work order**.\n- Alerted hours: **22** at work-order level and **6** in the watch band.\n- Strongest drivers: compressor working hard **100%** of the hour; **0.0 minutes** of rest per start.\n- This score ranks unusual behaviour; it is not a diagnosis.",
+   "step": "sense"
+  },
+  {
+   "seq": 8,
+   "t": 6.21,
+   "type": "model_call",
+   "agent": "diagnose"
+  },
+  {
+   "seq": 9,
+   "t": 6.21,
+   "type": "agent_start",
+   "agent": "diagnose"
+  },
+  {
+   "seq": 10,
+   "t": 10.46,
+   "type": "tool_call",
+   "agent": "diagnose",
+   "tool": "search_procedures",
+   "call_id": "call_GLvbnoy0e2IXzNFRyaogkL0c",
+   "args": {
+    "question": "APU-1 air compressor is running hard continuously (100% duty versus 7% normal), has no rest between starts, and panel air pressure has almost no swing. Find procedures to inspect likely causes such as air leaks, failed pressure control/unloader, blocked intake, discharge/check-valve problems, or inability to build/maintain pressure."
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 11,
+   "t": 10.52,
+   "type": "tool_call",
+   "agent": "diagnose",
+   "tool": "search_procedures",
+   "call_id": "call_ll5sgqwiW45Ew6fU8iTT2ydM",
+   "args": {
+    "question": "Find the lockout/tagout and safe isolation procedure for APU-1 air compressor before inspection or maintenance, including electrical isolation, stored pneumatic pressure release, verification of zero energy, and hazards from automatic restart."
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 12,
+   "t": 10.64,
+   "type": "model_call",
+   "agent": "diagnose"
+  },
+  {
+   "seq": 13,
+   "t": 10.64,
+   "type": "tool_result",
+   "agent": "diagnose",
+   "tool": "search_procedures",
+   "call_id": "call_GLvbnoy0e2IXzNFRyaogkL0c",
+   "ok": true,
+   "result": {
+    "search_result": "Passages found - no drafted answer for this question",
+    "passages": [
+     {
+      "citation": "USBR FIST 2-6 p. 56",
+      "source": "Water and Oil Systems Maintenance",
+      "score": 0.48,
+      "text": "FIST Volume 2-6 Maintenance of Auxiliary Mechanical Equipment a) Check V-belts for slippage, chains for looseness, and shaft couplings for excessive runout b) Check V-belts for signs of wear or aging and replace as needed. Using a dial indicator, check for excessive runout of direct-coupled shafts; check shaft alignment if runout is excessive. a) Check flow of water coolant through compressor and aftercooler. Check f"
+     },
+     {
+      "citation": "USBR FIST 2-6 p. 57",
+      "source": "Water and Oil Systems Maintenance",
+      "score": 0.47,
+      "text": "FIST Volume 2-6 Maintenance of Auxiliary Mechanical Equipment a) Verify that pressure switches cut in and out at proper pressures. Check settings of b) Check pressure and temperature switch calibration and set points. 11) Inspect and maintain compressor bearings. a) Check anti-friction bearings for excessive vibration or noise and for adequate lubrication. b) Disassemble compressor and inspect condition of all bushin"
+     },
+     {
+      "citation": "30 CFR 56.13019",
+      "source": "§ 56.13019 Pressure system repairs.",
+      "score": 0.45,
+      "text": "Repairs involving the pressure system of compressors, receivers, or compressed-air-powered equipment shall not be attempted until the pressure has been bled off."
+     }
+    ],
+    "note": "Similarity says the wording is close; a qualified person confirms it applies."
+   }
+  },
+  {
+   "seq": 14,
+   "t": 10.64,
+   "type": "tool_result",
+   "agent": "diagnose",
+   "tool": "search_procedures",
+   "call_id": "call_ll5sgqwiW45Ew6fU8iTT2ydM",
+   "ok": true,
+   "result": {
+    "search_result": "Passages found - no drafted answer for this question",
+    "passages": [
+     {
+      "citation": "OSHA 3120 p. 14",
+      "source": "Control of Hazardous Energy (Lockout/Tagout)",
+      "score": 0.57,
+      "text": "In Appendix A to 1910.147, OSHA provides a Typical Minimal Lockout Procedure for employers to consult when preparing their own specific energy-control procedures. The outline is a nonmandatory guideline to help employers and employees comply with the standard. Nothing in the appendix adds to or detracts from any of the requirements in the standard. What must workers do before they begin service or maintenance activit"
+     },
+     {
+      "citation": "USBR FIST 1-1 p. 37",
+      "source": "Hazardous Energy Control Program",
+      "score": 0.57,
+      "text": "FIST Volume 1-1 Hazardous Energy Control Program 1) The placement and removal of a personal lock (tag) must be: a. Installed at the energy isolation device after the device has been placed in the b. Affixed to the energy isolation device in a manner that will maintain the device in 2) Appropriate checks must be performed to verify de energization and release of stored 3) Upon completion of the servicing or maintenanc"
+     },
+     {
+      "citation": "29 CFR 1910.147(f)(4)",
+      "source": "§ 1910.147 The control of hazardous energy (lockout/tagout).",
+      "score": 0.54,
+      "text": "The following appendix to § 1910.147 services as a non-mandatory guideline to assist employers and employees in complying with the requirements of this section, as well as to provide other helpful information. Nothing in the appendix adds to or detracts from any of the requirements of this section. The following simple lockout procedure is provided to assist employers in developing their procedures so they meet the r"
+     }
+    ],
+    "note": "Similarity says the wording is close; a qualified person confirms it applies."
+   }
+  },
+  {
+   "seq": 15,
+   "t": 17.85,
+   "type": "message",
+   "agent": "diagnose",
+   "text": "**Route: Work order** — inspect the compressor’s pressure-control system and mechanical condition, using site-specific procedures.\n\n1. **USBR FIST 2-6 p. 57**  \n   “Verify that pressure switches cut in and out at proper pressures. Check settings of b) Check pressure and temperature switch calibration and set points.”  \n   **Technician meaning:** Test the cut-in/cut-out pressure switch and verify calibration; faulty control could explain continuous operation and no rest between starts.\n\n2. **USBR FIST 2-6 p. 56**  \n   “Check V-belts for slippage, chains for looseness, and shaft couplings for excessive runout… Check flow of water coolant through compressor and aftercooler.”  \n   **Technician meaning:** Inspect the drive and cooling system for conditions that could prevent normal pressure production or cause sustained hard running.\n\n3. **30 CFR 56.13019**  \n   “Repairs involving the pressure system of compressors, receivers, or compressed-air-powered equipment shall not be attempted until the pressure has been bled off.”  \n   **Technician meaning:** Fully depressurize the compressor, receiver, and connected section before opening or repairing the pressure system.\n\n4. **USBR FIST 1-1 p. 37**  \n   “The placement and removal of a personal lock (tag) must be… Installed at the energy isolation device… Appropriate checks must be performed to verify de energization and release of stored…”  \n   **Technician meaning:** Apply personal lockout/tagout at each energy-isolation device, then verify electrical de-energization and release of stored pneumatic energy before work.",
+   "step": "plan"
+  },
+  {
+   "seq": 16,
+   "t": 17.85,
+   "type": "model_call",
+   "agent": "planner"
+  },
+  {
+   "seq": 17,
+   "t": 17.86,
+   "type": "agent_start",
+   "agent": "planner"
+  },
+  {
+   "seq": 18,
+   "t": 24.63,
+   "type": "message",
+   "agent": "planner",
+   "text": "```json\n{\n  \"work_order_needed\": true,\n  \"asset\": \"APU-1 air compressor\",\n  \"priority\": \"high\",\n  \"problem\": \"Abnormal continuous hard running with no rest between starts and minimal panel air-pressure swing; inspect pressure controls, drive, and cooling system.\",\n  \"evidence\": [\n    \"Peak unusual-behaviour score was 12.07 at 2020-05-20 01:00:00, above the 6.0 work-order threshold.\",\n    \"The compressor worked hard for 100% of the hour versus a normal 7%.\",\n    \"Rest between working bursts was 0.0 minutes per start versus a normal 28.0 minutes.\",\n    \"Panel air-pressure swing was 0.01 bar versus a normal 0.56 bar.\",\n    \"The asset remained at work-order level for 22 hours.\"\n  ],\n  \"steps\": [\n    \"Verify pressure-switch cut-in and cut-out operation, calibration, and set points.\",\n    \"Inspect V-belts for wear or slippage, chains for looseness, and shaft couplings for excessive runout or misalignment.\",\n    \"Check coolant flow through the compressor and aftercooler.\",\n    \"Record findings and repair or adjust confirmed defects using the site-specific compressor procedure.\"\n  ],\n  \"safety\": [\n    \"Follow the site-specific hazardous-energy control procedure and apply personal lockout/tagout at each energy-isolation device.\",\n    \"Verify de-energization and release of stored energy before beginning work.\",\n    \"Bleed pressure from the compressor, receiver, and affected compressed-air system before attempting pressure-system repairs.\"\n  ],\n  \"citations\": [\n    \"USBR FIST 2-6 p. 57\",\n    \"USBR FIST 2-6 p. 56\",\n    \"30 CFR 56.13019\",\n    \"USBR FIST 1-1 p. 37\"\n  ],\n  \"due_within_hours\": 24\n}\n```",
+   "step": "plan"
+  },
+  {
+   "seq": 19,
+   "t": 24.63,
+   "type": "code_step",
+   "node": "field_check",
+   "title": "Field check",
+   "passed": true,
+   "checks": [
+    {
+     "check": "Planner produced a JSON work order",
+     "ok": true
+    },
+    {
+     "check": "States whether a work order is needed",
+     "ok": true
+    },
+    {
+     "check": "Asset named",
+     "ok": true
+    },
+    {
+     "check": "Priority is high, medium or low",
+     "ok": true
+    },
+    {
+     "check": "High priority is due within 24 h",
+     "ok": true
+    },
+    {
+     "check": "At least two work steps",
+     "ok": true
+    },
+    {
+     "check": "Safety step isolates the machine (lockout/tagout)",
+     "ok": true
+    },
+    {
+     "check": "At least one citation",
+     "ok": true
+    },
+    {
+     "check": "Every citation came from the procedure search",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "step": "check"
+  },
+  {
+   "seq": 20,
+   "t": 24.63,
+   "type": "model_call",
+   "agent": "dispatcher"
+  },
+  {
+   "seq": 21,
+   "t": 24.64,
+   "type": "agent_start",
+   "agent": "dispatcher"
+  },
+  {
+   "seq": 22,
+   "t": 26.9,
+   "type": "tool_call",
+   "agent": "dispatcher",
+   "tool": "create_work_order",
+   "call_id": "call_j05U6tCEBmtP61Vk8R1w7Nkh",
+   "args": {
+    "asset": "APU-1 air compressor",
+    "priority": "high",
+    "problem": "Abnormal continuous hard running with no rest between starts and minimal panel air-pressure swing; inspect pressure controls, drive, and cooling system.",
+    "due_within_hours": 24
+   },
+   "step": "act",
+   "approval": true
+  },
+  {
+   "seq": 23,
+   "t": 26.97,
+   "type": "approval_request",
+   "request_id": "af-call-b2967130bcd6400eb27cb1f67c44fbe8",
+   "agent": "dispatcher",
+   "tool": "create_work_order",
+   "args": {
+    "asset": "APU-1 air compressor",
+    "priority": "high",
+    "problem": "Abnormal continuous hard running with no rest between starts and minimal panel air-pressure swing; inspect pressure controls, drive, and cooling system.",
+    "due_within_hours": 24
+   }
+  },
+  {
+   "seq": 24,
+   "t": 26.97,
+   "type": "approval_response",
+   "request_id": "af-call-b2967130bcd6400eb27cb1f67c44fbe8",
+   "approved": true,
+   "by": "person"
+  },
+  {
+   "seq": 25,
+   "t": 26.97,
+   "type": "model_call",
+   "agent": "dispatcher"
+  },
+  {
+   "seq": 26,
+   "t": 26.97,
+   "type": "tool_result",
+   "agent": "dispatcher",
+   "tool": "create_work_order",
+   "call_id": "call_j05U6tCEBmtP61Vk8R1w7Nkh",
+   "ok": true,
+   "result": "Approved by a person and completed: create_work_order (reference #1)."
+  },
+  {
+   "seq": 27,
+   "t": 29.68,
+   "type": "message",
+   "agent": "dispatcher",
+   "text": "Work order **#1** was approved by a person and filed successfully for the **APU-1 air compressor**.",
+   "step": "act"
+  },
+  {
+   "seq": 28,
+   "t": 29.68,
+   "type": "run_end",
+   "status": "completed",
+   "error": null
+  }
+ ]
+}

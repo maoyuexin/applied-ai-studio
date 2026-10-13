@@ -3,6 +3,7 @@ import AppShell from "./components/AppShell";
 import { navigate, useLocationSnapshot } from "./router";
 
 const AskStudioPage = lazy(() => import("./pages/AskStudioPage"));
+const AgentWorkflowsPage = lazy(() => import("./pages/AgentWorkflowsPage"));
 const ComplaintsPage = lazy(() => import("./pages/ComplaintsPage"));
 const CreditPage = lazy(() => import("./pages/CreditPage"));
 const MaintenancePage = lazy(() => import("./pages/MaintenancePage"));
@@ -28,7 +29,7 @@ const load = (page: React.ReactNode) => (
 export default function App() {
   const location = useLocationSnapshot();
   const pathname = location.split("?", 1)[0];
-  const validPath = ["/workflow", "/demo", "/showcase", "/fit", "/ask", "/online-order", "/fraud", "/pneumonia", "/credit", "/complaints", "/maintenance", "/maintenance-simulator", "/procedures", "/forecast", "/recommendations", "/forecast-simulator", "/recommendations-simulator", "/forecast-reference", "/recommendations-reference"].includes(pathname);
+  const validPath = ["/workflow", "/demo", "/showcase", "/fit", "/ask", "/agent-workflows", "/online-order", "/fraud", "/pneumonia", "/credit", "/complaints", "/maintenance", "/maintenance-simulator", "/procedures", "/forecast", "/recommendations", "/forecast-simulator", "/recommendations-simulator", "/forecast-reference", "/recommendations-reference"].includes(pathname);
 
   useEffect(() => {
     if (!validPath) navigate("/showcase", { replace: true });
@@ -70,6 +71,8 @@ export default function App() {
       ? <DemoPlaceholderPage />
     : pathname === "/fit"
       ? <FitAnalyzerPage />
+    : pathname === "/agent-workflows"
+      ? <AgentWorkflowsPage />
       : pathname === "/ask"
         ? <AskStudioPage />
         : <ShowcasePage />;

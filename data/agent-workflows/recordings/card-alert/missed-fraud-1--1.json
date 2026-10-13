@@ -1,0 +1,185 @@
+{
+ "schema": "agent-workflows.run/1",
+ "id": "fc5e3f2a00e8",
+ "scenario": "card-alert",
+ "pattern": "single",
+ "task": {
+  "id": "missed-fraud-1",
+  "label": "$6.45 online purchase at 10:45 PM",
+  "prompt": "New card alert: transaction 90920633247d8a3750c394e7488e38fc on the card ending 0064. Review it and decide whether to hold the card.",
+  "truth": "Labeled fraud in the data: the score sits just below the cutoff, so the model misses it."
+ },
+ "mode": "recorded",
+ "model": "gpt-5.6-sol",
+ "framework": "Microsoft Agent Framework 1.20.0",
+ "started_at": "2026-10-13T03:33:43+00:00",
+ "seconds": 52.67,
+ "status": "completed",
+ "error": null,
+ "stats": {
+  "model_calls": 2,
+  "tool_calls": 2,
+  "input_tokens": 1343,
+  "output_tokens": 351,
+  "approvals": 0,
+  "handoffs": 0,
+  "messages": 1,
+  "per_agent": {
+   "card_alert_agent": {
+    "model_calls": 2,
+    "tool_calls": 2,
+    "tokens": 1694
+   }
+  }
+ },
+ "result": {
+  "headline": "No hold",
+  "fields": [
+   {
+    "label": "Model decision",
+    "value": "normal"
+   },
+   {
+    "label": "Score / cutoff",
+    "value": "0.728 / 0.729"
+   },
+   {
+    "label": "Hold placed",
+    "value": "No"
+   }
+  ],
+  "final": "Decision: **Normal**; no temporary hold requested.  \nScore: **0.728**, below the **0.729** review threshold.  \nTop reasons: purchase at **10:45 PM** and an online-shopping merchant category.  \nNext check: verify the cardholder recognizes Terry-Huel in Harbor City, CA.",
+  "outbox": []
+ },
+ "events": [
+  {
+   "seq": 1,
+   "t": 0.46,
+   "type": "run_start",
+   "task": "missed-fraud-1",
+   "prompt": "New card alert: transaction 90920633247d8a3750c394e7488e38fc on the card ending 0064. Review it and decide whether to hold the card."
+  },
+  {
+   "seq": 2,
+   "t": 0.47,
+   "type": "model_call",
+   "agent": "card_alert_agent"
+  },
+  {
+   "seq": 3,
+   "t": 0.81,
+   "type": "agent_start",
+   "agent": "card_alert_agent"
+  },
+  {
+   "seq": 4,
+   "t": 47.86,
+   "type": "tool_call",
+   "agent": "card_alert_agent",
+   "tool": "get_transaction",
+   "call_id": "call_bjx5TTOECjarDucYfGzY99JO",
+   "args": {
+    "transaction_id": "90920633247d8a3750c394e7488e38fc"
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 5,
+   "t": 48.3,
+   "type": "tool_call",
+   "agent": "card_alert_agent",
+   "tool": "score_transaction",
+   "call_id": "call_RHKWXIijUayF4LuDTCWePzxs",
+   "args": {
+    "transaction_id": "90920633247d8a3750c394e7488e38fc"
+   },
+   "step": "check",
+   "approval": false
+  },
+  {
+   "seq": 6,
+   "t": 48.65,
+   "type": "model_call",
+   "agent": "card_alert_agent"
+  },
+  {
+   "seq": 7,
+   "t": 48.65,
+   "type": "tool_result",
+   "agent": "card_alert_agent",
+   "tool": "get_transaction",
+   "call_id": "call_bjx5TTOECjarDucYfGzY99JO",
+   "ok": true,
+   "result": {
+    "transaction_id": "90920633247d8a3750c394e7488e38fc",
+    "card_last4": "0064",
+    "merchant": "Terry-Huel",
+    "location": "Harbor City, CA",
+    "amount_usd": 6.45,
+    "category": "shopping net",
+    "occurred_at": "2026-04-30T22:45:50",
+    "amount_vs_card_average": "0.1x",
+    "card_transactions_last_24h": 3,
+    "distance_from_home_km": 21
+   }
+  },
+  {
+   "seq": 8,
+   "t": 48.65,
+   "type": "tool_result",
+   "agent": "card_alert_agent",
+   "tool": "score_transaction",
+   "call_id": "call_RHKWXIijUayF4LuDTCWePzxs",
+   "ok": true,
+   "result": {
+    "model": "Random forest",
+    "fraud_score": 0.728,
+    "review_threshold": 0.729,
+    "decision": "normal",
+    "top_reasons": [
+     {
+      "feature": "Purchase date and time",
+      "value": "Thu, 10:45 PM",
+      "pushes": "toward review",
+      "weight": 0.218
+     },
+     {
+      "feature": "Merchant category",
+      "value": "shopping net",
+      "pushes": "toward review",
+      "weight": 0.182
+     },
+     {
+      "feature": "Compared with card average",
+      "value": "0.1x usual",
+      "pushes": "toward review",
+      "weight": 0.039
+     },
+     {
+      "feature": "Earlier transactions in 1 hour",
+      "value": "2",
+      "pushes": "toward review",
+      "weight": 0.022
+     }
+    ],
+    "note": "An uncalibrated model estimate used to rank transactions. It is not proof that fraud occurred; a reviewer makes the final determination."
+   }
+  },
+  {
+   "seq": 9,
+   "t": 52.67,
+   "type": "message",
+   "agent": "card_alert_agent",
+   "text": "Decision: **Normal**; no temporary hold requested.  \nScore: **0.728**, below the **0.729** review threshold.  \nTop reasons: purchase at **10:45 PM** and an online-shopping merchant category.  \nNext check: verify the cardholder recognizes Terry-Huel in Harbor City, CA.",
+   "step": "plan"
+  },
+  {
+   "seq": 10,
+   "t": 52.67,
+   "type": "run_end",
+   "status": "completed",
+   "error": null
+  }
+ ]
+}

@@ -1,0 +1,1910 @@
+{
+ "schema": "agent-workflows.run/1",
+ "id": "3b14f08c59ff",
+ "scenario": "trial-finder",
+ "pattern": "single",
+ "task": {
+  "id": "P01",
+  "label": "Patient P01: lung cancer after osimertinib",
+  "prompt": "Find recruiting clinical trials worth reviewing for patient P01. Then refer the patient to the trial you rank first.",
+  "truth": "Synthetic patient. Only the study team decides eligibility."
+ },
+ "mode": "recorded",
+ "model": "gpt-5.6-sol",
+ "framework": "Microsoft Agent Framework 1.20.0",
+ "started_at": "2026-10-13T03:34:36+00:00",
+ "seconds": 66.43,
+ "status": "completed",
+ "error": null,
+ "stats": {
+  "model_calls": 10,
+  "tool_calls": 27,
+  "input_tokens": 99101,
+  "output_tokens": 3608,
+  "approvals": 1,
+  "handoffs": 0,
+  "messages": 1,
+  "per_agent": {
+   "trial_finder": {
+    "model_calls": 10,
+    "tool_calls": 27,
+    "tokens": 102709
+   }
+  }
+ },
+ "result": {
+  "headline": "Referral approved",
+  "fields": [
+   {
+    "label": "Searches",
+    "value": "9"
+   },
+   {
+    "label": "Trials read in full",
+    "value": "8"
+   },
+   {
+    "label": "Referral requests",
+    "value": "1"
+   }
+  ],
+  "final": "I found five recruiting studies worth coordinator review. Basic age, sex, recruiting-status, and travel checks passed for all five.\n\n| Rank | Trial | Why it may fit | Key rule comparison |\n|---|---|---|---|\n| **1** | **NCT07315113** — NXP900 + osimertinib, Phase 1; NEXT Houston, 10.5 miles | Specifically studies advanced EGFR-mutated NSCLC progressing after osimertinib. | **MET:** “ECOG performance status of 0-1”; “metastatic…EGFR-mutated NSCLC”; prior osimertinib “as first or second line.” **NEEDS INFO:** “known oncogenic driver alteration other than EGFR”; osimertinib-resistance mutations; “HER2 overexpression”; contraindication to osimertinib. |\n| **2** | **NCT07100080** — Izalontamab brengitecan versus platinum-pemetrexed, Phase 2/3; Houston, 10.5 miles | Closely matches exon 19-deleted adenocarcinoma progressing after osimertinib without prior chemotherapy. | **MET:** “Non-squamous NSCLC”; “EGFR mutation (exon 19 deletion…)”; progression on a third-generation EGFR TKI. **NEEDS INFO:** “Eligible to receive a platinum-based doublet chemotherapy regimen.” Exact organ/bone-marrow thresholds also need confirmation. **Site issue:** overall study is recruiting and the coded check passed, but the Houston listing says **not yet recruiting**; activation must be confirmed. |\n| **3** | **NCT06706076** — BH-30643, Phase 1/2; MD Anderson, 10.5 miles | Accepts metastatic NSCLC with an EGFR mutation in exon 19 and allows ECOG 1. | **MET:** “EGFR…mutations in…exons 18, 19, 20, or 21”; ECOG ≤1; adequate function appears supported by current labs. **NEEDS INFO:** measurable extracranial lesion; ≥3-month life expectancy; other drivers/MET amplification or histologic transformation; ILD history; unresolved toxicity, cardiovascular events, or another recent malignancy. |\n| **4** | **NCT07462377** — EPI-326, Phase 1; MD Anderson, 10.5 miles | Broad EGFR-mutant metastatic NSCLC cohort, without a listed requirement for prior chemotherapy. | **MET:** pathologically confirmed NSCLC; “any documented EGFR mutation, insertion, or deletion”; metastatic disease; ECOG 0–2; current organ function appears adequate. **NEEDS INFO:** life expectancy >12 weeks; symptomatic brain metastases; secondary malignancy within three years. |\n| **5** | **NCT06567015** — STX-241, Phase 1/2; Oncology Consultants–TMC, 10.5 miles | Designed for exon 19-deleted NSCLC progressing after a third-generation EGFR TKI. | **MET:** stage IV EGFR exon 19-deleted NSCLC; progression on osimertinib; ECOG 0–1; ANC, platelets, and reported organ function meet or appear consistent with listed thresholds. **NEEDS INFO:** mandatory post-osimertinib **C797X** mutation and T790M status; measurable lesion; cardiac/QTc/LVEF criteria; other actionable drivers; ILD history; whether disease is considered rapidly progressive. |\n\n### Referral\n\nA pre-screening referral for **rank 1, NCT07315113**, was submitted to the demo coordinator outbox for human review.\n\n**Referral ID:** `REF-69E81FA5`  \n**Status:** Queued for coordinator review\n\nThis is not a determination of eligibility; the study team must complete screening.\n\n### Questions for the clinician\n\n1. Was post-progression tissue or liquid-biopsy testing performed? Please provide results for **C797X, T790M, MET amplification, HER2 expression/amplification, and other oncogenic drivers**.\n2. Is at least one liver or other extracranial lesion measurable by RECIST 1.1, and is archival or fresh tumor tissue available?\n3. Are there brain metastases, leptomeningeal disease, or spinal-cord compression? If brain metastases exist, are they symptomatic or requiring steroids?\n4. Is there any history of interstitial lung disease/pneumonitis, significant cardiac disease, prolonged QTc, or reduced LVEF?\n5. Any other malignancy within the last three years, active infection, unresolved osimertinib toxicity, or contraindication to continuing osimertinib?\n6. Is he medically eligible for platinum-pemetrexed, and is the current progression considered rapidly progressive?\n7. Can the Houston site confirm whether **NCT07100080** is now open locally?",
+  "outbox": []
+ },
+ "events": [
+  {
+   "seq": 1,
+   "t": 0.48,
+   "type": "run_start",
+   "task": "P01",
+   "prompt": "Find recruiting clinical trials worth reviewing for patient P01. Then refer the patient to the trial you rank first."
+  },
+  {
+   "seq": 2,
+   "t": 1.37,
+   "type": "model_call",
+   "agent": "trial_finder"
+  },
+  {
+   "seq": 3,
+   "t": 1.73,
+   "type": "agent_start",
+   "agent": "trial_finder"
+  },
+  {
+   "seq": 4,
+   "t": 3.72,
+   "type": "tool_call",
+   "agent": "trial_finder",
+   "tool": "get_patient",
+   "call_id": "call_rStZJie2AkeXJdUEE2VLiAAS",
+   "args": {
+    "patient_id": "P01"
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 5,
+   "t": 3.89,
+   "type": "model_call",
+   "agent": "trial_finder"
+  },
+  {
+   "seq": 6,
+   "t": 3.9,
+   "type": "tool_result",
+   "agent": "trial_finder",
+   "tool": "get_patient",
+   "call_id": "call_rStZJie2AkeXJdUEE2VLiAAS",
+   "ok": true,
+   "result": {
+    "patient_id": "P01",
+    "synthetic": true,
+    "name": "Ramon T.",
+    "age": 62,
+    "sex": "MALE",
+    "home_city": "Pasadena, TX",
+    "max_travel_miles": 30,
+    "summary": "62-year-old man with stage IV lung adenocarcinoma (non-small cell lung cancer), diagnosed March 2024. Tumor testing at diagnosis: EGFR exon 19 deletion; PD-L1 10%. Treated with osimertinib since April 2024. CT scan in August 2026 showed disease progression with new liver lesions. No chemotherapy and no immunotherapy so far. ECOG performance status 1 (active, some fatigue). Labs September 2026: kidney and liver function normal, absolute neutrophil count 3.1, platelets 210. Other conditions: high blood pressure (controlled), type 2 diabetes on metformin. Interested in a clinical trial before starting chemotherapy."
+   }
+  },
+  {
+   "seq": 7,
+   "t": 7.27,
+   "type": "tool_call",
+   "agent": "trial_finder",
+   "tool": "search_trials",
+   "call_id": "call_fdW9s1TPI5Xno4LZk9ZS6diq",
+   "args": {
+    "condition": "Stage IV non-small cell lung cancer",
+    "keywords": "EGFR exon 19 deletion progression after osimertinib no prior chemotherapy",
+    "patient_id": "P01",
+    "radius_miles": 30,
+    "max_results": 15
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 8,
+   "t": 7.28,
+   "type": "tool_call",
+   "agent": "trial_finder",
+   "tool": "search_trials",
+   "call_id": "call_BwtqkVie5YbM91CqWqJrafGv",
+   "args": {
+    "condition": "Lung adenocarcinoma",
+    "keywords": "EGFR-mutated osimertinib resistant",
+    "patient_id": "P01",
+    "radius_miles": 30,
+    "max_results": 15
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 9,
+   "t": 7.49,
+   "type": "tool_call",
+   "agent": "trial_finder",
+   "tool": "search_trials",
+   "call_id": "call_YRrLTM37uhZBN5HmAFjtQUUK",
+   "args": {
+    "condition": "Non-small cell lung cancer",
+    "keywords": "EGFR tyrosine kinase inhibitor progression first-line osimertinib",
+    "patient_id": "P01",
+    "radius_miles": 30,
+    "max_results": 15
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 10,
+   "t": 8.09,
+   "type": "model_call",
+   "agent": "trial_finder"
+  },
+  {
+   "seq": 11,
+   "t": 8.09,
+   "type": "tool_result",
+   "agent": "trial_finder",
+   "tool": "search_trials",
+   "call_id": "call_fdW9s1TPI5Xno4LZk9ZS6diq",
+   "ok": true,
+   "result": {
+    "search": {
+     "condition": "Stage IV non-small cell lung cancer",
+     "keywords": "EGFR exon 19 deletion progression after osimertinib no prior chemotherapy",
+     "center": "P01 home (Pasadena, TX)",
+     "radius_miles": 30
+    },
+    "total_recruiting_matches": 0,
+    "returned": 0,
+    "trials": []
+   }
+  },
+  {
+   "seq": 12,
+   "t": 8.09,
+   "type": "tool_result",
+   "agent": "trial_finder",
+   "tool": "search_trials",
+   "call_id": "call_BwtqkVie5YbM91CqWqJrafGv",
+   "ok": true,
+   "result": {
+    "search": {
+     "condition": "Lung adenocarcinoma",
+     "keywords": "EGFR-mutated osimertinib resistant",
+     "center": "P01 home (Pasadena, TX)",
+     "radius_miles": 30
+    },
+    "total_recruiting_matches": 0,
+    "returned": 0,
+    "trials": []
+   }
+  },
+  {
+   "seq": 13,
+   "t": 8.09,
+   "type": "tool_result",
+   "agent": "trial_finder",
+   "tool": "search_trials",
+   "call_id": "call_YRrLTM37uhZBN5HmAFjtQUUK",
+   "ok": true,
+   "result": {
+    "search": {
+     "condition": "Non-small cell lung cancer",
+     "keywords": "EGFR tyrosine kinase inhibitor progression first-line osimertinib",
+     "center": "P01 home (Pasadena, TX)",
+     "radius_miles": 30
+    },
+    "total_recruiting_matches": 2,
+    "returned": 2,
+    "trials": [
+     {
+      "nct_id": "NCT07100080",
+      "title": "Study of Izalontamab Brengitecan (BMS-986507) Versus Platinum-Pemetrexed for EGFR-mutated Non-small Cell Lung Cancer After Failure of EGFR TKI Therapy (IZABRIGHT-Lung01)",
+      "phase": "PHASE2, PHASE3",
+      "conditions": [
+       "Non-Small Cell Lung Cancer"
+      ],
+      "nearest_open_site": {
+       "facility": "Local Institution - 0025",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "NOT_YET_RECRUITING",
+       "miles": 10.5
+      }
+     },
+     {
+      "nct_id": "NCT07185997",
+      "title": "Study to Evaluate Efficacy and Safety of Firmonertinib Compared With Investigator's Choice of EGFR Inhibitor as First-Line Treatment in Participants Who Have Locally Advanced or Metastatic NSCLC With EGFR P-Loop and Alpha C-Helix Compressing (PACC) Uncommon Mutations",
+      "phase": "PHASE3",
+      "conditions": [
+       "Non-Small-Cell Lung Cancer",
+       "Metastatic Non-Small-Cell Lung Cancer",
+       "Advanced Non-Small-Cell Lung Cancer",
+       "EGFR P-Loop and Alpha C-Helix Compressing"
+      ],
+      "nearest_open_site": {
+       "facility": "The University of Texas MD Anderson Cancer Center",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "RECRUITING",
+       "miles": 10.5
+      }
+     }
+    ]
+   }
+  },
+  {
+   "seq": 14,
+   "t": 11.57,
+   "type": "tool_call",
+   "agent": "trial_finder",
+   "tool": "search_trials",
+   "call_id": "call_8s8RudxxOJhVDYxcgseblbG7",
+   "args": {
+    "condition": "EGFR-mutated non-small cell lung cancer",
+    "keywords": "osimertinib",
+    "patient_id": "P01",
+    "radius_miles": 30,
+    "max_results": 15
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 15,
+   "t": 11.57,
+   "type": "tool_call",
+   "agent": "trial_finder",
+   "tool": "search_trials",
+   "call_id": "call_FFvNJlW2ntPoG5uKzwFWQ7u6",
+   "args": {
+    "condition": "Non-small cell lung cancer",
+    "keywords": "EGFR",
+    "patient_id": "P01",
+    "radius_miles": 30,
+    "max_results": 15
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 16,
+   "t": 11.73,
+   "type": "tool_call",
+   "agent": "trial_finder",
+   "tool": "search_trials",
+   "call_id": "call_MQSqNIEyIBWJIeJuvuQJ3GAv",
+   "args": {
+    "condition": "Metastatic non-small cell lung cancer",
+    "keywords": "targeted therapy resistance",
+    "patient_id": "P01",
+    "radius_miles": 30,
+    "max_results": 15
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 17,
+   "t": 12.18,
+   "type": "model_call",
+   "agent": "trial_finder"
+  },
+  {
+   "seq": 18,
+   "t": 12.19,
+   "type": "tool_result",
+   "agent": "trial_finder",
+   "tool": "search_trials",
+   "call_id": "call_8s8RudxxOJhVDYxcgseblbG7",
+   "ok": true,
+   "result": {
+    "search": {
+     "condition": "EGFR-mutated non-small cell lung cancer",
+     "keywords": "osimertinib",
+     "center": "P01 home (Pasadena, TX)",
+     "radius_miles": 30
+    },
+    "total_recruiting_matches": 6,
+    "returned": 6,
+    "trials": [
+     {
+      "nct_id": "NCT07100080",
+      "title": "Study of Izalontamab Brengitecan (BMS-986507) Versus Platinum-Pemetrexed for EGFR-mutated Non-small Cell Lung Cancer After Failure of EGFR TKI Therapy (IZABRIGHT-Lung01)",
+      "phase": "PHASE2, PHASE3",
+      "conditions": [
+       "Non-Small Cell Lung Cancer"
+      ],
+      "nearest_open_site": {
+       "facility": "Local Institution - 0025",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "NOT_YET_RECRUITING",
+       "miles": 10.5
+      }
+     },
+     {
+      "nct_id": "NCT07005102",
+      "title": "A Study to Assess Adverse Events, Change in Disease Activity of Intravenous Telisotuzumab Adizutecan in Combination With Osimertinib as First-Line Treatment in Adult Participants With Locally Advanced Unresectable or Metastatic EGFR-Mutated Non-Squamous Non-Small Cell Lung Cancer",
+      "phase": "PHASE2, PHASE3",
+      "conditions": [
+       "Non-Squamous Non-Small Cell Lung Cancer",
+       "c-MET"
+      ],
+      "nearest_open_site": {
+       "facility": "The University of Texas MD Anderson Cancer Center /ID# 275107",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "RECRUITING",
+       "miles": 10.5
+      }
+     },
+     {
+      "nct_id": "NCT04486833",
+      "title": "Quaratusugene Ozeplasmid (Reqorsa) and Osimertinib in Patients With Advanced Lung Cancer Who Progressed on Osimertinib",
+      "phase": "PHASE1, PHASE2",
+      "conditions": [
+       "Carcinoma, Non-Small Cell Lung"
+      ],
+      "nearest_open_site": {
+       "facility": "Carle Cancer Institute",
+       "city": "Urbana",
+       "state": "Illinois",
+       "site_status": "RECRUITING",
+       "miles": 821.3
+      }
+     },
+     {
+      "nct_id": "NCT07315113",
+      "title": "Study of NXP900 With Osimertinib in Subjects With Advanced, EGFR-Mutated Non-Small Cell Lung Cancer",
+      "phase": "PHASE1",
+      "conditions": [
+       "EGFR Mutation Positive Non-small Cell Lung Cancer",
+       "EGFR Mutated Non-small Cell Lung Cancer Patients"
+      ],
+      "nearest_open_site": {
+       "facility": "NEXT Houston",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "RECRUITING",
+       "miles": 10.5
+      }
+     },
+     {
+      "nct_id": "NCT07185997",
+      "title": "Study to Evaluate Efficacy and Safety of Firmonertinib Compared With Investigator's Choice of EGFR Inhibitor as First-Line Treatment in Participants Who Have Locally Advanced or Metastatic NSCLC With EGFR P-Loop and Alpha C-Helix Compressing (PACC) Uncommon Mutations",
+      "phase": "PHASE3",
+      "conditions": [
+       "Non-Small-Cell Lung Cancer",
+       "Metastatic Non-Small-Cell Lung Cancer",
+       "Advanced Non-Small-Cell Lung Cancer",
+       "EGFR P-Loop and Alpha C-Helix Compressing"
+      ],
+      "nearest_open_site": {
+       "facility": "The University of Texas MD Anderson Cancer Center",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "RECRUITING",
+       "miles": 10.5
+      }
+     },
+     {
+      "nct_id": "NCT06350097",
+      "title": "Phase III, Open-label Study of First-line Osimertinib With or Without Datopotamab Deruxtecan for EGFRm Locally Advanced or Metastatic Non-small Cell Lung Cancer",
+      "phase": "PHASE3",
+      "conditions": [
+       "Non-small Cell Lung Cancer"
+      ],
+      "nearest_open_site": {
+       "facility": "Research Site",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "RECRUITING",
+       "miles": 10.5
+      }
+     }
+    ]
+   }
+  },
+  {
+   "seq": 19,
+   "t": 12.19,
+   "type": "tool_result",
+   "agent": "trial_finder",
+   "tool": "search_trials",
+   "call_id": "call_FFvNJlW2ntPoG5uKzwFWQ7u6",
+   "ok": true,
+   "result": {
+    "search": {
+     "condition": "Non-small cell lung cancer",
+     "keywords": "EGFR",
+     "center": "P01 home (Pasadena, TX)",
+     "radius_miles": 30
+    },
+    "total_recruiting_matches": 35,
+    "returned": 15,
+    "trials": [
+     {
+      "nct_id": "NCT06043817",
+      "title": "First-In-Human Study of STX-721/PFL-721 in Participants With Locally Advanced or Metastatic Non-Small Cell Lung Cancer Harboring EGFR or HER2 Exon 20 Insertion Mutations",
+      "phase": "PHASE1, PHASE2",
+      "conditions": [
+       "Non-Small Cell Lung Cancer",
+       "NSCLC",
+       "EGFR/HER2 Exon 20 Insertion Mutation"
+      ],
+      "nearest_open_site": {
+       "facility": "University of Texas MD Anderson Cancer Center",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "RECRUITING",
+       "miles": 10.5
+      }
+     },
+     {
+      "nct_id": "NCT07085091",
+      "title": "A First in Human Study of ALX2004 With Advanced or Metastatic Selected Solid Tumors",
+      "phase": "PHASE1",
+      "conditions": [
+       "NSCLC (Advanced Non-small Cell Lung Cancer)",
+       "HNSCC",
+       "CRC (Colorectal Cancer)",
+       "ESCC"
+      ],
+      "nearest_open_site": {
+       "facility": "ALX Center 5",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "RECRUITING",
+       "miles": 10.5
+      }
+     },
+     {
+      "nct_id": "NCT05967689",
+      "title": "A Study of Zipalertinib in Patients With Advanced Non-Small Cell Lung Cancer With Epidermal Growth Factor Receptor (EGFR) Exon 20 Insertions or Other Uncommon Mutation.",
+      "phase": "PHASE2",
+      "conditions": [
+       "Advanced or Metastatic NSCLC Harboring Epidermal Growth Factor Receptor (EGFR) Exon 20 Insertion (ex20ins) Mutations"
+      ],
+      "nearest_open_site": {
+       "facility": "University of Texas MD Anderson Cancer Center",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "RECRUITING",
+       "miles": 10.5
+      }
+     },
+     {
+      "nct_id": "NCT07100080",
+      "title": "Study of Izalontamab Brengitecan (BMS-986507) Versus Platinum-Pemetrexed for EGFR-mutated Non-small Cell Lung Cancer After Failure of EGFR TKI Therapy (IZABRIGHT-Lung01)",
+      "phase": "PHASE2, PHASE3",
+      "conditions": [
+       "Non-Small Cell Lung Cancer"
+      ],
+      "nearest_open_site": {
+       "facility": "Local Institution - 0025",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "NOT_YET_RECRUITING",
+       "miles": 10.5
+      }
+     },
+     {
+      "nct_id": "NCT05107674",
+      "title": "A Study of NX-1607 in Adults With Advanced Malignancies",
+      "phase": "PHASE1",
+      "conditions": [
+       "Ovarian Cancer, Epithelial",
+       "Gastric Cancer",
+       "GastroEsophageal Junction (GEJ) Cancer",
+       "Head and Neck Squamous Cell Carcinoma"
+      ],
+      "nearest_open_site": {
+       "facility": "MD Anderson Cancer Center",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "RECRUITING",
+       "miles": 10.5
+      }
+     },
+     {
+      "nct_id": "NCT06627647",
+      "title": "A Global Phase III Study of Rilvegostomig or Pembrolizumab Plus Chemotherapy for First-Line Treatment of Locally Advanced or Metastatic Non-Squamous NSCLC",
+      "phase": "PHASE3",
+      "conditions": [
+       "Non-squamous Non-small Cell Lung Cancer"
+      ],
+      "nearest_open_site": {
+       "facility": "Research Site",
+       "city": "Kingwood",
+       "state": "Texas",
+       "site_status": "RECRUITING",
+       "miles": 25.3
+      }
+     },
+     {
+      "nct_id": "NCT06452277",
+      "title": "A Study to Learn More About How Well Sevabertinib Works and How Safe it is Compared With Standard Treatment, in Participants Who Have Advanced Non-small Cell Lung Cancer (NSCLC) With Mutations of the Human Epidermal Growth Factor Receptor 2 (HER2)",
+      "phase": "PHASE3",
+      "conditions": [
+       "Advanced Non-small Cell Lung Cancer, HER2 Mutation"
+      ],
+      "nearest_open_site": {
+       "facility": "The University of Texas MD Anderson Cancer Center - Texas Medical Center",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "RECRUITING",
+       "miles": 10.5
+      }
+     },
+     {
+      "nct_id": "NCT07111520",
+      "title": "A Clinical Trial to Test if an Investigational Combination Therapy With BNT326 and BNT327 is Safe and Potentially Beneficial for People With Advanced Non-small Cell Lung Cancer (NSCLC)",
+      "phase": "PHASE1, PHASE2",
+      "conditions": [
+       "Non-small Cell Lung Cancer"
+      ],
+      "nearest_open_site": {
+       "facility": "University of Texas M. D. Anderson Cancer Center",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "RECRUITING",
+       "miles": 10.5
+      }
+     },
+     {
+      "nct_id": "NCT07005102",
+      "title": "A Study to Assess Adverse Events, Change in Disease Activity of Intravenous Telisotuzumab Adizutecan in Combination With Osimertinib as First-Line Treatment in Adult Participants With Locally Advanced Unresectable or Metastatic EGFR-Mutated Non-Squamous Non-Small Cell Lung Cancer",
+      "phase": "PHASE2, PHASE3",
+      "conditions": [
+       "Non-Squamous Non-Small Cell Lung Cancer",
+       "c-MET"
+      ],
+      "nearest_open_site": {
+       "facility": "The University of Texas MD Anderson Cancer Center /ID# 275107",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "RECRUITING",
+       "miles": 10.5
+      }
+     },
+     {
+      "nct_id": "NCT07028489",
+      "title": "Prospective External Control Cohort In Patients With Newly Diagnosed Advanced or Metastatic EGFR Mutant Non-Small Cell Lung Cancer",
+      "phase": "N/A",
+      "conditions": [
+       "Non Small Cell Lung Cancer"
+      ],
+      "nearest_open_site": {
+       "facility": "Oncology Consultants, P.A.",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "RECRUITING",
+       "miles": 10.5
+      }
+     },
+     {
+      "nct_id": "NCT06010329",
+      "title": "A Study to Evaluate the Efficacy and Safety of Sutetinib Maleate Capsule in Locally Advanced or Metastatic NSCLC",
+      "phase": "PHASE2",
+      "conditions": [
+       "Non-small Cell Lung Cancer"
+      ],
+      "nearest_open_site": {
+       "facility": "University of Texas MD Anderson Cancer Center",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "RECRUITING",
+       "miles": 10.5
+      }
+     },
+     {
+      "nct_id": "NCT07462377",
+      "title": "A Phase 1 Study of EPI-326 in EGFR-mutant NSCLC and HNSCC",
+      "phase": "PHASE1",
+      "conditions": [
+       "Epidermal Growth Factor",
+       "Epidermal Growth Factor Receptor",
+       "Epidermal Growth Factor Receptor Gene Mutation",
+       "Non Small Cell"
+      ],
+      "nearest_open_site": {
+       "facility": "MD Anderson Cancer Center",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "RECRUITING",
+       "miles": 10.5
+      }
+     },
+     {
+      "nct_id": "NCT06695845",
+      "title": "A Phase 2 Study of Zanidatamab in Patients With HER2-expressing Tumors",
+      "phase": "PHASE2",
+      "conditions": [
+       "Breast Cancer",
+       "Gastric Cancer",
+       "Esophageal Cancer",
+       "Gastroesophageal Cancer"
+      ],
+      "nearest_open_site": {
+       "facility": "MD Anderson Cancer Center",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "RECRUITING",
+       "miles": 10.5
+      }
+     },
+     {
+      "nct_id": "NCT04486833",
+      "title": "Quaratusugene Ozeplasmid (Reqorsa) and Osimertinib in Patients With Advanced Lung Cancer Who Progressed on Osimertinib",
+      "phase": "PHASE1, PHASE2",
+      "conditions": [
+       "Carcinoma, Non-Small Cell Lung"
+      ],
+      "nearest_open_site": {
+       "facility": "Carle Cancer Institute",
+       "city": "Urbana",
+       "state": "Illinois",
+       "site_status": "RECRUITING",
+       "miles": 821.3
+      }
+     },
+     {
+      "nct_id": "NCT07154290",
+      "title": "A Study to Investigate Ubamatamab With and Without Marlotamig (REGN7075) in Adult Participants With Advanced/Metastatic Non-Small Cell Lung Cancer (NSCLC)",
+      "phase": "PHASE2",
+      "conditions": [
+       "Non Small Cell Lung Cancer",
+       "Advanced Non Small Cell Lung Cancer",
+       "Metastatic Non Small Cell Lung Cancer",
+       "Carcinoma Non Small Cell Lung"
+      ],
+      "nearest_open_site": {
+       "facility": "The University of Texas MD Anderson Cancer Center",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "RECRUITING",
+       "miles": 10.5
+      }
+     }
+    ]
+   }
+  },
+  {
+   "seq": 20,
+   "t": 12.19,
+   "type": "tool_result",
+   "agent": "trial_finder",
+   "tool": "search_trials",
+   "call_id": "call_MQSqNIEyIBWJIeJuvuQJ3GAv",
+   "ok": true,
+   "result": {
+    "search": {
+     "condition": "Metastatic non-small cell lung cancer",
+     "keywords": "targeted therapy resistance",
+     "center": "P01 home (Pasadena, TX)",
+     "radius_miles": 30
+    },
+    "total_recruiting_matches": 6,
+    "returned": 6,
+    "trials": [
+     {
+      "nct_id": "NCT04606446",
+      "title": "Study of PF-07248144 in Advanced or Metastatic Solid Tumors",
+      "phase": "PHASE2",
+      "conditions": [
+       "Locally Advanced or Metastatic ER+ HER2- Breast Cancer",
+       "Locally Advanced or Metastatic Castration-resistant Prostate Cancer",
+       "Locally Advanced or Metastatic Non-small Cell Lung Cancer"
+      ],
+      "nearest_open_site": {
+       "facility": "The University of Texas M. D. Anderson Cancer Center",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "RECRUITING",
+       "miles": 10.5
+      }
+     },
+     {
+      "nct_id": "NCT06242470",
+      "title": "A Study of MGC026 in Participants With Advanced Solid Tumors",
+      "phase": "PHASE1",
+      "conditions": [
+       "Advanced Solid Tumor",
+       "Advanced Cancer",
+       "Metastatic Cancer",
+       "Squamous Cell Carcinoma of Head and Neck"
+      ],
+      "nearest_open_site": {
+       "facility": "The University of Texas MD Anderson Cancer Center",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "RECRUITING",
+       "miles": 10.5
+      }
+     },
+     {
+      "nct_id": "NCT07217301",
+      "title": "A Study Comparing TAK-928 With Docetaxel in Adults With Non-Small Cell Lung Cancer",
+      "phase": "PHASE3",
+      "conditions": [
+       "IO-resistant sqNSCLC"
+      ],
+      "nearest_open_site": {
+       "facility": "The University of Texas M.D Anderson Cancer Center (MDACC)",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "RECRUITING",
+       "miles": 10.5
+      }
+     },
+     {
+      "nct_id": "NCT07444814",
+      "title": "Study Evaluating the Safety and Efficacy of HWK-007, a PTK7-directed Antibody Drug Conjugate in Participants With Advanced Solid Tumors",
+      "phase": "PHASE1",
+      "conditions": [
+       "Endometrial Cancer",
+       "Ovarian Cancer",
+       "Ovarian Cancer Metastatic",
+       "Ovarian Cancer Metastatic Recurrent"
+      ],
+      "nearest_open_site": {
+       "facility": "NEXT - Oncology - Houston",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "RECRUITING",
+       "miles": 10.5
+      }
+     },
+     {
+      "nct_id": "NCT05786924",
+      "title": "Phase 1/2 Trial of S241656 in Selected RAS/MAPK Mutation- Positive Malignancies",
+      "phase": "PHASE1, PHASE2",
+      "conditions": [
+       "Non-small Cell Lung Cancer",
+       "Histiocytic Neoplasm",
+       "Histiocytosis",
+       "BRAF Gene Mutation"
+      ],
+      "nearest_open_site": {
+       "facility": "MD Anderson Cancer Center",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "RECRUITING",
+       "miles": 10.5
+      }
+     },
+     {
+      "nct_id": "NCT06953089",
+      "title": "DB-1311 in Combination With BNT327 or DB-1305 in Advanced/Metastatic Solid Tumors",
+      "phase": "PHASE2",
+      "conditions": [
+       "Solid Tumors"
+      ],
+      "nearest_open_site": {
+       "facility": "USA12-0",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "RECRUITING",
+       "miles": 10.5
+      }
+     }
+    ]
+   }
+  },
+  {
+   "seq": 21,
+   "t": 16.01,
+   "type": "tool_call",
+   "agent": "trial_finder",
+   "tool": "check_basics",
+   "call_id": "call_4CtMc6eeofKwtronBP6Tbn33",
+   "args": {
+    "nct_id": "NCT07315113",
+    "patient_id": "P01"
+   },
+   "step": "check",
+   "approval": false
+  },
+  {
+   "seq": 22,
+   "t": 16.02,
+   "type": "tool_call",
+   "agent": "trial_finder",
+   "tool": "check_basics",
+   "call_id": "call_kon5C95Nirv3RV7q8zVqNrzF",
+   "args": {
+    "nct_id": "NCT07462377",
+    "patient_id": "P01"
+   },
+   "step": "check",
+   "approval": false
+  },
+  {
+   "seq": 23,
+   "t": 16.03,
+   "type": "tool_call",
+   "agent": "trial_finder",
+   "tool": "check_basics",
+   "call_id": "call_iK7DsrLqgyxFMCv0LYhyLjKr",
+   "args": {
+    "nct_id": "NCT07154290",
+    "patient_id": "P01"
+   },
+   "step": "check",
+   "approval": false
+  },
+  {
+   "seq": 24,
+   "t": 16.04,
+   "type": "tool_call",
+   "agent": "trial_finder",
+   "tool": "check_basics",
+   "call_id": "call_Qa5vulJ6dH27qLLV2iAtIgPG",
+   "args": {
+    "nct_id": "NCT06010329",
+    "patient_id": "P01"
+   },
+   "step": "check",
+   "approval": false
+  },
+  {
+   "seq": 25,
+   "t": 16.04,
+   "type": "tool_call",
+   "agent": "trial_finder",
+   "tool": "check_basics",
+   "call_id": "call_VEKNZD5Uc1q3PQazFo0RBeSw",
+   "args": {
+    "nct_id": "NCT04606446",
+    "patient_id": "P01"
+   },
+   "step": "check",
+   "approval": false
+  },
+  {
+   "seq": 26,
+   "t": 16.11,
+   "type": "tool_call",
+   "agent": "trial_finder",
+   "tool": "check_basics",
+   "call_id": "call_qMGWf09xwHs5ydRkq8V2Aur4",
+   "args": {
+    "nct_id": "NCT07100080",
+    "patient_id": "P01"
+   },
+   "step": "check",
+   "approval": false
+  },
+  {
+   "seq": 27,
+   "t": 16.62,
+   "type": "model_call",
+   "agent": "trial_finder"
+  },
+  {
+   "seq": 28,
+   "t": 16.63,
+   "type": "tool_result",
+   "agent": "trial_finder",
+   "tool": "check_basics",
+   "call_id": "call_4CtMc6eeofKwtronBP6Tbn33",
+   "ok": true,
+   "result": {
+    "nct_id": "NCT07315113",
+    "patient_id": "P01",
+    "overall": "pass",
+    "checks": [
+     {
+      "check": "age",
+      "patient": "62 years",
+      "trial": "18 Years to no maximum",
+      "result": "pass"
+     },
+     {
+      "check": "sex",
+      "patient": "MALE",
+      "trial": "ALL",
+      "result": "pass"
+     },
+     {
+      "check": "recruiting",
+      "patient": "-",
+      "trial": "RECRUITING",
+      "result": "pass"
+     },
+     {
+      "check": "travel",
+      "patient": "up to 30 miles",
+      "trial": "nearest open site 10.5 miles (NEXT Houston, Houston)",
+      "result": "pass"
+     }
+    ]
+   }
+  },
+  {
+   "seq": 29,
+   "t": 16.63,
+   "type": "tool_result",
+   "agent": "trial_finder",
+   "tool": "check_basics",
+   "call_id": "call_kon5C95Nirv3RV7q8zVqNrzF",
+   "ok": true,
+   "result": {
+    "nct_id": "NCT07462377",
+    "patient_id": "P01",
+    "overall": "pass",
+    "checks": [
+     {
+      "check": "age",
+      "patient": "62 years",
+      "trial": "18 Years to no maximum",
+      "result": "pass"
+     },
+     {
+      "check": "sex",
+      "patient": "MALE",
+      "trial": "ALL",
+      "result": "pass"
+     },
+     {
+      "check": "recruiting",
+      "patient": "-",
+      "trial": "RECRUITING",
+      "result": "pass"
+     },
+     {
+      "check": "travel",
+      "patient": "up to 30 miles",
+      "trial": "nearest open site 10.5 miles (MD Anderson Cancer Center, Houston)",
+      "result": "pass"
+     }
+    ]
+   }
+  },
+  {
+   "seq": 30,
+   "t": 16.63,
+   "type": "tool_result",
+   "agent": "trial_finder",
+   "tool": "check_basics",
+   "call_id": "call_iK7DsrLqgyxFMCv0LYhyLjKr",
+   "ok": true,
+   "result": {
+    "nct_id": "NCT07154290",
+    "patient_id": "P01",
+    "overall": "pass",
+    "checks": [
+     {
+      "check": "age",
+      "patient": "62 years",
+      "trial": "18 Years to no maximum",
+      "result": "pass"
+     },
+     {
+      "check": "sex",
+      "patient": "MALE",
+      "trial": "ALL",
+      "result": "pass"
+     },
+     {
+      "check": "recruiting",
+      "patient": "-",
+      "trial": "RECRUITING",
+      "result": "pass"
+     },
+     {
+      "check": "travel",
+      "patient": "up to 30 miles",
+      "trial": "nearest open site 10.5 miles (The University of Texas MD Anderson Cancer Center, Houston)",
+      "result": "pass"
+     }
+    ]
+   }
+  },
+  {
+   "seq": 31,
+   "t": 16.63,
+   "type": "tool_result",
+   "agent": "trial_finder",
+   "tool": "check_basics",
+   "call_id": "call_Qa5vulJ6dH27qLLV2iAtIgPG",
+   "ok": true,
+   "result": {
+    "nct_id": "NCT06010329",
+    "patient_id": "P01",
+    "overall": "pass",
+    "checks": [
+     {
+      "check": "age",
+      "patient": "62 years",
+      "trial": "18 Years to no maximum",
+      "result": "pass"
+     },
+     {
+      "check": "sex",
+      "patient": "MALE",
+      "trial": "ALL",
+      "result": "pass"
+     },
+     {
+      "check": "recruiting",
+      "patient": "-",
+      "trial": "RECRUITING",
+      "result": "pass"
+     },
+     {
+      "check": "travel",
+      "patient": "up to 30 miles",
+      "trial": "nearest open site 10.5 miles (University of Texas MD Anderson Cancer Center, Houston)",
+      "result": "pass"
+     }
+    ]
+   }
+  },
+  {
+   "seq": 32,
+   "t": 16.63,
+   "type": "tool_result",
+   "agent": "trial_finder",
+   "tool": "check_basics",
+   "call_id": "call_VEKNZD5Uc1q3PQazFo0RBeSw",
+   "ok": true,
+   "result": {
+    "nct_id": "NCT04606446",
+    "patient_id": "P01",
+    "overall": "pass",
+    "checks": [
+     {
+      "check": "age",
+      "patient": "62 years",
+      "trial": "18 Years to no maximum",
+      "result": "pass"
+     },
+     {
+      "check": "sex",
+      "patient": "MALE",
+      "trial": "ALL",
+      "result": "pass"
+     },
+     {
+      "check": "recruiting",
+      "patient": "-",
+      "trial": "RECRUITING",
+      "result": "pass"
+     },
+     {
+      "check": "travel",
+      "patient": "up to 30 miles",
+      "trial": "nearest open site 10.5 miles (The University of Texas M. D. Anderson Cancer Center, Houston)",
+      "result": "pass"
+     }
+    ]
+   }
+  },
+  {
+   "seq": 33,
+   "t": 16.63,
+   "type": "tool_result",
+   "agent": "trial_finder",
+   "tool": "check_basics",
+   "call_id": "call_qMGWf09xwHs5ydRkq8V2Aur4",
+   "ok": true,
+   "result": {
+    "nct_id": "NCT07100080",
+    "patient_id": "P01",
+    "overall": "pass",
+    "checks": [
+     {
+      "check": "age",
+      "patient": "62 years",
+      "trial": "18 Years to no maximum",
+      "result": "pass"
+     },
+     {
+      "check": "sex",
+      "patient": "MALE",
+      "trial": "ALL",
+      "result": "pass"
+     },
+     {
+      "check": "recruiting",
+      "patient": "-",
+      "trial": "RECRUITING",
+      "result": "pass"
+     },
+     {
+      "check": "travel",
+      "patient": "up to 30 miles",
+      "trial": "nearest open site 10.5 miles (Local Institution - 0025, Houston)",
+      "result": "pass"
+     }
+    ]
+   }
+  },
+  {
+   "seq": 34,
+   "t": 20.86,
+   "type": "tool_call",
+   "agent": "trial_finder",
+   "tool": "get_trial",
+   "call_id": "call_yeCirfXp5H6zTVuxtYGynTxk",
+   "args": {
+    "nct_id": "NCT07315113",
+    "patient_id": "P01"
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 35,
+   "t": 20.9,
+   "type": "tool_call",
+   "agent": "trial_finder",
+   "tool": "get_trial",
+   "call_id": "call_AkcqC9D7lFHKJwgUzBozI2K3",
+   "args": {
+    "nct_id": "NCT07462377",
+    "patient_id": "P01"
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 36,
+   "t": 20.9,
+   "type": "tool_call",
+   "agent": "trial_finder",
+   "tool": "get_trial",
+   "call_id": "call_VTuDw7T31q1eoYyQ8YoSInoY",
+   "args": {
+    "nct_id": "NCT07154290",
+    "patient_id": "P01"
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 37,
+   "t": 20.9,
+   "type": "tool_call",
+   "agent": "trial_finder",
+   "tool": "get_trial",
+   "call_id": "call_jgVpUpVbGUD0G30ZwF0U3IAS",
+   "args": {
+    "nct_id": "NCT06010329",
+    "patient_id": "P01"
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 38,
+   "t": 20.9,
+   "type": "tool_call",
+   "agent": "trial_finder",
+   "tool": "get_trial",
+   "call_id": "call_0Odae1c25X3hD9gaD8tgzxX1",
+   "args": {
+    "nct_id": "NCT04606446",
+    "patient_id": "P01"
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 39,
+   "t": 20.99,
+   "type": "tool_call",
+   "agent": "trial_finder",
+   "tool": "get_trial",
+   "call_id": "call_RwLFRGwE2uFSAJ7fXZ6SSIg4",
+   "args": {
+    "nct_id": "NCT07100080",
+    "patient_id": "P01"
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 40,
+   "t": 21.6,
+   "type": "model_call",
+   "agent": "trial_finder"
+  },
+  {
+   "seq": 41,
+   "t": 21.61,
+   "type": "tool_result",
+   "agent": "trial_finder",
+   "tool": "get_trial",
+   "call_id": "call_yeCirfXp5H6zTVuxtYGynTxk",
+   "ok": true,
+   "result": {
+    "nct_id": "NCT07315113",
+    "title": "Study of NXP900 With Osimertinib in Subjects With Advanced, EGFR-Mutated Non-Small Cell Lung Cancer",
+    "phase": "PHASE1",
+    "overall_status": "RECRUITING",
+    "last_update": "2026-07-09",
+    "brief_summary": "This is a multi-center, open label, Phase 1b study of NXP900 in combination with osimertinib in subjects with advanced, progressing, EGFR-mutated non-small cell lung cancer (NSCLC)",
+    "minimum_age": "18 Years",
+    "maximum_age": null,
+    "sex": "ALL",
+    "eligibility_criteria": "Inclusion Criteria:\n\n1. Provide written informed consent.\n2. 18 years old or older.\n3. Eastern Cooperative Oncology Group (ECOG) performance status of 0-1.\n4. Unresectable, metastatic or locally advanced EGFR-mutated NSCLC.\n5. Prior treatment with osimertinib as first or second line, as single agent or in combination with chemotherapy, in the metastatic or locally advanced setting.\n\nExclusion Criteria:\n\n1. Subject's cancer has a known oncogenic driver alteration other than EGFR.\n2. Known EGFR mutations that cause resistance to osimertinib\n3. Known human epidermal growth factor receptor 2 (HER2) overexpression\n4. Any contraindications to treatment with osimertinib",
+    "nearest_open_site": {
+     "facility": "NEXT Houston",
+     "city": "Houston",
+     "state": "Texas",
+     "site_status": "RECRUITING",
+     "miles": 10.5
+    },
+    "distance_from": "P01 home (Pasadena, TX)",
+    "number_of_sites": 6,
+    "url": "https://clinicaltrials.gov/study/NCT07315113"
+   }
+  },
+  {
+   "seq": 42,
+   "t": 21.61,
+   "type": "tool_result",
+   "agent": "trial_finder",
+   "tool": "get_trial",
+   "call_id": "call_AkcqC9D7lFHKJwgUzBozI2K3",
+   "ok": true,
+   "result": {
+    "nct_id": "NCT07462377",
+    "title": "A Phase 1 Study of EPI-326 in EGFR-mutant NSCLC and HNSCC",
+    "phase": "PHASE1",
+    "overall_status": "RECRUITING",
+    "last_update": "2026-09-10",
+    "brief_summary": "A phase 1 study to determine the safety, tolerability, PK, PD, and preliminary anti-tumor activity of ascending doses of EPI-326 administered to patients with locally advanced or metastatic HNSCC and to patients with any documented EGFR-mutant locally advanced or metastatic NSCLC.",
+    "minimum_age": "18 Years",
+    "maximum_age": null,
+    "sex": "ALL",
+    "eligibility_criteria": "Inclusion Criteria:\n\n1. Participant has a life expectancy \\> 12 weeks at Day 1.\n2. Participant has an ECOG performance status of 0-2.\n3. Participant has pathologically confirmed NSCLC or HNSCC.\n\n   o For NSCLC: the tumor harbors any documented EGFR mutation, insertion, or deletion.\n4. Participant has locally advanced or metastatic NSCLC or HNSCC.\n5. Participant has adequate organ function\n\nExclusion Criteria:\n\n1. Participant has history of uncontrolled illness.\n2. Participant has symptomatic brain metastases.\n3. Participant has a diagnosis of any secondary malignancy within 3 years prior to enrollment, except for those patients treated with curative intent and no evidence of active disease.",
+    "nearest_open_site": {
+     "facility": "MD Anderson Cancer Center",
+     "city": "Houston",
+     "state": "Texas",
+     "site_status": "RECRUITING",
+     "miles": 10.5
+    },
+    "distance_from": "P01 home (Pasadena, TX)",
+    "number_of_sites": 6,
+    "url": "https://clinicaltrials.gov/study/NCT07462377"
+   }
+  },
+  {
+   "seq": 43,
+   "t": 21.61,
+   "type": "tool_result",
+   "agent": "trial_finder",
+   "tool": "get_trial",
+   "call_id": "call_VTuDw7T31q1eoYyQ8YoSInoY",
+   "ok": true,
+   "result": {
+    "nct_id": "NCT07154290",
+    "title": "A Study to Investigate Ubamatamab With and Without Marlotamig (REGN7075) in Adult Participants With Advanced/Metastatic Non-Small Cell Lung Cancer (NSCLC)",
+    "phase": "PHASE2",
+    "overall_status": "RECRUITING",
+    "last_update": "2026-09-25",
+    "brief_summary": "This study will evaluate two study drugs called ubamatamab and marlotamig, to see if they can help treat advanced or metastatic Non-Small Cell Lung Cancer (NSCLC), and sarilumab, to evaluate to see if it can help with immune-related side effects from ubamatamab.\n\nThe study is looking at:\n\n* How well ubamatamab and marlotamig work(s)\n* The side effects that ubamatamab and marlotamig might cause\n* How much ubamatamab and marlotamig is in the blood at different times\n* If the body makes antibodies to ubamatamab and/or marlotamig, this may cause the ubamatamab to not work as well",
+    "minimum_age": "18 Years",
+    "maximum_age": null,
+    "sex": "ALL",
+    "eligibility_criteria": "Key Inclusion Criteria:\n\n1. Has histologically or cytologically confirmed diagnosis of advanced (stage IIIB not amenable to definitive chemoradiotherapy or stage IIIC) or metastatic (stage IV) NSCLC\n2. Has received appropriate first line standard of care treatment for advanced or metastatic NSCLC, as described in the protocol\n3. If platinum doublet chemotherapy was not administered as first line therapy, it is required in a later line of therapy prior to enrollment unless there is a documented reason why it is not appropriate\n4. Has tumor tissue (archival or fresh) available for testing MUC16 expression by immunohistochemistry inclusion (IHC), as described in the protocol\n5. Has at least 1 radiographically measurable lesion by Computed Tomography (CT) or Magnetic Resonance Imaging (MRI) per RECIST v1.1 criteria. Target lesions may be located in a previously irradiated field if there is documented (radiographic) disease progression in that site\n6. Has an Eastern Cooperative Oncology Group (ECOG) performance status of 0 or 1\n\nKey Exclusion Criteria:\n\n1. Has progression of disease fewer than 84 days from starting initial anti-Programmed Cell Death (PD)-(L) 1 therapy\n2. Experienced toxicity related to prior treatment that has not resolved to grade 1 prior to initiation of study intervention (except alopecia, hearing loss, grade 2 neuropathy, or endocrinopathy managed with hormone replacement therapy)\n3. Has untreated or active primary brain tumor, Central Nervous System (CNS) metastases, leptomeningeal disease, or spinal cord compression, as described in the protocol\n4. Current participation OR past participation in another investigational study in which an investigational intervention (eg, drug, vaccine, invasive device) was administered within 4 weeks before planned first dose of study intervention in this clinical study\n5. Has received prior monoclonal antibody against PD-(L)1 within 21 days of the first dose of study intervention\n6. Has had other prior anti-cancer immunotherapy within 21 days prior to study intervention, as described in the protocol\n7. Has received prior cytotoxic chemotherapy within 21 days of the first dose of study intervention\n8. Has received an anti-EGFR antibody therapy within the following drug-specific window prior to first dose of study intervention (approximately 5 half-lives), as described in the protocol\n\nNOTE: Other protocol defined inclusion / exclusion criteria apply",
+    "nearest_open_site": {
+     "facility": "The University of Texas MD Anderson Cancer Center",
+     "city": "Houston",
+     "state": "Texas",
+     "site_status": "RECRUITING",
+     "miles": 10.5
+    },
+    "distance_from": "P01 home (Pasadena, TX)",
+    "number_of_sites": 17,
+    "url": "https://clinicaltrials.gov/study/NCT07154290"
+   }
+  },
+  {
+   "seq": 44,
+   "t": 21.61,
+   "type": "tool_result",
+   "agent": "trial_finder",
+   "tool": "get_trial",
+   "call_id": "call_jgVpUpVbGUD0G30ZwF0U3IAS",
+   "ok": true,
+   "result": {
+    "nct_id": "NCT06010329",
+    "title": "A Study to Evaluate the Efficacy and Safety of Sutetinib Maleate Capsule in Locally Advanced or Metastatic NSCLC",
+    "phase": "PHASE2",
+    "overall_status": "RECRUITING",
+    "last_update": "2026-04-24",
+    "brief_summary": "The main objective of the study will be to evaluate the efficacy of sutetinib maleate capsules in participants with locally advanced or metastatic non-small cell lung cancer NSCLC (uncommon EGFR mutations only).",
+    "minimum_age": "18 Years",
+    "maximum_age": null,
+    "sex": "ALL",
+    "eligibility_criteria": "Inclusion Criteria:\n\n1. Age 18 years old and above, male or female\n2. Histopathological and/or cytopathological confirmation of locally advanced or metastatic NSCLC\n3. Confirmation that the tumor harbors an uncommon epidermal growth factor receptor (EGFR) mutation (tumor tissue biopsy)\n4. At least one measurable lesion\n5. Eastern Cooperative Oncology Group (ECOG) score of 0, 1, or 2\n6. A minimum life expectancy of \\> 3 months\n7. Adequate bone marrow reserve, hepatic, renal, and coagulation function\n\nOther inclusion criteria apply for participating in the study.\n\nExclusion Criteria:\n\n1. Participant ever used the epidermal growth factor receptor-tyrosine kinase inhibitor (EGFR TKI) for anti-tumor therapy prior to enrollment (Cohort 1), or second generation EGFR TKI (Cohort 2)\n2. Any systemic anti-tumor therapy such as chemotherapy and radiation therapy (including curative radiotherapy or spinal radiotherapy portion \\>30%) used within 3 weeks prior to enrollment; immunotherapy within 4 weeks; any palliative radiotherapy for non-target lesions used to relieve symptoms and traditional Chinese medicines indicated for the tumor within 2 weeks prior to enrollment; Cohort 2: any EGFR TKIs within 5 half-lives.\n3. Use or intake of drugs or foods containing potent inhibitors or inducers of cytochrome P450 isozyme 3A4 (CYP3A4) within 14 days or 5 half-lives, whichever is the longer, prior to enrollment\n4. Surgical operation (excluding aspiration biopsy) of main organs or a significant injury within 4 weeks prior to enrollment\n5. Any unresolved toxicities from prior therapy greater than National Cancer Institute-Common Terminology Criteria for Adverse Events Version 5.0 (NCI-CTCAEv5.0) Grade 1, at the time of screening except for alopecia\n6. Inability to swallow the study medication, any seriously (NCI-CTCAEv5.0 ≥ Grade 3) chronic gastrointestinal disorder, malabsorption syndrome or any other conditions with influence on gastrointestinal absorption\n7. Active central nervous system metastases\n8. Any active infection which has not been controlled at screening\n\nOther exclusion criteria apply for participating in the Study.",
+    "nearest_open_site": {
+     "facility": "University of Texas MD Anderson Cancer Center",
+     "city": "Houston",
+     "state": "Texas",
+     "site_status": "RECRUITING",
+     "miles": 10.5
+    },
+    "distance_from": "P01 home (Pasadena, TX)",
+    "number_of_sites": 9,
+    "url": "https://clinicaltrials.gov/study/NCT06010329"
+   }
+  },
+  {
+   "seq": 45,
+   "t": 21.61,
+   "type": "tool_result",
+   "agent": "trial_finder",
+   "tool": "get_trial",
+   "call_id": "call_0Odae1c25X3hD9gaD8tgzxX1",
+   "ok": true,
+   "result": {
+    "nct_id": "NCT04606446",
+    "title": "Study of PF-07248144 in Advanced or Metastatic Solid Tumors",
+    "phase": "PHASE2",
+    "overall_status": "RECRUITING",
+    "last_update": "2026-04-16",
+    "brief_summary": "This is an open-label, multi center study to evaluate safety, tolerability, pharmacokinetics (PK), and pharmacodynamics (PD) of PF-07248144 and early signs of clinical efficacy of PF-07248144 as a single agent and in combination with other agents",
+    "minimum_age": "18 Years",
+    "maximum_age": null,
+    "sex": "ALL",
+    "eligibility_criteria": "Inclusion Criteria:\n\n* Disease Characteristics - Breast, Prostate, and Lung Cancer\n* Part 1A (Monotherapy Dose Escalation) Histological or cytological diagnosis of locally advanced or metastatic ER+HER2- breast cancer, CRPC, or NSCLC that is intolerant or resistant to standard therapy or for which no standard therapy is available.\n* Part 1B, Part 1C, Part 1D and Part 1E (Combination Dose Escalation) Histological or cytological diagnosis of locally advanced or metastatic ER+HER2- breast cancer. Participants must have progressed after at least 1 prior line of treatment with an endocrine therapy and CDK4/6 inhibitor in the advanced or metastatic setting.\n* Part 2A (ER+HER2- breast cancer 2L+, monotherapy) Histological or cytological diagnosis of locally advanced or metastatic ER+HER2- breast cancer. Participants must have progressed after at least 1 prior line of CDK4/6 inhibitor and 1 line of endocrine therapy.\n* Part 2B (ER+HER2- breast cancer 2-4L, combination with fulvestrant) Histological or cytological diagnosis of advanced or metastatic ER+HER2- breast cancer. Participants must have progressive disease after at least 1 prior line of a CDK4/6 inhibitor and at least 1 prior line of endocrine therapy.. Participants must not have received more than 3 prior lines of systemic therapies including up to 1 line of cytotoxic chemotherapy for visceral disease in advanced or metastatic setting; Participants may have but are not required to have prior treatment with fulvestrant.\n* Part 2D (ER+HER2- breast cancer 2-4L, combination with PF-07220060 (CDK4i) and fulvestrant):\n\nHistological or cytological diagnosis of advanced or metastatic ER+HER2- breast cancer. Participants must have progressive disease after at least 1 prior line of a CDK4/6 inhibitor and at least 1 prior line of endocrine therapy.\n\n* Participants must have not received more than 3 lines of systemic therapies including up to 1 line of cytotoxic chemotherapy for visceral disease in advanced or metastatic setting; Participants may have but are not required to have prior treatment with fulvestrant.\n* Part 2E (ER+HER2- breast cancer 2-4L, combination with vepdegestrant): Histological or cytological diagnosis of advanced or metastatic ER+HER2- breast cancer. Participants must have progressive disease after at least 1 prior line of a CDK4/6 inhibitor and at least 1 prior line of endocrine therapy; Participants must have not received more than 3 lines of systemic therapies including up to 1 line of cytotoxic chemotherapy for visceral disease in advanced or metastatic setting; Participants may have received fulvestrant\n* Participants with ER+HER2- advanced or metastatic breast cancer must have documentation of ER-positive tumor (≥1% positive stained cells) based on most recent tumor biopsy utilizing an assay consistent with local standards.\n* Participants with ER+HER2- advanced or metastatic breast cancer must have documentation of HER2-negative tumor: HER2-negative tumor is determined as immunohistochemistry score 0/1+ or negative by in situ hybridization (FISH/CISH/SISH/DISH) defined as a HER2/CEP17 ratio \\<2 or for single probe assessment a HER2 copy number \\<4.\n* Female participants with ER+HER2- advanced or metastatic breast cancer considered to be of childbearing potential (or have tubal ligations only) must be willing to undergo medically induced menopause by treatment with the approved LHRH agonist such as goserelin, leuprolide or equivalent agents to induce chemical menopause.\n* Female participants with ER+HER2- advanced or metastatic breast cancer of nonchildbearing potential must meet at least 1 criteria of achieving postmenopausal status.\n* Participants must have at least 1 measurable lesion as defined by RECIST version 1.1 that has not been previously irradiated.\n* Eastern Cooperative Oncology Group (ECOG) Performance Status PS 0 or 1\n* Female or male patients aged ≥ 18 years (Japan ≥ 20 years) (South Korea ≥ 19 years).\n* Adequate renal, liver, and bone marrow function.\n* Resolved acute effects of any prior therapy to baseline severity or CTCAE Grade 1 except for adverse events (AEs) not constituting a safety risk by investigator judgment.\n\nExclusion Criteria:\n\n* Unmanageable ascites (limited medical treatment to control ascites is permitted, but all participants with ascites require review by sponsor's medical monitor).\n* Participants with any other active malignancy within 3 years prior to enrollment, except for adequately treated basal cell or squamous cell skin cancer, or carcinoma in situ.\n* Major surgery, radiation therapy, or systemic anti-cancer therapy within 3 weeks prior to study entry.\n* Prior irradiation to \\>25% of the bone marrow.\n* ECG clinically relevant abnormalities (eg, QTc \\>470 msec, complete LBBB, second/third degree AV block, ST elevation or EKG changes suggesting myocardial infarction or active myocardia ischemia).\n* Therapeutic anticoagulation. However, low molecular weight heparin is allowed. Vitamin K antagonists or factor Xa inhibitors may be allowed following discussion with the Sponsor.\n* Known or suspected hypersensitivity or severe allergy to active ingredient/excipients of PF-07248144.\n* Active inflammatory GI disease, refractory and unresolved chronic diarrhea or previous gastric resection, lap band surgery or other GI conditions and surgeries that may significantly alter the absorption of PF-07248144 tablets. Gastroesophageal reflux disease under treatment is allowed.\n* Pregnant or breastfeeding female participants.",
+    "nearest_open_site": {
+     "facility": "The University of Texas M. D. Anderson Cancer Center",
+     "city": "Houston",
+     "state": "Texas",
+     "site_status": "RECRUITING",
+     "miles": 10.5
+    },
+    "distance_from": "P01 home (Pasadena, TX)",
+    "number_of_sites": 44,
+    "url": "https://clinicaltrials.gov/study/NCT04606446"
+   }
+  },
+  {
+   "seq": 46,
+   "t": 21.61,
+   "type": "tool_result",
+   "agent": "trial_finder",
+   "tool": "get_trial",
+   "call_id": "call_RwLFRGwE2uFSAJ7fXZ6SSIg4",
+   "ok": true,
+   "result": {
+    "nct_id": "NCT07100080",
+    "title": "Study of Izalontamab Brengitecan (BMS-986507) Versus Platinum-Pemetrexed for EGFR-mutated Non-small Cell Lung Cancer After Failure of EGFR TKI Therapy (IZABRIGHT-Lung01)",
+    "phase": "PHASE2, PHASE3",
+    "overall_status": "RECRUITING",
+    "last_update": "2026-10-09",
+    "brief_summary": "A Study of Izalontamab Brengitecan (BMS-986507) versus Platinum-Pemetrexed for EGFR-mutated Non-small Cell Lung Cancer after failure of EGFR TKI Therapy",
+    "minimum_age": "18 Years",
+    "maximum_age": null,
+    "sex": "ALL",
+    "eligibility_criteria": "Inclusion Criteria:\n\n* Non-squamous NSCLC, not amenable to treatment in curative intent.\n* Documented evidence of EGFR mutation (exon 19 deletion, L858R mutation).\n* Progressive disease on a 3rd-generation (such as osimertinib, furmonertinib, lazertinib,...) EGFR-TKI-based mono- or combination therapy regimen as the most recent line of therapy in an adjuvant, locally advanced, or metastatic treatment setting.\n* Eligible to receive a platinum-based doublet chemotherapy regimen (either cisplatin or carboplatin in combination with pemetrexed).\n\nExclusion criteria:\n\n* Inadequate organ function and/or bone marrow reserve.\n* Leptomeningeal metastases or spinal cord compression.\n* Poorly controlled systemic medical conditions.\n* Other protocol-defined inclusion/exclusion criteria apply.",
+    "nearest_open_site": {
+     "facility": "Local Institution - 0025",
+     "city": "Houston",
+     "state": "Texas",
+     "site_status": "NOT_YET_RECRUITING",
+     "miles": 10.5
+    },
+    "distance_from": "P01 home (Pasadena, TX)",
+    "number_of_sites": 187,
+    "url": "https://clinicaltrials.gov/study/NCT07100080"
+   }
+  },
+  {
+   "seq": 47,
+   "t": 29.97,
+   "type": "tool_call",
+   "agent": "trial_finder",
+   "tool": "search_trials",
+   "call_id": "call_Y1QV46ZfdaAlnEysFqklP4Am",
+   "args": {
+    "condition": "Non-small cell lung cancer",
+    "keywords": "post-osimertinib EGFR exon 19 deletion",
+    "patient_id": "P01",
+    "radius_miles": 30,
+    "max_results": 15
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 48,
+   "t": 30.02,
+   "type": "tool_call",
+   "agent": "trial_finder",
+   "tool": "search_trials",
+   "call_id": "call_Nb351rPclVPBmzr51Wd2hLFH",
+   "args": {
+    "condition": "EGFR-mutated NSCLC",
+    "keywords": "progressed on third-generation EGFR TKI",
+    "patient_id": "P01",
+    "radius_miles": 30,
+    "max_results": 15
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 49,
+   "t": 30.29,
+   "type": "tool_call",
+   "agent": "trial_finder",
+   "tool": "search_trials",
+   "call_id": "call_ch1jKGPasu0s4og164EQx3P8",
+   "args": {
+    "condition": "Lung cancer",
+    "keywords": "EGFR inhibitor resistant phase 1 Houston",
+    "patient_id": "P01",
+    "radius_miles": 30,
+    "max_results": 15
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 50,
+   "t": 31.07,
+   "type": "model_call",
+   "agent": "trial_finder"
+  },
+  {
+   "seq": 51,
+   "t": 31.07,
+   "type": "tool_result",
+   "agent": "trial_finder",
+   "tool": "search_trials",
+   "call_id": "call_Y1QV46ZfdaAlnEysFqklP4Am",
+   "ok": true,
+   "result": {
+    "search": {
+     "condition": "Non-small cell lung cancer",
+     "keywords": "post-osimertinib EGFR exon 19 deletion",
+     "center": "P01 home (Pasadena, TX)",
+     "radius_miles": 30
+    },
+    "total_recruiting_matches": 1,
+    "returned": 1,
+    "trials": [
+     {
+      "nct_id": "NCT04181060",
+      "title": "Osimertinib With or Without Bevacizumab as Initial Treatment for Patients With EGFR-Mutant Lung Cancer",
+      "phase": "PHASE3",
+      "conditions": [
+       "Advanced Lung Non-Squamous Non-Small Cell Carcinoma",
+       "Metastatic Lung Non-Squamous Non-Small Cell Carcinoma",
+       "Recurrent Lung Non-Squamous Non-Small Cell Carcinoma",
+       "Stage IIIB Lung Cancer AJCC v8"
+      ],
+      "nearest_open_site": {
+       "facility": "Houston Methodist Hospital",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "RECRUITING",
+       "miles": 10.5
+      }
+     }
+    ]
+   }
+  },
+  {
+   "seq": 52,
+   "t": 31.07,
+   "type": "tool_result",
+   "agent": "trial_finder",
+   "tool": "search_trials",
+   "call_id": "call_Nb351rPclVPBmzr51Wd2hLFH",
+   "ok": true,
+   "result": {
+    "search": {
+     "condition": "EGFR-mutated NSCLC",
+     "keywords": "progressed on third-generation EGFR TKI",
+     "center": "P01 home (Pasadena, TX)",
+     "radius_miles": 30
+    },
+    "total_recruiting_matches": 1,
+    "returned": 1,
+    "trials": [
+     {
+      "nct_id": "NCT04486833",
+      "title": "Quaratusugene Ozeplasmid (Reqorsa) and Osimertinib in Patients With Advanced Lung Cancer Who Progressed on Osimertinib",
+      "phase": "PHASE1, PHASE2",
+      "conditions": [
+       "Carcinoma, Non-Small Cell Lung"
+      ],
+      "nearest_open_site": {
+       "facility": "Carle Cancer Institute",
+       "city": "Urbana",
+       "state": "Illinois",
+       "site_status": "RECRUITING",
+       "miles": 821.3
+      }
+     }
+    ]
+   }
+  },
+  {
+   "seq": 53,
+   "t": 31.07,
+   "type": "tool_result",
+   "agent": "trial_finder",
+   "tool": "search_trials",
+   "call_id": "call_ch1jKGPasu0s4og164EQx3P8",
+   "ok": true,
+   "result": {
+    "search": {
+     "condition": "Lung cancer",
+     "keywords": "EGFR inhibitor resistant phase 1 Houston",
+     "center": "P01 home (Pasadena, TX)",
+     "radius_miles": 30
+    },
+    "total_recruiting_matches": 3,
+    "returned": 3,
+    "trials": [
+     {
+      "nct_id": "NCT05107674",
+      "title": "A Study of NX-1607 in Adults With Advanced Malignancies",
+      "phase": "PHASE1",
+      "conditions": [
+       "Ovarian Cancer, Epithelial",
+       "Gastric Cancer",
+       "GastroEsophageal Junction (GEJ) Cancer",
+       "Head and Neck Squamous Cell Carcinoma"
+      ],
+      "nearest_open_site": {
+       "facility": "MD Anderson Cancer Center",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "RECRUITING",
+       "miles": 10.5
+      }
+     },
+     {
+      "nct_id": "NCT06567015",
+      "title": "Study of FIH of STX-241 in Locally Advanced or Metastatic NSCLC Resistant to EGFR TKIs",
+      "phase": "PHASE1, PHASE2",
+      "conditions": [
+       "Non-small Cell Lung Cancer (NSCLC)"
+      ],
+      "nearest_open_site": {
+       "facility": "Oncology Consultants (OC) - Texas Medical Center - Cancer Center",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "RECRUITING",
+       "miles": 10.5
+      }
+     },
+     {
+      "nct_id": "NCT06706076",
+      "title": "A Study of BH-30643 in Subjects With Locally Advanced or Metastatic NSCLC Harboring EGFR and/or HER2 Mutations",
+      "phase": "PHASE1, PHASE2",
+      "conditions": [
+       "NSCLC (Advanced Non-small Cell Lung Cancer)"
+      ],
+      "nearest_open_site": {
+       "facility": "The University of Texas - M.D. Anderson Cancer Center",
+       "city": "Houston",
+       "state": "Texas",
+       "site_status": "RECRUITING",
+       "miles": 10.5
+      }
+     }
+    ]
+   }
+  },
+  {
+   "seq": 54,
+   "t": 34.32,
+   "type": "tool_call",
+   "agent": "trial_finder",
+   "tool": "check_basics",
+   "call_id": "call_3j9Vw60dH4fIO9gWsL1Vya1y",
+   "args": {
+    "nct_id": "NCT06567015",
+    "patient_id": "P01"
+   },
+   "step": "check",
+   "approval": false
+  },
+  {
+   "seq": 55,
+   "t": 34.42,
+   "type": "tool_call",
+   "agent": "trial_finder",
+   "tool": "check_basics",
+   "call_id": "call_O0MyHgU33dOQdWsReNYF8HJV",
+   "args": {
+    "nct_id": "NCT06706076",
+    "patient_id": "P01"
+   },
+   "step": "check",
+   "approval": false
+  },
+  {
+   "seq": 56,
+   "t": 34.72,
+   "type": "model_call",
+   "agent": "trial_finder"
+  },
+  {
+   "seq": 57,
+   "t": 34.72,
+   "type": "tool_result",
+   "agent": "trial_finder",
+   "tool": "check_basics",
+   "call_id": "call_3j9Vw60dH4fIO9gWsL1Vya1y",
+   "ok": true,
+   "result": {
+    "nct_id": "NCT06567015",
+    "patient_id": "P01",
+    "overall": "pass",
+    "checks": [
+     {
+      "check": "age",
+      "patient": "62 years",
+      "trial": "18 Years to no maximum",
+      "result": "pass"
+     },
+     {
+      "check": "sex",
+      "patient": "MALE",
+      "trial": "ALL",
+      "result": "pass"
+     },
+     {
+      "check": "recruiting",
+      "patient": "-",
+      "trial": "RECRUITING",
+      "result": "pass"
+     },
+     {
+      "check": "travel",
+      "patient": "up to 30 miles",
+      "trial": "nearest open site 10.5 miles (Oncology Consultants (OC) - Texas Medical Center - Cancer Center, Houston)",
+      "result": "pass"
+     }
+    ]
+   }
+  },
+  {
+   "seq": 58,
+   "t": 34.72,
+   "type": "tool_result",
+   "agent": "trial_finder",
+   "tool": "check_basics",
+   "call_id": "call_O0MyHgU33dOQdWsReNYF8HJV",
+   "ok": true,
+   "result": {
+    "nct_id": "NCT06706076",
+    "patient_id": "P01",
+    "overall": "pass",
+    "checks": [
+     {
+      "check": "age",
+      "patient": "62 years",
+      "trial": "18 Years to no maximum",
+      "result": "pass"
+     },
+     {
+      "check": "sex",
+      "patient": "MALE",
+      "trial": "ALL",
+      "result": "pass"
+     },
+     {
+      "check": "recruiting",
+      "patient": "-",
+      "trial": "RECRUITING",
+      "result": "pass"
+     },
+     {
+      "check": "travel",
+      "patient": "up to 30 miles",
+      "trial": "nearest open site 10.5 miles (The University of Texas - M.D. Anderson Cancer Center, Houston)",
+      "result": "pass"
+     }
+    ]
+   }
+  },
+  {
+   "seq": 59,
+   "t": 38.12,
+   "type": "tool_call",
+   "agent": "trial_finder",
+   "tool": "get_trial",
+   "call_id": "call_hVjAY5oryqu2Z5qCqFdswfAk",
+   "args": {
+    "nct_id": "NCT06567015",
+    "patient_id": "P01"
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 60,
+   "t": 38.24,
+   "type": "tool_call",
+   "agent": "trial_finder",
+   "tool": "get_trial",
+   "call_id": "call_TZ5eo9oyFtAP6xSmptdt2YPI",
+   "args": {
+    "nct_id": "NCT06706076",
+    "patient_id": "P01"
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 61,
+   "t": 38.55,
+   "type": "model_call",
+   "agent": "trial_finder"
+  },
+  {
+   "seq": 62,
+   "t": 38.55,
+   "type": "tool_result",
+   "agent": "trial_finder",
+   "tool": "get_trial",
+   "call_id": "call_hVjAY5oryqu2Z5qCqFdswfAk",
+   "ok": true,
+   "result": {
+    "nct_id": "NCT06567015",
+    "title": "Study of FIH of STX-241 in Locally Advanced or Metastatic NSCLC Resistant to EGFR TKIs",
+    "phase": "PHASE1, PHASE2",
+    "overall_status": "RECRUITING",
+    "last_update": "2026-09-02",
+    "brief_summary": "The goal of this First-In-Human (FIH) Phase I/II trial is to establish the safety profile, determine the Recommended Phase II Dose (RP2D), explore the pharmacokinetic (PK) exposure and pharmacodynamic (PD) properties as well as assess the efficacy of STX-241/PFL-241, a mutant selective Central Nervous System (CNS)-penetrant fourth generation EGFR TKI, in participants with locally advanced or metastatic NSCLC that progressed during or following third generation EGFR TKI such as osimertinib due to C797X double acquired (secondary) mutations.",
+    "minimum_age": "18 Years",
+    "maximum_age": null,
+    "sex": "ALL",
+    "eligibility_criteria": "Inclusion Criteria:\n\n1. Signed and dated informed consent for participation in the trial obtained according to International Council for Harmonisation of Technical Requirements of Pharmaceuticals for Human Use (ICH) Good Clinical Practice (GCP), and national/local regulations.\n2. Male or female ≥ 18 years of age at the time of signing informed consent but at least of legal age in their country.\n3. Histological confirmation of locally advanced or metastatic, EGFR-mutant (ex19del or L858R mutations) non-small cell lung cancer (NSCLC) Stage IIIB/C or IV (AJCC 8th edition) not eligible for curative intent surgery or chemoradiation.\n4. Part 1 Disease progression on a 3rd generation EGFR TKI-based therapy (administered as monotherapy or in combination) received at any prior line of treatment.\n\n   Part 2: Disease progression after a 3rd generation EGFR TKI-based therapy (administered as monotherapy or in combination) given as first or second line of systemic anti-cancer therapy and no more than 2 prior lines of systemic anti-cancer therapy.\n5. Tumor mutation profile:\n\n   * Part 1 (backfilling component): Presence of C797X and absence of T790M mutations documented locally (as part of clinical practice) on a sample (blood or tissue) collected after progression on treatment with 3rd generation EGFR TKI.\n   * Part 2: Presence of C79X mutation documented locally (as part of clinical practice) on a sample (blood or tissue) collected after progression on a 3rd generation EGFR TKI-based therapy.\n6. Part 1 (Backfilling component), Part 2: At least one measurable target lesion according to RECIST v1.1.\n7. Eastern cooperative oncology group (ECOG) performance status 0-1.\n8. Adequate organ function as defined below:\n\n   * Absolute neutrophil count (ANC) ≥ 1.5 x 10\\^9/L\n   * Platelets ≥ 75 x 10\\^9/L\n   * Hemoglobin ≥ 90 g/L.\n   * Serum total bilirubin ≤ 1.5 x ULN or ≤ 3.0 × ULN for participants with documented Gilbert's syndrome.\n   * Alanine aminotransferase (ALT) and aspartate aminotransferase (AST) ≤ 3.0 x ULN. If the participant has liver metastases, AST and ALT ≤5 × ULN.\n   * Estimated glomerular filtration rate (GFR) ≥ 50 mL/min by CKD-EPI equation\n9. Adequate cardiac function as defined below:\n\n   * Mean QT interval corrected for heart rate according to Fridericia's formula (QTcF) value ≤ 470 msec for women and ≤ 450 msec for men and no history of long QT syndrome or risk factors for torsade de pointe.\n   * Left ventricular ejection fraction (LVEF) ≥ 50% .\n   * Systolic blood pressure \\< 150 mmHg and diastolic blood pressure \\< 100 mmHg\n10. Female participants of childbearing potential:\n\n    * Negative highly sensitive serum β-HCG test performed within 7 days prior to first dose of STX-241 (C1D1) and a negative urine pregnancy test performed prior to C1D1.\n    * Agreement to use one highly effective contraceptive method (as defined in protocol and according to local regulations), starting at screening period, throughout the trial and until at least 182 days (i.e. more than 5 estimated STX- 241 half-lives (2 days) plus 6 months (180 days)) after the last dose of STX-241. If the highly effective method of contraception is a hormonal contraceptive method, it must be supplemented by one additional effective (barrier) method of contraception.\n    * Agreement to not donate eggs (ova, oocytes) for the purpose of assisted reproduction during the trial and for a period of 182 days after the last dose of STX-241.\n\n    Note: a female participant of childbearing potential is a woman who is not permanently sterilized or not postmenopausal (postmenopausal is defined as 12 months with no menses without an alternative medical cause).\n11. Male participants/partners with female spouse/partners of childbearing potential must agree to take appropriate precautions to avoid fathering a child, i.e.:\n\n    * Consistently use a barrier method \\[e.g., condom with spermicidal foam / gel / film /cream/suppository\\], and his female partner use a highly effective method of contraception as defined in protocol and according to local regulations), starting at screening and continuing throughout the trial period and for 92 days (ie. more than 5 estimated STX-241 half-lives (2 days) plus 3 months (90 days)) after the last dose of STX-241.\n    * Not donate sperm from Day 1 (first administration of STX-241) until at least 92 days after the last dose of STX-241.\n\nNOTE: Other protocol defined inclusion criteria may apply.\n\nExclusion Criteria:\n\n1. Part 1: Participants candidate for targeted therapies available to them (such as but not limited to therapies targeting ALK, BRAF, MET, NTRK, ROS1) as identified by local testing performed after progression to the last line of systemic therapy.\n\n   Part 2: Participants candidate for targeted therapies available to them such as, but not limited to: ALK, BRAF, MET (ex14 mutation and amplification), NTRK, ROSI, HER2 (mutations and amplification) as identified by local testing performed after progression to 3rd generation EGFR TKI-based therapy.\n2. Part 2: Participants who received 1st or 2nd generation EGFR TKIs.\n3. Participant with rapid progressive disease eligible to receive a platinum-based chemotherapy.\n4. Participant unable ingest or digest tablets. This can be caused by any impaired gastrointestinal function or disease, such as for example: ulcerative diseases, malabsorption syndrome, small bowel resection, ileus, etc. or any condition causing uncontrolled nausea, vomiting or diarrhea.\n5. History of a primary malignancy other than NSCLC with the exception of:\n\n   * Participants with a previous malignancy that completed all curative anticancer treatment at least 2 years before signing informed consent and with no evidence of residual disease from the prior malignancy at screening.\n   * Malignancies with a negligible risk of metastasis or death (i.e. 5-year overall survival rate \\> 90%) that are adequately treated - Examples include, but are not limited to, completely resected basal cell carcinoma and squamous cell carcinoma of skin, melanoma in situ, curatively treated prostate cancer, breast cancer and early gastric cancer cured by endoscopic mucosal resection or endoscopic submucosal dissection.\n6. Spinal cord compression or CNS metastases that are associated with progressive neurological symptoms or require increasing doses of corticosteroids to control the CNS disease. If a participant requires corticosteroids for management of CNS disease, the dose must have been stable for 2 weeks prior to enrollment in the trial.\n7. History of hypersensitivity to active or inactive ingredients of STX-241, or drugs with a similar chemical structure or from the same class.\n8. Active, bacterial, fungal, or viral infection, including, but not limited to: Hepatitis B Virus (HBV), Hepatitis C Virus (HCV), and known Human Immunodeficiency Virus (HIV) or Acquired Immunodeficiency Syndrome (AIDS)-related illness, tuberculosis or an infection requiring systemic therapeutic treatment within 2 weeks prior to Day 1 (first administration of STX-241).\n\n   Note: Participants with known HIV infection are permitted if they have controlled infection (undetectable viral load \\[HIV ribonucleic acid polymerase chain reaction (PCR)\\] and CD4 count \\>350 either spontaneously or on a stable antiviral regimen). For participants with controlled HIV infection, monitoring will be performed per local standards.\n9. Positive SARs-CoV-2 or variants of SARs-CoV2 RT-PCR test or suspected to be infected with SARs-CoV2 or variants of SARsCoV2 with confirmation pending within 2 weeks of first dose of STX-241.\n10. Impaired cardiovascular function or clinically significant cardiovascular disease (either active or within 6 months prior to signing informed consent), including any of the following:\n\n    * Myocardial infarction, acute coronary syndromes including unstable angina, coronary/peripheral artery bypass graft, coronary angioplasty or stenting.\n    * Symptomatic congestive heart failure (New York Heart Association Classification Class ≥ II).\n    * Cerebrovascular accident or transient ischemic attack.\n    * Symptomatic bradycardia, requirement for anti-arrhythmic medication.\n    * Ongoing cardiac dysrhythmia of NCI-CTCAE Grade ≥2.\n11. Uncontrolled intercurrent illness including, but not limited to ongoing or active infection or psychiatric illness/social situation that would limit compliance with trial requirements.\n12. Past medical history of Interstitial Lung Disease (ILD), drug-induced ILD, radiation pneumonitis that required steroid treatment, or any evidence of clinically active ILD.\n13. Past medical history of Stevens-Jonhson Syndrome (SJS) or Toxic epidermal necrolysis (TEN) or any evidence of clinically active SJS/TEN.\n14. Women who are breast feeding.\n15. Prior anticancer therapy:\n\n    * EGFR-targeted TKI within 7 days prior to the first dose of STX-241.\n    * Any other systemic anticancer therapy within 28 days or 5 half-lives prior to the first dose of STX-241, whichever is the shortest, but with a minimum of 14 days in all circumstances.\n    * Radiotherapy to a large field or including a vital organ (including whole brain radiotherapy or stereotactic radiosurgery to brain) within 14 days before the first dose of STX-241.\n16. Live attenuated vaccine received within 30 days prior to the first dose of STX-241.\n17. Any toxicities from prior therapy with a NCI-CTCAE Grade ≥1 at the time of the first dose of STX-241 (C1D1). Exceptions include alopecia (any grade), fatigue with a Grade ≤2, and peripheral neuropathy with a Grade ≤2.\n18. Major surgical procedure within 14 days of the first dose of STX-241 (procedures such as central venous catheter placement, tumor needle biopsy, and feeding tube placement are not considered major surgical procedures). Sequelae of surgical procedures must have resolved, including adequate wound healing, prior to the first dose of STX-241.\n19. Treatment with a prohibited medication or herbal remedy known to be strong CYP1A2 or CYP3A4 inducers, strong CYP1A2 or CYP3A4 inhibitors, sensitive CYP1A2, CYP2B6 and CYP3A4 substrates, sensitive MATE1 and OATP1B1 substrates and proton pump inhibitors (PPI) and H2 antagonists unless discontinued prior to the first administration of STX-241 within the following timeframe:\n\n    * At least 5 half-lives plus 14 days for strong CYP inducers.\n    * At least 5 half-lives for CYP inhibitors, CYP/transporter substrates, proton pump inhibitor (PPI) and H2 antagonists.\n20. Participation in a clinical trial with administration of an investigational drug within 5 half-lives plus 14 days of the investigational drug, before the first dose of STX-241.\n21. Any condition for which, in the opinion of the investigator, participation would not be in the best interest of the participant (e. g, could compromise the participant's well-being) or would prevent, limit, or confound the protocol-specified assessments.\n22. Employee or family member of the investigator or site staff.\n\nNOTE: Other protocol defined exclusion criteria may apply.",
+    "nearest_open_site": {
+     "facility": "Oncology Consultants (OC) - Texas Medical Center - Cancer Center",
+     "city": "Houston",
+     "state": "Texas",
+     "site_status": "RECRUITING",
+     "miles": 10.5
+    },
+    "distance_from": "P01 home (Pasadena, TX)",
+    "number_of_sites": 18,
+    "url": "https://clinicaltrials.gov/study/NCT06567015"
+   }
+  },
+  {
+   "seq": 63,
+   "t": 38.55,
+   "type": "tool_result",
+   "agent": "trial_finder",
+   "tool": "get_trial",
+   "call_id": "call_TZ5eo9oyFtAP6xSmptdt2YPI",
+   "ok": true,
+   "result": {
+    "nct_id": "NCT06706076",
+    "title": "A Study of BH-30643 in Subjects With Locally Advanced or Metastatic NSCLC Harboring EGFR and/or HER2 Mutations",
+    "phase": "PHASE1, PHASE2",
+    "overall_status": "RECRUITING",
+    "last_update": "2026-08-05",
+    "brief_summary": "This Phase1/2, open label, multicenter study will assess the safety, tolerability, pharmacokinetics (PK), pharmacodynamics and preliminary anti-tumor activity of BH-30643 in patients with NSCLC having EGFR and/or HER2 mutations.\n\nPhase 1 will determine the recommended Phase 2 dose (RP2D) and, if applicable, the maximum tolerated dose (MTD) of BH-30643, both as a monotherapy and in combination with chemotherapy.\n\nPhase 2 will further evaluate the antitumor efficacy and safety in specified cohorts determined by EGFR/HER2 mutation subtypes and/or treatment history at the RP2D, as well as the population PK.",
+    "minimum_age": "18 Years",
+    "maximum_age": null,
+    "sex": "ALL",
+    "eligibility_criteria": "Inclusion Criteria:\n\n* ≥ 18 years or legal adult.\n* Pathologically confirmed diagnosis of locally advanced or metastatic NSCLC with EGFR or HER2 mutations in the kinase domain of exons 18, 19, 20, or 21.\n* Has at least 1 measurable target extracranial lesion according to RECIST v1.1.\n* Eastern Cooperative Oncology Group Performance Status ≤ 1.\n* Has a life expectancy of ≥ 3 months.\n* Has adequate hematologic, hepatic, and renal function.\n\n  * The above are a summary; other Inclusion Criteria details may apply.\n\nExclusion Criteria:\n\n* History of any concurrent malignancy within the previous 2 years.\n* Known other oncogenic driver alterations (eg, moderate or high MET amplification) or histological transformation (eg, to small cell carcinoma, etc.).\n* Unresolved toxicities from prior therapies.\n* Any significant and uncontrolled medical condition, such as infection.\n* Active or history of interstitial lung disease from any cause\n* Clinically significant cardiovascular event within 6 months or significant history of major organ.\n\n  * The above are a summary; other Exclusion Criteria details may apply.",
+    "nearest_open_site": {
+     "facility": "The University of Texas - M.D. Anderson Cancer Center",
+     "city": "Houston",
+     "state": "Texas",
+     "site_status": "RECRUITING",
+     "miles": 10.5
+    },
+    "distance_from": "P01 home (Pasadena, TX)",
+    "number_of_sites": 42,
+    "url": "https://clinicaltrials.gov/study/NCT06706076"
+   }
+  },
+  {
+   "seq": 64,
+   "t": 45.87,
+   "type": "tool_call",
+   "agent": "trial_finder",
+   "tool": "send_referral",
+   "call_id": "call_vhu3e4VipQRAIqBDJNAvSzLw",
+   "args": {
+    "nct_id": "NCT07315113",
+    "patient_id": "P01",
+    "reason": "Pre-screening referral requested by the user. Patient appears to meet key listed criteria: age 62 (trial: “18 years old or older”); ECOG 1 (trial: “ECOG performance status of 0-1”); stage IV EGFR-mutated lung adenocarcinoma/NSCLC (trial: “Unresectable, metastatic or locally advanced EGFR-mutated NSCLC”); and progression after first-line osimertinib (trial: “Prior treatment with osimertinib as first or second line”). Houston site is listed as recruiting about 10.5 miles from the patient, within his 30-mile travel limit. Open questions for site/clinician: post-progression molecular testing for an oncogenic driver other than EGFR; whether any acquired EGFR mutation known to cause osimertinib resistance is present; HER2 overexpression status; any contraindication to continued osimertinib; and confirmation of pathology/source records. Final eligibility is for the study team to determine."
+   },
+   "step": "act",
+   "approval": true
+  },
+  {
+   "seq": 65,
+   "t": 45.92,
+   "type": "approval_request",
+   "request_id": "af-call-e87e65b10152415d8952e8807bccd924",
+   "agent": "trial_finder",
+   "tool": "send_referral",
+   "args": {
+    "nct_id": "NCT07315113",
+    "patient_id": "P01",
+    "reason": "Pre-screening referral requested by the user. Patient appears to meet key listed criteria: age 62 (trial: “18 years old or older”); ECOG 1 (trial: “ECOG performance status of 0-1”); stage IV EGFR-mutated lung adenocarcinoma/NSCLC (trial: “Unresectable, metastatic or locally advanced EGFR-mutated NSCLC”); and progression after first-line osimertinib (trial: “Prior treatment with osimertinib as first or second line”). Houston site is listed as recruiting about 10.5 miles from the patient, within his 30-mile travel limit. Open questions for site/clinician: post-progression molecular testing for an oncogenic driver other than EGFR; whether any acquired EGFR mutation known to cause osimertinib resistance is present; HER2 overexpression status; any contraindication to continued osimertinib; and confirmation of pathology/source records. Final eligibility is for the study team to determine."
+   }
+  },
+  {
+   "seq": 66,
+   "t": 45.92,
+   "type": "approval_response",
+   "request_id": "af-call-e87e65b10152415d8952e8807bccd924",
+   "approved": true,
+   "by": "person"
+  },
+  {
+   "seq": 67,
+   "t": 46.06,
+   "type": "model_call",
+   "agent": "trial_finder"
+  },
+  {
+   "seq": 68,
+   "t": 46.07,
+   "type": "tool_result",
+   "agent": "trial_finder",
+   "tool": "send_referral",
+   "call_id": "call_vhu3e4VipQRAIqBDJNAvSzLw",
+   "ok": true,
+   "result": {
+    "referral_id": "REF-69E81FA5",
+    "status": "queued for coordinator review (demo outbox)"
+   }
+  },
+  {
+   "seq": 69,
+   "t": 66.43,
+   "type": "message",
+   "agent": "trial_finder",
+   "text": "I found five recruiting studies worth coordinator review. Basic age, sex, recruiting-status, and travel checks passed for all five.\n\n| Rank | Trial | Why it may fit | Key rule comparison |\n|---|---|---|---|\n| **1** | **NCT07315113** — NXP900 + osimertinib, Phase 1; NEXT Houston, 10.5 miles | Specifically studies advanced EGFR-mutated NSCLC progressing after osimertinib. | **MET:** “ECOG performance status of 0-1”; “metastatic…EGFR-mutated NSCLC”; prior osimertinib “as first or second line.” **NEEDS INFO:** “known oncogenic driver alteration other than EGFR”; osimertinib-resistance mutations; “HER2 overexpression”; contraindication to osimertinib. |\n| **2** | **NCT07100080** — Izalontamab brengitecan versus platinum-pemetrexed, Phase 2/3; Houston, 10.5 miles | Closely matches exon 19-deleted adenocarcinoma progressing after osimertinib without prior chemotherapy. | **MET:** “Non-squamous NSCLC”; “EGFR mutation (exon 19 deletion…)”; progression on a third-generation EGFR TKI. **NEEDS INFO:** “Eligible to receive a platinum-based doublet chemotherapy regimen.” Exact organ/bone-marrow thresholds also need confirmation. **Site issue:** overall study is recruiting and the coded check passed, but the Houston listing says **not yet recruiting**; activation must be confirmed. |\n| **3** | **NCT06706076** — BH-30643, Phase 1/2; MD Anderson, 10.5 miles | Accepts metastatic NSCLC with an EGFR mutation in exon 19 and allows ECOG 1. | **MET:** “EGFR…mutations in…exons 18, 19, 20, or 21”; ECOG ≤1; adequate function appears supported by current labs. **NEEDS INFO:** measurable extracranial lesion; ≥3-month life expectancy; other drivers/MET amplification or histologic transformation; ILD history; unresolved toxicity, cardiovascular events, or another recent malignancy. |\n| **4** | **NCT07462377** — EPI-326, Phase 1; MD Anderson, 10.5 miles | Broad EGFR-mutant metastatic NSCLC cohort, without a listed requirement for prior chemotherapy. | **MET:** pathologically confirmed NSCLC; “any documented EGFR mutation, insertion, or deletion”; metastatic disease; ECOG 0–2; current organ function appears adequate. **NEEDS INFO:** life expectancy >12 weeks; symptomatic brain metastases; secondary malignancy within three years. |\n| **5** | **NCT06567015** — STX-241, Phase 1/2; Oncology Consultants–TMC, 10.5 miles | Designed for exon 19-deleted NSCLC progressing after a third-generation EGFR TKI. | **MET:** stage IV EGFR exon 19-deleted NSCLC; progression on osimertinib; ECOG 0–1; ANC, platelets, and reported organ function meet or appear consistent with listed thresholds. **NEEDS INFO:** mandatory post-osimertinib **C797X** mutation and T790M status; measurable lesion; cardiac/QTc/LVEF criteria; other actionable drivers; ILD history; whether disease is considered rapidly progressive. |\n\n### Referral\n\nA pre-screening referral for **rank 1, NCT07315113**, was submitted to the demo coordinator outbox for human review.\n\n**Referral ID:** `REF-69E81FA5`  \n**Status:** Queued for coordinator review\n\nThis is not a determination of eligibility; the study team must complete screening.\n\n### Questions for the clinician\n\n1. Was post-progression tissue or liquid-biopsy testing performed? Please provide results for **C797X, T790M, MET amplification, HER2 expression/amplification, and other oncogenic drivers**.\n2. Is at least one liver or other extracranial lesion measurable by RECIST 1.1, and is archival or fresh tumor tissue available?\n3. Are there brain metastases, leptomeningeal disease, or spinal-cord compression? If brain metastases exist, are they symptomatic or requiring steroids?\n4. Is there any history of interstitial lung disease/pneumonitis, significant cardiac disease, prolonged QTc, or reduced LVEF?\n5. Any other malignancy within the last three years, active infection, unresolved osimertinib toxicity, or contraindication to continuing osimertinib?\n6. Is he medically eligible for platinum-pemetrexed, and is the current progression considered rapidly progressive?\n7. Can the Houston site confirm whether **NCT07100080** is now open locally?",
+   "step": "plan"
+  },
+  {
+   "seq": 70,
+   "t": 66.43,
+   "type": "run_end",
+   "status": "completed",
+   "error": null
+  }
+ ]
+}

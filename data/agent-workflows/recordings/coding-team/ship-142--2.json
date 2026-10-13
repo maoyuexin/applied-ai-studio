@@ -1,0 +1,349 @@
+{
+ "schema": "agent-workflows.run/1",
+ "id": "f5c40014de0f",
+ "scenario": "coding-team",
+ "pattern": "handoff",
+ "task": {
+  "id": "ship-142",
+  "label": "Shipping-cost function (ticket SHIP-142)",
+  "prompt": "Ticket SHIP-142 from the e-commerce team.\nOur checkout needs a Python function shipping_cost(weight_lb, zone, express=False) that returns the parcel shipping price in dollars.\n- Zone 1 costs $5.00, zone 2 $7.50 and zone 3 $10.00 for the first pound.\n- Each additional pound, or part of a pound, adds $1.25 in zones 1 and 2, and $2.00 in zone 3.\n- Express shipping doubles the price.\n- Parcels heavier than 70 lb cannot ship as parcels, and the weight must be greater than zero: raise ValueError in those cases. Unknown zones also raise ValueError.\n- Return the price rounded to cents.",
+  "truth": "Ten hidden acceptance cases; edge cases are partial pounds, the 70 lb limit and unknown zones."
+ },
+ "mode": "recorded",
+ "model": "gpt-5.6-sol",
+ "framework": "Microsoft Agent Framework 1.20.0",
+ "started_at": "2026-10-13T03:37:38+00:00",
+ "seconds": 34.66,
+ "status": "completed",
+ "error": null,
+ "stats": {
+  "model_calls": 6,
+  "tool_calls": 3,
+  "input_tokens": 8108,
+  "output_tokens": 1880,
+  "approvals": 1,
+  "handoffs": 3,
+  "messages": 5,
+  "per_agent": {
+   "product_owner": {
+    "model_calls": 1,
+    "tool_calls": 0,
+    "tokens": 702
+   },
+   "developer": {
+    "model_calls": 1,
+    "tool_calls": 0,
+    "tokens": 1002
+   },
+   "tester": {
+    "model_calls": 2,
+    "tool_calls": 2,
+    "tokens": 5349
+   },
+   "reviewer": {
+    "model_calls": 2,
+    "tool_calls": 1,
+    "tokens": 2935
+   }
+  }
+ },
+ "result": {
+  "headline": "Merged",
+  "fields": [
+   {
+    "label": "Test results",
+    "value": "10/10 passed"
+   },
+   {
+    "label": "Sandbox runs",
+    "value": "1"
+   },
+   {
+    "label": "Sent back to developer",
+    "value": "0"
+   }
+  ],
+  "code": "def shipping_cost(weight_lb, zone, express=False):\n    \"\"\"Return the parcel shipping price in dollars for the given weight and zone.\"\"\"\n    import math\n\n    if not isinstance(weight_lb, (int, float)) or isinstance(weight_lb, bool):\n        raise ValueError(\"weight must be a number greater than zero and no more than 70\")\n    if not math.isfinite(weight_lb) or weight_lb <= 0 or weight_lb > 70:\n        raise ValueError(\"weight must be greater than zero and no more than 70\")\n    if type(zone) is not int or zone not in (1, 2, 3):\n        raise ValueError(\"unknown zone\")\n\n    base, additional_rate = {\n        1: (5.00, 1.25),\n        2: (7.50, 1.25),\n        3: (10.00, 2.00),\n    }[zone]\n    price = base + max(0, math.ceil(weight_lb) - 1) * additional_rate\n    return round(price * (2 if express else 1), 2)",
+  "final": "MERGED",
+  "outbox": [
+   {
+    "action": "merge_change",
+    "summary": "Implement validated parcel shipping costs by weight, zone, and express service"
+   }
+  ]
+ },
+ "events": [
+  {
+   "seq": 1,
+   "t": 0.46,
+   "type": "run_start",
+   "task": "ship-142",
+   "prompt": "Ticket SHIP-142 from the e-commerce team.\nOur checkout needs a Python function shipping_cost(weight_lb, zone, express=False) that returns the parcel shipping price in dollars.\n- Zone 1 costs $5.00, zone 2 $7.50 and zone 3 $10.00 for the first pound.\n- Each additional pound, or part of a pound, adds $1.25 in zones 1 and 2, and $2.00 in zone 3.\n- Express shipping doubles the price.\n- Parcels heavier than 70 lb cannot ship as parcels, and the weight must be greater than zero: raise ValueError in those cases. Unknown zones also raise ValueError.\n- Return the price rounded to cents."
+  },
+  {
+   "seq": 2,
+   "t": 0.46,
+   "type": "model_call",
+   "agent": "product_owner"
+  },
+  {
+   "seq": 3,
+   "t": 0.8,
+   "type": "agent_start",
+   "agent": "product_owner"
+  },
+  {
+   "seq": 4,
+   "t": 8.93,
+   "type": "message",
+   "agent": "product_owner",
+   "text": "## SHIP-142: Parcel Shipping Cost\n\n**Function signature:**  \n`shipping_cost(weight_lb, zone, express=False) -> float`\n\n### Rules\n\n1. `weight_lb` must be greater than `0` and no more than `70`; otherwise, raise `ValueError`.\n2. `zone` must be `1`, `2`, or `3`; otherwise, raise `ValueError`.\n3. The first pound costs:\n   - Zone 1: `$5.00`\n   - Zone 2: `$7.50`\n   - Zone 3: `$10.00`\n4. Each pound after the first, including any partial pound, is charged as a full additional pound:\n   - Zones 1 and 2: `$1.25` per additional pound\n   - Zone 3: `$2.00` per additional pound\n5. If `express=True`, double the total shipping price.\n6. Return the final price in dollars, rounded to two decimal places.\n\n### Examples\n\n- `shipping_cost(1, 1)` → `5.00`\n- `shipping_cost(2.3, 2)` → `10.00`\n- `shipping_cost(4, 3, express=True)` → `32.00`",
+   "step": "plan"
+  },
+  {
+   "seq": 5,
+   "t": 8.93,
+   "type": "handoff",
+   "source": "product_owner",
+   "target": "developer"
+  },
+  {
+   "seq": 6,
+   "t": 8.93,
+   "type": "model_call",
+   "agent": "developer"
+  },
+  {
+   "seq": 7,
+   "t": 8.94,
+   "type": "agent_start",
+   "agent": "developer"
+  },
+  {
+   "seq": 8,
+   "t": 14.02,
+   "type": "message",
+   "agent": "developer",
+   "text": "```python\ndef shipping_cost(weight_lb, zone, express=False):\n    \"\"\"Return the parcel shipping price in dollars for the given weight and zone.\"\"\"\n    import math\n\n    if not isinstance(weight_lb, (int, float)) or isinstance(weight_lb, bool):\n        raise ValueError(\"weight must be a number greater than zero and no more than 70\")\n    if not math.isfinite(weight_lb) or weight_lb <= 0 or weight_lb > 70:\n        raise ValueError(\"weight must be greater than zero and no more than 70\")\n    if type(zone) is not int or zone not in (1, 2, 3):\n        raise ValueError(\"unknown zone\")\n\n    base, additional_rate = {\n        1: (5.00, 1.25),\n        2: (7.50, 1.25),\n        3: (10.00, 2.00),\n    }[zone]\n    price = base + max(0, math.ceil(weight_lb) - 1) * additional_rate\n    return round(price * (2 if express else 1), 2)\n```",
+   "step": "act"
+  },
+  {
+   "seq": 9,
+   "t": 14.02,
+   "type": "handoff",
+   "source": "developer",
+   "target": "tester"
+  },
+  {
+   "seq": 10,
+   "t": 14.02,
+   "type": "model_call",
+   "agent": "tester"
+  },
+  {
+   "seq": 11,
+   "t": 14.02,
+   "type": "agent_start",
+   "agent": "tester"
+  },
+  {
+   "seq": 12,
+   "t": 19.87,
+   "type": "tool_call",
+   "agent": "tester",
+   "tool": "get_acceptance_tests",
+   "call_id": "call_RBGQKz8STyEETqlgITej9YsH",
+   "args": {},
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 13,
+   "t": 20.03,
+   "type": "model_call",
+   "agent": "tester"
+  },
+  {
+   "seq": 14,
+   "t": 20.03,
+   "type": "tool_result",
+   "agent": "tester",
+   "tool": "get_acceptance_tests",
+   "call_id": "call_RBGQKz8STyEETqlgITej9YsH",
+   "ok": true,
+   "result": [
+    {
+     "case": 1,
+     "call": "shipping_cost(1, 1)",
+     "expected": 5.0
+    },
+    {
+     "case": 2,
+     "call": "shipping_cost(0.4, 2)",
+     "expected": 7.5
+    },
+    {
+     "case": 3,
+     "call": "shipping_cost(2, 1)",
+     "expected": 6.25
+    },
+    {
+     "case": 4,
+     "call": "shipping_cost(2.1, 1)",
+     "expected": 7.5
+    },
+    {
+     "case": 5,
+     "call": "shipping_cost(10, 3)",
+     "expected": 28.0
+    },
+    {
+     "case": 6,
+     "call": "shipping_cost(3, 2, express=True)",
+     "expected": 20.0
+    },
+    {
+     "case": 7,
+     "call": "shipping_cost(70, 3)",
+     "expected": 148.0
+    },
+    {
+     "case": 8,
+     "call": "shipping_cost(70.5, 1)",
+     "expected": "ValueError"
+    },
+    {
+     "case": 9,
+     "call": "shipping_cost(0, 1)",
+     "expected": "ValueError"
+    },
+    {
+     "case": 10,
+     "call": "shipping_cost(5, 4)",
+     "expected": "ValueError"
+    }
+   ]
+  },
+  {
+   "seq": 15,
+   "t": 26.57,
+   "type": "tool_call",
+   "agent": "tester",
+   "tool": "run_python",
+   "call_id": "ci_065e94e81ae68256006acda797820481949fe9c2f61877b86a",
+   "args": {
+    "code": "import math\n\ndef shipping_cost(weight_lb, zone, express=False):\n    \"\"\"Return the parcel shipping price in dollars for the given weight and zone.\"\"\"\n    import math\n\n    if not isinstance(weight_lb, (int, float)) or isinstance(weight_lb, bool):\n        raise ValueError(\"weight must be a number greater than zero and no more than 70\")\n    if not math.isfinite(weight_lb) or weight_lb <= 0 or weight_lb > 70:\n        raise ValueError(\"weight must be greater than zero and no more than 70\")\n    if type(zone) is not int or zone not in (1, 2, 3):\n        raise ValueError(\"unknown zone\")\n\n    base, additional_rate = {\n        1: (5.00, 1.25),\n        2: (7.50, 1.25),\n        3: (10.00, 2.00),\n    }[zone]\n    price = base + max(0, math.ceil(weight_lb) - 1) * additional_rate\n    return round(price * (2 if express else 1), 2)\n\ncases = [\n(1, \"shipping_cost(1, 1)\", 5.0),\n(2, \"shipping_cost(0.4, 2)\", 7.5),\n(3, \"shipping_cost(2, 1)\", 6.25),\n(4, \"shipping_cost(2.1, 1)\", 7.5),\n(5, \"shipping_cost(10, 3)\", 28.0),\n(6, \"shipping_cost(3, 2, express=True)\", 20.0),\n(7, \"shipping_cost(70, 3)\", 148.0),\n(8, \"shipping_cost(70.5, 1)\", \"ValueError\"),\n(9, \"shipping_cost(0, 1)\", \"ValueError\"),\n(10, \"shipping_cost(5, 4)\", \"ValueError\"),\n]\nresults=[]\nfor num, call, exp in cases:\n    try:\n        got=eval(call)\n        passed=(exp!=\"ValueError\" and got==exp)\n    except Exception as e:\n        got=type(e).__name__\n        passed=(exp==\"ValueError\" and isinstance(e, ValueError))\n    results.append((num,call,exp,got,passed))\nresults\nimport math\n\ndef shipping_cost(weight_lb, zone, express=False):\n    \"\"\"Return the parcel shipping price in dollars for the given weight and zone.\"\"\"\n    import math\n\n    if not isinstance(weight_lb, (int, float)) or isinstance(weight_lb, bool):\n        raise ValueError(\"weight must be a number greater than zero and no more than 70\")\n    if not math.isfinite(weight_lb) or weight_lb <= 0 or weight_lb > 70:\n        raise ValueError(\"weight must be greater than zero and no more than 70\")\n    if type(zone) is not int or zone not in (1, 2, 3):\n        raise ValueError(\"unknown zone\")\n\n    base, additional_rate = {\n        1: (5.00, 1.25),\n        2: (7.50, 1.25),\n        3: (10.00, 2.00),\n    }[zone]\n    price = base + max(0, math.ceil(weight_lb) - 1) * additional_rate\n    return round(price * (2 if express else 1), 2)\n\ncases = [\n(1, \"shipping_cost(1, 1)\", 5.0),\n(2, \"shipping_cost(0.4, 2)\", 7.5),\n(3, \"shipping_cost(2, 1)\", 6.25),\n(4, \"shipping_cost(2.1, 1)\", 7.5),\n(5, \"shipping_cost(10, 3)\", 28.0),\n(6, \"shipping_cost(3, 2, express=True)\", 20.0),\n(7, \"shipping_cost(70, 3)\", 148.0),\n(8, \"shipping_cost(70.5, 1)\", \"ValueError\"),\n(9, \"shipping_cost(0, 1)\", \"ValueError\"),\n(10, \"shipping_cost(5, 4)\", \"ValueError\"),\n]\nresults=[]\nfor num, call, exp in cases:\n    try:\n        got=eval(call)\n        passed=(exp!=\"ValueError\" and got==exp)\n    except Exception as e:\n        got=type(e).__name__\n        passed=(exp==\"ValueError\" and isinstance(e, ValueError))\n    results.append((num,call,exp,got,passed))\nresults"
+   },
+   "step": "check",
+   "approval": false
+  },
+  {
+   "seq": 16,
+   "t": 26.57,
+   "type": "tool_result",
+   "agent": "tester",
+   "tool": "run_python",
+   "call_id": "ci_065e94e81ae68256006acda797820481949fe9c2f61877b86a",
+   "ok": true,
+   "result": "Ran in the hosted sandbox; the agent reads the output and reports it."
+  },
+  {
+   "seq": 17,
+   "t": 29.27,
+   "type": "message",
+   "agent": "tester",
+   "text": "| Case | Call | Expected | Got | Pass/Fail |\n|---:|---|---:|---:|:---:|\n| 1 | `shipping_cost(1, 1)` | `5.0` | `5.0` | Pass |\n| 2 | `shipping_cost(0.4, 2)` | `7.5` | `7.5` | Pass |\n| 3 | `shipping_cost(2, 1)` | `6.25` | `6.25` | Pass |\n| 4 | `shipping_cost(2.1, 1)` | `7.5` | `7.5` | Pass |\n| 5 | `shipping_cost(10, 3)` | `28.0` | `28.0` | Pass |\n| 6 | `shipping_cost(3, 2, express=True)` | `20.0` | `20.0` | Pass |\n| 7 | `shipping_cost(70, 3)` | `148.0` | `148.0` | Pass |\n| 8 | `shipping_cost(70.5, 1)` | `ValueError` | `ValueError` | Pass |\n| 9 | `shipping_cost(0, 1)` | `ValueError` | `ValueError` | Pass |\n| 10 | `shipping_cost(5, 4)` | `ValueError` | `ValueError` | Pass |\n\n**RESULT: 10/10 passed**\n\nAll acceptance tests passed. Handing off to the reviewer.",
+   "step": "check"
+  },
+  {
+   "seq": 18,
+   "t": 29.27,
+   "type": "handoff",
+   "source": "tester",
+   "target": "reviewer"
+  },
+  {
+   "seq": 19,
+   "t": 29.27,
+   "type": "model_call",
+   "agent": "reviewer"
+  },
+  {
+   "seq": 20,
+   "t": 29.27,
+   "type": "agent_start",
+   "agent": "reviewer"
+  },
+  {
+   "seq": 21,
+   "t": 33.01,
+   "type": "message",
+   "agent": "reviewer",
+   "text": "SHIP-142 review: All 10 acceptance tests pass. The implementation correctly validates finite numeric weights in the allowed range, rejects unknown zones, rounds partial additional pounds up, applies zone rates and express doubling, and returns a price rounded to cents. The code is clear and ready to merge.",
+   "step": "check"
+  },
+  {
+   "seq": 22,
+   "t": 33.01,
+   "type": "tool_call",
+   "agent": "reviewer",
+   "tool": "merge_change",
+   "call_id": "call_7Xiw734di3b2FPEPB7Cx8fsp",
+   "args": {
+    "summary": "Implement validated parcel shipping costs by weight, zone, and express service"
+   },
+   "step": "act",
+   "approval": true
+  },
+  {
+   "seq": 23,
+   "t": 33.04,
+   "type": "approval_request",
+   "request_id": "af-call-e7a125938da14dea855f3f40b4534955",
+   "agent": "reviewer",
+   "tool": "merge_change",
+   "args": {
+    "summary": "Implement validated parcel shipping costs by weight, zone, and express service"
+   }
+  },
+  {
+   "seq": 24,
+   "t": 33.04,
+   "type": "approval_response",
+   "request_id": "af-call-e7a125938da14dea855f3f40b4534955",
+   "approved": true,
+   "by": "person"
+  },
+  {
+   "seq": 25,
+   "t": 33.04,
+   "type": "model_call",
+   "agent": "reviewer"
+  },
+  {
+   "seq": 26,
+   "t": 33.04,
+   "type": "tool_result",
+   "agent": "reviewer",
+   "tool": "merge_change",
+   "call_id": "call_7Xiw734di3b2FPEPB7Cx8fsp",
+   "ok": true,
+   "result": "Approved by a person and completed: merge_change (reference #1)."
+  },
+  {
+   "seq": 27,
+   "t": 34.66,
+   "type": "message",
+   "agent": "reviewer",
+   "text": "MERGED",
+   "step": "check"
+  },
+  {
+   "seq": 28,
+   "t": 34.66,
+   "type": "run_end",
+   "status": "completed",
+   "error": null
+  }
+ ]
+}

@@ -1,0 +1,467 @@
+{
+ "schema": "agent-workflows.run/1",
+ "id": "340fffcd0df4",
+ "scenario": "work-order",
+ "pattern": "sequential",
+ "task": {
+  "id": "W-1104",
+  "label": "Score climbs 14 hours before a reported air leak",
+  "prompt": "Sensor alert for APU-1 air compressor: review sensor window W-1104 and prepare maintenance work if it is needed.",
+  "truth": "This window ends in a documented air-leak failure; the score crossed the line about 14 hours earlier."
+ },
+ "mode": "recorded",
+ "model": "gpt-5.6-sol",
+ "framework": "Microsoft Agent Framework 1.20.0",
+ "started_at": "2026-10-13T03:35:43+00:00",
+ "seconds": 31.77,
+ "status": "completed",
+ "error": null,
+ "stats": {
+  "model_calls": 7,
+  "tool_calls": 4,
+  "input_tokens": 12205,
+  "output_tokens": 1797,
+  "approvals": 1,
+  "handoffs": 0,
+  "messages": 4,
+  "per_agent": {
+   "monitor": {
+    "model_calls": 2,
+    "tool_calls": 1,
+    "tokens": 959
+   },
+   "diagnose": {
+    "model_calls": 2,
+    "tool_calls": 2,
+    "tokens": 3392
+   },
+   "planner": {
+    "model_calls": 1,
+    "tool_calls": 0,
+    "tokens": 3072
+   },
+   "dispatcher": {
+    "model_calls": 2,
+    "tool_calls": 1,
+    "tokens": 6579
+   }
+  }
+ },
+ "result": {
+  "headline": "Work order filed",
+  "fields": [
+   {
+    "label": "Peak score",
+    "value": "13.39 (Raise a work order)"
+   },
+   {
+    "label": "Field check",
+    "value": "passed"
+   },
+   {
+    "label": "Priority",
+    "value": "high"
+   }
+  ],
+  "document": {
+   "work_order_needed": true,
+   "asset": "APU-1 air compressor",
+   "priority": "high",
+   "problem": "Abnormally high compressor duty cycle with rapid pressure decay and short rest periods, indicating possible air leakage, unloader/check-valve malfunction, pressure-control issue, or reduced compressor capacity.",
+   "evidence": [
+    "Peak unusual-behaviour score was 13.39 at 2020-07-15 14:00:00, above the 6.0 work-order threshold.",
+    "The asset remained at work-order level for 19 hours and in the watch band for 4 hours.",
+    "Compressor worked hard for 85% of the hour versus a normal 7%.",
+    "Resting pressure fell at 0.545 bar per minute versus a normal 0.059 bar per minute.",
+    "Rest between working bursts was 3.0 minutes per start versus a normal 28.0 minutes."
+   ],
+   "steps": [
+    "Inspect the compressed-air system, receiver, fittings, and piping for external leaks.",
+    "Inspect and function-test the unloader and discharge/check valves for leakage or improper operation.",
+    "Verify pressure-switch settings, sensing lines, and compressor start/stop operation.",
+    "Inspect belts or couplings for wear, slippage, looseness, runout, and alignment problems.",
+    "Check compressor and aftercooler cooling flow and inspect for conditions reducing compressor capacity.",
+    "After repairs, restore the system safely and confirm normal pressure retention, duty cycle, and rest time."
+   ],
+   "safety": [
+    "Follow the site-specific hazardous-energy control and lockout/tagout procedure.",
+    "Isolate electrical and pneumatic energy, prevent automatic restart, vent stored air pressure, and verify zero energy before inspection.",
+    "Use qualified personnel and applicable personal protective equipment."
+   ],
+   "citations": [
+    "USBR FIST 2-6 p. 55",
+    "USBR FIST 2-6 p. 56",
+    "USBR FIST 1-1 p. 37"
+   ],
+   "due_within_hours": 24
+  },
+  "final": "Work order filed successfully after supervisor approval: **reference #1**.",
+  "outbox": [
+   {
+    "action": "create_work_order",
+    "asset": "APU-1 air compressor",
+    "priority": "high",
+    "problem": "Abnormally high compressor duty cycle with rapid pressure decay and short rest periods, indicating possible air leakage, unloader/check-valve malfunction, pressure-control issue, or reduced compressor capacity.",
+    "due_within_hours": 24
+   }
+  ]
+ },
+ "events": [
+  {
+   "seq": 1,
+   "t": 0.46,
+   "type": "run_start",
+   "task": "W-1104",
+   "prompt": "Sensor alert for APU-1 air compressor: review sensor window W-1104 and prepare maintenance work if it is needed."
+  },
+  {
+   "seq": 2,
+   "t": 0.46,
+   "type": "model_call",
+   "agent": "monitor"
+  },
+  {
+   "seq": 3,
+   "t": 0.79,
+   "type": "agent_start",
+   "agent": "monitor"
+  },
+  {
+   "seq": 4,
+   "t": 2.48,
+   "type": "tool_call",
+   "agent": "monitor",
+   "tool": "score_machine",
+   "call_id": "call_3rigQf2oQXK9wg05g9FFqucP",
+   "args": {
+    "window_id": "W-1104"
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 5,
+   "t": 2.58,
+   "type": "model_call",
+   "agent": "monitor"
+  },
+  {
+   "seq": 6,
+   "t": 2.59,
+   "type": "tool_result",
+   "agent": "monitor",
+   "tool": "score_machine",
+   "call_id": "call_3rigQf2oQXK9wg05g9FFqucP",
+   "ok": true,
+   "result": {
+    "asset": "APU-1 air compressor",
+    "window": "2020-07-14 14:30:00 to 2020-07-15 19:00:00",
+    "hours_with_data": 23,
+    "policy": "work order at a score of 6.0 or more; watch from 3.0",
+    "peak_score": 13.39,
+    "peak_at": "2020-07-15 14:00:00",
+    "median_score": 8.91,
+    "route_at_peak": "Raise a work order",
+    "hours_at_work_order_level": 19,
+    "hours_in_watch_band": 4,
+    "first_alert_hour": "2020-07-15 00:00:00",
+    "drivers": [
+     {
+      "signal": "Share of the hour the compressor is working hard",
+      "reading": "85% of the hour",
+      "normal": "7% of the hour",
+      "meaning": "Higher than usual means trouble"
+     },
+     {
+      "signal": "How fast pressure falls while resting (bar/min)",
+      "reading": "0.545 bar per minute",
+      "normal": "0.059 bar per minute",
+      "meaning": "Higher than usual means trouble"
+     },
+     {
+      "signal": "Minutes of rest between working bursts",
+      "reading": "3.0 minutes of rest per start",
+      "normal": "28.0 minutes of rest per start",
+      "meaning": "Lower than usual means trouble"
+     }
+    ],
+    "note": "A distance from this compressor's own quiet-months normal, used to rank hours for attention. It is not a diagnosis and not a prediction that the machine will fail. A technician inspects the machine and decides."
+   }
+  },
+  {
+   "seq": 7,
+   "t": 5.84,
+   "type": "message",
+   "agent": "monitor",
+   "text": "Peak unusual-behaviour score: **13.39** at **2020-07-15 14:00:00**.  \nPolicy route at peak: **Raise a work order**.  \nAlerted for **23 hours**: **19** at work-order level and **4** in watch.  \nStrongest drivers: compressor working hard **85%** of the hour; resting pressure falling **0.545 bar per minute**.  \nThis score ranks unusual behaviour; it is not a diagnosis.",
+   "step": "sense"
+  },
+  {
+   "seq": 8,
+   "t": 5.84,
+   "type": "model_call",
+   "agent": "diagnose"
+  },
+  {
+   "seq": 9,
+   "t": 5.84,
+   "type": "agent_start",
+   "agent": "diagnose"
+  },
+  {
+   "seq": 10,
+   "t": 9.46,
+   "type": "tool_call",
+   "agent": "diagnose",
+   "tool": "search_procedures",
+   "call_id": "call_vONffeFlRHnynVMneWmFZWod",
+   "args": {
+    "question": "APU-1 air compressor inspection procedure for excessive loaded runtime, rapid pressure loss while resting, and short rest between starts; check likely compressed-air leaks, discharge/check valve leakage, pressure controls, and compressor capacity."
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 11,
+   "t": 9.49,
+   "type": "tool_call",
+   "agent": "diagnose",
+   "tool": "search_procedures",
+   "call_id": "call_e0FeIKblN6ptVnM2KEESjDX5",
+   "args": {
+    "question": "APU-1 air compressor safe isolation and lockout/tagout procedure before inspection or maintenance, including electrical, pneumatic, stored pressure, automatic restart, and verification of zero energy."
+   },
+   "step": "sense",
+   "approval": false
+  },
+  {
+   "seq": 12,
+   "t": 9.58,
+   "type": "model_call",
+   "agent": "diagnose"
+  },
+  {
+   "seq": 13,
+   "t": 9.58,
+   "type": "tool_result",
+   "agent": "diagnose",
+   "tool": "search_procedures",
+   "call_id": "call_vONffeFlRHnynVMneWmFZWod",
+   "ok": true,
+   "result": {
+    "search_result": "Passages found - no drafted answer for this question",
+    "passages": [
+     {
+      "citation": "USBR FIST 2-6 p. 58",
+      "source": "Water and Oil Systems Maintenance",
+      "score": 0.51,
+      "text": "FIST Volume 2-6 Maintenance of Auxiliary Mechanical Equipment a) Check piston for wear and clearance within the bore. Examine rings for tightness and fit. 7) Inspect and maintain the connecting rod. a) Visually inspect for distortion or bending. b) Check connecting rod for trueness, scoring or wear. Refurbish or replace as required. c) Inspect bearing fasteners for damage and replace as required. 8) Inspect and maint"
+     },
+     {
+      "citation": "USBR FIST 2-6 p. 56",
+      "source": "Water and Oil Systems Maintenance",
+      "score": 0.5,
+      "text": "FIST Volume 2-6 Maintenance of Auxiliary Mechanical Equipment a) Check V-belts for slippage, chains for looseness, and shaft couplings for excessive runout b) Check V-belts for signs of wear or aging and replace as needed. Using a dial indicator, check for excessive runout of direct-coupled shafts; check shaft alignment if runout is excessive. a) Check flow of water coolant through compressor and aftercooler. Check f"
+     },
+     {
+      "citation": "USBR FIST 2-6 p. 55",
+      "source": "Water and Oil Systems Maintenance",
+      "score": 0.49,
+      "text": "Reciprocating compressors have an unloader valve located between the discharge of the compressor and the air receiver. Unloader valves are used to minimize the load required to start a reciprocating compressor. The output of a compressor is typically connected to the air receiver through a short section of piping. When the pressure switch is activated and the compressor stops, an unloader valve opens and the pressure"
+     }
+    ],
+    "note": "Similarity says the wording is close; a qualified person confirms it applies."
+   }
+  },
+  {
+   "seq": 14,
+   "t": 9.58,
+   "type": "tool_result",
+   "agent": "diagnose",
+   "tool": "search_procedures",
+   "call_id": "call_e0FeIKblN6ptVnM2KEESjDX5",
+   "ok": true,
+   "result": {
+    "search_result": "Passages found - no drafted answer for this question",
+    "passages": [
+     {
+      "citation": "OSHA 3120 p. 14",
+      "source": "Control of Hazardous Energy (Lockout/Tagout)",
+      "score": 0.5,
+      "text": "In Appendix A to 1910.147, OSHA provides a Typical Minimal Lockout Procedure for employers to consult when preparing their own specific energy-control procedures. The outline is a nonmandatory guideline to help employers and employees comply with the standard. Nothing in the appendix adds to or detracts from any of the requirements in the standard. What must workers do before they begin service or maintenance activit"
+     },
+     {
+      "citation": "USBR FIST 1-1 p. 37",
+      "source": "Hazardous Energy Control Program",
+      "score": 0.5,
+      "text": "FIST Volume 1-1 Hazardous Energy Control Program 1) The placement and removal of a personal lock (tag) must be: a. Installed at the energy isolation device after the device has been placed in the b. Affixed to the energy isolation device in a manner that will maintain the device in 2) Appropriate checks must be performed to verify de energization and release of stored 3) Upon completion of the servicing or maintenanc"
+     },
+     {
+      "citation": "USBR FIST 2-6 p. 32",
+      "source": "Water and Oil Systems Maintenance",
+      "score": 0.5,
+      "text": "Powerplant compressors are machines designed for compressing air from an initial intake pressure to a higher discharge pressure. Single-stage compressors are those in which compression from initial to final pressure is complete in a single step or stage. Two-stage compressors are those in which compression from initial to final pressure is completed in two or more distinct steps or stages. Air compressors are discuss"
+     }
+    ],
+    "note": "Similarity says the wording is close; a qualified person confirms it applies."
+   }
+  },
+  {
+   "seq": 15,
+   "t": 16.89,
+   "type": "message",
+   "agent": "diagnose",
+   "text": "**Route: Raise a work order.** The high duty cycle, rapid pressure decay, and short rest periods suggest leakage, unloader/check-valve trouble, or reduced compressor capacity.\n\n- **USBR FIST 2-6 p. 55**  \n  “Reciprocating compressors have an unloader valve located between the discharge of the compressor and the air receiver. Unloader valves are used to minimize the load required to start a reciprocating compressor. The output of a compressor is typically connected to the air receiver through a short section of piping. When the pressure switch is activated and the compressor stops, an unloader valve opens and the pressure”  \n  **Technician meaning:** Inspect the unloader, receiver connection, and associated valves/piping for leakage or failure to operate correctly.\n\n- **USBR FIST 2-6 p. 56**  \n  “FIST Volume 2-6 Maintenance of Auxiliary Mechanical Equipment a) Check V-belts for slippage, chains for looseness, and shaft couplings for excessive runout b) Check V-belts for signs of wear or aging and replace as needed. Using a dial indicator, check for excessive runout of direct-coupled shafts; check shaft alignment if runout is excessive. a) Check flow of water coolant through compressor and aftercooler. Check f”  \n  **Technician meaning:** Check drive condition/alignment and cooling flow for causes of reduced output and excessive run time.\n\n- **USBR FIST 1-1 p. 37**  \n  “FIST Volume 1-1 Hazardous Energy Control Program 1) The placement and removal of a personal lock (tag) must be: a. Installed at the energy isolation device after the device has been placed in the b. Affixed to the energy isolation device in a manner that will maintain the device in 2) Appropriate checks must be performed to verify de energization and release of stored 3) Upon completion of the servicing or maintenanc”  \n  **Technician meaning:** Follow the site-specific energy-control procedure, apply personal locks/tags, release stored pressure, and verify de-energization before work.",
+   "step": "plan"
+  },
+  {
+   "seq": 16,
+   "t": 16.89,
+   "type": "model_call",
+   "agent": "planner"
+  },
+  {
+   "seq": 17,
+   "t": 16.9,
+   "type": "agent_start",
+   "agent": "planner"
+  },
+  {
+   "seq": 18,
+   "t": 25.12,
+   "type": "message",
+   "agent": "planner",
+   "text": "```json\n{\n  \"work_order_needed\": true,\n  \"asset\": \"APU-1 air compressor\",\n  \"priority\": \"high\",\n  \"problem\": \"Abnormally high compressor duty cycle with rapid pressure decay and short rest periods, indicating possible air leakage, unloader/check-valve malfunction, pressure-control issue, or reduced compressor capacity.\",\n  \"evidence\": [\n    \"Peak unusual-behaviour score was 13.39 at 2020-07-15 14:00:00, above the 6.0 work-order threshold.\",\n    \"The asset remained at work-order level for 19 hours and in the watch band for 4 hours.\",\n    \"Compressor worked hard for 85% of the hour versus a normal 7%.\",\n    \"Resting pressure fell at 0.545 bar per minute versus a normal 0.059 bar per minute.\",\n    \"Rest between working bursts was 3.0 minutes per start versus a normal 28.0 minutes.\"\n  ],\n  \"steps\": [\n    \"Inspect the compressed-air system, receiver, fittings, and piping for external leaks.\",\n    \"Inspect and function-test the unloader and discharge/check valves for leakage or improper operation.\",\n    \"Verify pressure-switch settings, sensing lines, and compressor start/stop operation.\",\n    \"Inspect belts or couplings for wear, slippage, looseness, runout, and alignment problems.\",\n    \"Check compressor and aftercooler cooling flow and inspect for conditions reducing compressor capacity.\",\n    \"After repairs, restore the system safely and confirm normal pressure retention, duty cycle, and rest time.\"\n  ],\n  \"safety\": [\n    \"Follow the site-specific hazardous-energy control and lockout/tagout procedure.\",\n    \"Isolate electrical and pneumatic energy, prevent automatic restart, vent stored air pressure, and verify zero energy before inspection.\",\n    \"Use qualified personnel and applicable personal protective equipment.\"\n  ],\n  \"citations\": [\n    \"USBR FIST 2-6 p. 55\",\n    \"USBR FIST 2-6 p. 56\",\n    \"USBR FIST 1-1 p. 37\"\n  ],\n  \"due_within_hours\": 24\n}\n```",
+   "step": "plan"
+  },
+  {
+   "seq": 19,
+   "t": 25.12,
+   "type": "code_step",
+   "node": "field_check",
+   "title": "Field check",
+   "passed": true,
+   "checks": [
+    {
+     "check": "Planner produced a JSON work order",
+     "ok": true
+    },
+    {
+     "check": "States whether a work order is needed",
+     "ok": true
+    },
+    {
+     "check": "Asset named",
+     "ok": true
+    },
+    {
+     "check": "Priority is high, medium or low",
+     "ok": true
+    },
+    {
+     "check": "High priority is due within 24 h",
+     "ok": true
+    },
+    {
+     "check": "At least two work steps",
+     "ok": true
+    },
+    {
+     "check": "Safety step isolates the machine (lockout/tagout)",
+     "ok": true
+    },
+    {
+     "check": "At least one citation",
+     "ok": true
+    },
+    {
+     "check": "Every citation came from the procedure search",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "step": "check"
+  },
+  {
+   "seq": 20,
+   "t": 25.12,
+   "type": "model_call",
+   "agent": "dispatcher"
+  },
+  {
+   "seq": 21,
+   "t": 25.12,
+   "type": "agent_start",
+   "agent": "dispatcher"
+  },
+  {
+   "seq": 22,
+   "t": 29.94,
+   "type": "tool_call",
+   "agent": "dispatcher",
+   "tool": "create_work_order",
+   "call_id": "call_J2mew2B9VCUqfubFnjfd7sDg",
+   "args": {
+    "asset": "APU-1 air compressor",
+    "priority": "high",
+    "problem": "Abnormally high compressor duty cycle with rapid pressure decay and short rest periods, indicating possible air leakage, unloader/check-valve malfunction, pressure-control issue, or reduced compressor capacity.",
+    "due_within_hours": 24
+   },
+   "step": "act",
+   "approval": true
+  },
+  {
+   "seq": 23,
+   "t": 30.05,
+   "type": "approval_request",
+   "request_id": "af-call-53b24476922e426e97b5d05e249a2493",
+   "agent": "dispatcher",
+   "tool": "create_work_order",
+   "args": {
+    "asset": "APU-1 air compressor",
+    "priority": "high",
+    "problem": "Abnormally high compressor duty cycle with rapid pressure decay and short rest periods, indicating possible air leakage, unloader/check-valve malfunction, pressure-control issue, or reduced compressor capacity.",
+    "due_within_hours": 24
+   }
+  },
+  {
+   "seq": 24,
+   "t": 30.05,
+   "type": "approval_response",
+   "request_id": "af-call-53b24476922e426e97b5d05e249a2493",
+   "approved": true,
+   "by": "person"
+  },
+  {
+   "seq": 25,
+   "t": 30.05,
+   "type": "model_call",
+   "agent": "dispatcher"
+  },
+  {
+   "seq": 26,
+   "t": 30.05,
+   "type": "tool_result",
+   "agent": "dispatcher",
+   "tool": "create_work_order",
+   "call_id": "call_J2mew2B9VCUqfubFnjfd7sDg",
+   "ok": true,
+   "result": "Approved by a person and completed: create_work_order (reference #1)."
+  },
+  {
+   "seq": 27,
+   "t": 31.76,
+   "type": "message",
+   "agent": "dispatcher",
+   "text": "Work order filed successfully after supervisor approval: **reference #1**.",
+   "step": "act"
+  },
+  {
+   "seq": 28,
+   "t": 31.77,
+   "type": "run_end",
+   "status": "completed",
+   "error": null
+  }
+ ]
+}
