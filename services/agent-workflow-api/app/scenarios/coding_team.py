@@ -7,7 +7,7 @@ from typing import Annotated, Any
 from agent_framework import tool
 from agent_framework.orchestrations import HandoffBuilder
 
-from ..specs import AgentSpec, EdgeSpec, NodeSpec, Scenario, TaskSpec, ToolSpec
+from ..specs import ActorSpec, AgentSpec, BusinessSpec, EdgeSpec, NodeSpec, Scenario, StageSpec, TaskSpec, ToolSpec
 from .common import final_message, last_code_block, messages_from, outbox_actions
 
 TICKET = """Ticket SHIP-142 from the e-commerce team.
@@ -167,5 +167,64 @@ def summarize(events: list[dict], outbox: list[dict]) -> dict:
     }
 
 
+SCENARIO.business = BusinessSpec(
+    question="Can a team of AI agents deliver tested code that a person is willing to merge?",
+    situation=(
+        "An online shop needs a function that prices parcel shipping. A ticket describes it. The work "
+        "passes through a product owner, a developer, a tester and a reviewer, as in a software team."
+    ),
+    stakes=[
+        "A wrong price costs money on every order.",
+        "Edge cases break quietly: partial pounds, the weight limit, unknown zones.",
+        "Code goes live only after a person approves the merge.",
+    ],
+    decides="The engineering lead approves the merge. People wrote the acceptance tests before the agents started.",
+    good=[
+        "Every hidden acceptance test passes.",
+        "Work goes back to the developer when a test fails.",
+        "The reviewer explains the change before asking to merge.",
+    ],
+    today=[
+        "A product owner writes the ticket.",
+        "A developer codes it; a tester runs the tests and sends bugs back.",
+        "A reviewer reads the code; a lead approves the merge.",
+    ],
+    with_agent=[
+        "Four agents play the same roles and hand the work to each other.",
+        "The tests run as code in a sandbox; the tester reports the results.",
+        "The lead still approves the merge.",
+    ],
+    actors=[
+        ActorSpec("ticket", "Ticket", "trigger", "A feature request from the shop team", ref="task"),
+        ActorSpec("product_owner", "Product owner", "agent", "Turns the ticket into a clear spec", ref="product_owner"),
+        ActorSpec("developer", "Developer", "agent", "Writes the code", ref="developer"),
+        ActorSpec("tester", "Tester", "agent", "Runs the hidden tests and reports", ref="tester"),
+        ActorSpec("reviewer", "Reviewer", "agent", "Reads the code and asks to merge", ref="reviewer"),
+        ActorSpec("lead", "Engineering lead", "person", "Approves or rejects the merge", ref="person"),
+    ],
+    stages=[
+        StageSpec("ticket", "Ticket arrives", "ticket", "The shop team asks for a shipping-cost function.",
+                  [{"type": "run_start"}], "alert", "The ticket becomes the task message that starts the run."),
+        StageSpec("spec", "Write the spec", "product_owner", "The product owner turns the ticket into rules and examples.",
+                  [{"type": "message", "agent": "product_owner"}], "ticket", "The language model writes the spec; no tools."),
+        StageSpec("code", "Write the code", "developer", "The product owner hands the work to the developer, who writes the function.",
+                  [{"type": "handoff", "target": "developer"}, {"type": "message", "agent": "developer"}], "code",
+                  "Handoff to developer; the language model writes Python."),
+        StageSpec("test", "Test it", "tester", "The tester runs ten hidden acceptance tests and reports every result.",
+                  [{"type": "handoff", "target": "tester"}, {"type": "tool_call", "tool": "get_acceptance_tests"},
+                   {"type": "tool_call", "tool": "run_python"}, {"type": "message", "agent": "tester"}], "tests",
+                  "Tool calls get_acceptance_tests and run_python: the tests run as code in a hosted sandbox."),
+        StageSpec("review", "Review the code", "reviewer", "The reviewer reads the code and the test results.",
+                  [{"type": "handoff", "target": "reviewer"}, {"type": "message", "agent": "reviewer", "nth": 1}], "review",
+                  "Handoff to reviewer; the language model reviews."),
+        StageSpec("approve", "Lead approves the merge", "lead", "The reviewer asks to merge; the engineering lead decides.",
+                  [{"type": "tool_call", "tool": "merge_change"}, {"type": "approval_request"}], "approval",
+                  "Tool call merge_change: an action, locked until a person approves.",
+                  optional=True, skipped="No merge was requested."),
+        StageSpec("merged", "Merged", "reviewer", "The reviewer confirms the outcome.",
+                  [{"type": "message", "agent": "reviewer", "last": True}], "note", "The last agent to hold the task writes the final message.",
+                  optional=True, skipped="The reviewer did not confirm a merge."),
+    ],
+)
 SCENARIO.builder = build
 SCENARIO.summarize = summarize

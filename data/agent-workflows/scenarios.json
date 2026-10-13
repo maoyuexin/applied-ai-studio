@@ -149,6 +149,165 @@
    "fraud"
   ],
   "data_note": "Transactions are synthetic (Sparkov generator). Labels are hidden from the agent and shown only after the run.",
+  "business": {
+   "question": "A card purchase looks unusual. Hold the card, or let it through?",
+   "situation": "The bank's card system flags a purchase. Someone has to decide quickly whether to put a temporary hold on the card, and record why.",
+   "stakes": [
+    "Miss real fraud and the bank and the cardholder lose money.",
+    "Hold a good customer's card and they are stuck at the checkout.",
+    "Every decision has to be explainable later."
+   ],
+   "decides": "A fraud analyst. The assistant may only request a hold; a person approves it.",
+   "good": [
+    "Every alert gets the same checks, in seconds.",
+    "A hold happens only when the fraud model says review and a person agrees.",
+    "A short note explains each decision in plain words."
+   ],
+   "today": [
+    "An analyst opens the purchase and the card's recent activity.",
+    "Checks the fraud model's score on another screen.",
+    "Decides, places the hold and writes the note by hand."
+   ],
+   "with_agent": [
+    "The assistant gathers the facts and the score.",
+    "It drafts the hold request and the note.",
+    "The analyst reviews, then approves or rejects."
+   ],
+   "actors": [
+    {
+     "id": "alert",
+     "label": "Card system",
+     "kind": "trigger",
+     "plain": "Flags a purchase for review",
+     "ref": "task"
+    },
+    {
+     "id": "assistant",
+     "label": "AI assistant",
+     "kind": "agent",
+     "plain": "Gathers the facts, reads the score, drafts the request and the note",
+     "ref": "card_alert_agent"
+    },
+    {
+     "id": "records",
+     "label": "Card records",
+     "kind": "system",
+     "plain": "Purchase details and recent card activity",
+     "ref": "get_transaction"
+    },
+    {
+     "id": "model",
+     "label": "Fraud model",
+     "kind": "model",
+     "plain": "Scores how unusual a purchase is; learned from past transactions",
+     "ref": "score_transaction"
+    },
+    {
+     "id": "analyst",
+     "label": "Fraud analyst",
+     "kind": "person",
+     "plain": "Approves or rejects the hold",
+     "ref": "person"
+    }
+   ],
+   "stages": [
+    {
+     "id": "alert",
+     "title": "Alert arrives",
+     "actor": "alert",
+     "plain": "The card system flags one purchase for review.",
+     "match": [
+      {
+       "type": "run_start"
+      }
+     ],
+     "visual": "alert",
+     "tech": "The alert becomes the task message that starts the run.",
+     "optional": false,
+     "skipped": ""
+    },
+    {
+     "id": "lookup",
+     "title": "Look up the purchase",
+     "actor": "records",
+     "plain": "The assistant pulls the purchase details and the card's recent activity.",
+     "match": [
+      {
+       "type": "tool_call",
+       "tool": "get_transaction"
+      }
+     ],
+     "visual": "receipt",
+     "tech": "Tool call get_transaction: a read-only look-up.",
+     "optional": false,
+     "skipped": ""
+    },
+    {
+     "id": "score",
+     "title": "Score the risk",
+     "actor": "model",
+     "plain": "The bank's fraud model scores the purchase and compares it with the review cutoff.",
+     "match": [
+      {
+       "type": "tool_call",
+       "tool": "score_transaction"
+      }
+     ],
+     "visual": "risk",
+     "tech": "Tool call score_transaction: a trained machine-learning model used as a tool.",
+     "optional": false,
+     "skipped": ""
+    },
+    {
+     "id": "request",
+     "title": "Request a hold",
+     "actor": "assistant",
+     "plain": "The model said review, so the assistant asks for a temporary hold and gives a reason.",
+     "match": [
+      {
+       "type": "tool_call",
+       "tool": "hold_card"
+      }
+     ],
+     "visual": "request",
+     "tech": "Tool call hold_card: an action, so it is locked until a person approves.",
+     "optional": true,
+     "skipped": "No hold requested: the model said normal, so the purchase went through."
+    },
+    {
+     "id": "approve",
+     "title": "Analyst decides",
+     "actor": "analyst",
+     "plain": "A person reads the request and approves or rejects the hold.",
+     "match": [
+      {
+       "type": "approval_request"
+      }
+     ],
+     "visual": "approval",
+     "tech": "Approval request: the run waits until a person answers.",
+     "optional": true,
+     "skipped": "Nobody was asked: there was no hold to approve."
+    },
+    {
+     "id": "note",
+     "title": "Write the note",
+     "actor": "assistant",
+     "plain": "The assistant writes a short note for the fraud team.",
+     "match": [
+      {
+       "type": "message",
+       "agent": "card_alert_agent",
+       "last": true
+      }
+     ],
+     "visual": "note",
+     "tech": "The language model writes the final message.",
+     "optional": false,
+     "skipped": ""
+    }
+   ]
+  },
   "has_live": true
  },
  {
@@ -298,6 +457,192 @@
   ],
   "requires": [],
   "data_note": "Patients are synthetic. Trial data comes live from ClinicalTrials.gov. Referrals stay in the tool server's outbox.",
+  "business": {
+   "question": "Which recruiting clinical trials are worth a coordinator's time for this patient?",
+   "situation": "A research coordinator receives a referral for a patient with advanced lung cancer. They need open trials near the patient that might fit, before the next clinic visit.",
+   "stakes": [
+    "Hundreds of studies, each with pages of eligibility rules.",
+    "Miss a good trial and the patient loses an option.",
+    "Refer a poor fit and the study team loses time."
+   ],
+   "decides": "The research coordinator decides what to refer. Only the study team decides eligibility.",
+   "good": [
+    "Only recruiting trials within the patient's travel distance.",
+    "Each trial's own rules quoted, with what is still unknown.",
+    "Nothing is sent without the coordinator's approval."
+   ],
+   "today": [
+    "Search the public registry by hand, several ways.",
+    "Open each trial and read its eligibility rules.",
+    "Check age, sex, status and distance, then write a summary."
+   ],
+   "with_agent": [
+    "The assistant searches, opens and compares trials in about a minute.",
+    "Code checks the basic facts the same way every time.",
+    "The coordinator reviews a ranked shortlist and approves any referral."
+   ],
+   "actors": [
+    {
+     "id": "request",
+     "label": "Referral",
+     "kind": "trigger",
+     "plain": "A patient is referred for trial pre-screening",
+     "ref": "task"
+    },
+    {
+     "id": "assistant",
+     "label": "AI assistant",
+     "kind": "agent",
+     "plain": "Searches, reads and compares trials; drafts the shortlist",
+     "ref": "trial_finder"
+    },
+    {
+     "id": "record",
+     "label": "Patient record",
+     "kind": "system",
+     "plain": "The patient's summary (synthetic)",
+     "ref": "get_patient"
+    },
+    {
+     "id": "registry",
+     "label": "Trial registry",
+     "kind": "system",
+     "plain": "ClinicalTrials.gov, searched live",
+     "ref": "search_trials"
+    },
+    {
+     "id": "checks",
+     "label": "Coded checks",
+     "kind": "code",
+     "plain": "Age, sex, recruiting status and distance, checked by code",
+     "ref": "check_basics"
+    },
+    {
+     "id": "coordinator",
+     "label": "Research coordinator",
+     "kind": "person",
+     "plain": "Approves or rejects each referral",
+     "ref": "person"
+    }
+   ],
+   "stages": [
+    {
+     "id": "request",
+     "title": "Referral arrives",
+     "actor": "request",
+     "plain": "A coordinator asks for trials worth reviewing for one patient.",
+     "match": [
+      {
+       "type": "run_start"
+      }
+     ],
+     "visual": "alert",
+     "tech": "The request becomes the task message that starts the run.",
+     "optional": false,
+     "skipped": ""
+    },
+    {
+     "id": "patient",
+     "title": "Read the patient record",
+     "actor": "record",
+     "plain": "The assistant reads the patient's diagnosis, treatment so far and how far they can travel.",
+     "match": [
+      {
+       "type": "tool_call",
+       "tool": "get_patient"
+      }
+     ],
+     "visual": "patient",
+     "tech": "Tool call get_patient: a read-only look-up.",
+     "optional": false,
+     "skipped": ""
+    },
+    {
+     "id": "search",
+     "title": "Search the registry",
+     "actor": "registry",
+     "plain": "The assistant searches the public trial registry several ways, near the patient's home.",
+     "match": [
+      {
+       "type": "tool_call",
+       "tool": "search_trials"
+      }
+     ],
+     "visual": "search",
+     "tech": "Tool call search_trials on a tool server (MCP) that queries ClinicalTrials.gov.",
+     "optional": false,
+     "skipped": ""
+    },
+    {
+     "id": "checks",
+     "title": "Check the basics in code",
+     "actor": "checks",
+     "plain": "Code checks age, sex, recruiting status and distance for each candidate trial.",
+     "match": [
+      {
+       "type": "tool_call",
+       "tool": "check_basics"
+      }
+     ],
+     "visual": "checks",
+     "tech": "Tool call check_basics: plain code, the same answer every time.",
+     "optional": false,
+     "skipped": ""
+    },
+    {
+     "id": "rules",
+     "title": "Read each trial's rules",
+     "actor": "registry",
+     "plain": "The assistant opens each promising trial and compares its rules with the patient.",
+     "match": [
+      {
+       "type": "tool_call",
+       "tool": "get_trial"
+      }
+     ],
+     "visual": "trials",
+     "tech": "Tool call get_trial: the trial's full eligibility text and nearest open site.",
+     "optional": false,
+     "skipped": ""
+    },
+    {
+     "id": "referral",
+     "title": "Coordinator approves a referral",
+     "actor": "coordinator",
+     "plain": "The assistant asks to refer the patient to its top trial; the coordinator decides.",
+     "match": [
+      {
+       "type": "tool_call",
+       "tool": "send_referral"
+      },
+      {
+       "type": "approval_request"
+      }
+     ],
+     "visual": "approval",
+     "tech": "Tool call send_referral: an action, locked until a person approves.",
+     "optional": true,
+     "skipped": "No referral was requested in this run."
+    },
+    {
+     "id": "shortlist",
+     "title": "Shortlist and open questions",
+     "actor": "assistant",
+     "plain": "The assistant ranks the trials, quotes their rules and lists what is still unknown.",
+     "match": [
+      {
+       "type": "message",
+       "agent": "trial_finder",
+       "last": true
+      }
+     ],
+     "visual": "shortlist",
+     "tech": "The language model writes the final message.",
+     "optional": false,
+     "skipped": ""
+    }
+   ]
+  },
   "has_live": true
  },
  {
@@ -529,6 +874,195 @@
    "procedures"
   ],
   "data_note": "Sensor data: UCI MetroPT-3 (CC BY 4.0). The Studio's maintenance model is a robust statistical baseline, not a classroom notebook model. Window labels are hidden from the agents.",
+  "business": {
+   "question": "A compressor is behaving unusually. Does it need a work order, and what should the technician do?",
+   "situation": "A train's air compressor reports sensor readings all day. A score built from them flags unusual hours. Maintenance must decide whether to send a technician, and with which instructions.",
+   "stakes": [
+    "Miss a real fault and the train can fail in service.",
+    "Raise needless work orders and technicians stop trusting the alerts.",
+    "Every work order must follow the safety procedure."
+   ],
+   "decides": "The shift supervisor approves every work order. A technician inspects the machine and decides the repair.",
+   "good": [
+    "Every flagged week is reviewed the same way.",
+    "Work orders cite the maintenance manuals and include the lockout step.",
+    "Nothing is filed without the supervisor."
+   ],
+   "today": [
+    "An engineer watches the anomaly dashboard.",
+    "Looks up the right procedures in the manuals.",
+    "Writes the work order and gets it signed."
+   ],
+   "with_agent": [
+    "Four agents work in a fixed order, like an assembly line.",
+    "A plain-code check catches missing fields and made-up citations.",
+    "The supervisor approves or rejects the finished order."
+   ],
+   "actors": [
+    {
+     "id": "sensors",
+     "label": "Compressor sensors",
+     "kind": "trigger",
+     "plain": "One week of readings from the machine",
+     "ref": "task"
+    },
+    {
+     "id": "monitor",
+     "label": "Monitor",
+     "kind": "agent",
+     "plain": "Reads the anomaly score and says how serious it is",
+     "ref": "monitor"
+    },
+    {
+     "id": "diagnose",
+     "label": "Diagnose",
+     "kind": "agent",
+     "plain": "Finds the right procedures in the manuals",
+     "ref": "diagnose"
+    },
+    {
+     "id": "planner",
+     "label": "Planner",
+     "kind": "agent",
+     "plain": "Drafts the work order",
+     "ref": "planner"
+    },
+    {
+     "id": "check",
+     "label": "Field check",
+     "kind": "code",
+     "plain": "Fixed rules: required fields, a lockout step, real citations",
+     "ref": "field_check"
+    },
+    {
+     "id": "dispatcher",
+     "label": "Dispatcher",
+     "kind": "agent",
+     "plain": "Files the order once it is checked and approved",
+     "ref": "dispatcher"
+    },
+    {
+     "id": "supervisor",
+     "label": "Shift supervisor",
+     "kind": "person",
+     "plain": "Approves or rejects the work order",
+     "ref": "person"
+    }
+   ],
+   "stages": [
+    {
+     "id": "alert",
+     "title": "Sensor alert arrives",
+     "actor": "sensors",
+     "plain": "A week of compressor readings is sent for review.",
+     "match": [
+      {
+       "type": "run_start"
+      }
+     ],
+     "visual": "alert",
+     "tech": "The alert becomes the task message that starts the run.",
+     "optional": false,
+     "skipped": ""
+    },
+    {
+     "id": "score",
+     "title": "Score the machine",
+     "actor": "monitor",
+     "plain": "The monitor reads the anomaly score: how far this week is from the machine's own normal.",
+     "match": [
+      {
+       "agent": "monitor"
+      }
+     ],
+     "visual": "machine",
+     "tech": "Tool call score_machine: a statistical model in the maintenance service.",
+     "optional": false,
+     "skipped": ""
+    },
+    {
+     "id": "manual",
+     "title": "Find the procedures",
+     "actor": "diagnose",
+     "plain": "Diagnose decides the route and finds the inspection and lockout steps in the manuals.",
+     "match": [
+      {
+       "agent": "diagnose"
+      }
+     ],
+     "visual": "manual",
+     "tech": "Tool call search_procedures: search over maintenance manuals (retrieval).",
+     "optional": false,
+     "skipped": ""
+    },
+    {
+     "id": "draft",
+     "title": "Draft the work order",
+     "actor": "planner",
+     "plain": "The planner writes the work order: priority, steps, safety and sources.",
+     "match": [
+      {
+       "agent": "planner"
+      }
+     ],
+     "visual": "workorder",
+     "tech": "The language model writes the order as structured data (JSON).",
+     "optional": false,
+     "skipped": ""
+    },
+    {
+     "id": "check",
+     "title": "Check it with fixed rules",
+     "actor": "check",
+     "plain": "Plain code checks the order. No AI: the same rules every time.",
+     "match": [
+      {
+       "type": "code_step"
+      }
+     ],
+     "visual": "fieldcheck",
+     "tech": "A code step in the workflow, between two agents.",
+     "optional": false,
+     "skipped": ""
+    },
+    {
+     "id": "approve",
+     "title": "Supervisor approves",
+     "actor": "supervisor",
+     "plain": "The dispatcher asks to file the order; the supervisor approves or rejects it.",
+     "match": [
+      {
+       "type": "tool_call",
+       "tool": "create_work_order"
+      },
+      {
+       "type": "approval_request"
+      }
+     ],
+     "visual": "approval",
+     "tech": "Tool call create_work_order: an action, locked until a person approves.",
+     "optional": true,
+     "skipped": "Nothing to approve: no work order was needed."
+    },
+    {
+     "id": "file",
+     "title": "File it, or stand down",
+     "actor": "dispatcher",
+     "plain": "The dispatcher reports what was filed, or that no action was needed.",
+     "match": [
+      {
+       "type": "message",
+       "agent": "dispatcher",
+       "last": true
+      }
+     ],
+     "visual": "note",
+     "tech": "The last agent in the line writes the final message.",
+     "optional": false,
+     "skipped": ""
+    }
+   ]
+  },
   "has_live": true
  },
  {
@@ -731,6 +1265,213 @@
   ],
   "requires": [],
   "data_note": "The ticket and test cases were written for this demo. Code runs only in the hosted sandbox.",
+  "business": {
+   "question": "Can a team of AI agents deliver tested code that a person is willing to merge?",
+   "situation": "An online shop needs a function that prices parcel shipping. A ticket describes it. The work passes through a product owner, a developer, a tester and a reviewer, as in a software team.",
+   "stakes": [
+    "A wrong price costs money on every order.",
+    "Edge cases break quietly: partial pounds, the weight limit, unknown zones.",
+    "Code goes live only after a person approves the merge."
+   ],
+   "decides": "The engineering lead approves the merge. People wrote the acceptance tests before the agents started.",
+   "good": [
+    "Every hidden acceptance test passes.",
+    "Work goes back to the developer when a test fails.",
+    "The reviewer explains the change before asking to merge."
+   ],
+   "today": [
+    "A product owner writes the ticket.",
+    "A developer codes it; a tester runs the tests and sends bugs back.",
+    "A reviewer reads the code; a lead approves the merge."
+   ],
+   "with_agent": [
+    "Four agents play the same roles and hand the work to each other.",
+    "The tests run as code in a sandbox; the tester reports the results.",
+    "The lead still approves the merge."
+   ],
+   "actors": [
+    {
+     "id": "ticket",
+     "label": "Ticket",
+     "kind": "trigger",
+     "plain": "A feature request from the shop team",
+     "ref": "task"
+    },
+    {
+     "id": "product_owner",
+     "label": "Product owner",
+     "kind": "agent",
+     "plain": "Turns the ticket into a clear spec",
+     "ref": "product_owner"
+    },
+    {
+     "id": "developer",
+     "label": "Developer",
+     "kind": "agent",
+     "plain": "Writes the code",
+     "ref": "developer"
+    },
+    {
+     "id": "tester",
+     "label": "Tester",
+     "kind": "agent",
+     "plain": "Runs the hidden tests and reports",
+     "ref": "tester"
+    },
+    {
+     "id": "reviewer",
+     "label": "Reviewer",
+     "kind": "agent",
+     "plain": "Reads the code and asks to merge",
+     "ref": "reviewer"
+    },
+    {
+     "id": "lead",
+     "label": "Engineering lead",
+     "kind": "person",
+     "plain": "Approves or rejects the merge",
+     "ref": "person"
+    }
+   ],
+   "stages": [
+    {
+     "id": "ticket",
+     "title": "Ticket arrives",
+     "actor": "ticket",
+     "plain": "The shop team asks for a shipping-cost function.",
+     "match": [
+      {
+       "type": "run_start"
+      }
+     ],
+     "visual": "alert",
+     "tech": "The ticket becomes the task message that starts the run.",
+     "optional": false,
+     "skipped": ""
+    },
+    {
+     "id": "spec",
+     "title": "Write the spec",
+     "actor": "product_owner",
+     "plain": "The product owner turns the ticket into rules and examples.",
+     "match": [
+      {
+       "type": "message",
+       "agent": "product_owner"
+      }
+     ],
+     "visual": "ticket",
+     "tech": "The language model writes the spec; no tools.",
+     "optional": false,
+     "skipped": ""
+    },
+    {
+     "id": "code",
+     "title": "Write the code",
+     "actor": "developer",
+     "plain": "The product owner hands the work to the developer, who writes the function.",
+     "match": [
+      {
+       "type": "handoff",
+       "target": "developer"
+      },
+      {
+       "type": "message",
+       "agent": "developer"
+      }
+     ],
+     "visual": "code",
+     "tech": "Handoff to developer; the language model writes Python.",
+     "optional": false,
+     "skipped": ""
+    },
+    {
+     "id": "test",
+     "title": "Test it",
+     "actor": "tester",
+     "plain": "The tester runs ten hidden acceptance tests and reports every result.",
+     "match": [
+      {
+       "type": "handoff",
+       "target": "tester"
+      },
+      {
+       "type": "tool_call",
+       "tool": "get_acceptance_tests"
+      },
+      {
+       "type": "tool_call",
+       "tool": "run_python"
+      },
+      {
+       "type": "message",
+       "agent": "tester"
+      }
+     ],
+     "visual": "tests",
+     "tech": "Tool calls get_acceptance_tests and run_python: the tests run as code in a hosted sandbox.",
+     "optional": false,
+     "skipped": ""
+    },
+    {
+     "id": "review",
+     "title": "Review the code",
+     "actor": "reviewer",
+     "plain": "The reviewer reads the code and the test results.",
+     "match": [
+      {
+       "type": "handoff",
+       "target": "reviewer"
+      },
+      {
+       "type": "message",
+       "agent": "reviewer",
+       "nth": 1
+      }
+     ],
+     "visual": "review",
+     "tech": "Handoff to reviewer; the language model reviews.",
+     "optional": false,
+     "skipped": ""
+    },
+    {
+     "id": "approve",
+     "title": "Lead approves the merge",
+     "actor": "lead",
+     "plain": "The reviewer asks to merge; the engineering lead decides.",
+     "match": [
+      {
+       "type": "tool_call",
+       "tool": "merge_change"
+      },
+      {
+       "type": "approval_request"
+      }
+     ],
+     "visual": "approval",
+     "tech": "Tool call merge_change: an action, locked until a person approves.",
+     "optional": true,
+     "skipped": "No merge was requested."
+    },
+    {
+     "id": "merged",
+     "title": "Merged",
+     "actor": "reviewer",
+     "plain": "The reviewer confirms the outcome.",
+     "match": [
+      {
+       "type": "message",
+       "agent": "reviewer",
+       "last": true
+      }
+     ],
+     "visual": "note",
+     "tech": "The last agent to hold the task writes the final message.",
+     "optional": true,
+     "skipped": "The reviewer did not confirm a merge."
+    }
+   ]
+  },
   "has_live": true
  },
  {
@@ -933,6 +1674,249 @@
    "forecast"
   ],
   "data_note": "Products and sales history: UCI Online Retail II (2009-2011, CC BY 4.0). The claims check is plain code.",
+  "business": {
+   "question": "Which products go on next week's homepage, and what should the banner say?",
+   "situation": "An online gift shop plans its homepage promotion for the week of 28 November, at 15% off. Merchandising, copywriting and brand review all have a say, and the marketing manager signs off.",
+   "stakes": [
+    "The wrong products waste the best spot on the site.",
+    "A banner can break the rules: unproven claims, the wrong offer, no end date.",
+    "Pushy wording can hurt a warm, calm brand."
+   ],
+   "decides": "The marketing manager approves the brief. The claims rules are checked by code.",
+   "good": [
+    "Products picked from the demand forecast, not gut feeling.",
+    "A banner that passes every claims rule and fits the brand voice.",
+    "Disagreement improves the copy before a person sees it."
+   ],
+   "today": [
+    "A merchandiser pulls sales reports and picks products.",
+    "A copywriter drafts; a brand reviewer sends edits back.",
+    "Several rounds of email before the manager signs off."
+   ],
+   "with_agent": [
+    "A chair runs a meeting of three agents and picks who speaks next.",
+    "Everyone sees the whole conversation.",
+    "The manager approves the final brief."
+   ],
+   "actors": [
+    {
+     "id": "brief",
+     "label": "Promotion request",
+     "kind": "trigger",
+     "plain": "A homepage slot and an offer to fill",
+     "ref": "task"
+    },
+    {
+     "id": "chair",
+     "label": "Chair",
+     "kind": "agent",
+     "plain": "Runs the meeting and picks who speaks next",
+     "ref": "chair"
+    },
+    {
+     "id": "merchandiser",
+     "label": "Merchandiser",
+     "kind": "agent",
+     "plain": "Picks products using the demand forecast",
+     "ref": "merchandiser"
+    },
+    {
+     "id": "copywriter",
+     "label": "Copywriter",
+     "kind": "agent",
+     "plain": "Drafts the banner; told to write bold sales copy",
+     "ref": "copywriter"
+    },
+    {
+     "id": "brand_reviewer",
+     "label": "Brand reviewer",
+     "kind": "agent",
+     "plain": "Checks claims with code and judges the tone",
+     "ref": "brand_reviewer"
+    },
+    {
+     "id": "manager",
+     "label": "Marketing manager",
+     "kind": "person",
+     "plain": "Approves or rejects the brief",
+     "ref": "person"
+    }
+   ],
+   "stages": [
+    {
+     "id": "brief",
+     "title": "Request arrives",
+     "actor": "brief",
+     "plain": "Marketing asks for next week's homepage promotion.",
+     "match": [
+      {
+       "type": "run_start"
+      }
+     ],
+     "visual": "alert",
+     "tech": "The request becomes the task message that starts the run.",
+     "optional": false,
+     "skipped": ""
+    },
+    {
+     "id": "open",
+     "title": "Chair opens the meeting",
+     "actor": "chair",
+     "plain": "The chair decides who should speak first.",
+     "match": [
+      {
+       "type": "speaker",
+       "nth": 1
+      }
+     ],
+     "visual": "meeting",
+     "tech": "The chair agent picks the next speaker each round.",
+     "optional": false,
+     "skipped": ""
+    },
+    {
+     "id": "pick",
+     "title": "Pick products from the forecast",
+     "actor": "merchandiser",
+     "plain": "The merchandiser checks expected demand and picks two products.",
+     "match": [
+      {
+       "type": "tool_call",
+       "tool": "list_products"
+      },
+      {
+       "type": "tool_call",
+       "tool": "forecast_demand"
+      },
+      {
+       "type": "message",
+       "agent": "merchandiser"
+      }
+     ],
+     "visual": "products",
+     "tech": "Tool calls list_products and forecast_demand: a forecasting model used as a tool.",
+     "optional": false,
+     "skipped": ""
+    },
+    {
+     "id": "draft",
+     "title": "First draft",
+     "actor": "copywriter",
+     "plain": "The copywriter writes the banner.",
+     "match": [
+      {
+       "type": "speaker",
+       "agent": "copywriter",
+       "nth": 1
+      },
+      {
+       "type": "message",
+       "agent": "copywriter",
+       "nth": 1
+      }
+     ],
+     "visual": "banner",
+     "tech": "The language model writes copy; no tools.",
+     "optional": false,
+     "skipped": ""
+    },
+    {
+     "id": "review",
+     "title": "Brand review",
+     "actor": "brand_reviewer",
+     "plain": "Code checks the claims; the reviewer also judges the tone and sends notes back.",
+     "match": [
+      {
+       "type": "speaker",
+       "agent": "brand_reviewer",
+       "nth": 1
+      },
+      {
+       "type": "tool_call",
+       "tool": "check_claims",
+       "nth": 1
+      },
+      {
+       "type": "message",
+       "agent": "brand_reviewer",
+       "nth": 1
+      }
+     ],
+     "visual": "claims",
+     "tech": "Tool call check_claims (plain code) plus the model's own judgment.",
+     "optional": false,
+     "skipped": ""
+    },
+    {
+     "id": "revise",
+     "title": "Revised draft",
+     "actor": "copywriter",
+     "plain": "The copywriter fixes what the reviewer flagged.",
+     "match": [
+      {
+       "type": "speaker",
+       "agent": "copywriter",
+       "nth": 2
+      },
+      {
+       "type": "message",
+       "agent": "copywriter",
+       "nth": 2
+      }
+     ],
+     "visual": "banner",
+     "tech": "Same agent, second turn: it sees the reviewer's notes in the conversation.",
+     "optional": true,
+     "skipped": "No revision was needed."
+    },
+    {
+     "id": "approve",
+     "title": "Manager approves the brief",
+     "actor": "manager",
+     "plain": "The reviewer checks again and sends the brief; the marketing manager decides.",
+     "match": [
+      {
+       "type": "speaker",
+       "agent": "brand_reviewer",
+       "nth": 2
+      },
+      {
+       "type": "tool_call",
+       "tool": "check_claims",
+       "nth": 2
+      },
+      {
+       "type": "tool_call",
+       "tool": "submit_brief"
+      },
+      {
+       "type": "approval_request"
+      }
+     ],
+     "visual": "approval",
+     "tech": "Tool call submit_brief: an action, locked until a person approves.",
+     "optional": true,
+     "skipped": "No brief was submitted."
+    },
+    {
+     "id": "done",
+     "title": "Brief submitted",
+     "actor": "brand_reviewer",
+     "plain": "The reviewer reports the outcome and the meeting ends.",
+     "match": [
+      {
+       "type": "message",
+       "agent": "brand_reviewer",
+       "last": true
+      }
+     ],
+     "visual": "note",
+     "tech": "The chair ends the meeting after the last message.",
+     "optional": true,
+     "skipped": "The meeting ended without a submitted brief."
+    }
+   ]
+  },
   "has_live": true
  }
 ]

@@ -7,10 +7,12 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app import main
+from app.config import RECORDINGS_DIR
 from app.recorder import Recorder
 from app.scenarios import SCENARIOS
 from app.scenarios.holiday_promo import claims_issues
 from app.scenarios.work_order import check_order
+from app.specs import stage_of_events
 from scripts.export_specs import render
 
 
@@ -106,6 +108,25 @@ def test_claims_rules_flag_superlatives_wrong_offer_and_missing_end_date() -> No
     assert "Offer must be 15% off" in rules
     assert "Offer terms must show the end date (4 Dec)" in rules
     assert claims_issues("Cosy gifts. 15% off until 4 Dec. Shop now.", 15) == []
+
+
+def test_every_recording_maps_onto_its_business_stages() -> None:
+    for path in sorted(RECORDINGS_DIR.glob("*/*.json")):
+        run = json.loads(path.read_text(encoding="utf-8"))
+        business = SCENARIOS[run["scenario"]].business
+        assert business is not None, run["scenario"]
+        stages = stage_of_events(business, run["events"])
+        reached = {business.stages[i].id for i in stages if i >= 0}
+        required = {stage.id for stage in business.stages if not stage.optional}
+        assert required <= reached, (path.name, required - reached)
+        # Only the trial finder loops back (it searches again after reading trials).
+        if run["scenario"] != "trial-finder":
+            assert stages == sorted(stages), path.name
+    missed = json.loads((RECORDINGS_DIR / "card-alert" / "missed-fraud-1--1.json").read_text(encoding="utf-8"))
+    business = SCENARIOS["card-alert"].business
+    assert business is not None
+    reached = {business.stages[i].id for i in stage_of_events(business, missed["events"]) if i >= 0}
+    assert {"request", "approve"}.isdisjoint(reached)
 
 
 @pytest.fixture()

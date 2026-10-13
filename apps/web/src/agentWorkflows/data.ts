@@ -26,7 +26,9 @@ function loaderFor(file: string): () => Promise<Run> {
 }
 
 export function recordedChoices(scenarioId: string): RunChoice[] {
-  const items = RECORDINGS.filter((item) => item.scenario === scenarioId);
+  const order = SCENARIOS.find((s) => s.id === scenarioId)?.tasks.map((t) => t.id) ?? [];
+  const rank = (taskId: string) => (order.includes(taskId) ? order.indexOf(taskId) : order.length);
+  const items = RECORDINGS.filter((item) => item.scenario === scenarioId).sort((a, b) => rank(a.task_id) - rank(b.task_id));
   const takes: Record<string, number> = {};
   return items.map((item) => {
     takes[item.task_id] = (takes[item.task_id] ?? 0) + 1;

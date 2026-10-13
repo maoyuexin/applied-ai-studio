@@ -44,6 +44,50 @@ export interface TaskSpec {
   truth: string;
 }
 
+export type ActorKind = "trigger" | "agent" | "system" | "model" | "code" | "person";
+
+export interface ActorSpec {
+  id: string;
+  label: string;
+  kind: ActorKind;
+  plain: string;
+  ref: string;
+}
+
+export interface StageMatcher {
+  type?: string;
+  agent?: string;
+  tool?: string;
+  node?: string;
+  target?: string;
+  nth?: number;
+  last?: boolean;
+}
+
+export interface StageSpec {
+  id: string;
+  title: string;
+  actor: string;
+  plain: string;
+  match: StageMatcher[];
+  visual: string;
+  tech: string;
+  optional: boolean;
+  skipped: string;
+}
+
+export interface BusinessSpec {
+  question: string;
+  situation: string;
+  stakes: string[];
+  decides: string;
+  good: string[];
+  today: string[];
+  with_agent: string[];
+  actors: ActorSpec[];
+  stages: StageSpec[];
+}
+
 export interface ScenarioSpec {
   id: string;
   title: string;
@@ -62,6 +106,7 @@ export interface ScenarioSpec {
   requires: string[];
   data_note: string;
   has_live: boolean;
+  business?: BusinessSpec | null;
 }
 
 export interface CheckItem {

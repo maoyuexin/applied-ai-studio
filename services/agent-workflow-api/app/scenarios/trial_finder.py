@@ -7,7 +7,7 @@ from typing import Any
 
 from agent_framework.orchestrations import SequentialBuilder
 
-from ..specs import AgentSpec, EdgeSpec, NodeSpec, Scenario, TaskSpec, ToolSpec
+from ..specs import ActorSpec, AgentSpec, BusinessSpec, EdgeSpec, NodeSpec, Scenario, StageSpec, TaskSpec, ToolSpec
 from .common import final_message, outbox_actions
 
 INSTRUCTIONS = """You are Trial Finder, a pre-screening assistant for a clinical research coordinator in Houston.
@@ -122,5 +122,59 @@ def summarize(events: list[dict], outbox: list[dict]) -> dict:
     }
 
 
+SCENARIO.business = BusinessSpec(
+    question="Which recruiting clinical trials are worth a coordinator's time for this patient?",
+    situation=(
+        "A research coordinator receives a referral for a patient with advanced lung cancer. They need "
+        "open trials near the patient that might fit, before the next clinic visit."
+    ),
+    stakes=[
+        "Hundreds of studies, each with pages of eligibility rules.",
+        "Miss a good trial and the patient loses an option.",
+        "Refer a poor fit and the study team loses time.",
+    ],
+    decides="The research coordinator decides what to refer. Only the study team decides eligibility.",
+    good=[
+        "Only recruiting trials within the patient's travel distance.",
+        "Each trial's own rules quoted, with what is still unknown.",
+        "Nothing is sent without the coordinator's approval.",
+    ],
+    today=[
+        "Search the public registry by hand, several ways.",
+        "Open each trial and read its eligibility rules.",
+        "Check age, sex, status and distance, then write a summary.",
+    ],
+    with_agent=[
+        "The assistant searches, opens and compares trials in about a minute.",
+        "Code checks the basic facts the same way every time.",
+        "The coordinator reviews a ranked shortlist and approves any referral.",
+    ],
+    actors=[
+        ActorSpec("request", "Referral", "trigger", "A patient is referred for trial pre-screening", ref="task"),
+        ActorSpec("assistant", "AI assistant", "agent", "Searches, reads and compares trials; drafts the shortlist", ref="trial_finder"),
+        ActorSpec("record", "Patient record", "system", "The patient's summary (synthetic)", ref="get_patient"),
+        ActorSpec("registry", "Trial registry", "system", "ClinicalTrials.gov, searched live", ref="search_trials"),
+        ActorSpec("checks", "Coded checks", "code", "Age, sex, recruiting status and distance, checked by code", ref="check_basics"),
+        ActorSpec("coordinator", "Research coordinator", "person", "Approves or rejects each referral", ref="person"),
+    ],
+    stages=[
+        StageSpec("request", "Referral arrives", "request", "A coordinator asks for trials worth reviewing for one patient.",
+                  [{"type": "run_start"}], "alert", "The request becomes the task message that starts the run."),
+        StageSpec("patient", "Read the patient record", "record", "The assistant reads the patient's diagnosis, treatment so far and how far they can travel.",
+                  [{"type": "tool_call", "tool": "get_patient"}], "patient", "Tool call get_patient: a read-only look-up."),
+        StageSpec("search", "Search the registry", "registry", "The assistant searches the public trial registry several ways, near the patient's home.",
+                  [{"type": "tool_call", "tool": "search_trials"}], "search", "Tool call search_trials on a tool server (MCP) that queries ClinicalTrials.gov."),
+        StageSpec("checks", "Check the basics in code", "checks", "Code checks age, sex, recruiting status and distance for each candidate trial.",
+                  [{"type": "tool_call", "tool": "check_basics"}], "checks", "Tool call check_basics: plain code, the same answer every time."),
+        StageSpec("rules", "Read each trial's rules", "registry", "The assistant opens each promising trial and compares its rules with the patient.",
+                  [{"type": "tool_call", "tool": "get_trial"}], "trials", "Tool call get_trial: the trial's full eligibility text and nearest open site."),
+        StageSpec("referral", "Coordinator approves a referral", "coordinator", "The assistant asks to refer the patient to its top trial; the coordinator decides.",
+                  [{"type": "tool_call", "tool": "send_referral"}, {"type": "approval_request"}], "approval",
+                  "Tool call send_referral: an action, locked until a person approves.",
+                  optional=True, skipped="No referral was requested in this run."),
+        StageSpec("shortlist", "Shortlist and open questions", "assistant", "The assistant ranks the trials, quotes their rules and lists what is still unknown.",
+                  [{"type": "message", "agent": "trial_finder", "last": True}], "shortlist", "The language model writes the final message."),
+    ],
+)
 SCENARIO.builder = build
 SCENARIO.summarize = summarize

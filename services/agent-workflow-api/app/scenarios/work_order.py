@@ -8,7 +8,7 @@ from typing import Annotated, Any
 from agent_framework import AgentExecutorResponse, Executor, Message, WorkflowContext, handler, tool
 from agent_framework.orchestrations import SequentialBuilder
 
-from ..specs import AgentSpec, EdgeSpec, NodeSpec, Scenario, TaskSpec, ToolSpec
+from ..specs import ActorSpec, AgentSpec, BusinessSpec, EdgeSpec, NodeSpec, Scenario, StageSpec, TaskSpec, ToolSpec
 from .common import final_message, first_result, last_json_block, messages_from, outbox_actions
 
 # Neutral ids for the Studio's packaged sensor windows (their real ids describe the answer).
@@ -255,5 +255,60 @@ def summarize(events: list[dict], outbox: list[dict]) -> dict:
     }
 
 
+SCENARIO.business = BusinessSpec(
+    question="A compressor is behaving unusually. Does it need a work order, and what should the technician do?",
+    situation=(
+        "A train's air compressor reports sensor readings all day. A score built from them flags unusual "
+        "hours. Maintenance must decide whether to send a technician, and with which instructions."
+    ),
+    stakes=[
+        "Miss a real fault and the train can fail in service.",
+        "Raise needless work orders and technicians stop trusting the alerts.",
+        "Every work order must follow the safety procedure.",
+    ],
+    decides="The shift supervisor approves every work order. A technician inspects the machine and decides the repair.",
+    good=[
+        "Every flagged week is reviewed the same way.",
+        "Work orders cite the maintenance manuals and include the lockout step.",
+        "Nothing is filed without the supervisor.",
+    ],
+    today=[
+        "An engineer watches the anomaly dashboard.",
+        "Looks up the right procedures in the manuals.",
+        "Writes the work order and gets it signed.",
+    ],
+    with_agent=[
+        "Four agents work in a fixed order, like an assembly line.",
+        "A plain-code check catches missing fields and made-up citations.",
+        "The supervisor approves or rejects the finished order.",
+    ],
+    actors=[
+        ActorSpec("sensors", "Compressor sensors", "trigger", "One week of readings from the machine", ref="task"),
+        ActorSpec("monitor", "Monitor", "agent", "Reads the anomaly score and says how serious it is", ref="monitor"),
+        ActorSpec("diagnose", "Diagnose", "agent", "Finds the right procedures in the manuals", ref="diagnose"),
+        ActorSpec("planner", "Planner", "agent", "Drafts the work order", ref="planner"),
+        ActorSpec("check", "Field check", "code", "Fixed rules: required fields, a lockout step, real citations", ref="field_check"),
+        ActorSpec("dispatcher", "Dispatcher", "agent", "Files the order once it is checked and approved", ref="dispatcher"),
+        ActorSpec("supervisor", "Shift supervisor", "person", "Approves or rejects the work order", ref="person"),
+    ],
+    stages=[
+        StageSpec("alert", "Sensor alert arrives", "sensors", "A week of compressor readings is sent for review.",
+                  [{"type": "run_start"}], "alert", "The alert becomes the task message that starts the run."),
+        StageSpec("score", "Score the machine", "monitor", "The monitor reads the anomaly score: how far this week is from the machine's own normal.",
+                  [{"agent": "monitor"}], "machine", "Tool call score_machine: a statistical model in the maintenance service."),
+        StageSpec("manual", "Find the procedures", "diagnose", "Diagnose decides the route and finds the inspection and lockout steps in the manuals.",
+                  [{"agent": "diagnose"}], "manual", "Tool call search_procedures: search over maintenance manuals (retrieval)."),
+        StageSpec("draft", "Draft the work order", "planner", "The planner writes the work order: priority, steps, safety and sources.",
+                  [{"agent": "planner"}], "workorder", "The language model writes the order as structured data (JSON)."),
+        StageSpec("check", "Check it with fixed rules", "check", "Plain code checks the order. No AI: the same rules every time.",
+                  [{"type": "code_step"}], "fieldcheck", "A code step in the workflow, between two agents."),
+        StageSpec("approve", "Supervisor approves", "supervisor", "The dispatcher asks to file the order; the supervisor approves or rejects it.",
+                  [{"type": "tool_call", "tool": "create_work_order"}, {"type": "approval_request"}], "approval",
+                  "Tool call create_work_order: an action, locked until a person approves.",
+                  optional=True, skipped="Nothing to approve: no work order was needed."),
+        StageSpec("file", "File it, or stand down", "dispatcher", "The dispatcher reports what was filed, or that no action was needed.",
+                  [{"type": "message", "agent": "dispatcher", "last": True}], "note", "The last agent in the line writes the final message."),
+    ],
+)
 SCENARIO.builder = build
 SCENARIO.summarize = summarize

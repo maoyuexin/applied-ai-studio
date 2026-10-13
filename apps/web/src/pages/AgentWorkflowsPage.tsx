@@ -1,5 +1,6 @@
-import { CircleStop, Pause, Play, Radio, RotateCcw, SkipBack, SkipForward, Workflow } from "lucide-react";
+import { BookOpen, CircleStop, Pause, Play, Radio, RotateCcw, SkipBack, SkipForward, Workflow } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { BusinessSection, CaseBrief } from "../agentWorkflows/BusinessView";
 import { AboutPanel, Inspector, ResultPanel } from "../agentWorkflows/Panels";
 import Timeline from "../agentWorkflows/Timeline";
 import WorkflowCanvas, { type Selection } from "../agentWorkflows/WorkflowCanvas";
@@ -39,6 +40,7 @@ export default function AgentWorkflowsPage() {
   const [playing, setPlaying] = useState(false);
   const [speed, setSpeed] = useState(1);
   const clock = useRef(0);
+  const loadedKey = useRef<string | null>(null);
   const [tab, setTab] = useState<"timeline" | "result" | "about">("timeline");
   const [selection, setSelection] = useState<Selection>(null);
   const [health, setHealth] = useState<Health | null>(null);
@@ -48,6 +50,7 @@ export default function AgentWorkflowsPage() {
   const [liveState, setLiveState] = useState<"idle" | "running" | "done">("idle");
   const [liveError, setLiveError] = useState<string | null>(null);
   const [approving, setApproving] = useState<string | null>(null);
+  const [briefOpen, setBriefOpen] = useState(true);
   const closeStream = useRef<(() => void) | null>(null);
 
   const events = useMemo(() => run?.events ?? [], [run]);
@@ -86,19 +89,22 @@ export default function AgentWorkflowsPage() {
     setSelection(null);
     setLiveTask(scenario.tasks[0]?.id ?? "");
     setTab("timeline");
+    setBriefOpen(true);
     void loadChoices(scenario.id);
   }, [scenario.id, scenario.tasks, loadChoices]);
 
   useEffect(() => {
     if (mode !== "replay") return;
     const choice = choices.find((c) => c.key === choiceKey);
-    if (!choice) return;
+    // The choice list grows when saved live runs arrive; only a different selection reloads.
+    if (!choice || loadedKey.current === choiceKey) return;
     let cancelled = false;
     setLoadError(null);
     choice
       .load()
       .then((loaded) => {
         if (cancelled) return;
+        loadedKey.current = choiceKey;
         setRun(loaded);
         setCursor(0);
         clock.current = 0;
@@ -163,6 +169,7 @@ export default function AgentWorkflowsPage() {
 
   const togglePlay = useCallback(() => {
     if (mode !== "replay") return;
+    setBriefOpen(false);
     if (cursor >= events.length) jumpTo(0);
     setPlaying((value) => !value);
   }, [cursor, events.length, jumpTo, mode]);
@@ -192,6 +199,7 @@ export default function AgentWorkflowsPage() {
   async function runLive() {
     setLiveError(null);
     setPlaying(false);
+    setBriefOpen(false);
     closeStream.current?.();
     try {
       const id = await startLiveRun(scenario.id, liveTask);
@@ -234,6 +242,7 @@ export default function AgentWorkflowsPage() {
 
   function backToReplay() {
     closeStream.current?.();
+    loadedKey.current = null;
     setMode("replay");
     setLiveState("idle");
     setLiveRunId(null);
@@ -375,6 +384,11 @@ export default function AgentWorkflowsPage() {
             <span className={`aw-pattern aw-pattern-${scenario.pattern}`}>{scenario.pattern_label}</span>
             <strong>{scenario.title}</strong>
             <span>{scenario.tagline}</span>
+            {scenario.business ? (
+              <button type="button" className="awb-ghost aw-case-button" onClick={() => setBriefOpen((open) => !open)} aria-pressed={briefOpen}>
+                <BookOpen size={14} /> The case
+              </button>
+            ) : null}
           </div>
           <div className="aw-canvas">
             <WorkflowCanvas scenario={scenario} view={view} selection={selection} onSelect={setSelection} />
@@ -444,7 +458,38 @@ export default function AgentWorkflowsPage() {
             {tab === "about" ? <AboutPanel scenario={scenario} /> : null}
           </div>
         </aside>
+        {briefOpen && scenario.business ? (
+          <CaseBrief
+            scenario={scenario}
+            canStart={mode === "replay" && events.length > 0}
+            onStart={() => {
+              setBriefOpen(false);
+              jumpTo(0);
+              setPlaying(true);
+            }}
+            onClose={() => setBriefOpen(false)}
+          />
+        ) : null}
       </div>
+
+      {run && scenario.business ? (
+        <BusinessSection
+          scenario={scenario}
+          run={run}
+          cursor={cursor}
+          finished={finished}
+          live={mode === "live"}
+          playing={playing}
+          onJump={(index) => {
+            setPlaying(false);
+            setBriefOpen(false);
+            jumpTo(index);
+          }}
+          onTogglePlay={togglePlay}
+          onDecide={mode === "live" && liveState === "running" ? (requestId, approved) => void decide(requestId, approved) : undefined}
+          deciding={approving}
+        />
+      ) : null}
     </div>
   );
 }

@@ -45,5 +45,14 @@ Create `app/scenarios/<name>.py` with a `Scenario` (agents, tools, layout, tasks
 then run `scripts/export_specs.py`. Approval-required tools use `@tool(approval_mode="always_require")`
 and `ctx.file_action(...)`.
 
+### Business view
+
+Set `SCENARIO.business` to a `BusinessSpec` so people without a technical background can follow
+the case: the question, situation, stakes, who decides, today versus with agents, the actors
+(swimlanes) and the business stages. Each `StageSpec` lists event matchers (`type`, `agent`,
+`tool`, `node`, `target`, plus `nth` or `last`) and a `visual` rendered by
+`apps/web/src/agentWorkflows/visuals.tsx`. The tests check that every recording reaches every
+non-optional stage.
+
 The service binds to 127.0.0.1 and has no authentication; put it behind an authenticated proxy
 before exposing it anywhere else.
