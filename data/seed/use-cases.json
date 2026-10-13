@@ -1116,6 +1116,199 @@
     "source": "public-synthetic"
   },
   {
+    "id": "transportation-warehouse-robot-lab",
+    "title": "Train a Warehouse Robot",
+    "industry": "transportation",
+    "industryLabel": "Transportation & Smart Infrastructure",
+    "icon": "route",
+    "accent": "teal",
+    "summary": "A robot learns a route to the packing station from points alone: try a move, get points, update one score. Guided steps, then a free training lab.",
+    "problem": "Some decisions have no answer key: the right move depends on what happens next. Reinforcement learning learns from the consequences of its own actions.",
+    "outcomes": [
+      "Watch a score table fill in, trip by trip",
+      "Test with random moves and learning turned off",
+      "Retrain when the floor changes"
+    ],
+    "capabilities": [
+      "Reinforcement learning",
+      "Q-table",
+      "Exploration",
+      "Validation against map search"
+    ],
+    "patterns": [
+      "Try, get points, update one score",
+      "Invented floor, fully visible",
+      "Learned route checked against a map search"
+    ],
+    "workloadType": "decision-support",
+    "dataReadiness": "high",
+    "riskLevel": "low",
+    "maturity": "showcase",
+    "architecture": [
+      "Invented warehouse floor and points rule",
+      "Tabular Q-learning in the browser",
+      "Seeded, reproducible training",
+      "Notebook reproduces every number"
+    ],
+    "workflow": {
+      "nodes": [
+        { "id": "state", "label": "Robot's square", "kind": "input" },
+        { "id": "choose", "label": "Highest score or a random try", "kind": "ai" },
+        { "id": "move", "label": "Move and receive points", "kind": "system" },
+        { "id": "update", "label": "Update one score", "kind": "ai" },
+        { "id": "test", "label": "Test drive: no random moves", "kind": "process" },
+        { "id": "review", "label": "Compare with the shortest route", "kind": "human" },
+        { "id": "policy", "label": "Learned route", "kind": "output" }
+      ],
+      "edges": [
+        { "from": "state", "to": "choose", "label": "state" },
+        { "from": "choose", "to": "move", "label": "action" },
+        { "from": "move", "to": "update", "label": "reward" },
+        { "from": "update", "to": "choose", "label": "next move" },
+        { "from": "update", "to": "test", "label": "after practice" },
+        { "from": "test", "to": "review", "label": "route taken" },
+        { "from": "review", "to": "policy", "label": "accepted" }
+      ]
+    },
+    "demoPrompts": [
+      "Why does good news travel backward one square per trip?",
+      "Why turn off random moves for the test?",
+      "What happens when a pallet blocks the learned route?"
+    ],
+    "demoStatus": "available",
+    "source": "public-synthetic"
+  },
+  {
+    "id": "transportation-traffic-signal-lab",
+    "title": "Train a Traffic Light",
+    "industry": "transportation",
+    "industryLabel": "Transportation & Smart Infrastructure",
+    "icon": "route",
+    "accent": "orange",
+    "summary": "A signal learns when to keep green or switch, inside timing rules it cannot break, and is tested against a fixed timer and a simple rule on the same cars.",
+    "problem": "A traffic light never finishes a trip, and what it is rewarded for decides whose waiting time counts.",
+    "outcomes": [
+      "Compare learned, fixed-timer and simple-rule lights fairly",
+      "See a reward that ignores Side St starve it",
+      "Keep safety rules outside the learner"
+    ],
+    "capabilities": [
+      "Reinforcement learning",
+      "Discounting without a finish line",
+      "Safety constraints",
+      "Baseline comparison"
+    ],
+    "patterns": [
+      "Simulated arrivals, labelled as such",
+      "Learner decides only within engineered rules",
+      "Validation on fixed test hours"
+    ],
+    "workloadType": "decision-support",
+    "dataReadiness": "medium",
+    "riskLevel": "high",
+    "maturity": "showcase",
+    "architecture": [
+      "Simulated intersection and arrivals",
+      "Yellow, all-red, minimum and maximum green rules",
+      "Tabular Q-learning in the browser",
+      "Notebook reproduces every number"
+    ],
+    "workflow": {
+      "nodes": [
+        { "id": "sense", "label": "Cars waiting on each road", "kind": "input" },
+        { "id": "choose", "label": "Keep or switch", "kind": "ai" },
+        { "id": "rules", "label": "Safety timing rules", "kind": "system" },
+        { "id": "signal", "label": "Signal changes", "kind": "system" },
+        { "id": "reward", "label": "Minus one per waiting car", "kind": "process" },
+        { "id": "test", "label": "Test against timer and simple rule", "kind": "process" },
+        { "id": "engineer", "label": "Engineer approves and monitors", "kind": "human" },
+        { "id": "plan", "label": "Signal policy", "kind": "output" }
+      ],
+      "edges": [
+        { "from": "sense", "to": "choose", "label": "state" },
+        { "from": "choose", "to": "rules", "label": "proposed action" },
+        { "from": "rules", "to": "signal", "label": "allowed action" },
+        { "from": "signal", "to": "reward", "label": "waiting cars" },
+        { "from": "reward", "to": "choose", "label": "update score" },
+        { "from": "reward", "to": "test", "label": "after practice" },
+        { "from": "test", "to": "engineer", "label": "results" },
+        { "from": "engineer", "to": "plan", "label": "approved" }
+      ]
+    },
+    "demoPrompts": [
+      "Why does the light need the 0.1 and the 0.9?",
+      "Is learning better than a simple rule? By how much?",
+      "What happens if the points only count Main St cars?"
+    ],
+    "demoStatus": "available",
+    "source": "public-synthetic"
+  },
+  {
+    "id": "transportation-ride-hail-lab",
+    "title": "Train a Ride-Hail Driver",
+    "industry": "transportation",
+    "industryLabel": "Transportation & Smart Infrastructure",
+    "icon": "route",
+    "accent": "amber",
+    "summary": "On 19.7 million real New York trips from January 2024, a driver learns where to wait or drive empty. Then we ask who a driver-earnings reward leaves behind.",
+    "problem": "Driving empty costs money now and pays only later, and a reward that counts only driver earnings can leave whole boroughs underserved.",
+    "outcomes": [
+      "Learn from delayed reward",
+      "Match the best of all 3,125 where-to-wait rules",
+      "See who a driver-earnings reward leaves behind"
+    ],
+    "capabilities": [
+      "Reinforcement learning",
+      "Delayed reward",
+      "Real public trip data",
+      "Fairness review"
+    ],
+    "patterns": [
+      "Real borough-level trip summary",
+      "Two named assumptions",
+      "Reward change as a policy lever"
+    ],
+    "workloadType": "decision-support",
+    "dataReadiness": "high",
+    "riskLevel": "high",
+    "maturity": "showcase",
+    "architecture": [
+      "NYC TLC trip records reduced to borough totals",
+      "Assumed request chance and empty-driving cost",
+      "Tabular Q-learning in the browser",
+      "Notebook reproduces every number"
+    ],
+    "workflow": {
+      "nodes": [
+        { "id": "data", "label": "Real trip summary", "kind": "input" },
+        { "id": "prep", "label": "Named assumptions", "kind": "process" },
+        { "id": "choose", "label": "Wait or drive empty", "kind": "ai" },
+        { "id": "trip", "label": "Ride or empty drive", "kind": "system" },
+        { "id": "reward", "label": "Dollars, discounted by time", "kind": "process" },
+        { "id": "test", "label": "Test against simple and best rules", "kind": "process" },
+        { "id": "review", "label": "Platform reviews who is served", "kind": "human" },
+        { "id": "rule", "label": "Where-to-wait rule", "kind": "output" }
+      ],
+      "edges": [
+        { "from": "data", "to": "prep", "label": "pickups, pay, trip times" },
+        { "from": "prep", "to": "choose", "label": "borough" },
+        { "from": "choose", "to": "trip", "label": "action" },
+        { "from": "trip", "to": "reward", "label": "dollars and time" },
+        { "from": "reward", "to": "choose", "label": "update score" },
+        { "from": "reward", "to": "test", "label": "after practice" },
+        { "from": "test", "to": "review", "label": "rule and wait shares" },
+        { "from": "review", "to": "rule", "label": "approved" }
+      ]
+    },
+    "demoPrompts": [
+      "Why would a driver ever pay to drive empty?",
+      "Why does look-ahead 0 never leave the Bronx?",
+      "What does a Bronx pickup bonus cost, and who still misses out?"
+    ],
+    "demoStatus": "available",
+    "source": "public-benchmark"
+  },
+  {
     "id": "media-content-studio",
     "title": "Grounded Campaign Content Studio",
     "industry": "media-creative",
@@ -1204,6 +1397,68 @@
       "Where are attribution and IP checks enforced?",
       "Why is fluency not a quality metric?"
     ],
+    "source": "public-synthetic"
+  },
+  {
+    "id": "media-promo-studio-lab",
+    "title": "Generative ad production · SOLENNE GT",
+    "industry": "media-creative",
+    "industryLabel": "Media, Content & Creative Industries",
+    "icon": "film",
+    "accent": "pink",
+    "summary": "How a fictional luxury car ad was made with MAI-Image and Sora, step by step: design sheet, keyframes, takes, human review, guardrails and provenance. The same runs open in Design Studio.",
+    "problem": "Creative teams can generate convincing car-ad footage quickly, but design consistency, brand safety, rights review, provenance, and publishability still need explicit human checkpoints.",
+    "outcomes": [
+      "Build a five-shot ad from a fixed creative brief",
+      "Separate live generation from recorded review mode",
+      "Export keep/regenerate and QC decisions for the lab sheet"
+    ],
+    "capabilities": [
+      "Image generation",
+      "Image editing",
+      "Text-to-video",
+      "Image-to-video",
+      "Provenance review"
+    ],
+    "patterns": [
+      "Prompt built from approved options",
+      "Recorded fallback when live quota or credentials are unavailable",
+      "Brand-and-legal review outside vendor guardrails",
+      "C2PA and visible-label review"
+    ],
+    "workloadType": "content-generation",
+    "dataReadiness": "medium",
+    "riskLevel": "high",
+    "maturity": "showcase",
+    "architecture": [
+      "Synced local media manifest served as static assets",
+      "Optional server-side Foundry image and video API",
+      "No Azure calls or secrets in the browser",
+      "Instructor review record exported as JSON"
+    ],
+    "workflow": {
+      "nodes": [
+        { "id": "brief", "label": "Approved car brief", "kind": "input" },
+        { "id": "image", "label": "Generate or edit stills", "kind": "ai" },
+        { "id": "video", "label": "Generate Sora takes", "kind": "ai" },
+        { "id": "qc", "label": "Student and instructor QC", "kind": "human" },
+        { "id": "legal", "label": "Brand and provenance review", "kind": "human" },
+        { "id": "record", "label": "Review record", "kind": "output" }
+      ],
+      "edges": [
+        { "from": "brief", "to": "image", "label": "fixed options" },
+        { "from": "image", "to": "video", "label": "keyframe" },
+        { "from": "video", "to": "qc", "label": "takes" },
+        { "from": "qc", "to": "legal", "label": "usable clips" },
+        { "from": "legal", "to": "record", "label": "export" }
+      ]
+    },
+    "demoPrompts": [
+      "What did the keyframe preserve that text-only generation lost?",
+      "Why is the vendor guardrail not the brand-and-legal review?",
+      "Which C2PA signal survived the edit pipeline?"
+    ],
+    "demoStatus": "available",
     "source": "public-synthetic"
   },
   {

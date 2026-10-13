@@ -29,6 +29,8 @@ model's output changes a business decision, and where a person keeps authority.
 | 04 | [AI in Finance and Risk](lessons/04-finance-risk/README.md) | Credit risk review; complaint routing | [PDF](lessons/04-finance-risk/M4_Deck_AI_in_Finance.pdf) | `/credit`, `/complaints` |
 | 05 | [AI in Manufacturing](lessons/05-manufacturing/README.md) | Compressor predictive maintenance; procedure assistant | [PDF](lessons/05-manufacturing/M5_Deck_AI_in_Manufacturing.pdf) | `/maintenance`, `/procedures` |
 | 06 | [AI in Retail and Supply Chain](lessons/06-retail-supply-chain/README.md) | Demand forecasting; next best product; catalog onboarding | [PDF](lessons/06-retail-supply-chain/M6_Deck_AI_in_Retail.pdf) | `/forecast`, `/recommendations` |
+| 07 | [AI in Transportation](lessons/07-transportation/README.md) | Warehouse robot; traffic light; ride-hail driver | [PDF](lessons/07-transportation/M7_Deck_AI_in_Transportation.pdf) | `/warehouse-robot`, `/traffic-signal`, `/ride-hail` |
+| 08 | [AI Media Content & Creative](lessons/08-media-content/README.md) | Luxury car ad image + video generation review | — | `/design-studio`, `/promo-studio` |
 
 Each lesson folder lists its readings, notebook reports, interactive demos and Studio routes.
 Courses map their own modules to these lessons; see [`courses/`](courses/README.md).
@@ -54,9 +56,10 @@ Copilot CLI session; authentication material remains outside the project.
 - Map → Judge AI Fit → Design What Survives analysis method, with deterministic AI-fit scoring
   and a gated solution blueprint.
 - Executable Online Order storefront, customer tracking, merchant operations, and scenario controls.
-- Eight executed teaching notebooks with offline HTML reports: fraud, chest X-ray, credit risk,
-  complaint routing, predictive maintenance, procedure assistant (RAG), demand forecasting and
-  product recommendations, plus reference versions for deeper study.
+- Eleven executed teaching notebooks with offline HTML reports: fraud, chest X-ray, credit risk,
+  complaint routing, predictive maintenance, procedure assistant (RAG), demand forecasting,
+  product recommendations and three reinforcement-learning cases (warehouse robot, traffic light,
+  ride-hail driver), plus reference versions for deeper study.
 - Artifact-backed FastAPI and React workbenches, and single-file browser simulators that need no
   server.
 - Captured, replayable LLM runs (complaint classification, multimodal X-ray reading, grounded
@@ -64,6 +67,9 @@ Copilot CLI session; authentication material remains outside the project.
 - Explainable AI impact: signals, probabilities, thresholds, workflow branches,
   counterfactuals, and human authority.
 - Sandboxed GitHub Copilot SDK gateway using only allowlisted read-only tools.
+- **Design Studio**: generative pipelines (article, voice, image, video) on your own Microsoft Foundry
+  models, with human review gates, automatic checks, run history, fork/compare and export/import bundles
+  ([docs](docs/design-studio/README.md)).
 - .NET Aspire AppHost source for local composition and observability.
 
 ## Architecture
@@ -215,6 +221,8 @@ A missing API can appear as a proxy error even when the web page itself loads.
 | Procedure Assistant API | <http://127.0.0.1:4390/health> |
 | Demand Forecast API | <http://127.0.0.1:4400/health> |
 | Product Recommendation API | <http://127.0.0.1:4410/health> |
+| Promo Studio Media API (optional) | <http://127.0.0.1:4420/health> |
+| Design Studio API | <http://127.0.0.1:4430/health> |
 
 ### Lab routes
 
@@ -229,6 +237,9 @@ A missing API can appear as a proxy error even when the web page itself loads.
 | `/maintenance`, `/maintenance-simulator` | Compressor health monitoring and telemetry simulator | [05](lessons/05-manufacturing/README.md) |
 | `/procedures` | Grounded procedure assistant that cites public safety regulation and refuses when unsupported | [05](lessons/05-manufacturing/README.md) |
 | `/forecast`, `/recommendations` | Demand forecasting; next best product | [06](lessons/06-retail-supply-chain/README.md) |
+| `/warehouse-robot`, `/traffic-signal`, `/ride-hail` | Reinforcement learning: warehouse robot, traffic light, ride-hail driver (run in the browser) | [07](lessons/07-transportation/README.md) |
+| `/promo-studio` | Case study: how the SOLENNE GT ad was made, step by step (reached from Industry Workflows); recorded by default | [08](lessons/08-media-content/README.md) |
+| `/design-studio` | Design Studio: article, voice, image and video pipelines with review gates and run history (needs your Foundry resource; see [docs](docs/design-studio/README.md)) | [08](lessons/08-media-content/README.md) |
 | `/workflow?courseCase=<id>` | The full business workflow behind a case | all |
 | `/ask` | Ask Studio (needs GitHub Copilot) | all |
 
@@ -320,6 +331,12 @@ Common settings:
 | `CATALOG_API_URL` | `http://127.0.0.1:4310` | Agent-to-catalog boundary |
 | `DATABASE_URL` | Project-local SQLite | Online Order database URL |
 | `ALLOWED_ORIGINS` | Local Vite origins | Order API CORS allowlist |
+| `MEDIA_LIVE_IMAGES` | `0` | Enables Promo Studio image generation/editing only when set to `1` |
+| `MEDIA_LIVE_VIDEO` | `0` | Enables the Promo Studio live Sora take button only when set to `1` |
+| `MEDIA_DAILY_IMAGE_CAP` | `40` | Daily accepted live image attempts |
+| `MEDIA_DAILY_VIDEO_CAP` | `4` | Daily accepted live video attempts |
+| `MEDIA_IMAGE_RETRY_ATTEMPTS` | `3` | MAI image retry attempts for transient provider rate limits |
+| `MEDIA_IMAGE_RETRY_BACKOFF_SECONDS` | `1` | Initial MAI image retry backoff in seconds |
 
 ## Useful Commands
 
@@ -393,6 +410,8 @@ authenticated Copilot account and may use metered requests.
 - SQLite and local session data are ignored
 - Moving from loopback to a shared network requires a new authentication and
   authorization design
+- Design Studio calls Foundry with Microsoft Entra ID (`az login` or a scoped service principal);
+  it never stores keys, and daily caps limit spend
 
 See [SECURITY.md](SECURITY.md) and
 [ADR-0002](docs/adr/0002-copilot-identity-and-tools.md).
@@ -409,6 +428,7 @@ services/catalog-api/    Catalog, assessments, deterministic fit scoring
 services/agent-api/      Sandboxed GitHub Copilot SDK gateway
 services/order-api/      FastAPI, SQLAlchemy, Alembic, SQLite order vertical
 services/*-api/          Artifact-backed model services, one per lab
+services/design-api/     Design Studio pipeline engine, run store and Foundry providers
 packages/contracts/      Shared Zod schemas and TypeScript contracts
 data/seed/               Public teaching scenarios and workflows
 docs/                    Quickstart, architecture, ADRs and lab guides

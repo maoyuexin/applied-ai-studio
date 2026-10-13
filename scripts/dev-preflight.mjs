@@ -13,6 +13,7 @@ const services = [
   { name: "procedure assistant API", port: 4390 },
   { name: "demand forecast API", port: 4400 },
   { name: "product recommendation API", port: 4410 },
+  { name: "Design Studio API", port: 4430 },
 ];
 
 function isListening(port) {

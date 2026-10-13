@@ -14,6 +14,7 @@ Studio routes). Modules are added here as they are published.
 | 4 | AI in finance and risk management | [04-finance-risk](../../lessons/04-finance-risk/README.md) | [open](https://maoyuexin.github.io/applied-ai-studio/#04-finance-risk) |
 | 5 | AI in manufacturing | [05-manufacturing](../../lessons/05-manufacturing/README.md) | [open](https://maoyuexin.github.io/applied-ai-studio/#05-manufacturing) |
 | 6 | AI in retail and supply chain | [06-retail-supply-chain](../../lessons/06-retail-supply-chain/README.md) | [open](https://maoyuexin.github.io/applied-ai-studio/#06-retail-supply-chain) |
+| 7 | AI in transportation and smart infrastructure | [07-transportation](../../lessons/07-transportation/README.md) | [open](https://maoyuexin.github.io/applied-ai-studio/#07-transportation) |
 
 ## For students
 
