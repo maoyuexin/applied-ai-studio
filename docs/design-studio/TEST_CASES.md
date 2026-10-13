@@ -103,12 +103,24 @@ advisory and a launch-day report disagree in tense.
 | 1 | NASA Sets Crew-13 Launch, Docking Coverage | 2026-09-29 | `nasa_04_nasa-sets-crew-13-launch-docking-coverage.txt` |
 | 2 | NASA's SpaceX Crew-13 Launches to International Space Station | 2026-10-01 | `nasa_03_nasas-spacex-crew-13-launches-to-international-space-station.txt` |
 
+**Full URLs to paste into the source cards:**
+
+- **Source 1 URL:** [https://www.nasa.gov/news-release/nasa-sets-crew-13-launch-docking-coverage/](https://www.nasa.gov/news-release/nasa-sets-crew-13-launch-docking-coverage/)
+- **Source 2 URL:** [https://www.nasa.gov/news-release/nasas-spacex-crew-13-launches-to-international-space-station/](https://www.nasa.gov/news-release/nasas-spacex-crew-13-launches-to-international-space-station/)
+
+**Important:** the **URL** field is for the citation; it does **not** fetch the article. Paste the full
+saved `.txt` file into each card's **source text** field. These saved texts preserve the version used in
+the reference test; a live webpage may have changed. The fact checker checks the pasted text, not the web.
+
 1. **New article run**. **Format** *Explainer*, **Length** *about 250 words* (or 200), **Audience**
    `first-year college students`, **Tone** `clear, friendly, specific`. **Fact check** on.
    Brief: `Explain what NASA's SpaceX Crew-13 mission is: who is on board, when and where it launched, what it
    docks to, and two kinds of research the crew will do. Use both sources and cite them.`
-2. **+ Paste a source** twice: paste each file's text, its title, URL (`https://www.nasa.gov/news-release/…`)
-   and **Published** date. The date matters: it lets the checker resolve "Thursday" and "this year".
+2. Add two source cards with **+ Paste a source** (reuse any empty card already shown). For each card,
+   enter the **Title** and **Published** date from the table above, paste its **full URL** from the list
+   above into **URL (for the citation)**, and paste the corresponding saved file's entire contents into
+   **source text**. Do not paste only a URL into the text field.
+   The date matters: it lets the checker resolve "Thursday" and "this year".
    **Start run**.
 3. **Expect** (~10 s): an outline of 5–7 points where each point cites `[1]`, `[2]` or both. In the reference
    run the launch time cites only `[2]` (the launch-day report) and the crew list cites both.
