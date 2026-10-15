@@ -129,6 +129,16 @@ def test_every_recording_maps_onto_its_business_stages() -> None:
     assert {"request", "approve"}.isdisjoint(reached)
 
 
+def test_card_alert_tasks_use_pinned_transactions() -> None:
+    from app.scenarios.card_alert import TRANSACTIONS
+
+    for task in SCENARIOS["card-alert"].tasks:
+        transaction_id = task.prompt.split("transaction ")[1].split()[0]
+        record = TRANSACTIONS[transaction_id]
+        assert record["transaction"]["transaction_id"] == transaction_id
+        assert f"card ending {record['card_last4']}" in task.prompt
+
+
 @pytest.fixture()
 def client() -> TestClient:
     return TestClient(main.app)

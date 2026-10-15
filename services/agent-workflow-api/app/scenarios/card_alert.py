@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import json
+from pathlib import Path
 from typing import Annotated, Any
 
 from agent_framework import tool
@@ -115,6 +117,13 @@ SCENARIO = Scenario(
 
 HIDDEN_FIELDS = {"known_outcome", "scenario_id", "scenario_label", "learning_note"}
 
+# The task transactions, exported from the fraud model's held-out stream. The fraud service picks its
+# samples by sorting tied scores, which orders differently on other CPUs (x86 server vs. Apple silicon),
+# so the tasks cannot rely on its sample list. Scoring still goes to the live fraud model.
+TRANSACTIONS: dict[str, dict] = json.loads(
+    Path(__file__).with_name("card_alert_transactions.json").read_text(encoding="utf-8")
+)
+
 BUSINESS = BusinessSpec(
     question="A card purchase looks unusual. Hold the card, or let it through?",
     situation=(
@@ -174,6 +183,8 @@ def build(ctx) -> Any:  # type: ignore[no-untyped-def]
     cache: dict[str, dict] = {}
 
     async def find(transaction_id: str) -> dict | None:
+        if transaction_id.strip() in TRANSACTIONS:
+            return TRANSACTIONS[transaction_id.strip()]
         if not cache:
             response = await ctx.http.get(f"{base}/api/fraud/samples")
             response.raise_for_status()
