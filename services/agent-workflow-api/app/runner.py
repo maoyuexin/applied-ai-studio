@@ -60,12 +60,13 @@ class BuildContext:
 
 def make_client(settings: Settings) -> Any:
     from agent_framework.foundry import FoundryChatClient
-    from azure.identity import AzureCliCredential
+    from azure.identity import DefaultAzureCredential
 
+    # az login on a Mac; a service principal (AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_CLIENT_SECRET) on a server.
     return FoundryChatClient(
         project_endpoint=settings.project_endpoint,
         model=settings.model,
-        credential=AzureCliCredential(),
+        credential=DefaultAzureCredential(exclude_interactive_browser_credential=True),
     )
 
 

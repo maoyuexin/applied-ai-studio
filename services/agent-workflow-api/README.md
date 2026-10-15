@@ -20,9 +20,12 @@ Every action tool requires a person's approval and only writes to a per-run outb
 ```bash
 npm run setup:agent-workflows        # own .venv in this folder
 cp services/agent-workflow-api/settings.example.json services/agent-workflow-api/settings.local.json
-# edit endpoint + model; sign in with `az login` (AzureCliCredential, no keys stored)
+# edit endpoint + model; sign in with `az login` (DefaultAzureCredential, no keys stored)
 npm run dev:agent-workflows          # http://127.0.0.1:4440, proxied at /api/agent-workflows
 ```
+
+On a server, set `FOUNDRY_PROJECT_ENDPOINT`, `FOUNDRY_MODEL` and a service principal's `AZURE_CLIENT_ID`,
+`AZURE_TENANT_ID` and `AZURE_CLIENT_SECRET` instead (it needs **Cognitive Services User** on the Foundry resource).
 
 Live runs also need the model services each scenario uses (`npm run dev:fraud`, `dev:pdm`,
 `dev:procedures`, `dev:forecast`). The page shows which ones are missing.
