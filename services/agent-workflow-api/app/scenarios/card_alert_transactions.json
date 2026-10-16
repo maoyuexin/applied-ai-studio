@@ -1,0 +1,74 @@
+{
+  "00d98f6d319ddee3b61bea07843952f1": {
+    "card_last4": "0161",
+    "merchant": "Greenholt, O'Hara and Balistreri",
+    "location": "Battle Creek, MI",
+    "transaction": {
+      "transaction_id": "00d98f6d319ddee3b61bea07843952f1",
+      "occurred_at": "2026-05-04T23:06:12",
+      "amount": 1026.44,
+      "category": "shopping_net",
+      "amount_ratio_to_card_mean": 14.878199214278798,
+      "card_transactions_1h": 3,
+      "card_transactions_24h": 3,
+      "minutes_since_previous": 4.7,
+      "distance_from_home_km": 94.64489621966231,
+      "customer_age": 78.16837782340862,
+      "city_population": 92270
+    }
+  },
+  "942bb9e03c995db22e4753be999d53ee": {
+    "card_last4": "0070",
+    "merchant": "Barton LLC",
+    "location": "Bakersfield, CA",
+    "transaction": {
+      "transaction_id": "942bb9e03c995db22e4753be999d53ee",
+      "occurred_at": "2026-05-18T14:43:39",
+      "amount": 284.12,
+      "category": "kids_pets",
+      "amount_ratio_to_card_mean": 5.077592797663064,
+      "card_transactions_1h": 0,
+      "card_transactions_24h": 1,
+      "minutes_since_previous": 1236.2833333333333,
+      "distance_from_home_km": 80.9089875194664,
+      "customer_age": 31.422313483915126,
+      "city_population": 520197
+    }
+  },
+  "90920633247d8a3750c394e7488e38fc": {
+    "card_last4": "0064",
+    "merchant": "Terry-Huel",
+    "location": "Harbor City, CA",
+    "transaction": {
+      "transaction_id": "90920633247d8a3750c394e7488e38fc",
+      "occurred_at": "2026-04-30T22:45:50",
+      "amount": 6.45,
+      "category": "shopping_net",
+      "amount_ratio_to_card_mean": 0.13474776463362326,
+      "card_transactions_1h": 2,
+      "card_transactions_24h": 3,
+      "minutes_since_previous": 24.533333333333335,
+      "distance_from_home_km": 20.718769230915964,
+      "customer_age": 21.23750855578371,
+      "city_population": 25457
+    }
+  },
+  "8575b675c7fcbb5ee0e7281555903f53": {
+    "card_last4": "0263",
+    "merchant": "Feil-Morar",
+    "location": "Lake Forest, IL",
+    "transaction": {
+      "transaction_id": "8575b675c7fcbb5ee0e7281555903f53",
+      "occurred_at": "2026-01-02T20:22:10",
+      "amount": 62.14,
+      "category": "health_fitness",
+      "amount_ratio_to_card_mean": 1.1085966424158717,
+      "card_transactions_1h": 0,
+      "card_transactions_24h": 5,
+      "minutes_since_previous": 278.95,
+      "distance_from_home_km": 66.69741285413247,
+      "customer_age": 23.88227241615332,
+      "city_population": 20925
+    }
+  }
+}

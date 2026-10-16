@@ -8,7 +8,7 @@ from typing import Annotated, Any
 from agent_framework import tool
 from agent_framework.orchestrations import GroupChatBuilder
 
-from ..specs import AgentSpec, EdgeSpec, NodeSpec, Scenario, TaskSpec, ToolSpec
+from ..specs import ActorSpec, AgentSpec, BusinessSpec, EdgeSpec, NodeSpec, Scenario, StageSpec, TaskSpec, ToolSpec
 from .common import final_message, last_result, messages_from, outbox_actions
 
 PLANNING_WEEK = "2011-11-28"
@@ -229,5 +229,70 @@ def summarize(events: list[dict], outbox: list[dict]) -> dict:
     }
 
 
+SCENARIO.business = BusinessSpec(
+    question="Which products go on next week's homepage, and what should the banner say?",
+    situation=(
+        f"An online gift shop plans its homepage promotion for the week of 28 November, at {OFFER_PERCENT}% off. "
+        "Merchandising, copywriting and brand review all have a say, and the marketing manager signs off."
+    ),
+    stakes=[
+        "The wrong products waste the best spot on the site.",
+        "A banner can break the rules: unproven claims, the wrong offer, no end date.",
+        "Pushy wording can hurt a warm, calm brand.",
+    ],
+    decides="The marketing manager approves the brief. The claims rules are checked by code.",
+    good=[
+        "Products picked from the demand forecast, not gut feeling.",
+        "A banner that passes every claims rule and fits the brand voice.",
+        "Disagreement improves the copy before a person sees it.",
+    ],
+    today=[
+        "A merchandiser pulls sales reports and picks products.",
+        "A copywriter drafts; a brand reviewer sends edits back.",
+        "Several rounds of email before the manager signs off.",
+    ],
+    with_agent=[
+        "A chair runs a meeting of three agents and picks who speaks next.",
+        "Everyone sees the whole conversation.",
+        "The manager approves the final brief.",
+    ],
+    actors=[
+        ActorSpec("brief", "Promotion request", "trigger", "A homepage slot and an offer to fill", ref="task"),
+        ActorSpec("chair", "Chair", "agent", "Runs the meeting and picks who speaks next", ref="chair"),
+        ActorSpec("merchandiser", "Merchandiser", "agent", "Picks products using the demand forecast", ref="merchandiser"),
+        ActorSpec("copywriter", "Copywriter", "agent", "Drafts the banner; told to write bold sales copy", ref="copywriter"),
+        ActorSpec("brand_reviewer", "Brand reviewer", "agent", "Checks claims with code and judges the tone", ref="brand_reviewer"),
+        ActorSpec("manager", "Marketing manager", "person", "Approves or rejects the brief", ref="person"),
+    ],
+    stages=[
+        StageSpec("brief", "Request arrives", "brief", "Marketing asks for next week's homepage promotion.",
+                  [{"type": "run_start"}], "alert", "The request becomes the task message that starts the run."),
+        StageSpec("open", "Chair opens the meeting", "chair", "The chair decides who should speak first.",
+                  [{"type": "speaker", "nth": 1}], "meeting", "The chair agent picks the next speaker each round."),
+        StageSpec("pick", "Pick products from the forecast", "merchandiser", "The merchandiser checks expected demand and picks two products.",
+                  [{"type": "tool_call", "tool": "list_products"}, {"type": "tool_call", "tool": "forecast_demand"},
+                   {"type": "message", "agent": "merchandiser"}], "products",
+                  "Tool calls list_products and forecast_demand: a forecasting model used as a tool."),
+        StageSpec("draft", "First draft", "copywriter", "The copywriter writes the banner.",
+                  [{"type": "speaker", "agent": "copywriter", "nth": 1}, {"type": "message", "agent": "copywriter", "nth": 1}], "banner",
+                  "The language model writes copy; no tools."),
+        StageSpec("review", "Brand review", "brand_reviewer", "Code checks the claims; the reviewer also judges the tone and sends notes back.",
+                  [{"type": "speaker", "agent": "brand_reviewer", "nth": 1}, {"type": "tool_call", "tool": "check_claims", "nth": 1},
+                   {"type": "message", "agent": "brand_reviewer", "nth": 1}], "claims",
+                  "Tool call check_claims (plain code) plus the model's own judgment."),
+        StageSpec("revise", "Revised draft", "copywriter", "The copywriter fixes what the reviewer flagged.",
+                  [{"type": "speaker", "agent": "copywriter", "nth": 2}, {"type": "message", "agent": "copywriter", "nth": 2}], "banner",
+                  "Same agent, second turn: it sees the reviewer's notes in the conversation.",
+                  optional=True, skipped="No revision was needed."),
+        StageSpec("approve", "Manager approves the brief", "manager", "The reviewer checks again and sends the brief; the marketing manager decides.",
+                  [{"type": "speaker", "agent": "brand_reviewer", "nth": 2}, {"type": "tool_call", "tool": "check_claims", "nth": 2},
+                   {"type": "tool_call", "tool": "submit_brief"}, {"type": "approval_request"}], "approval",
+                  "Tool call submit_brief: an action, locked until a person approves.",
+                  optional=True, skipped="No brief was submitted."),
+        StageSpec("done", "Brief submitted", "brand_reviewer", "The reviewer reports the outcome and the meeting ends.",
+                  [{"type": "message", "agent": "brand_reviewer", "last": True}], "note", "The chair ends the meeting after the last message.",
+                  optional=True, skipped="The meeting ended without a submitted brief."),
+    ],
+)
 SCENARIO.builder = build
 SCENARIO.summarize = summarize

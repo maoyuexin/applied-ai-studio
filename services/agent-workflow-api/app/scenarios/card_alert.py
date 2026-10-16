@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+import json
+from pathlib import Path
 from typing import Annotated, Any
 
 from agent_framework import tool
 from agent_framework.orchestrations import SequentialBuilder
 
-from ..specs import AgentSpec, EdgeSpec, NodeSpec, Scenario, TaskSpec, ToolSpec
+from ..specs import ActorSpec, AgentSpec, BusinessSpec, EdgeSpec, NodeSpec, Scenario, StageSpec, TaskSpec, ToolSpec
 from .common import final_message, first_result, outbox_actions
 
 INSTRUCTIONS = """You are a card-alert agent at a bank. For the transaction in the request:
@@ -115,12 +117,74 @@ SCENARIO = Scenario(
 
 HIDDEN_FIELDS = {"known_outcome", "scenario_id", "scenario_label", "learning_note"}
 
+# The task transactions, exported from the fraud model's held-out stream. The fraud service picks its
+# samples by sorting tied scores, which orders differently on other CPUs (x86 server vs. Apple silicon),
+# so the tasks cannot rely on its sample list. Scoring still goes to the live fraud model.
+TRANSACTIONS: dict[str, dict] = json.loads(
+    Path(__file__).with_name("card_alert_transactions.json").read_text(encoding="utf-8")
+)
+
+BUSINESS = BusinessSpec(
+    question="A card purchase looks unusual. Hold the card, or let it through?",
+    situation=(
+        "The bank's card system flags a purchase. Someone has to decide quickly whether to put a "
+        "temporary hold on the card, and record why."
+    ),
+    stakes=[
+        "Miss real fraud and the bank and the cardholder lose money.",
+        "Hold a good customer's card and they are stuck at the checkout.",
+        "Every decision has to be explainable later.",
+    ],
+    decides="A fraud analyst. The assistant may only request a hold; a person approves it.",
+    good=[
+        "Every alert gets the same checks, in seconds.",
+        "A hold happens only when the fraud model says review and a person agrees.",
+        "A short note explains each decision in plain words.",
+    ],
+    today=[
+        "An analyst opens the purchase and the card's recent activity.",
+        "Checks the fraud model's score on another screen.",
+        "Decides, places the hold and writes the note by hand.",
+    ],
+    with_agent=[
+        "The assistant gathers the facts and the score.",
+        "It drafts the hold request and the note.",
+        "The analyst reviews, then approves or rejects.",
+    ],
+    actors=[
+        ActorSpec("alert", "Card system", "trigger", "Flags a purchase for review", ref="task"),
+        ActorSpec("assistant", "AI assistant", "agent", "Gathers the facts, reads the score, drafts the request and the note", ref="card_alert_agent"),
+        ActorSpec("records", "Card records", "system", "Purchase details and recent card activity", ref="get_transaction"),
+        ActorSpec("model", "Fraud model", "model", "Scores how unusual a purchase is; learned from past transactions", ref="score_transaction"),
+        ActorSpec("analyst", "Fraud analyst", "person", "Approves or rejects the hold", ref="person"),
+    ],
+    stages=[
+        StageSpec("alert", "Alert arrives", "alert", "The card system flags one purchase for review.",
+                  [{"type": "run_start"}], "alert", "The alert becomes the task message that starts the run."),
+        StageSpec("lookup", "Look up the purchase", "records", "The assistant pulls the purchase details and the card's recent activity.",
+                  [{"type": "tool_call", "tool": "get_transaction"}], "receipt", "Tool call get_transaction: a read-only look-up."),
+        StageSpec("score", "Score the risk", "model", "The bank's fraud model scores the purchase and compares it with the review cutoff.",
+                  [{"type": "tool_call", "tool": "score_transaction"}], "risk", "Tool call score_transaction: a trained machine-learning model used as a tool."),
+        StageSpec("request", "Request a hold", "assistant", "The model said review, so the assistant asks for a temporary hold and gives a reason.",
+                  [{"type": "tool_call", "tool": "hold_card"}], "request", "Tool call hold_card: an action, so it is locked until a person approves.",
+                  optional=True, skipped="No hold requested: the model said normal, so the purchase went through."),
+        StageSpec("approve", "Analyst decides", "analyst", "A person reads the request and approves or rejects the hold.",
+                  [{"type": "approval_request"}], "approval", "Approval request: the run waits until a person answers.",
+                  optional=True, skipped="Nobody was asked: there was no hold to approve."),
+        StageSpec("note", "Write the note", "assistant", "The assistant writes a short note for the fraud team.",
+                  [{"type": "message", "agent": "card_alert_agent", "last": True}], "note", "The language model writes the final message."),
+    ],
+)
+SCENARIO.business = BUSINESS
+
 
 def build(ctx) -> Any:  # type: ignore[no-untyped-def]
     base = ctx.service("fraud")
     cache: dict[str, dict] = {}
 
     async def find(transaction_id: str) -> dict | None:
+        if transaction_id.strip() in TRANSACTIONS:
+            return TRANSACTIONS[transaction_id.strip()]
         if not cache:
             response = await ctx.http.get(f"{base}/api/fraud/samples")
             response.raise_for_status()
