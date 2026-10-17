@@ -86,6 +86,8 @@ test("site build copies every material under its published name", () => {
       for (const link of lesson.studio ?? []) assert.ok(html.includes(`data-route="${link.route.replaceAll("&", "&amp;")}"`));
     }
     assert.ok(!/<(?:script|link|img)[^>]+(?:src|href)=["']https?:/i.test(html), "index loads no remote resources");
+    assert.ok(!html.includes('href="http://127.0.0.1'), "Studio links default to setup steps, not a local address");
+    assert.ok(html.includes('id="studio"') && html.includes('<dialog id="studio-dialog"'));
   } finally {
     rmSync(out, { recursive: true, force: true });
   }
