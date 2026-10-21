@@ -56,7 +56,7 @@ export default function HistoryPage() {
         <div className="ds-filters">
           <input aria-label="Search runs" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search titles, briefs, run ids…" />
           <select aria-label="Pipeline" value={pipeline} onChange={(e) => setPipeline(e.target.value)}>
-            <option value="">All pipelines</option><option value="video">Video</option><option value="image">Image</option><option value="voice">Voice</option><option value="article">Article</option>
+            <option value="">All pipelines</option><option value="video">Video</option><option value="image">Image</option><option value="voice">Voice</option><option value="article">Article</option><option value="inspect">Inspect</option>
           </select>
           <select aria-label="Status" value={status} onChange={(e) => setStatus(e.target.value)}>
             <option value="">Any status</option><option value="waiting">Waiting for review</option><option value="running">Running</option><option value="completed">Completed</option><option value="failed">Needs attention</option><option value="canceled">Canceled</option>

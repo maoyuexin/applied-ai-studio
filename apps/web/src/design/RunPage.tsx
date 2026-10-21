@@ -4,6 +4,7 @@ import { designApi, mediaUrl, useRun, type RunDetail } from "./api";
 import { Banner, Crumbs, Dialog, EventLog, Link, ReviewTag, Spinner, StatusPill, Stepper } from "./ui";
 import ArticleRun from "./ArticleRun";
 import ImageRun from "./ImageRun";
+import InspectRun from "./InspectRun";
 import ReviewView from "./ReviewView";
 import VideoRun from "./VideoRun";
 import VoiceRun from "./VoiceRun";
@@ -211,6 +212,7 @@ export default function RunPage({ runId, review }: { runId: string; review: stri
             {info.pipeline === "image" && <ImageRun {...props} />}
             {info.pipeline === "voice" && <VoiceRun {...props} />}
             {info.pipeline === "article" && <ArticleRun {...props} />}
+            {info.pipeline === "inspect" && <InspectRun {...props} />}
           </main>
         </div>
       )}

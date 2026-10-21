@@ -275,6 +275,54 @@
 .ds-script-row textarea { min-height: 52px; }
 
 .ds-pipe-badge.article { color: var(--teal); background: var(--ds-teal-soft); }
+.ds-pipe-badge.inspect { color: var(--ds-amber); background: var(--ds-amber-soft); }
+
+/* Inspect: image grid with each model's answers, review list, rules */
+.ds-ins-bar-top { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+.ds-ins-legend { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 10px; }
+.ds-ins-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+.ds-ins-tile { all: unset; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; border: 1px solid var(--ds-line); border-radius: 10px; overflow: hidden; background: var(--ds-panel2); min-width: 0; }
+.ds-ins-tile:hover, .ds-ins-tile:focus-visible { border-color: var(--orange); }
+.ds-ins-img { position: relative; display: block; aspect-ratio: 16 / 9; background: #000; }
+.ds-ins-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ds-ins-group { position: absolute; left: 6px; top: 6px; font-size: 11.5px; padding: 1px 7px; border-radius: 999px; background: rgba(10, 12, 16, 0.78); color: var(--text); }
+.ds-ins-meta { display: grid; gap: 4px; padding: 8px 9px 10px; font-size: 12.5px; }
+.ds-ins-name { font-weight: 650; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ds-ins-label { color: var(--ds-dim); }
+.ds-ins-row { display: flex; align-items: center; justify-content: space-between; gap: 6px; min-width: 0; }
+.ds-ins-row .m { font-family: var(--font-mono); font-size: 11.5px; color: var(--ds-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ds-ins-chip { font-size: 12px; gap: 6px; }
+.ds-ins-dots { display: inline-flex; gap: 2px; }
+.ds-ins-dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--ds-muted); }
+.ds-ins-dots i.ok { background: var(--ds-green); }
+.ds-ins-dots i.bad { background: var(--red); }
+.ds-ins-dots i.warn { background: var(--ds-amber); }
+.ds-ins-varies { font-weight: 700; font-size: 10.5px; color: var(--ds-amber); }
+.ds-ins-table td, .ds-ins-table th { white-space: nowrap; }
+.ds-ins-table td.wrap { white-space: normal; min-width: 160px; max-width: 260px; }
+.ds-ins-table td.ds-ins-bad { color: var(--red); font-weight: 700; }
+.ds-ins-bar { height: 8px; border-radius: 4px; background: var(--ds-panel3); overflow: hidden; width: 110px; }
+.ds-ins-bar i { display: block; height: 100%; }
+.ds-ins-bar i.ok { background: var(--ds-green); }
+.ds-ins-bar i.warn { background: var(--ds-amber); }
+.ds-ins-bar i.bad { background: var(--red); }
+.ds-ins-item { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 10px; padding: 8px; border: 1px solid var(--ds-line); border-radius: 10px; background: var(--ds-panel2); }
+.ds-ins-item.done { opacity: 0.78; }
+.ds-ins-item img { width: 150px; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 6px; display: block; }
+.ds-dialog.ds-ins-dialog { width: min(1180px, 100%); max-height: calc(100vh - 40px); overflow: auto; }
+.ds-ins-dialog .ds-row { justify-content: flex-start; margin-top: 0; }
+.ds-ins-dialog .ds-row.between { justify-content: space-between; }
+.ds-ins-dialog-body { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 14px; margin-top: 10px; align-items: start; }
+.ds-ins-live { display: grid; grid-template-columns: minmax(120px, 0.6fr) minmax(0, 1.6fr) auto; gap: 6px; }
+@media (max-width: 980px) {
+  .ds-ins-dialog-body { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .ds-ins-grid { grid-template-columns: 1fr; }
+  .ds-ins-item { grid-template-columns: 1fr; }
+  .ds-ins-item img { width: 100%; }
+  .ds-ins-live { grid-template-columns: 1fr; }
+}
 .ds-diff { white-space: pre-wrap; font-size: 14px; line-height: 1.6; }
 .ds-diff del { color: #f3b3b2; background: var(--ds-red-soft); text-decoration: line-through; border-radius: 3px; }
 .ds-diff ins { color: #b7ebcc; background: var(--ds-green-soft); text-decoration: none; border-radius: 3px; }

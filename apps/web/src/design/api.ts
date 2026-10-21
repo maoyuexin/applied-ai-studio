@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-export type PipelineKey = "video" | "image" | "voice" | "article";
+export type PipelineKey = "video" | "image" | "voice" | "article" | "inspect";
 export type RunStatus = "running" | "waiting" | "completed" | "failed" | "canceled";
 export type StepStatus = "pending" | "running" | "waiting" | "done" | "skipped" | "failed";
 export type ArtifactStatus = "queued" | "running" | "ready" | "failed" | "blocked" | "canceled" | "superseded";
@@ -60,6 +60,75 @@ export interface Claim {
   source: number | null;
 }
 
+export interface InspectQuestion {
+  key: string;
+  text: string;
+  short: string;
+  kind: "choice" | "count" | "open";
+  choices: string[];
+  expect: "label" | "decline" | "none";
+  flag_terms: string[];
+  tolerance: number;
+}
+
+export interface InspectImage {
+  sha: string;
+  thumb_sha?: string;
+  name: string;
+  group: string;
+  truth: Record<string, string>;
+  note: string;
+}
+
+export interface InspectPolicy {
+  identity: "refuse" | "allow";
+  retention_days: number;
+  access: string;
+  signoff: "yes" | "no";
+  notice: "yes" | "no";
+  note: string;
+}
+
+/** One model answer in a disagreement: which try, what it said (read as) and how it was marked. */
+export interface InspectMark {
+  model: string;
+  try: number;
+  value: string;
+  grade: string;
+}
+
+export interface InspectResolution {
+  outcome: "label stands" | "fixed";
+  value: string;
+  was?: string;
+  note: string;
+  at: string;
+}
+
+export interface InspectModelReport {
+  questions: Record<string, Record<string, number>>;
+  correct: number;
+  wrong: number;
+  overconfident: number;
+  unsure: number;
+  invalid: number;
+  graded: number;
+  right_share: number | null;
+  consistent: [number, number] | null;
+  median_seconds: number | null;
+}
+
+export interface InspectReport {
+  counts: { answers: number; blocked: number; failed: number; expected: number };
+  models: Record<string, InspectModelReport>;
+  groups: Array<{ group: string; models: Record<string, [number, number]> }>;
+  disagreements: Array<{
+    image_id: string; image: string; group: string; question: string; label: string;
+    answers: InspectMark[]; resolution: InspectResolution | null;
+  }>;
+  fixes: number;
+}
+
 export interface Brief {
   brief: string;
   references?: Reference[];
@@ -88,6 +157,11 @@ export interface Brief {
   target_words?: number;
   sources?: ArticleSource[];
   fact_check?: boolean;
+  instructions?: string;
+  questions?: InspectQuestion[];
+  images?: InspectImage[];
+  models?: string[];
+  tries?: number;
 }
 
 export interface C2pa {
@@ -141,6 +215,8 @@ export interface ArtifactParams {
   edit_labels?: string[];
   title?: string;
   label?: string;
+  model?: string;
+  try?: number;
 }
 
 export interface ProvenanceReport {
@@ -216,10 +292,13 @@ export interface StepData {
   final_id?: string;
   title?: string;
   label?: string;
-  report?: ProvenanceReport;
+  report?: ProvenanceReport | InspectReport;
   headline?: string;
   points?: Array<{ text: string; sources: number[] }>;
   version_id?: string;
+  system?: string;
+  calls?: number;
+  policy?: InspectPolicy;
 }
 
 export interface Step {
@@ -260,6 +339,7 @@ export interface Counters {
   median_motion?: number | null;
   final_duration?: number | null;
   models?: string[];
+  answers?: number;
 }
 
 export interface Run {
@@ -505,6 +585,11 @@ export const designApi = {
     const form = new FormData();
     form.append("file", file);
     return request<RunDetail>("/runs/import", { method: "POST", body: form });
+  },
+  inspectKit: (file: File) => {
+    const form = new FormData();
+    form.append("file", file);
+    return request<{ title: string; tags: string[]; brief: Partial<Brief> }>("/inspect/kit", { method: "POST", body: form });
   },
   exportUrl: (id: string) => `${BASE}/runs/${id}/export`,
 };

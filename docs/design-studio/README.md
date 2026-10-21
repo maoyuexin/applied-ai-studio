@@ -10,8 +10,14 @@ history you can reopen, fork, compare, export and import.
 | **Voice** | brief → script ✋ → synthesize each line + listen-back ✋ → mix + label | text-draft, voice, listen-back | transcript vs script word differences, silence, spoken AI disclosure |
 | **Image** | brief + references → prompt ✋ → candidates ✋ → iterate on a version tree ✋ → finish | text-draft, image | content-filter outcome, Content Credentials (C2PA) on originals and labeled copies |
 | **Video** | brief → shot list ✋ → keyframes ✋ → takes ✋ → voiceover → assemble → provenance | text-draft, image, video, voice | motion, audio and silent gaps, Content Credentials, burned-in label |
+| **Inspect** | images + questions + your labels ✋ → ask the models (1–3 tries) → check against the labels → review disagreements ✋ → rules for asking ✋ → report | up to 4 text models that read images | right, wrong, overconfident (a firm answer where the label is “cannot tell”), unsure, declined vs did not decline, flag terms in open answers |
 
 Video can also run **prompt only**: with *Shot prompts* set to Off, each line of the brief is one shot sent to Sora as written (no text model, no keyframes).
+
+Inspect starts from images you upload, or from a **kit**: a `.zip` with `kit.json` (format
+`design-studio-inspect-kit`, version 1: title, tags and a brief whose images name a `file` in the zip) and the
+images. Labels are fixed in the review step with the old label kept; once every model has answered, **Ask live**
+sends one free question about one image to one model. Vision calls count toward the daily text cap.
 
 Checks never decide. Every keep, regenerate, remix, revision and approval is stored with the run.
 

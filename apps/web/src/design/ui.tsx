@@ -1,4 +1,5 @@
 import { useEffect, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { AlertTriangle, CheckCircle2, Info, LoaderCircle, UserCheck, XCircle } from "lucide-react";
 import { mediaUrl, type Artifact, type Check, type RunEvent, type RunStatus, type Step, type StepSpec } from "./api";
 import { checkFlag, clockOf, go } from "./lib";
@@ -213,14 +214,18 @@ export function Dialog({ title, children, onClose, actions }: {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
-  return (
-    <div className="ds-dialog-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
-      <div className="ds-dialog" role="dialog" aria-modal="true" aria-label={title}>
-        <h2>{title}</h2>
-        <div className="ds-dim ds-small">{children}</div>
-        <div className="ds-row">{actions}</div>
+  return createPortal(
+    <div className="ds">
+      <div className="ds-dialog-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
+        <div className="ds-dialog" role="dialog" aria-modal="true" aria-label={title}>
+          <h2>{title}</h2>
+          <div className="ds-dim ds-small">{children}</div>
+          <div className="ds-row">{actions}</div>
+        </div>
       </div>
-    </div>
+    </div>,
+    // The page's reveal animation leaves a transform, which would pin position: fixed to the page, not the window.
+    document.body,
   );
 }
 
