@@ -25,7 +25,7 @@ def test_health_status_and_pipelines(client: TestClient) -> None:
                                                           "listen-back"}
     assert all(item["ready"] for item in status["pipelines"])
     pipelines = {p["key"]: p for p in client.get("/api/design/pipelines").json()}
-    assert set(pipelines) == {"video", "image", "voice", "article", "inspect"}
+    assert set(pipelines) == {"video", "image", "voice", "article", "inspect", "alerts"}
     assert [s["key"] for s in pipelines["video"]["steps"]] == ["shotlist", "keyframes", "takes", "voiceover",
                                                                 "assemble", "provenance"]
 

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { FileUp, ImagePlus, Trash2, Wand2 } from "lucide-react";
 import {
   designApi, errorMessage, mediaUrl, useLoad,
-  type ArticleSource, type Brief, type InspectQuestion, type PipelineInfo, type TextRole, type PipelineKey, type Reference, type Speaker, type StudioStatus, type Voice,
+  type AlertLanguage, type AlertMoment, type ArticleSource, type Brief, type InspectQuestion, type PipelineInfo, type TextRole, type PipelineKey, type Reference, type Speaker, type StudioStatus, type Voice,
 } from "./api";
 import { Banner, Crumbs, FlowTrack, Spinner } from "./ui";
 import { PREFILL_KEY, go, promptOnlySteps, stepWorker, useUploader, type Prefill } from "./lib";
@@ -64,6 +64,18 @@ const EXAMPLES: Record<PipelineKey, { title: string; brief: Partial<Brief> }> = 
       ],
     },
   },
+  alerts: {
+    title: "River gauge · public alert",
+    brief: {
+      brief: "Can models turn one river-gauge reading into a short, correct public alert in two languages, and answer a resident without guessing?",
+      tries: 1,
+      max_chars: 160,
+      watch_terms: ["shelter", "closed", "evacuat"],
+      languages: [{ code: "en", name: "English", disclosure: "AI-assisted" }, { code: "es", name: "Spanish", disclosure: "Asistido por IA" }],
+      moments: [{ name: "River rising", group: "", note: "", question: "Is my street flooded?",
+        facts: "River gauge at Mill Road: 12.4 ft at 6:15 am, up 2.1 ft in the last hour.\nFlood stage at this gauge: 13 ft.\nNo street sensors in this area.\nCity non-emergency line: 311. Emergencies: 911." }],
+    },
+  },
 };
 
 // Prompt helper off: this exact line was sent to Sora unchanged in run_2026-10-06_105110_1aa6 (docs/design-studio/TEST_CASES.md, VD3).
@@ -88,6 +100,7 @@ const TEXT_MODEL_HINT: Record<PipelineKey, string> = {
   voice: "Writes the script.",
   article: "Writes the outline and every draft.",
   inspect: "",
+  alerts: "",
 };
 
 const VIDEO_DEFAULTS: Brief = {
@@ -106,7 +119,11 @@ const ARTICLE_DEFAULTS: Brief = {
   sources: [], must_not_include: "", fact_check: true, visible_label: "AI-assisted draft, reviewed by an editor.",
 };
 const INSPECT_DEFAULTS: Brief = { brief: "", instructions: "", questions: [], images: [], models: [], tries: 1 };
-const DEFAULTS: Record<PipelineKey, Brief> = { video: VIDEO_DEFAULTS, image: IMAGE_DEFAULTS, voice: VOICE_DEFAULTS, article: ARTICLE_DEFAULTS, inspect: INSPECT_DEFAULTS };
+const ALERTS_DEFAULTS: Brief = {
+  brief: "", instructions: "", moments: [], languages: [{ code: "en", name: "English", disclosure: "AI-assisted" }], models: [], tries: 1,
+  max_chars: 160, watch_terms: [],
+};
+const DEFAULTS: Record<PipelineKey, Brief> = { video: VIDEO_DEFAULTS, image: IMAGE_DEFAULTS, voice: VOICE_DEFAULTS, article: ARTICLE_DEFAULTS, inspect: INSPECT_DEFAULTS, alerts: ALERTS_DEFAULTS };
 
 function Field({ label, children, hint }: { label: ReactNode; children: ReactNode; hint?: string }) {
   return (
@@ -525,6 +542,96 @@ function InspectForm({ brief, set, models, onKit }: { brief: Brief; set: (patch:
   );
 }
 
+const ALERTS_KIT = "design-studio-alerts-kit";
+
+function AlertsForm({ brief, set, models, onKit }: { brief: Brief; set: (patch: Partial<Brief>) => void; models: string[]; onKit: (kit: Kit) => void }) {
+  const moments = brief.moments ?? [];
+  const languages = brief.languages ?? [];
+  const chosen = brief.models ?? [];
+  const kitInput = useRef<HTMLInputElement>(null);
+  const [problem, setProblem] = useState<string | null>(null);
+  const setMoment = (index: number, patch: Partial<AlertMoment>) => set({ moments: moments.map((m, i) => (i === index ? { ...m, ...patch } : m)) });
+  const setLanguage = (index: number, patch: Partial<AlertLanguage>) => set({ languages: languages.map((l, i) => (i === index ? { ...l, ...patch } : l)) });
+  const loadKit = async (file: File) => {
+    setProblem(null);
+    try {
+      const kit = JSON.parse(await file.text()) as { format?: string; version?: number; title?: string; tags?: string[]; brief?: Partial<Brief> };
+      if (kit.format !== ALERTS_KIT || kit.version !== 1 || !kit.brief) throw new Error("That file is not an Alerts kit (kit.json, version 1).");
+      onKit({ title: String(kit.title ?? ""), tags: (kit.tags ?? []).map(String), brief: kit.brief });
+    } catch (problemError) {
+      setProblem(errorMessage(problemError));
+    }
+  };
+  return (
+    <>
+      <div className="ds-row" style={{ marginTop: 12 }}>
+        <button type="button" className="ds-btn" onClick={() => kitInput.current?.click()}><FileUp size={14} aria-hidden="true" /> Load a kit (.json)</button>
+        <span className="ds-tiny ds-muted">A kit holds the brief, the facts for each moment, the languages and the rules.</span>
+        <input ref={kitInput} type="file" accept=".json,application/json" hidden onChange={(e) => { const file = e.target.files?.[0]; if (file) void loadKit(file); e.target.value = ""; }} />
+      </div>
+      {problem && <Banner kind="error">{problem}</Banner>}
+      <Field label="Brief" hint="What you are testing and why. The models never see this; they get the instructions and the facts.">
+        <textarea value={brief.brief} onChange={(e) => set({ brief: e.target.value })} style={{ minHeight: 70 }} placeholder="Can models turn these readings into correct alerts…" />
+      </Field>
+      <div className="ds-grid2">
+        <Field label={`Models (${chosen.length} of 4)`} hint="Each moment goes to every model you pick.">
+          <div className="ds-row" style={{ gap: 10 }}>
+            {models.map((model) => {
+              const on = chosen.includes(model);
+              return (
+                <label key={model} className="ds-row" style={{ margin: 0, fontWeight: 500, gap: 5 }}>
+                  <input type="checkbox" checked={on} disabled={!on && chosen.length >= 4}
+                    onChange={() => set({ models: on ? chosen.filter((m) => m !== model) : [...chosen, model] })} />
+                  <span className="ds-mono ds-small">{model}</span>
+                </label>
+              );
+            })}
+          </div>
+        </Field>
+        <div className="ds-grid2">
+          <Field label="Tries per model"><select value={brief.tries} onChange={(e) => set({ tries: Number(e.target.value) })}>{[1, 2, 3].map((n) => <option key={n} value={n}>{n}</option>)}</select></Field>
+          <Field label="Alert length (characters)"><input type="number" min={60} max={600} value={brief.max_chars ?? 160} onChange={(e) => set({ max_chars: Number(e.target.value) || 160 })} /></Field>
+        </div>
+      </div>
+      <Field label="Watch terms" hint="Flagged when a message (or its back-translation) uses them and the facts do not, e.g. shelter, closed.">
+        <input value={(brief.watch_terms ?? []).join(", ")} onChange={(e) => set({ watch_terms: splitList(e.target.value) })} />
+      </Field>
+      <label>Languages ({languages.length} of 6) · each alert must end with its disclosure</label>
+      <div className="ds-stack" style={{ gap: 6 }}>
+        {languages.map((lang, index) => (
+          <div key={index} className="ds-grid3" style={{ gridTemplateColumns: "90px 1fr 1fr auto" }}>
+            <input aria-label={`Language ${index + 1} code`} value={lang.code} onChange={(e) => setLanguage(index, { code: e.target.value.trim() })} placeholder="es" />
+            <input aria-label={`Language ${index + 1} name`} value={lang.name} onChange={(e) => setLanguage(index, { name: e.target.value })} placeholder="Spanish" />
+            <input aria-label={`Language ${index + 1} disclosure`} value={lang.disclosure} onChange={(e) => setLanguage(index, { disclosure: e.target.value })} placeholder="Asistido por IA" />
+            <button type="button" className="ds-btn sm ghost" aria-label={`Remove language ${index + 1}`} onClick={() => set({ languages: languages.filter((_, i) => i !== index) })}><Trash2 size={13} aria-hidden="true" /></button>
+          </div>
+        ))}
+        {languages.length < 6 && <button type="button" className="ds-btn sm" style={{ justifySelf: "start" }} onClick={() => set({ languages: [...languages, { code: "", name: "", disclosure: "" }] })}>+ Add language</button>}
+      </div>
+      <label>Moments ({moments.length} of 12) · the only facts a model may use</label>
+      <div className="ds-stack" style={{ gap: 8 }}>
+        {moments.map((moment, index) => (
+          <div key={index} className="ds-shot-edit">
+            <div className="head">
+              <b className="ds-mono">{index + 1}</b>
+              <input aria-label={`Moment ${index + 1} name`} value={moment.name} onChange={(e) => setMoment(index, { name: e.target.value.slice(0, 80) })} placeholder="e.g. River rising" style={{ flex: 1 }} />
+              <button type="button" className="ds-btn sm ghost" aria-label={`Remove moment ${index + 1}`} onClick={() => set({ moments: moments.filter((_, i) => i !== index) })}><Trash2 size={13} aria-hidden="true" /></button>
+            </div>
+            <textarea aria-label={`Moment ${index + 1} facts`} value={moment.facts} onChange={(e) => setMoment(index, { facts: e.target.value })} style={{ minHeight: 80 }} placeholder="One fact per line: readings, thresholds, times, what is not known" />
+            <input aria-label={`Moment ${index + 1} question`} value={moment.question} onChange={(e) => setMoment(index, { question: e.target.value })} placeholder="A resident's question (optional)" style={{ marginTop: 6 }} />
+          </div>
+        ))}
+        {moments.length < 12 && <button type="button" className="ds-btn sm" style={{ justifySelf: "start" }} onClick={() => set({ moments: [...moments, { name: "", group: "", facts: "", question: "", note: "" }] })}>+ Add moment</button>}
+      </div>
+      <details style={{ marginTop: 12 }}>
+        <summary className="ds-small ds-dim" style={{ cursor: "pointer" }}>Instructions sent to the models (optional)</summary>
+        <textarea aria-label="Instructions" value={brief.instructions ?? ""} onChange={(e) => set({ instructions: e.target.value })} style={{ minHeight: 70, marginTop: 6 }}
+          placeholder="Empty = the default: use only the facts; add no places, closures, shelters, times or numbers; say plainly when the facts do not answer a question; reply with JSON." />
+      </details>
+    </>
+  );
+}
+
 function Preview({ info, status, brief, pipeline, onStart, busy, canStart, models }: {
   info: PipelineInfo; status: StudioStatus | null; brief: Brief; pipeline: PipelineKey; onStart: () => void; busy: boolean; canStart: boolean;
   models: Partial<Record<TextRole, string>>;
@@ -532,7 +639,7 @@ function Preview({ info, status, brief, pipeline, onStart, busy, canStart, model
   const [estimate, setEstimate] = useState<Record<string, number | string> | null>(null);
   const [problem, setProblem] = useState<string | null>(null);
   const key = JSON.stringify(brief);
-  const longEnough = brief.brief.trim().length >= (pipeline === "image" || pipeline === "article" || pipeline === "inspect" ? 10 : 20);
+  const longEnough = brief.brief.trim().length >= (pipeline === "image" || pipeline === "article" || pipeline === "inspect" || pipeline === "alerts" ? 10 : 20);
   useEffect(() => {
     if (!longEnough) {
       setProblem(null);
@@ -560,6 +667,7 @@ function Preview({ info, status, brief, pipeline, onStart, busy, canStart, model
     if (pipeline === "voice") kpis.push([`~${estimate.voice_calls}`, "lines to record"], [`~${estimate.minutes} min`, "to record"]);
     if (pipeline === "article") kpis.push([String(estimate.text_calls), "text calls per version"], [`~${estimate.minutes} min`, "to the first draft"]);
     if (pipeline === "inspect") kpis.push([String(estimate.text_calls), "vision calls"], [`~${estimate.minutes} min`, "to ask every model"]);
+    if (pipeline === "alerts") kpis.push([String(estimate.text_calls), "text calls"], [`~${estimate.minutes} min`, "to draft and check"]);
   }
   const cap = pipeline === "video" ? status?.caps.video : pipeline === "image" ? status?.caps.image : pipeline === "voice" ? status?.caps.voice : status?.caps.text;
   const retire = pipeline === "video" ? status?.video_retirement : null;
@@ -590,7 +698,7 @@ function Preview({ info, status, brief, pipeline, onStart, busy, canStart, model
 }
 
 export default function NewRunPage({ pipeline: rawPipeline, forkOf }: { pipeline: string; forkOf: string | null }) {
-  const pipeline: PipelineKey = rawPipeline === "image" || rawPipeline === "voice" || rawPipeline === "article" || rawPipeline === "inspect" ? rawPipeline : "video";
+  const pipeline: PipelineKey = rawPipeline === "image" || rawPipeline === "voice" || rawPipeline === "article" || rawPipeline === "inspect" || rawPipeline === "alerts" ? rawPipeline : "video";
   const pipelines = useLoad(designApi.pipelines, "pipelines");
   const status = useLoad(designApi.status, "status");
   const voices = useLoad(() => designApi.voices(), "voices");
@@ -651,17 +759,21 @@ export default function NewRunPage({ pipeline: rawPipeline, forkOf }: { pipeline
 
   const defaults = status.data?.text_defaults;
   const promptOnly = pipeline === "video" && brief.prompt_helper === false;
-  const chosenModels: Partial<Record<TextRole, string>> = promptOnly || pipeline === "inspect" ? {} : {
+  const chosenModels: Partial<Record<TextRole, string>> = promptOnly || pipeline === "inspect" ? {}
+    : pipeline === "alerts" ? { "text-judge": models["text-judge"] ?? defaults?.["text-judge"] } : {
     "text-draft": models["text-draft"] ?? defaults?.["text-draft"],
     ...(pipeline === "article" ? { "text-judge": models["text-judge"] ?? defaults?.["text-judge"] } : {}),
   };
-  const fullBrief: Brief = pipeline === "inspect" ? { ...brief, instructions: brief.instructions?.trim() ? brief.instructions : undefined }
+  const fullBrief: Brief = pipeline === "inspect" || pipeline === "alerts" ? { ...brief, instructions: brief.instructions?.trim() ? brief.instructions : undefined }
     : pipeline === "voice" || pipeline === "article" ? brief
     : { ...brief, references: promptOnly ? [] : refs.map(({ sha, role, name }) => ({ sha, role, name })) };
   const ready = status.data?.pipelines.find((item) => item.key === pipeline)?.ready ?? false;
   const inspectReady = pipeline !== "inspect" || ((brief.images ?? []).length > 0 && (brief.models ?? []).length > 0
     && (brief.questions ?? []).length > 0 && (brief.questions ?? []).every((q) => q.text.trim().length >= 5));
-  const canStart = ready && inspectReady && brief.brief.trim().length >= (pipeline === "image" || pipeline === "article" || pipeline === "inspect" ? 10 : 20)
+  const alertsReady = pipeline !== "alerts" || ((brief.models ?? []).length > 0 && (brief.languages ?? []).length > 0 && (brief.moments ?? []).length > 0
+    && (brief.moments ?? []).every((m) => m.name.trim().length >= 2 && m.facts.trim().length >= 10)
+    && (brief.languages ?? []).every((l) => l.code.trim() && l.name.trim().length >= 2 && l.disclosure.trim().length >= 2));
+  const canStart = ready && inspectReady && alertsReady && brief.brief.trim().length >= (pipeline === "image" || pipeline === "article" || pipeline === "inspect" || pipeline === "alerts" ? 10 : 20)
     && (pipeline !== "article" || ((brief.sources ?? []).length > 0 && (brief.sources ?? []).every((s) => s.title.trim() && s.text.trim().length >= 40)));
 
   const start = async () => {
@@ -683,7 +795,7 @@ export default function NewRunPage({ pipeline: rawPipeline, forkOf }: { pipeline
     const example = promptOnly ? PROMPT_ONLY_EXAMPLE : EXAMPLES[pipeline];
     setTitle(example.title);
     set(example.brief);
-    if (pipeline === "inspect" && !(brief.models ?? []).length) set({ models: (status.data?.text_models ?? []).slice(0, 2) });
+    if ((pipeline === "inspect" || pipeline === "alerts") && !(brief.models ?? []).length) set({ models: (status.data?.text_models ?? []).slice(0, 2) });
     if (!tags) setTags("example");
     if ((pipeline === "image" || (pipeline === "video" && !promptOnly)) && !refs.length) {
       // Use the SOLENNE design sheet from run history as the subject reference, when this install has it.
@@ -713,6 +825,7 @@ export default function NewRunPage({ pipeline: rawPipeline, forkOf }: { pipeline
             {pipeline === "voice" && "Describe the piece and cast the voices. The script comes back for you to edit, then each line is recorded and checked."}
             {pipeline === "article" && "Give it a brief and the sources. You approve the outline, then every draft is fact-checked against the sources by a second model before you approve one."}
             {pipeline === "inspect" && "Load a kit, or add images, questions and the right answers yourself. You check everything before any model is asked; then you review every disagreement and record the rules for asking."}
+            {pipeline === "alerts" && "Load a kit, or write the facts for each moment and pick the languages. Models draft an alert and an answer in every language; a second model back-translates; the app checks the rules; you sign every draft. Nothing is sent."}
           </p>
         </div>
         <div className="ds-head-actions">
@@ -731,7 +844,14 @@ export default function NewRunPage({ pipeline: rawPipeline, forkOf }: { pipeline
               <Field label="Run title"><input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Shown in run history" /></Field>
               <Field label="Tags" hint="Comma separated, e.g. Module 8, example"><input value={tags} onChange={(e) => setTags(e.target.value)} /></Field>
             </div>
-            {status.data && status.data.text_models.length > 0 && !promptOnly && pipeline !== "inspect" && (
+            {status.data && status.data.text_models.length > 0 && pipeline === "alerts" && (
+              <Field label="Checking model" hint="Back-translates every message and lists statements the facts do not support.">
+                <select value={chosenModels["text-judge"] ?? ""} onChange={(e) => setModels({ ...models, "text-judge": e.target.value })}>
+                  {status.data.text_models.map((name) => <option key={name} value={name}>{name}{name === defaults?.["text-judge"] ? " (default)" : ""}</option>)}
+                </select>
+              </Field>
+            )}
+            {status.data && status.data.text_models.length > 0 && !promptOnly && pipeline !== "inspect" && pipeline !== "alerts" && (
               <div className="ds-grid2">
                 <Field label="Text model" hint={TEXT_MODEL_HINT[pipeline]}>
                   <select value={chosenModels["text-draft"] ?? ""} onChange={(e) => setModels({ ...models, "text-draft": e.target.value })}>
@@ -760,6 +880,17 @@ export default function NewRunPage({ pipeline: rawPipeline, forkOf }: { pipeline
               setBrief({ ...INSPECT_DEFAULTS, ...kit.brief, models: usable.length ? usable : available.slice(0, 2) });
               const missing = wanted.filter((m) => !available.includes(m));
               setNote(`Loaded “${kit.title || "kit"}”: ${kit.brief.images?.length ?? 0} images, ${kit.brief.questions?.length ?? 0} questions.`
+                + (missing.length ? ` Not on this install, so left out: ${missing.join(", ")}.` : ""));
+            }} />}
+            {pipeline === "alerts" && <AlertsForm brief={brief} set={set} models={status.data?.text_models ?? []} onKit={(kit) => {
+              const available = status.data?.text_models ?? [];
+              const wanted = kit.brief.models ?? [];
+              const usable = wanted.filter((m) => available.includes(m));
+              setTitle(kit.title);
+              setTags(kit.tags.join(", "));
+              setBrief({ ...ALERTS_DEFAULTS, ...kit.brief, models: usable.length ? usable : available.slice(0, 2) });
+              const missing = wanted.filter((m) => !available.includes(m));
+              setNote(`Loaded “${kit.title || "kit"}”: ${kit.brief.moments?.length ?? 0} moments, ${kit.brief.languages?.length ?? 0} languages.`
                 + (missing.length ? ` Not on this install, so left out: ${missing.join(", ")}.` : ""));
             }} />}
             {(pipeline === "image" || (pipeline === "video" && !promptOnly)) && (

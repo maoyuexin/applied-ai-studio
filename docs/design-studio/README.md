@@ -11,6 +11,7 @@ history you can reopen, fork, compare, export and import.
 | **Image** | brief + references → prompt ✋ → candidates ✋ → iterate on a version tree ✋ → finish | text-draft, image | content-filter outcome, Content Credentials (C2PA) on originals and labeled copies |
 | **Video** | brief → shot list ✋ → keyframes ✋ → takes ✋ → voiceover → assemble → provenance | text-draft, image, video, voice | motion, audio and silent gaps, Content Credentials, burned-in label |
 | **Inspect** | images + questions + your labels ✋ → ask the models (1–3 tries) → check against the labels → review disagreements ✋ → rules for asking ✋ → report | up to 4 text models that read images | right, wrong, overconfident (a firm answer where the label is “cannot tell”), unsure, declined vs did not decline, flag terms in open answers |
+| **Alerts** | facts per moment + languages ✋ → draft (alert + answer, every language) → check (back-translation, length, AI disclosure, numbers, watch terms) → sign-off desk ✋ → report | text-draft (you pick up to 4), text-judge | numbers not in the facts, missing disclosure, over length, watch terms the facts never mention, the second model's issues |
 
 Video can also run **prompt only**: with *Shot prompts* set to Off, each line of the brief is one shot sent to Sora as written (no text model, no keyframes).
 

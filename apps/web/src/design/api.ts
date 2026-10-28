@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-export type PipelineKey = "video" | "image" | "voice" | "article" | "inspect";
+export type PipelineKey = "video" | "image" | "voice" | "article" | "inspect" | "alerts";
 export type RunStatus = "running" | "waiting" | "completed" | "failed" | "canceled";
 export type StepStatus = "pending" | "running" | "waiting" | "done" | "skipped" | "failed";
 export type ArtifactStatus = "queued" | "running" | "ready" | "failed" | "blocked" | "canceled" | "superseded";
@@ -162,6 +162,31 @@ export interface Brief {
   images?: InspectImage[];
   models?: string[];
   tries?: number;
+  moments?: AlertMoment[];
+  languages?: AlertLanguage[];
+  max_chars?: number;
+  watch_terms?: string[];
+}
+
+export interface AlertMoment {
+  name: string;
+  group: string;
+  facts: string;
+  question: string;
+  note: string;
+}
+
+export interface AlertLanguage {
+  code: string;
+  name: string;
+  disclosure: string;
+}
+
+export interface AlertsReport {
+  counts: { drafts: number; blocked: number; failed: number; expected: number };
+  models: Record<string, { drafts: number; messages: number; flagged: number; checks: Record<string, number>; median_seconds: number | null }>;
+  languages: Record<string, { messages: number; flagged: number }>;
+  signed: { approve: number; edit: number; reject: number; open: number; approved_flagged: number };
 }
 
 export interface C2pa {
@@ -217,6 +242,7 @@ export interface ArtifactParams {
   label?: string;
   model?: string;
   try?: number;
+  moment?: number;
 }
 
 export interface ProvenanceReport {
@@ -292,12 +318,13 @@ export interface StepData {
   final_id?: string;
   title?: string;
   label?: string;
-  report?: ProvenanceReport | InspectReport;
+  report?: ProvenanceReport | InspectReport | AlertsReport;
   headline?: string;
   points?: Array<{ text: string; sources: number[] }>;
   version_id?: string;
   system?: string;
   calls?: number;
+  prompts?: string[];
   policy?: InspectPolicy;
 }
 
@@ -324,6 +351,8 @@ export interface RunEvent {
 }
 
 export interface Counters {
+  drafts?: number;
+  languages?: string[];
   outputs?: string;
   thumb_sha?: string | null;
   takes?: number;

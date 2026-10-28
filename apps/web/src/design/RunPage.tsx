@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Ban, Download, GitFork, Lock, RotateCcw, Trash2, Unlock } from "lucide-react";
 import { designApi, mediaUrl, useRun, type RunDetail } from "./api";
 import { Banner, Crumbs, Dialog, EventLog, Link, ReviewTag, Spinner, StatusPill, Stepper } from "./ui";
+import AlertsRun from "./AlertsRun";
 import ArticleRun from "./ArticleRun";
 import ImageRun from "./ImageRun";
 import InspectRun from "./InspectRun";
@@ -213,6 +214,7 @@ export default function RunPage({ runId, review }: { runId: string; review: stri
             {info.pipeline === "voice" && <VoiceRun {...props} />}
             {info.pipeline === "article" && <ArticleRun {...props} />}
             {info.pipeline === "inspect" && <InspectRun {...props} />}
+            {info.pipeline === "alerts" && <AlertsRun {...props} />}
           </main>
         </div>
       )}

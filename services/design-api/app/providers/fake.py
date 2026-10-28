@@ -11,6 +11,7 @@ import asyncio
 import hashlib
 import io
 import json
+import re
 import secrets
 import subprocess
 import tempfile
@@ -90,6 +91,28 @@ class FakeText:
                 {"claim": "The first flight could happen in December.",
                  "verdict": "unsupported" if "2024" in body else "supported",
                  "evidence": "December of this year", "source": 1, "note": "year"}]}
+        elif purpose == "alerts.draft":
+            # Models named *mini* invent a shelter (a watch term and a number not in the facts) and drop the
+            # disclosure in the second language.
+            invent = "mini" in deployment
+            level = (re.findall(r"\d+\.\d+", str(ctx.get("facts", ""))) or ["1.0"])[0]
+            alert, answer = {}, {}
+            for index, lang in enumerate(ctx.get("languages", [])):
+                disclosure = "" if invent and index == 1 else f" {lang['disclosure']}"
+                extra = " Shelter open at 99 Main." if invent else ""
+                alert[lang["code"]] = f"[{lang['code']}] River at {level} ft and rising.{extra}{disclosure}"
+                answer[lang["code"]] = f"[{lang['code']}] The facts do not say. Call 311."
+            payload = {"alert": alert, **({"answer": answer} if ctx.get("question") else {})}
+        elif purpose == "alerts.check":
+            messages = ctx.get("messages") or {}
+            back, issues = {}, {}
+            for lang in ctx.get("languages", []):
+                code = lang["code"]
+                back[code] = {part: str((texts or {}).get(code, "")).replace(f"[{code}]", "[en]")
+                              for part, texts in messages.items()}
+                if "Shelter" in str((messages.get("alert") or {}).get(code, "")):
+                    issues[code] = [{"part": "alert", "text": "Mentions a shelter the facts do not give."}]
+            payload = {"back": back, "issues": issues}
         else:
             payload = {"text": "ok"}
         return TextResult(json.dumps(payload), self.delay, deployment, {"total_tokens": 0})
