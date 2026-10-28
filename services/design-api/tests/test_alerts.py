@@ -3,7 +3,7 @@ from typing import Any
 import pytest
 from fastapi.testclient import TestClient
 
-from app.pipelines.alerts import allowed_numbers, compose_draft, numbers_in, unknown_numbers, watch_hits
+from app.pipelines.alerts import allowed_numbers, compose_check, compose_draft, numbers_in, unknown_numbers, watch_hits
 from tests.helpers import act, at_gate, run_status, wait_for
 
 LANGUAGES = [{"code": "en", "name": "English", "disclosure": "AI-assisted"},
@@ -25,6 +25,7 @@ def test_numbers_and_watch_terms() -> None:
     assert unknown_numbers("22:00 · 38,6 pies", allowed_numbers("38.6 ft at 10:00 pm")) == [], "24-hour clock"
     assert unknown_numbers("Shelter at 99 Main, 44 ft by noon", allowed) == ["99", "44"]
     assert unknown_numbers("45.7 ft", allowed_numbers("Level 45.67 ft")) == [], "rounding to one decimal is fine"
+    assert unknown_numbers("up 11.6 ft in 1 hour", allowed_numbers("It rose 11.6 ft in one hour.")) == [], "number words"
     assert watch_hits("Shelters open; roads closed", FACTS, ["shelter", "closed"]) == ["shelter", "closed"]
     assert watch_hits("Roads closed", "Main St is closed.", ["closed"]) == []
 
@@ -33,6 +34,8 @@ def test_prompt_shape() -> None:
     text = compose_draft({"facts": FACTS, "question": ""}, LANGUAGES, 160)
     assert text.startswith("FACTS (the only facts you may use):\nRiver gauge")
     assert '- es = Spanish (disclosure: "Asistido por IA")' in text
+    check_text = compose_check({"facts": FACTS, "question": ""}, LANGUAGES, {"alert": {"en": "x", "es": "y"}})
+    assert '("AI-assisted", "Asistido por IA")' in check_text and "Do not list anything that agrees" in check_text
     assert text.endswith('Reply as JSON: {"alert": {"en": "...", "es": "..."}}')
 
 

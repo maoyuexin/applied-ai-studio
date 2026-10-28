@@ -66,6 +66,8 @@ class AlertsBrief(BaseModel):
 
 _NUMBER = re.compile(r"(?<![\w.])(\d+(?:[.,]\d+)?)(?![\w])")
 _CLOCK = re.compile(r"\b(\d{1,2})(?::(\d{2}))?\s*(a\.?m\.?|p\.?m\.?)", re.IGNORECASE)
+_WORDS = {word: index + 1 for index, word in enumerate(
+    ("one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"))}
 _MONTHS = {name: index + 1 for index, name in enumerate(
     ("jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"))}
 
@@ -96,6 +98,8 @@ def allowed_numbers(facts: str) -> set[float]:
         month = _MONTHS.get(word.lower()[:3])
         if month and len(word) >= 3:
             allowed.add(float(month))
+        if word.lower() in _WORDS:
+            allowed.add(float(_WORDS[word.lower()]))
     return allowed
 
 
@@ -138,9 +142,14 @@ def compose_check(moment: dict[str, Any], languages: list[dict[str, Any]], messa
             text = (messages.get(part) or {}).get(lang["code"])
             if text:
                 lines.append(f"[{lang['code']} {part}] {text}")
-    lines += ["", "For each message: translate it into English (copy English messages as they are), then list every "
-              "statement that is not in the facts, contradicts them or changes their meaning (an empty list if none). "
-              "For answers, also list any claim to know something the facts do not say.",
+    disclosures = ", ".join(f'"{lang["disclosure"]}"' for lang in languages)
+    lines += ["", "For each message: translate it into English (copy English messages as they are), then list only real "
+              "problems: a statement that contradicts the facts or changes their meaning; a specific detail the facts do "
+              "not give (a place, road, closure, shelter, time, number, forecast or official order); or, in an answer, "
+              "a claim to know something the facts do not say. Not problems: the required disclosure line "
+              f"({disclosures}); general safety advice such as avoiding floodwater or not driving through water; "
+              "pointing people to the phone lines in the facts; saying that something is not known. Do not list "
+              "anything that agrees with the facts. An empty list if there are no real problems.",
               'Reply as JSON: {"back": {"<code>": {"alert": "...", "answer": "..."}}, '
               '"issues": {"<code>": [{"part": "alert" or "answer", "text": "..."}]}}']
     return "\n".join(lines)
@@ -386,7 +395,8 @@ class AlertsPipeline(Pipeline):
     def _grades(self, ctx: RunContext, moment: dict[str, Any], messages: dict[str, dict[str, str]],
                 back: dict[str, Any], issues: dict[str, Any]) -> dict[str, dict[str, list[dict[str, str]]]]:
         brief = ctx.brief
-        allowed = allowed_numbers(moment["facts"])
+        allowed = {"alert": allowed_numbers(moment["facts"]),
+                   "answer": allowed_numbers(f"{moment['facts']}\n{moment['question']}")}
         grades: dict[str, dict[str, list[dict[str, str]]]] = {}
         for lang in brief["languages"]:
             code = lang["code"]
@@ -402,7 +412,7 @@ class AlertsPipeline(Pipeline):
                 # A reply may repeat what the resident asked about (a place name) without inventing it.
                 known = f"{moment['facts']}\n{moment['question']}" if part == "answer" else moment["facts"]
                 grades.setdefault(code, {})[part] = grade_message(
-                    part, lang, text, clean_text(english.get(part), 1200), part_issues, known, allowed,
+                    part, lang, text, clean_text(english.get(part), 1200), part_issues, known, allowed[part],
                     brief["watch_terms"], brief["max_chars"])
         return grades
 
