@@ -842,6 +842,124 @@
     "source": "public-synthetic"
   },
   {
+    "id": "public-city-operations",
+    "title": "City Flood Operations Console",
+    "industry": "public-sector",
+    "industryLabel": "Public Sector",
+    "icon": "waves",
+    "accent": "teal",
+    "summary": "Watch bayou gauges and a 2-hour flood forecast, check street-camera readings from vision models, and approve AI-drafted public alerts in four languages before anything goes out.",
+    "problem": "During a storm, operators juggle gauges that go dark, forecasts that miss, cameras that cannot be trusted at night, and alerts that must be right in every language, with a person accountable for each decision.",
+    "outcomes": [
+      "Earlier, policy-set flood watches",
+      "Camera readings checked before anyone acts",
+      "Every public alert approved by a named person"
+    ],
+    "capabilities": [
+      "Time-series forecasting",
+      "Vision Q&A on camera images",
+      "Multilingual drafting with checks"
+    ],
+    "patterns": [
+      "Alert threshold as policy",
+      "Model consensus and human review",
+      "Draft and approve (human sign-off)"
+    ],
+    "workloadType": "decision-support",
+    "dataReadiness": "high",
+    "riskLevel": "high",
+    "maturity": "prototype",
+    "architecture": [
+      "Gauge feed and replay clock",
+      "Forecast model",
+      "Vision model checks",
+      "Alert drafting and checks",
+      "Approval desk and audit log"
+    ],
+    "workflow": {
+      "nodes": [
+        {
+          "id": "sense",
+          "label": "Gauges and cameras",
+          "kind": "input"
+        },
+        {
+          "id": "forecast",
+          "label": "2-hour flood forecast",
+          "kind": "ai"
+        },
+        {
+          "id": "vision",
+          "label": "Camera readings",
+          "kind": "ai"
+        },
+        {
+          "id": "officer",
+          "label": "Duty officer decides",
+          "kind": "human"
+        },
+        {
+          "id": "draft",
+          "label": "Draft alerts, 4 languages",
+          "kind": "ai"
+        },
+        {
+          "id": "pio",
+          "label": "Public-information officer approves",
+          "kind": "human"
+        },
+        {
+          "id": "publish",
+          "label": "Approved alert and record",
+          "kind": "system"
+        }
+      ],
+      "edges": [
+        {
+          "from": "sense",
+          "to": "forecast",
+          "label": "15-min readings"
+        },
+        {
+          "from": "sense",
+          "to": "vision",
+          "label": "snapshots"
+        },
+        {
+          "from": "forecast",
+          "to": "officer",
+          "label": "flood watch"
+        },
+        {
+          "from": "vision",
+          "to": "officer",
+          "label": "street status"
+        },
+        {
+          "from": "officer",
+          "to": "draft",
+          "label": "warn now"
+        },
+        {
+          "from": "draft",
+          "to": "pio",
+          "label": "drafts + checks"
+        },
+        {
+          "from": "pio",
+          "to": "publish",
+          "label": "approve, edit or reject"
+        }
+      ]
+    },
+    "demoPrompts": [
+      "Who sets the alert line, and what does lowering it cost?",
+      "Which language would you not be able to check?"
+    ],
+    "demoStatus": "available",
+    "source": "public-benchmark"
+  },
+  {
     "id": "education-student-success",
     "title": "Student Success Planning Assistant",
     "industry": "higher-education",

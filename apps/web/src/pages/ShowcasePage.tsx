@@ -99,9 +99,11 @@ export default function ShowcasePage() {
                 ? "/ride-hail"
               : item.id === "media-promo-studio-lab"
                 ? "/promo-studio"
+              : item.id === "public-city-operations"
+                ? "/city-operations"
               : `/demo?case=${encodeURIComponent(item.id)}`;
             const retailSimulator = item.id === "retail-demand-forecasting-lab" || item.id === "retail-product-recommendations-lab";
-            const browserDemo = retailSimulator || ["transportation-warehouse-robot-lab", "transportation-traffic-signal-lab", "transportation-ride-hail-lab", "media-promo-studio-lab"].includes(item.id);
+            const browserDemo = retailSimulator || ["transportation-warehouse-robot-lab", "transportation-traffic-signal-lab", "transportation-ride-hail-lab", "media-promo-studio-lab", "public-city-operations"].includes(item.id);
             return (
               <article key={item.id} className={`use-case-card accent-${item.accent}`}>
                 <div className="use-case-card-main">

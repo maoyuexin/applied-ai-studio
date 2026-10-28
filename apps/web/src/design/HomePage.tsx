@@ -12,7 +12,8 @@ const TAGLINES: Record<PipelineKey, string> = {
   inspect: "Vision checks · audits · what may be asked",
   alerts: "Public alerts · translations · sign-off",
 };
-const ORDER: PipelineKey[] = ["article", "voice", "image", "video", "inspect", "alerts"];
+// Inspect and Alerts power City Operations (Industry Workflows); their runs stay in history but not on this page.
+const ORDER: PipelineKey[] = ["article", "voice", "image", "video"];
 
 /** Which models a card's pipeline uses, so each card shows its own connections. */
 const CARD_ROLES: Record<PipelineKey, Array<[string, string]>> = {
