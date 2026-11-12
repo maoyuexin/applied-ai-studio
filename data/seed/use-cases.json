@@ -1762,6 +1762,427 @@
     "source": "public-synthetic"
   },
   {
+    "id": "ai-blockchain-explorer-lab",
+    "title": "Blockchain Explorer",
+    "industry": "ai-blockchain",
+    "industryLabel": "AI & Blockchain Integration",
+    "icon": "blocks",
+    "accent": "teal",
+    "summary": "What a blockchain actually does, on real bitcoin blocks: hash a real header, break the chain by editing one payment, build a Merkle proof and mine a practice block in the browser.",
+    "problem": "Before judging any AI-and-blockchain pitch, people need to know what a ledger proves (order and integrity) and what it cannot prove (that a record is true).",
+    "outcomes": [
+      "Explain a hash, a block, the chain link and a Merkle root on a real block",
+      "Compare proof of work, proof of stake and permissioned agreement",
+      "State what a ledger proves and does not prove"
+    ],
+    "capabilities": [
+      "Distributed ledgers",
+      "Consensus",
+      "Real public chain data",
+      "Integrity vs truth"
+    ],
+    "patterns": [
+      "Every hash computed in the browser",
+      "Real blocks re-checked at build",
+      "Opening that sets up three cases"
+    ],
+    "workloadType": "decision-support",
+    "dataReadiness": "high",
+    "riskLevel": "low",
+    "maturity": "showcase",
+    "architecture": [
+      "Real bitcoin and Ethereum blocks from public explorers",
+      "SHA-256, Merkle and mining code in the page",
+      "Build checks against Node crypto and every real hash",
+      "Single offline HTML file"
+    ],
+    "workflow": {
+      "nodes": [
+        {
+          "id": "tx",
+          "label": "Payments",
+          "kind": "input"
+        },
+        {
+          "id": "hash",
+          "label": "Fingerprint each one",
+          "kind": "process"
+        },
+        {
+          "id": "block",
+          "label": "Block header",
+          "kind": "system"
+        },
+        {
+          "id": "chain",
+          "label": "Link to the previous block",
+          "kind": "system"
+        },
+        {
+          "id": "agree",
+          "label": "Network agrees",
+          "kind": "system"
+        },
+        {
+          "id": "record",
+          "label": "Shared record",
+          "kind": "output"
+        }
+      ],
+      "edges": [
+        {
+          "from": "tx",
+          "to": "hash",
+          "label": "transactions"
+        },
+        {
+          "from": "hash",
+          "to": "block",
+          "label": "Merkle root"
+        },
+        {
+          "from": "block",
+          "to": "chain",
+          "label": "previous hash"
+        },
+        {
+          "from": "chain",
+          "to": "agree",
+          "label": "proof of work or stake"
+        },
+        {
+          "from": "agree",
+          "to": "record",
+          "label": "confirmed"
+        }
+      ]
+    },
+    "demoPrompts": [
+      "Why does changing 10 BTC to 11 break every later block?",
+      "What would it cost to redo the work after block 170?",
+      "What can a ledger never prove?"
+    ],
+    "demoStatus": "available",
+    "source": "public-benchmark"
+  },
+  {
+    "id": "ai-blockchain-ledger-watch-lab",
+    "title": "Ledger Watch",
+    "industry": "ai-blockchain",
+    "industryLabel": "AI & Blockchain Integration",
+    "icon": "scan-search",
+    "accent": "red",
+    "summary": "A random forest flags illicit bitcoin transactions on a public ledger, then goes blind after a dark market shuts down. An agent drafts the analyst’s case note; the analyst decides. Local teaching copy only.",
+    "problem": "Exchanges must check where deposits come from, but labels are scarce, criminals adapt, and most flags have no label at all.",
+    "outcomes": [
+      "Read precision and recall for an anti-money-laundering model",
+      "See a model fail when the world changes",
+      "Keep the filing decision with a named analyst"
+    ],
+    "capabilities": [
+      "Graph features",
+      "Random forest",
+      "Data drift",
+      "Agent with approval"
+    ],
+    "patterns": [
+      "Train on early snapshots, test on later ones",
+      "Most flags never labeled",
+      "Agent drafts, analyst approves"
+    ],
+    "workloadType": "decision-support",
+    "dataReadiness": "medium",
+    "riskLevel": "high",
+    "maturity": "showcase",
+    "architecture": [
+      "Elliptic Data Set (CC BY-NC-ND 4.0): local teaching copy, not published here",
+      "Random forest on local and neighbor features",
+      "Investigator agent on Microsoft Agent Framework",
+      "Recorded runs replayed offline"
+    ],
+    "workflow": {
+      "nodes": [
+        {
+          "id": "deposit",
+          "label": "Incoming deposit",
+          "kind": "input"
+        },
+        {
+          "id": "graph",
+          "label": "Payment graph",
+          "kind": "process"
+        },
+        {
+          "id": "score",
+          "label": "Forest score",
+          "kind": "ai"
+        },
+        {
+          "id": "agent",
+          "label": "Agent drafts a case note",
+          "kind": "ai"
+        },
+        {
+          "id": "analyst",
+          "label": "Analyst approves or rejects",
+          "kind": "human"
+        },
+        {
+          "id": "note",
+          "label": "Case note",
+          "kind": "output"
+        }
+      ],
+      "edges": [
+        {
+          "from": "deposit",
+          "to": "graph",
+          "label": "transaction"
+        },
+        {
+          "from": "graph",
+          "to": "score",
+          "label": "features"
+        },
+        {
+          "from": "score",
+          "to": "agent",
+          "label": "flag"
+        },
+        {
+          "from": "agent",
+          "to": "analyst",
+          "label": "approval request"
+        },
+        {
+          "from": "analyst",
+          "to": "note",
+          "label": "decision"
+        }
+      ]
+    },
+    "demoPrompts": [
+      "Why did the model catch 3 of 169 after snapshot 43?",
+      "Why does neighbor information cut false alarms?",
+      "When does the agent lean too hard on the score?"
+    ],
+    "demoStatus": "available",
+    "source": "public-benchmark"
+  },
+  {
+    "id": "ai-blockchain-agent-wallet-lab",
+    "title": "Agent Wallet",
+    "industry": "ai-blockchain",
+    "industryLabel": "AI & Blockchain Integration",
+    "icon": "wallet",
+    "accent": "orange",
+    "summary": "During Hurricane Harvey, a dispatch agent buys real river-gauge readings through HTTP 402, paying from a wallet contract whose limits it cannot change. A note in the data asks it to pay $25.",
+    "problem": "Agents that act need to pay, and “don’t spend more than 50 cents” in a prompt is a request, not a guarantee.",
+    "outcomes": [
+      "Follow the 402 → pay → retry pattern",
+      "See a spending rule enforced by a contract, not the model",
+      "Decide which payments need a person"
+    ],
+    "capabilities": [
+      "Agent payments (x402 pattern)",
+      "Smart-contract limits",
+      "Prompt injection",
+      "Human approval"
+    ],
+    "patterns": [
+      "Keys never reach the model",
+      "Every payment a public record",
+      "Over the limit, ask a person"
+    ],
+    "workloadType": "decision-support",
+    "dataReadiness": "high",
+    "riskLevel": "high",
+    "maturity": "showcase",
+    "architecture": [
+      "Real USGS Brays Bayou gauge readings (public domain)",
+      "Paid data desk answering HTTP 402",
+      "SpendingPolicy contract: allowed sellers, per-payment and daily limits",
+      "Microsoft Agent Framework agent; 18 recorded runs"
+    ],
+    "workflow": {
+      "nodes": [
+        {
+          "id": "task",
+          "label": "Dispatcher’s question",
+          "kind": "input"
+        },
+        {
+          "id": "agent",
+          "label": "Dispatch agent",
+          "kind": "ai"
+        },
+        {
+          "id": "desk",
+          "label": "Data desk: 402 with a price",
+          "kind": "system"
+        },
+        {
+          "id": "wallet",
+          "label": "Wallet contract checks the rules",
+          "kind": "system"
+        },
+        {
+          "id": "owner",
+          "label": "Owner approves exceptions",
+          "kind": "human"
+        },
+        {
+          "id": "brief",
+          "label": "Brief for the dispatcher",
+          "kind": "output"
+        }
+      ],
+      "edges": [
+        {
+          "from": "task",
+          "to": "agent",
+          "label": "prompt"
+        },
+        {
+          "from": "agent",
+          "to": "desk",
+          "label": "request"
+        },
+        {
+          "from": "desk",
+          "to": "agent",
+          "label": "price"
+        },
+        {
+          "from": "agent",
+          "to": "wallet",
+          "label": "pay"
+        },
+        {
+          "from": "wallet",
+          "to": "owner",
+          "label": "over the limit"
+        },
+        {
+          "from": "agent",
+          "to": "brief",
+          "label": "readings"
+        }
+      ]
+    },
+    "demoPrompts": [
+      "What should the agent spend without asking?",
+      "Why did no model pay the $25 note, and what did gpt-4o do instead?",
+      "Does an agent need a blockchain to pay?"
+    ],
+    "demoStatus": "available",
+    "source": "public-benchmark"
+  },
+  {
+    "id": "ai-blockchain-recall-desk-lab",
+    "title": "Recall Desk",
+    "industry": "ai-blockchain",
+    "industryLabel": "AI & Blockchain Integration",
+    "icon": "link-2",
+    "accent": "amber",
+    "summary": "A salad outbreak and a signed, anchored supply chain: edit one record and the proof breaks; an AI reads a smudged paper log; a wrong record is kept perfectly, and the fix is a new record.",
+    "problem": "A recall needs records nobody can quietly change, but a ledger only proves records are unchanged, not that they were true when written.",
+    "outcomes": [
+      "Verify a record against a Merkle root anchored on chain",
+      "Check an AI’s reading of a paper log before it is anchored",
+      "Explain why corrections are new records"
+    ],
+    "capabilities": [
+      "Traceability",
+      "Tamper evidence",
+      "Vision model extraction",
+      "Oracle problem"
+    ],
+    "patterns": [
+      "Fictional, standards-shaped data",
+      "AI reading checked by a person",
+      "Append-only corrections"
+    ],
+    "workloadType": "decision-support",
+    "dataReadiness": "medium",
+    "riskLevel": "high",
+    "maturity": "showcase",
+    "architecture": [
+      "Fictional FSMA 204-shaped supply chain",
+      "Signed records, daily Merkle roots on a local chain",
+      "Recorded vision-model runs",
+      "Proofs verified in the browser"
+    ],
+    "workflow": {
+      "nodes": [
+        {
+          "id": "paper",
+          "label": "Paper harvest log",
+          "kind": "input"
+        },
+        {
+          "id": "ai",
+          "label": "Vision model reads it",
+          "kind": "ai"
+        },
+        {
+          "id": "clerk",
+          "label": "Clerk checks the reading",
+          "kind": "human"
+        },
+        {
+          "id": "anchor",
+          "label": "Sign and anchor the batch",
+          "kind": "system"
+        },
+        {
+          "id": "trace",
+          "label": "Traceback",
+          "kind": "process"
+        },
+        {
+          "id": "recall",
+          "label": "Recall decision",
+          "kind": "output"
+        }
+      ],
+      "edges": [
+        {
+          "from": "paper",
+          "to": "ai",
+          "label": "image"
+        },
+        {
+          "from": "ai",
+          "to": "clerk",
+          "label": "draft records"
+        },
+        {
+          "from": "clerk",
+          "to": "anchor",
+          "label": "approved records"
+        },
+        {
+          "from": "anchor",
+          "to": "trace",
+          "label": "verified records"
+        },
+        {
+          "from": "trace",
+          "to": "recall",
+          "label": "lots to pull"
+        }
+      ]
+    },
+    "demoPrompts": [
+      "What happens to the proof if one digit changes?",
+      "Why is a wrong record preserved perfectly?",
+      "Why can a ledger not follow a re-encoded file?"
+    ],
+    "demoStatus": "available",
+    "source": "public-synthetic"
+  },
+  {
     "id": "financial-credit-risk-lab",
     "title": "Credit Risk Early-Intervention Review",
     "industry": "financial-services",

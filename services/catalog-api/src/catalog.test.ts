@@ -5,7 +5,7 @@ describe("CatalogStore seed contracts", () => {
   it("loads the syllabus-aligned showcase catalog", async () => {
     const catalog = await CatalogStore.load();
 
-    expect(catalog.list()).toHaveLength(26);
+    expect(catalog.list()).toHaveLength(30);
     expect(catalog.industries()).toHaveLength(12);
     expect(catalog.list({ industry: "retail" }).map((item) => item.id)).toEqual([
       "retail-online-order-decision-lab",
@@ -151,6 +151,20 @@ describe("CatalogStore seed contracts", () => {
     expect(catalog.get("transportation-ride-hail-lab")!.summary).toContain("19.7 million real New York trips");
     expect(catalog.get("transportation-fleet-routing")?.title).toBe("Fleet Routing Decision Workbench");
     expect(catalog.getCourseCase("transportation-fleet-routing")?.title).toBe("One Day of Fleet Dispatch");
+  });
+
+  it("shows the four Module 13 lessons after the provenance case, each as a browser demo", async () => {
+    const catalog = await CatalogStore.load();
+    const ids = ["ai-blockchain-explorer-lab", "ai-blockchain-ledger-watch-lab", "ai-blockchain-agent-wallet-lab", "ai-blockchain-recall-desk-lab"];
+    expect(catalog.list({ industry: "ai-blockchain" }).map((item) => item.id)).toEqual(["blockchain-provenance-review", ...ids]);
+    for (const id of ids) {
+      const card = catalog.get(id)!;
+      expect(card.demoStatus, id).toBe("available");
+      expect(card.courseCaseId, id).toBeUndefined();
+      expect(card.industryLabel, id).toBe("AI & Blockchain Integration");
+    }
+    expect(catalog.get("ai-blockchain-ledger-watch-lab")!.summary).toContain("Local teaching copy only");
+    expect(catalog.get("ai-blockchain-agent-wallet-lab")!.capabilities).toContain("Smart-contract limits");
   });
 
   it("describes the current classroom retail models without replacing the other labs", async () => {
