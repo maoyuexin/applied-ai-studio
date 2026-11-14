@@ -66,3 +66,7 @@ _site/
 # Agent Workflows: machine-specific settings and ad-hoc live runs (curated replays live in recordings/)
 services/agent-workflow-api/settings.local.json
 data/agent-workflows/live-runs/
+
+# Module 13: built from the Elliptic Data Set (CC BY-NC-ND 4.0, no derivatives). Local teaching copies only.
+notebooks/ai-blockchain/local/
+

@@ -1,4 +1,5 @@
 import {
+  Blocks,
   Building2,
   Factory,
   Film,
@@ -6,13 +7,17 @@ import {
   HardHat,
   HeartPulse,
   Landmark,
+  Link2,
+  ScanSearch,
   ShieldAlert,
   ShoppingBag,
+  Wallet,
   Waves,
   type LucideIcon,
 } from "lucide-react";
 
 const iconMap: Record<string, LucideIcon> = {
+  blocks: Blocks,
   "building-2": Building2,
   clapperboard: Film,
   factory: Factory,
@@ -21,8 +26,11 @@ const iconMap: Record<string, LucideIcon> = {
   "hard-hat": HardHat,
   "heart-pulse": HeartPulse,
   landmark: Landmark,
+  "link-2": Link2,
+  "scan-search": ScanSearch,
   "shield-alert": ShieldAlert,
   "shopping-bag": ShoppingBag,
+  wallet: Wallet,
   waves: Waves,
 };
 

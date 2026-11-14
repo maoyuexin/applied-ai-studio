@@ -20,6 +20,7 @@ const PromoStudioPage = lazy(() => import("./pages/PromoStudioPage"));
 const RecommendPage = lazy(() => import("./pages/RecommendPage"));
 const RetailDemoPage = lazy(() => import("./pages/RetailDemoPage"));
 const TransportationLabPage = lazy(() => import("./pages/TransportationLabPage"));
+const BlockchainLabPage = lazy(() => import("./pages/BlockchainLabPage"));
 const ProceduresPage = lazy(() => import("./pages/ProceduresPage"));
 const ShowcasePage = lazy(() => import("./pages/ShowcasePage"));
 const WorkflowPage = lazy(() => import("./pages/WorkflowPage"));
@@ -33,11 +34,15 @@ const load = (page: React.ReactNode) => (
 export default function App() {
   const location = useLocationSnapshot();
   const pathname = location.split("?", 1)[0];
-  const validPath = ["/workflow", "/demo", "/showcase", "/fit", "/ask", "/agent-workflows", "/online-order", "/fraud", "/pneumonia", "/credit", "/complaints", "/maintenance", "/maintenance-simulator", "/procedures", "/forecast", "/recommendations", "/forecast-simulator", "/recommendations-simulator", "/forecast-reference", "/recommendations-reference", "/warehouse-robot", "/traffic-signal", "/ride-hail", "/promo-studio", "/city-operations"].includes(pathname) || pathname === "/design-studio" || pathname.startsWith("/design-studio/");
+  const validPath = ["/workflow", "/demo", "/showcase", "/fit", "/ask", "/agent-workflows", "/online-order", "/fraud", "/pneumonia", "/credit", "/complaints", "/maintenance", "/maintenance-simulator", "/procedures", "/forecast", "/recommendations", "/forecast-simulator", "/recommendations-simulator", "/forecast-reference", "/recommendations-reference", "/warehouse-robot", "/traffic-signal", "/ride-hail", "/promo-studio", "/city-operations", "/blockchain-explorer", "/ledger-watch", "/agent-wallet", "/recall-desk"].includes(pathname) || pathname === "/design-studio" || pathname.startsWith("/design-studio/");
   const designStudio = pathname === "/design-studio" || pathname.startsWith("/design-studio/");
   const transportationLab = pathname === "/warehouse-robot" ? "warehouse-robot"
     : pathname === "/traffic-signal" ? "traffic-signal"
     : pathname === "/ride-hail" ? "ride-hail" : null;
+  const blockchainLab = pathname === "/blockchain-explorer" ? "blockchain-explorer"
+    : pathname === "/ledger-watch" ? "ledger-watch"
+    : pathname === "/agent-wallet" ? "agent-wallet"
+    : pathname === "/recall-desk" ? "recall-desk" : null;
 
   useEffect(() => {
     if (!validPath) navigate("/showcase", { replace: true });
@@ -71,6 +76,8 @@ export default function App() {
       ? <RetailDemoPage key="recommendations" kind="recommendations" />
     : transportationLab
       ? <TransportationLabPage key={transportationLab} lab={transportationLab} />
+    : blockchainLab
+      ? <BlockchainLabPage key={blockchainLab} lab={blockchainLab} />
     : pathname === "/promo-studio"
       ? <PromoStudioPage />
     : pathname === "/city-operations"
@@ -92,7 +99,7 @@ export default function App() {
       : pathname === "/ask"
         ? <AskStudioPage />
         : <ShowcasePage />;
-  const navigationPath = pathname === "/workflow" || pathname === "/demo" || pathname === "/online-order" || pathname === "/fraud" || pathname === "/pneumonia" || pathname === "/credit" || pathname === "/complaints" || pathname === "/maintenance" || pathname === "/procedures" || pathname === "/forecast" || pathname === "/recommendations" || pathname === "/forecast-reference" || pathname === "/recommendations-reference" || pathname === "/promo-studio" || pathname === "/city-operations" || transportationLab ? "/showcase" : designStudio ? "/design-studio" : pathname;
+  const navigationPath = pathname === "/workflow" || pathname === "/demo" || pathname === "/online-order" || pathname === "/fraud" || pathname === "/pneumonia" || pathname === "/credit" || pathname === "/complaints" || pathname === "/maintenance" || pathname === "/procedures" || pathname === "/forecast" || pathname === "/recommendations" || pathname === "/forecast-reference" || pathname === "/recommendations-reference" || pathname === "/promo-studio" || pathname === "/city-operations" || transportationLab || blockchainLab ? "/showcase" : designStudio ? "/design-studio" : pathname;
 
   return (
     <AppShell pathname={validPath ? navigationPath : "/showcase"}>
