@@ -1,15 +1,18 @@
-import { Clapperboard, FileText, History, ImageIcon, Mic, Settings } from "lucide-react";
+import { Clapperboard, FileText, History, ImageIcon, Megaphone, Mic, ScanEye, Settings } from "lucide-react";
 import { designApi, mediaUrl, useLoad, type PipelineInfo, type PipelineKey, type RunSummary, type StudioStatus } from "./api";
 import { Banner, FlowTrack, Link, Progress, ReviewTag, StatusPill } from "./ui";
 import { go, stepWorker, when } from "./lib";
 
-const ICONS: Record<PipelineKey, typeof Clapperboard> = { video: Clapperboard, image: ImageIcon, voice: Mic, article: FileText };
+const ICONS: Record<PipelineKey, typeof Clapperboard> = { video: Clapperboard, image: ImageIcon, voice: Mic, article: FileText, inspect: ScanEye, alerts: Megaphone };
 const TAGLINES: Record<PipelineKey, string> = {
   video: "Ads · promos · previz",
   image: "Key art · posters · keyframes",
   voice: "Podcast intros · narration · ad reads",
   article: "Summaries · reports · explainers",
+  inspect: "Vision checks · audits · what may be asked",
+  alerts: "Public alerts · translations · sign-off",
 };
+// Inspect and Alerts power City Operations (Industry Workflows); their runs stay in history but not on this page.
 const ORDER: PipelineKey[] = ["article", "voice", "image", "video"];
 
 /** Which models a card's pipeline uses, so each card shows its own connections. */
@@ -18,6 +21,8 @@ const CARD_ROLES: Record<PipelineKey, Array<[string, string]>> = {
   voice: [["text-draft", "Script"], ["voice", "Voice"], ["listen-back", "Listen-back"]],
   image: [["text-draft", "Prompt"], ["image", "Image"]],
   video: [["text-draft", "Shots"], ["image", "Keyframes"], ["video", "Video"], ["voice", "Voiceover"]],
+  inspect: [["text-draft", "Vision"]],
+  alerts: [["text-draft", "Writes"], ["text-judge", "Checks"]],
 };
 
 function shortDate(iso: string) {
@@ -30,7 +35,8 @@ function ModelChips({ pipeline, status }: { pipeline: PipelineKey; status: Studi
       {CARD_ROLES[pipeline].map(([role, label]) => {
         const info = status.roles.find((item) => item.role === role);
         const configured = info?.configured ?? false;
-        const name = role === "text-draft" || role === "text-judge" ? status.text_defaults?.[role] ?? info?.model
+        const name = pipeline === "inspect" || (pipeline === "alerts" && role === "text-draft") ? `pick up to 4 of ${status.text_models.length}`
+          : role === "text-draft" || role === "text-judge" ? status.text_defaults?.[role] ?? info?.model
           : role === "listen-back" ? "Speech to text" : info?.model;
         const retire = role === "video" ? status.video_retirement : null;
         const retiring = Boolean(retire && retire.days_left >= 0 && retire.days_left <= 14);

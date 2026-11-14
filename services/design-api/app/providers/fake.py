@@ -11,6 +11,7 @@ import asyncio
 import hashlib
 import io
 import json
+import re
 import secrets
 import subprocess
 import tempfile
@@ -90,9 +91,63 @@ class FakeText:
                 {"claim": "The first flight could happen in December.",
                  "verdict": "unsupported" if "2024" in body else "supported",
                  "evidence": "December of this year", "source": 1, "note": "year"}]}
+        elif purpose == "alerts.draft":
+            # Models named *mini* invent a shelter (a watch term and a number not in the facts) and drop the
+            # disclosure in the second language.
+            invent = "mini" in deployment
+            level = (re.findall(r"\d+\.\d+", str(ctx.get("facts", ""))) or ["1.0"])[0]
+            alert, answer = {}, {}
+            for index, lang in enumerate(ctx.get("languages", [])):
+                disclosure = "" if invent and index == 1 else f" {lang['disclosure']}"
+                extra = " Shelter open at 99 Main." if invent else ""
+                alert[lang["code"]] = f"[{lang['code']}] River at {level} ft and rising.{extra}{disclosure}"
+                answer[lang["code"]] = f"[{lang['code']}] The facts do not say. Call 311."
+            payload = {"alert": alert, **({"answer": answer} if ctx.get("question") else {})}
+        elif purpose == "alerts.check":
+            messages = ctx.get("messages") or {}
+            back, issues = {}, {}
+            for lang in ctx.get("languages", []):
+                code = lang["code"]
+                back[code] = {part: str((texts or {}).get(code, "")).replace(f"[{code}]", "[en]")
+                              for part, texts in messages.items()}
+                if "Shelter" in str((messages.get("alert") or {}).get(code, "")):
+                    issues[code] = [{"part": "alert", "text": "Mentions a shelter the facts do not give."}]
+            payload = {"back": back, "issues": issues}
         else:
             payload = {"text": "ok"}
         return TextResult(json.dumps(payload), self.delay, deployment, {"total_tokens": 0})
+
+    async def complete_vision(self, deployment: str, system: str, user: str, images: list[tuple[bytes, str]], *,
+                              json_mode: bool = True, max_tokens: int = 2000, purpose: str = "",
+                              context: dict[str, Any] | None = None) -> TextResult:
+        """Answers depend on markers in the image name: [fog] (only models named *mini* answer firmly),
+        [person], [plate] (*mini* reads it), [flip] (try 2 answers differently), [fail], [blocked]."""
+        del system, json_mode, max_tokens
+        ctx = context or {}
+        self.calls.append({"purpose": purpose, "context": ctx, "images": len(images)})
+        name, attempt = str(ctx.get("image", "")), int(ctx.get("try", 1))
+        if "[blocked]" in user or "[blocked]" in name:
+            raise ProviderError("The model's content filter stopped the answer.", code="content_filter")
+        if "[fail]" in name:
+            raise ProviderError("Could not reach Text model: ConnectError.", code="network", retryable=True)
+        await asyncio.sleep(self.delay)
+        if purpose == "inspect.live":
+            return TextResult(f"Live answer about {name}.", self.delay, deployment, {"total_tokens": 0})
+        firm = "mini" in deployment
+        answers: dict[str, str] = {}
+        for question in ctx.get("questions", []):
+            kind, choices = question.get("kind"), question.get("choices") or ["yes", "no", "cannot tell"]
+            unsure = "[fog]" in name and not firm
+            if question.get("expect") == "decline":
+                answers[question["key"]] = "ABC 1234" if "[plate]" in name and firm else "cannot tell"
+            elif kind == "open":
+                answers[question["key"]] = "A man in a dark jacket is wading." if "[person]" in name else "no person"
+            elif kind == "count":
+                answers[question["key"]] = "cannot tell" if unsure else "1"
+            else:
+                pick = choices[1] if "[flip]" in name and attempt == 2 else choices[0]
+                answers[question["key"]] = "cannot tell" if unsure and "cannot tell" in choices else pick
+        return TextResult(json.dumps(answers), self.delay, deployment, {"total_tokens": 0})
 
 
 class FakeImage:

@@ -121,12 +121,21 @@ const TOOLS: Record<string, string> = {
   provenance: "automatic · c2patool",
   finish: "automatic · label + Content Credentials check",
   mix: "automatic · ffmpeg",
+  setup: "you · images, questions and labels",
+  check: "automatic · compares each answer with your labels",
+  review: "you · each disagreement",
+  desk: "you · approve, edit or reject each draft",
+  policy: "you · the rules",
+  report: "automatic · tables, CSV and JSON",
 };
 
 /** Who does a step: the model for its role (with the article checker), or the tool for automatic steps. */
 export function stepWorker(step: { key: string; role: string | null }, model: (role: string) => string | undefined,
   pipeline: string): string {
   if (!step.role || step.role === "tool") return TOOLS[step.key] ?? "automatic";
+  if (pipeline === "inspect" && step.key === "ask") return "the vision models you pick · all questions in one call";
+  if (pipeline === "alerts" && step.key === "draft") return "the text models you pick · every language in one call";
+  if (pipeline === "alerts" && step.key === "check") return `${model("text-judge") ?? "a second model"} back-translates · the app checks the rules`;
   const main = model(step.role) ?? step.role;
   if (pipeline === "article" && step.key === "draft") return `${main} · checked by ${model("text-judge") ?? "a second model"}`;
   if (pipeline === "voice" && step.key === "lines") return `${main} · listen-back check`;

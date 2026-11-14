@@ -108,6 +108,38 @@ class TextClient:
             raise ProviderError("The text model's content filter stopped the answer.", code="content_filter")
         return TextResult(text, round(time.perf_counter() - started, 2), deployment, payload.get("usage") or {})
 
+    async def complete_vision(
+        self, deployment: str, system: str, user: str, images: list[tuple[bytes, str]], *, json_mode: bool = True,
+        max_tokens: int = 2000, purpose: str = "", context: dict[str, Any] | None = None,
+    ) -> TextResult:
+        """One chat completion with the question text and images (sent as data URLs) in the user message."""
+        del purpose, context  # used by the fake provider only
+        content: list[dict[str, Any]] = [{"type": "text", "text": user}]
+        for data, media_type in images:
+            url = f"data:{media_type};base64,{base64.b64encode(data).decode()}"
+            content.append({"type": "image_url", "image_url": {"url": url}})
+        body: dict[str, Any] = {
+            "model": deployment,
+            "messages": [{"role": "system", "content": system}, {"role": "user", "content": content}],
+            "max_completion_tokens": max_tokens,
+        }
+        if json_mode:
+            body["response_format"] = {"type": "json_object"}
+        started = time.perf_counter()
+        token = await self.tokens.token()
+        async with httpx.AsyncClient(timeout=180, transport=self.transport) as client:
+            response = await _send(client, self.service, "POST", f"{self.endpoint}/chat/completions", json=body,
+                                   headers={"Authorization": f"Bearer {token}"})
+        payload = response.json()
+        try:
+            choice = payload["choices"][0]
+            text = choice["message"]["content"] or ""
+        except (KeyError, IndexError, TypeError) as error:
+            raise ProviderError("The model returned no message.", code="bad_output") from error
+        if choice.get("finish_reason") == "content_filter":
+            raise ProviderError("The model's content filter stopped the answer.", code="content_filter")
+        return TextResult(text, round(time.perf_counter() - started, 2), deployment, payload.get("usage") or {})
+
 
 class RateWindow:
     """At most `limit` calls in any rolling 60-second window."""

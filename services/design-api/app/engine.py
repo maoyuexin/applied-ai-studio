@@ -109,14 +109,14 @@ class RunContext:
         self, step_key: str, kind: str, *, grp: str | None = None, label: str | None = None, role: str | None = None,
         prompt: str | None = None, params: dict[str, Any] | None = None, inputs: list[str] | None = None,
         parent_id: str | None = None, status: str = "queued", data: dict[str, Any] | None = None,
-        enqueue: bool = True,
+        enqueue: bool = True, deployment: str | None = None,
     ) -> dict[str, Any]:
-        provider = deployment = version = None
+        provider = version = None
         if role == "tool":
             provider = "local tools"
         elif role:
             provider = {"text-draft": "text", "text-judge": "text"}.get(role, role)
-            deployment = self.deployment(role)
+            deployment = deployment or self.deployment(role)
             if role == "video":
                 version = self.settings.video_model_version or None
             elif role == "image":

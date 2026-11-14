@@ -1,7 +1,9 @@
 from ..config import Settings
+from .alerts import AlertsPipeline
 from .article import ArticlePipeline
 from .base import Pipeline
 from .image import ImagePipeline
+from .inspect import InspectPipeline
 from .video import VideoPipeline
 from .voice import VoicePipeline
 
@@ -12,5 +14,7 @@ def build_pipelines(settings: Settings) -> dict[str, Pipeline]:
         ImagePipeline(),
         VoicePipeline(),
         ArticlePipeline(),
+        InspectPipeline(),
+        AlertsPipeline(),
     ]
     return {pipeline.key: pipeline for pipeline in pipelines}

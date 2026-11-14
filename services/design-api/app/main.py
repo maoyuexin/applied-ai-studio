@@ -28,6 +28,7 @@ from .events import Broker
 from .media import MediaStore, MediaTools, MediaToolError, normalize_upload, thumbnail_jpeg
 from .pipelines import build_pipelines
 from .pipelines.base import ActionError
+from .pipelines.inspect import load_kit
 from .providers.base import ProviderError
 from .providers.registry import ROLE_LABELS, Providers
 from .store import Store, now
@@ -386,6 +387,28 @@ def create_app(
                                  headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
 
     # Bundles
+
+    async def _receive_zip(file: UploadFile, folder: Path, limit: int) -> Path:
+        target = folder / "upload.zip"
+        size = 0
+        with target.open("wb") as handle:
+            while chunk := await file.read(1 << 20):
+                size += len(chunk)
+                if size > limit:
+                    raise HTTPException(status_code=413, detail="The file is larger than this install accepts.")
+                handle.write(chunk)
+        return target
+
+    @app.post(f"{PREFIX}/inspect/kit")
+    async def inspect_kit(request: Request, file: UploadFile = File(...)) -> dict[str, Any]:
+        """Store a kit's images and return the brief for the new-run form (no run is created)."""
+        limit = current.max_import_mb * 1024 * 1024
+        folder = Path(tempfile.mkdtemp(dir=request.app.state.media.tmp))
+        try:
+            target = await _receive_zip(file, folder, limit)
+            return await asyncio.to_thread(load_kit, request.app.state.media, target, max_bytes=limit * 2)
+        finally:
+            shutil.rmtree(folder, ignore_errors=True)
 
     @app.get(PREFIX + "/runs/{run_id}/export")
     async def export(request: Request, run_id: str) -> FileResponse:

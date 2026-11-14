@@ -5,7 +5,7 @@ describe("CatalogStore seed contracts", () => {
   it("loads the syllabus-aligned showcase catalog", async () => {
     const catalog = await CatalogStore.load();
 
-    expect(catalog.list()).toHaveLength(25);
+    expect(catalog.list()).toHaveLength(26);
     expect(catalog.industries()).toHaveLength(12);
     expect(catalog.list({ industry: "retail" }).map((item) => item.id)).toEqual([
       "retail-online-order-decision-lab",

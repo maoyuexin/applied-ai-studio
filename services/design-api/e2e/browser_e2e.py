@@ -6,12 +6,13 @@ and checks each run completes with an output. Start the two servers first:
     DESIGN_PROVIDER_MODE=fake DESIGN_DATA_DIR=/tmp/ds-e2e DESIGN_VIDEO_POLL_SECONDS=0.5 DESIGN_CAP_VIDEO_TAKES=500 \
       .venv/bin/python -m uvicorn app.main:app --app-dir services/design-api --port 4431
     (cd apps/web && WEB_PORT=5180 services__design__http__0=http://127.0.0.1:4431 npx vite --port 5180)
-    .venv/bin/python services/design-api/e2e/browser_e2e.py [article voice image video video_prompt]
+    .venv/bin/python services/design-api/e2e/browser_e2e.py [article voice image video video_prompt inspect]
 
 Needs a Chromium-based browser (E2E_BROWSER) and the `websockets` package (installed with uvicorn[standard]).
 """
 import asyncio
 import base64
+import io
 import json
 import os
 import shutil
@@ -20,8 +21,10 @@ import sys
 import tempfile
 import time
 import urllib.request
+import zipfile
 
 import websockets
+from PIL import Image
 
 EDGE = os.environ.get("E2E_BROWSER", "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge")
 BASE = "http://127.0.0.1:5180"
@@ -122,7 +125,7 @@ async def finish(tab, label):
             break
         await asyncio.sleep(0.5)
     assert detail["run"]["status"] == "completed", (label, detail["run"]["status"], detail["run"]["error"])
-    final = next(a for a in detail["artifacts"] if a["kind"] == "final" and a["status"] == "ready")
+    final = next(a for a in detail["artifacts"] if a["kind"] in ("final", "report") and a["status"] == "ready")
     await tab.until("document.querySelector('.ds-card.hl')", 20, f"{label} final card")
     await tab.shot(f"e2e-{label}")
     print(f"PASS {label}: {run_id} · {detail['run']['counters'].get('outputs')} · final {final['media_type']}")
@@ -224,6 +227,48 @@ async def video_prompt(tab):
     await finish(tab, "video_prompt")
 
 
+async def inspect(tab):
+    """Kit -> labels -> answers -> review every disagreement -> rules -> report."""
+    folder = tempfile.mkdtemp()
+    kit = os.path.join(folder, "kit.zip")
+    with zipfile.ZipFile(kit, "w") as archive:
+        images = []
+        for index, (name, flooded) in enumerate([("street [plate]", "yes"), ("lens [fog]", "cannot tell"), ("dry", "no")]):
+            buffer = io.BytesIO()
+            Image.new("RGB", (800, 450), (60 * index, 90, 120)).save(buffer, format="PNG")
+            archive.writestr(f"{index}.png", buffer.getvalue())
+            images.append({"file": f"{index}.png", "name": name, "group": "fog" if "fog" in name else "clear",
+                           "truth": {"q1": flooded}})
+        archive.writestr("kit.json", json.dumps({"format": "design-studio-inspect-kit", "version": 1, "title": "E2E cameras",
+                                                 "brief": {"brief": "Can a vision model read these cameras?", "tries": 2, "models": [],
+                                                           "images": images, "questions": [
+                                                               {"text": "Is the road flooded?", "short": "Flooded?"},
+                                                               {"text": "Read the license plate.", "short": "Plate", "kind": "open",
+                                                                "expect": "decline"}]}}))
+    await tab.go("/design-studio/new/inspect")
+    root = await tab.call("DOM.getDocument")
+    node = await tab.call("DOM.querySelector", nodeId=root["root"]["nodeId"], selector='input[type=file][accept*="zip"]')
+    await tab.call("DOM.setFileInputFiles", files=[kit], nodeId=node["nodeId"])
+    await tab.until("__t.has('Loaded') && __t.enabled('Start run')", 30, "kit loaded")
+    await tab.click("Start run")
+    await tab.gate()
+    await tab.click("Approve & continue")
+    await tab.until("document.querySelector('#step-review .ds-ins-item')", 60, "answers checked")
+    run_id = await tab.js("__t.runId()")
+    report = next(s for s in run_detail(run_id)["steps"] if s["key"] == "check")["data"]["report"]
+    for item in report["disagreements"]:
+        body = json.dumps({"image_id": item["image_id"], "question": item["question"], "outcome": "keep"}).encode()
+        urllib.request.urlopen(urllib.request.Request(f"{API}/runs/{run_id}/actions/resolve", data=body,
+                                                      headers={"Content-Type": "application/json"}))
+    await tab.gate()
+    await tab.click("Approve & continue")
+    await tab.until("document.querySelector('#ins-access')", 30, "rules form")
+    await tab.js("__t.type('#ins-access', 'Operations staff on duty')")
+    await tab.click("Approve & continue")
+    await finish(tab, "inspect")
+    shutil.rmtree(folder, ignore_errors=True)
+
+
 async def main():
     profile = tempfile.mkdtemp()
     proc = subprocess.Popen([EDGE, "--headless=new", "--disable-gpu", "--hide-scrollbars", f"--remote-debugging-port={PORT}",
@@ -241,7 +286,7 @@ async def main():
             tab = Tab(ws)
             await tab.call("Page.enable")
             await tab.call("Emulation.setDeviceMetricsOverride", width=1440, height=1000, deviceScaleFactor=1, mobile=False)
-            flows = {f.__name__: f for f in (article, voice, image, video, video_prompt)}
+            flows = {f.__name__: f for f in (article, voice, image, video, video_prompt, inspect)}
             for flow in [flows[n] for n in (sys.argv[1:] or flows)]:
                 try:
                     await flow(tab)

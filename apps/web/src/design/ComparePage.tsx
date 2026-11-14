@@ -1,4 +1,4 @@
-import { designApi, mediaUrl, useLoad, type Artifact, type RunDetail } from "./api";
+import { designApi, mediaUrl, useLoad, type AlertsReport, type Artifact, type InspectReport, type RunDetail } from "./api";
 import { Banner, Crumbs, Link, StatusPill } from "./ui";
 import { when } from "./lib";
 
@@ -21,6 +21,11 @@ const passed = (items: Artifact[]) => items.filter((a) => a.verdict === "keep" |
 const textModel = (d: RunDetail) => d.run.settings?.models?.["text-draft"] ?? "install default";
 const judgeModel = (d: RunDetail) => d.run.settings?.models?.["text-judge"] ?? "install default";
 const TEXT_MODEL_ROW: Row = { label: "Text model", setting: true, value: textModel };
+
+const alertsReport = (d: RunDetail) => d.steps.find((s) => s.key === "check")?.data.report as AlertsReport | undefined;
+const inspectReport = (d: RunDetail) => d.steps.find((s) => s.key === "check")?.data.report as InspectReport | undefined;
+const inspectTotal = (d: RunDetail, key: "correct" | "overconfident" | "unsure" | "graded") =>
+  Object.values(inspectReport(d)?.models ?? {}).reduce((total, row) => total + row[key], 0);
 
 const ROWS: Record<string, Row[]> = {
   video: [
@@ -70,6 +75,27 @@ const ROWS: Record<string, Row[]> = {
     { label: "Re-recorded lines", value: (d) => String(d.artifacts.filter((a) => a.kind === "line" && a.parent_id).length) },
     { label: "Word differences (kept)", value: (d) => String(d.artifacts.filter((a) => a.kind === "line" && a.verdict === "keep").reduce((t, a) => t + (a.metrics.word_errors ?? 0), 0)) },
     { label: "Final length", value: (d) => { const f = d.artifacts.find((a) => a.kind === "final" && a.status === "ready"); return f ? `${f.metrics.duration?.toFixed(1)} s` : "—"; } },
+  ],
+  alerts: [
+    { label: "Models", setting: true, value: (d) => (d.run.brief.models ?? []).join(" · ") },
+    { label: "Tries", setting: true, value: (d) => String(d.run.brief.tries ?? 1) },
+    { label: "Moments", setting: true, value: (d) => String(d.run.brief.moments?.length ?? 0) },
+    { label: "Languages", setting: true, value: (d) => (d.run.brief.languages ?? []).map((l) => l.name).join(" · ") },
+    { label: "Drafts", value: (d) => String(d.run.counters.drafts ?? 0) },
+    { label: "Messages flagged", value: (d) => { const r = alertsReport(d); if (!r) return "—"; const rows = Object.values(r.models); const f = rows.reduce((t, x) => t + x.flagged, 0); const m = rows.reduce((t, x) => t + x.messages, 0); return m ? `${f} of ${m} (${Math.round((100 * f) / m)}%)` : "—"; } },
+    { label: "Signed", value: (d) => { const s = alertsReport(d)?.signed; return s ? `${s.approve} approved · ${s.edit} edited · ${s.reject} rejected` : "—"; } },
+  ],
+  inspect: [
+    { label: "Models", setting: true, value: (d) => (d.run.brief.models ?? []).join(" · ") },
+    { label: "Tries", setting: true, value: (d) => String(d.run.brief.tries ?? 1) },
+    { label: "Images", setting: true, value: (d) => String(d.run.brief.images?.length ?? 0) },
+    { label: "Questions", setting: true, value: (d) => (d.run.brief.questions ?? []).map((q) => q.short).join(" · ") },
+    { label: "Answers", value: (d) => String(d.run.counters.answers ?? 0) },
+    { label: "Labeled answers right", value: (d) => { const g = inspectTotal(d, "graded"); return g ? `${inspectTotal(d, "correct")} of ${g} (${Math.round((100 * inspectTotal(d, "correct")) / g)}%)` : "—"; } },
+    { label: "Overconfident", value: (d) => String(inspectTotal(d, "overconfident")) },
+    { label: "Said cannot tell", value: (d) => String(inspectTotal(d, "unsure")) },
+    { label: "Labels fixed in review", value: (d) => String(inspectReport(d)?.fixes ?? 0) },
+    { label: "Identity questions", value: (d) => { const p = d.steps.find((s) => s.key === "policy")?.data.policy; return p ? (p.identity === "refuse" ? "refused" : "allowed") : "—"; } },
   ],
 };
 
