@@ -31,6 +31,8 @@ model's output changes a business decision, and where a person keeps authority.
 | 06 | [AI in Retail and Supply Chain](lessons/06-retail-supply-chain/README.md) | Demand forecasting; next best product; catalog onboarding | [PDF](lessons/06-retail-supply-chain/M6_Deck_AI_in_Retail.pdf) | `/forecast`, `/recommendations` |
 | 07 | [AI in Transportation](lessons/07-transportation/README.md) | Warehouse robot; traffic light; ride-hail driver | [PDF](lessons/07-transportation/M7_Deck_AI_in_Transportation.pdf) | `/warehouse-robot`, `/traffic-signal`, `/ride-hail` |
 | 08 | [AI Media Content & Creative](lessons/08-media-content/README.md) | Luxury car ad image + video generation review | — | `/design-studio`, `/promo-studio` |
+| 09 | [AI Agents and Decision Automation](lessons/09-ai-agents/README.md) | Card Alert; Trial Finder; work order, coding and promotion teams | [PDF](lessons/09-ai-agents/M9_Deck_AI_Agents.pdf) | `/agent-workflows` |
+| 11 | [AI in Government and the Smart City](lessons/11-government-smart-city/README.md) | Flood Watch; Storm Desk | [PDF](lessons/11-government-smart-city/M11_Deck_AI_in_Government_Smart_City.pdf) | `/city-operations` |
 | 13 | [AI and Blockchain Integration](lessons/13-ai-blockchain/README.md) | Blockchain explorer; Ledger Watch; Agent Wallet; Recall Desk | in class | `/blockchain-explorer`, `/ledger-watch`, `/agent-wallet`, `/recall-desk` |
 
 Each lesson folder lists its readings, notebook reports, interactive demos and Studio routes.
@@ -70,7 +72,13 @@ Copilot CLI session; authentication material remains outside the project.
 - Sandboxed GitHub Copilot SDK gateway using only allowlisted read-only tools.
 - **Design Studio**: generative pipelines (article, voice, image, video) on your own Microsoft Foundry
   models, with human review gates, automatic checks, run history, fork/compare and export/import bundles
-  ([docs](docs/design-studio/README.md)).
+  ([docs](docs/design-studio/README.md)). The **Inspect** (vision Q&A checked against your labels) and **Alerts**
+  (multilingual drafts checked against facts, then signed off) pipelines feed the City Operations console.
+- **Agent Workflows** (`/agent-workflows`): five scenarios on Microsoft Agent Framework, from a single agent
+  to sequential, handoff and group-chat teams, with a business view, every tool call on a timeline and an
+  approval before every action; recorded runs replay offline.
+- **City Operations** (`/city-operations`): a flood operations console for the lesson 11 Houston storms.
+- **AI and blockchain** labs (`/blockchain-explorer`, `/agent-wallet`, `/recall-desk`) that run in the browser.
 - .NET Aspire AppHost source for local composition and observability.
 
 ## Architecture
@@ -239,6 +247,8 @@ A missing API can appear as a proxy error even when the web page itself loads.
 | `/procedures` | Grounded procedure assistant that cites public safety regulation and refuses when unsupported | [05](lessons/05-manufacturing/README.md) |
 | `/forecast`, `/recommendations` | Demand forecasting; next best product | [06](lessons/06-retail-supply-chain/README.md) |
 | `/warehouse-robot`, `/traffic-signal`, `/ride-hail` | Reinforcement learning: warehouse robot, traffic light, ride-hail driver (run in the browser) | [07](lessons/07-transportation/README.md) |
+| `/agent-workflows` | Agent Workflows: one agent and teams of agents (sequential, handoff, group chat) on five scenarios; recorded runs replay, live runs need Foundry ([service](services/agent-workflow-api/README.md)) | [09](lessons/09-ai-agents/README.md) |
+| `/city-operations` | City flood operations console: gauge replay and 2-hour forecast, camera wall, alert sign-off desk in four languages, activity log (recorded data) | [11](lessons/11-government-smart-city/README.md) |
 | `/blockchain-explorer`, `/ledger-watch`, `/agent-wallet`, `/recall-desk` | AI and blockchain: real blocks; an illicit-transaction model and investigator agent (local copy only); an agent paying inside contract limits; tamper evidence and AI readings (run in the browser) | [13](lessons/13-ai-blockchain/README.md) |
 | `/promo-studio` | Case study: how the SOLENNE GT ad was made, step by step (reached from Industry Workflows); recorded by default | [08](lessons/08-media-content/README.md) |
 | `/design-studio` | Design Studio: article, voice, image and video pipelines with review gates and run history (needs your Foundry resource; see [docs](docs/design-studio/README.md)) | [08](lessons/08-media-content/README.md) |

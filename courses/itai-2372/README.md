@@ -15,7 +15,11 @@ Studio routes). Modules are added here as they are published.
 | 5 | AI in manufacturing | [05-manufacturing](../../lessons/05-manufacturing/README.md) | [open](https://maoyuexin.github.io/applied-ai-studio/#05-manufacturing) |
 | 6 | AI in retail and supply chain | [06-retail-supply-chain](../../lessons/06-retail-supply-chain/README.md) | [open](https://maoyuexin.github.io/applied-ai-studio/#06-retail-supply-chain) |
 | 7 | AI in transportation and smart infrastructure | [07-transportation](../../lessons/07-transportation/README.md) | [open](https://maoyuexin.github.io/applied-ai-studio/#07-transportation) |
-| 13 | AI and blockchain integration | [13-ai-blockchain](../../lessons/13-ai-blockchain/README.md) | Studio: `/blockchain-explorer`, `/agent-wallet`, `/recall-desk` |
+| 8 | AI in media, content and creative industries | [08-media-content](../../lessons/08-media-content/README.md) | Studio: `/design-studio`, `/promo-studio` |
+| 9 | AI agents and decision automation | [09-ai-agents](../../lessons/09-ai-agents/README.md) | [open](https://maoyuexin.github.io/applied-ai-studio/#09-ai-agents) |
+| 10 | Midterm review | Reviews modules 1–9 | in class |
+| 11 | AI in government and the public sector | [11-government-smart-city](../../lessons/11-government-smart-city/README.md) | [open](https://maoyuexin.github.io/applied-ai-studio/#11-government-smart-city) |
+| 13 | AI and blockchain integration | [13-ai-blockchain](../../lessons/13-ai-blockchain/README.md) | [open](https://maoyuexin.github.io/applied-ai-studio/#13-ai-blockchain) |
 
 ## For students
 

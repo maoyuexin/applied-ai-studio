@@ -16,6 +16,10 @@ shows where the model's output changes a real decision and where a person keeps 
 | 05 | [AI in Manufacturing](05-manufacturing/README.md) | Compressor predictive maintenance | [PDF](05-manufacturing/M5_Deck_AI_in_Manufacturing.pdf) |
 | 06 | [AI in Retail and Supply Chain](06-retail-supply-chain/README.md) | Demand forecasting; next best product; catalog onboarding | [PDF](06-retail-supply-chain/M6_Deck_AI_in_Retail.pdf) |
 | 07 | [AI in Transportation](07-transportation/README.md) | Warehouse robot; traffic light; ride-hail driver | [PDF](07-transportation/M7_Deck_AI_in_Transportation.pdf) |
+| 08 | [AI Media Content & Creative](08-media-content/README.md) | Luxury car ad image + video generation review | — |
+| 09 | [AI Agents and Decision Automation](09-ai-agents/README.md) | Card Alert; Trial Finder; work order, coding and promotion teams | [PDF](09-ai-agents/M9_Deck_AI_Agents.pdf) |
+| 11 | [AI in Government and the Smart City](11-government-smart-city/README.md) | Flood Watch; Storm Desk | [PDF](11-government-smart-city/M11_Deck_AI_in_Government_Smart_City.pdf) |
+| 13 | [AI and Blockchain Integration](13-ai-blockchain/README.md) | Blockchain explorer; Agent Wallet; Recall Desk | in class |
 
 ## Three ways to use a lesson
 
