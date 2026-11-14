@@ -127,6 +127,50 @@
         { "title": "Ride-hail lesson", "route": "/ride-hail" },
         { "title": "Fleet dispatch workflow", "route": "/workflow?courseCase=transportation-fleet-routing" }
       ]
+    },
+    {
+      "id": "09-ai-agents",
+      "title": "AI Agents and Decision Automation",
+      "summary": "Models, then tools, then one agent, then a team of agents: the eight parts of an agent, the Sense, Plan, Act, Check, Ask loop, five recorded scenarios on one screen, and the controls that decide what an agent may do without asking.",
+      "cases": ["Card Alert", "Trial Finder", "Machine alert to work order", "Coding team", "Holiday promotion"],
+      "materials": [
+        { "type": "slides", "title": "Slides", "path": "lessons/09-ai-agents/M9_Deck_AI_Agents.pdf" }
+      ],
+      "studio": [
+        { "title": "Agent Workflows", "route": "/agent-workflows" }
+      ]
+    },
+    {
+      "id": "11-government-smart-city",
+      "title": "AI in Government and the Smart City",
+      "summary": "How a smart city senses, predicts, decides, acts and tells residents, then two Houston storm cases on the same gauges: a bayou flood forecast with a policy-set alert line, and AI-drafted public alerts in four languages that a person signs off.",
+      "cases": ["Flood Watch", "Storm Desk"],
+      "materials": [
+        { "type": "slides", "title": "Slides", "path": "lessons/11-government-smart-city/M11_Deck_AI_in_Government_Smart_City.pdf" },
+        { "type": "demo", "title": "Flood Watch: a forecast on Houston's bayou sensors", "path": "notebooks/smart-city/flood-watch.html", "publishAs": "M11_Flood_Watch.html" },
+        { "type": "demo", "title": "Storm Desk: sign off on AI flood alerts", "path": "notebooks/smart-city/storm-desk.html", "publishAs": "M11_Storm_Desk.html" },
+        { "type": "demo", "title": "Should the city ask AI residents? A recorded experiment", "path": "notebooks/smart-city/synthetic-residents.html", "publishAs": "M11_Synthetic_Residents.html" }
+      ],
+      "studio": [
+        { "title": "City flood operations console", "route": "/city-operations" },
+        { "title": "Design Studio (Inspect and Alerts pipelines)", "route": "/design-studio" }
+      ]
+    },
+    {
+      "id": "13-ai-blockchain",
+      "title": "AI and Blockchain Integration",
+      "summary": "What a blockchain actually does, on real bitcoin blocks, then three ways AI and a shared ledger meet: AI reads the ledger, AI acts on the ledger inside contract limits, and the ledger checks AI.",
+      "cases": ["Blockchain explorer", "Agent Wallet", "Recall Desk"],
+      "materials": [
+        { "type": "demo", "title": "Blockchain Explorer", "path": "notebooks/ai-blockchain/backup/blockchain-explorer.html", "publishAs": "M13_Blockchain_Explorer.html" },
+        { "type": "demo", "title": "Agent Wallet", "path": "notebooks/ai-blockchain/backup/agent-wallet.html", "publishAs": "M13_Agent_Wallet.html" },
+        { "type": "demo", "title": "Recall Desk", "path": "notebooks/ai-blockchain/backup/recall-desk.html", "publishAs": "M13_Recall_Desk.html" }
+      ],
+      "studio": [
+        { "title": "Blockchain Explorer", "route": "/blockchain-explorer" },
+        { "title": "Agent Wallet", "route": "/agent-wallet" },
+        { "title": "Recall Desk", "route": "/recall-desk" }
+      ]
     }
   ]
 }

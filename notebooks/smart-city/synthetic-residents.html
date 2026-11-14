@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Should the city ask AI residents instead of real ones? A recorded experiment</title>
+<style>
+:root { --bg:#0F1117; --card:#171A22; --rule:#2A2F3A; --text:#F2F4F8; --dim:#AAB2C0; --faint:#6B7482;
+  --people:#22D3EE; --mini:#A78BFA; --sol:#E8913C; --little:#38BDF8; --right:#B9BDC6; --much:#F472B6; --ok:#7CC59A; --bad:#E5675F; }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; overflow: hidden; }
+#viewport { position: absolute; inset: 0 0 64px 0; }
+body.record #viewport { inset: 0; }
+#stage { position: absolute; width: 1920px; height: 1080px; transform-origin: 0 0; background: var(--bg); overflow: hidden; }
+.scene { position: absolute; inset: 0; visibility: hidden; }
+.kicker { position: absolute; left: 110px; top: 70px; font-size: 26px; font-weight: 800; letter-spacing: .12em; color: var(--people); text-transform: uppercase; }
+.title { position: absolute; left: 110px; top: 110px; font-size: 58px; font-weight: 800; line-height: 1.1; }
+.caption { position: absolute; left: 0; right: 0; bottom: 56px; text-align: center; font-size: 36px; color: var(--text); padding: 0 160px; line-height: 1.3; }
+.caption b { color: var(--sol); }
+.foot { position: absolute; left: 110px; bottom: 18px; font-size: 18px; color: var(--faint); }
+.cards { position: absolute; left: 110px; right: 110px; top: 300px; display: flex; gap: 60px; }
+.card { flex: 1; background: var(--card); border: 2px solid var(--rule); border-radius: 26px; padding: 30px 36px; }
+.card h3 { margin: 0 0 14px; font-size: 30px; color: var(--dim); font-weight: 700; }
+.facts { display: grid; grid-template-columns: 170px 1fr; gap: 6px 18px; font-size: 25px; margin-bottom: 22px; }
+.facts dt { color: var(--faint); } .facts dd { margin: 0; }
+.row { display: flex; align-items: center; gap: 10px; margin-top: 16px; min-height: 60px; }
+.row .who { width: 230px; flex: none; font-size: 24px; font-weight: 700; }
+.chip { display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; border-radius: 999px; font-size: 24px; font-weight: 800; border: 3px solid currentColor; background: rgba(255,255,255,.04); transform-origin: center; white-space: nowrap; }
+.chip .mark { font-size: 24px; }
+.question { position: absolute; left: 110px; right: 110px; top: 200px; font-size: 34px; color: var(--dim); }
+.question b { color: var(--text); }
+svg text { font-family: inherit; }
+#controls { position: absolute; left: 0; right: 0; bottom: 0; height: 64px; display: flex; align-items: center; gap: 12px; padding: 0 16px; background: #14161d; border-top: 1px solid var(--rule); }
+body.record #controls { display: none; }
+#controls button { min-height: 40px; padding: 6px 14px; border-radius: 10px; border: 1px solid var(--rule); background: var(--card); color: var(--text); font: inherit; font-size: 15px; cursor: pointer; }
+#controls button.primary { background: var(--sol); border-color: var(--sol); color: #1b1206; font-weight: 700; min-width: 96px; }
+#controls button[aria-current="true"] { border-color: var(--people); }
+#scrub { flex: 1; accent-color: var(--sol); }
+#time { color: var(--dim); font-variant-numeric: tabular-nums; min-width: 88px; text-align: right; }
+#about { position: fixed; inset: 0; z-index: 10; overflow-y: auto; background: var(--bg); }
+#about[hidden], body.record #about { display: none; }
+.about-inner { max-width: 880px; margin: 0 auto; padding: 32px 16px 56px; font-size: 16px; line-height: 1.6; color: var(--text); }
+.about-inner .eyebrow { margin: 0; color: var(--people); font-size: 13px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.about-inner h1 { margin: 6px 0 12px; font-size: 30px; line-height: 1.2; }
+.about-inner h2 { margin: 32px 0 8px; font-size: 20px; color: var(--people); }
+.about-inner .lead { font-size: 18px; color: var(--dim); }
+.about-inner b { color: var(--text); }
+.about-inner blockquote { margin: 12px 0; padding: 12px 16px; border-left: 3px solid var(--people); background: var(--card); color: var(--dim); font-style: italic; }
+.about-inner table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 14px; }
+.about-inner th, .about-inner td { padding: 8px 10px; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; }
+.about-inner th { color: var(--faint); font-weight: 700; font-size: 13px; }
+.about-inner td:not(:first-child), .about-inner th:not(:first-child) { text-align: right; white-space: nowrap; }
+.about-inner .checks td, .about-inner .checks th { text-align: left !important; white-space: normal !important; }
+.about-inner tr.pair2 td { border-top: none; }
+.about-inner .tag { display: inline-block; margin-left: 6px; padding: 0 8px; border: 1px solid var(--rule); border-radius: 999px; font-size: 12px; color: var(--dim); }
+.about-inner .a-little { color: var(--little); } .about-inner .a-right { color: var(--right); } .about-inner .a-much { color: var(--much); }
+.about-inner .note { color: var(--dim); font-size: 14px; }
+.about-inner .no { color: var(--bad); font-weight: 800; }
+.about-inner .prompt { margin: 12px 0; padding: 14px 18px; background: var(--card); border: 1px solid var(--rule); border-radius: 12px; }
+.about-inner .prompt-label { color: var(--faint); font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.about-inner .prompt dl { display: grid; grid-template-columns: minmax(140px, 220px) 1fr; gap: 2px 14px; margin: 8px 0; font-family: ui-monospace, Menlo, monospace; font-size: 13px; }
+.about-inner .prompt dt { color: var(--faint); } .about-inner .prompt dd { margin: 0; }
+.about-inner .chapters li { margin: 4px 0; color: var(--dim); }
+.about-inner .go { margin-top: 20px; min-height: 44px; padding: 8px 20px; border-radius: 10px; border: 0; background: var(--sol); color: #1b1206; font: inherit; font-weight: 800; cursor: pointer; }
+.about-inner .cite { margin-top: 28px; color: var(--faint); font-size: 12px; }
+@media (max-width: 600px) { .about-inner table { font-size: 12px; } .about-inner th, .about-inner td { padding: 6px 4px; } }
+</style></head>
+<body>
+
+<div id="about" role="dialog" aria-modal="true" aria-labelledby="about-title"><div class="about-inner">
+  <p class="eyebrow">Module 11 · before you watch</p>
+  <h1 id="about-title">The test behind the story</h1>
+  <p class="lead">A vendor tells the city: skip the survey, describe each resident to an AI and let the AI answer for them.
+    We tested that pitch on <b>300 real people</b> whose answers we already know.</p>
+
+  <h2>1 · The survey</h2>
+  <p>The <b>General Social Survey (GSS)</b> is run by NORC at the University of Chicago. It has asked a national
+    sample of U.S. adults the same core questions since 1972. We used the <b>2024</b> survey: 3,986 people.
+    One block of questions is about government spending. The interviewer reads:</p>
+  <blockquote>“We are faced with many problems in this country, none of which can be solved easily or inexpensively. I'm going to name some of these problems, and for each one I'd like you to tell me whether you think we're spending too much money on it, too little money, or about the right amount.”</blockquote>
+  <p>Then the topics, one by one, and the person answers <span class="a-little">too little</span>,
+    <span class="a-right">about right</span> or <span class="a-much">too much</span>. We used five topics.</p>
+  <p><b>Two wordings, chosen at random.</b> For three topics the GSS has two ways of naming the same spending, and each
+    person hears only one of them, picked at random (a <i>split ballot</i>). Because the split is random, the two halves
+    are alike in every other way, so any difference in their answers is caused by the words alone.</p>
+
+  <h2>2 · The original results: what the 300 real people said</h2>
+  <table><thead><tr><th>Topic, as the interviewer said it</th><th>People</th><th class="a-little">Too little</th>
+    <th class="a-right">About right</th><th class="a-much">Too much</th></tr></thead><tbody>
+    <tr>
+      <td>Highways and bridges</td>
+      <td>300</td><td>50%</td><td>39%</td><td>11%</td></tr><tr>
+      <td>Solving the problems of the big cities <span class="tag">wording A</span></td>
+      <td>161</td><td>54%</td><td>29%</td><td>17%</td></tr><tr class="pair2">
+      <td>Assistance to big cities <span class="tag">wording B</span></td>
+      <td>139</td><td>21%</td><td>37%</td><td>42%</td></tr><tr>
+      <td>Halting the rising crime rate <span class="tag">wording A</span></td>
+      <td>161</td><td>72%</td><td>21%</td><td>7%</td></tr><tr class="pair2">
+      <td>Law enforcement <span class="tag">wording B</span></td>
+      <td>139</td><td>45%</td><td>40%</td><td>15%</td></tr><tr>
+      <td>Improving and protecting the environment <span class="tag">wording A</span></td>
+      <td>161</td><td>64%</td><td>24%</td><td>12%</td></tr><tr class="pair2">
+      <td>The environment <span class="tag">wording B</span></td>
+      <td>139</td><td>64%</td><td>22%</td><td>14%</td></tr><tr>
+      <td>Developing alternative energy sources</td>
+      <td>300</td><td>53%</td><td>34%</td><td>13%</td></tr>
+  </tbody></table>
+  <p class="note">Read it: on highways and bridges the real people split about half “too little”, the rest mostly “about right”.
+    Change two words and answers move: “solving the problems of the big cities” gets 54% “too little”,
+    “assistance to big cities” only 21%. For the environment the two wordings mean the same thing,
+    and people answered the same way (64% and 64%).</p>
+
+  <h2>3 · The people we used</h2>
+  <p>Of the 2024 respondents, 3,275 answered all five topics and every background question. We drew
+    <b>300 at random</b> (fixed seed 2372, so anyone can redraw the same people): 137 Democrats
+    (including independents who lean Democrat), 62 independents, 97 Republicans (including leaners)
+    and 4 from other parties. Results are unweighted: the AI is compared with these same 300 people,
+    not with the whole country.</p>
+
+  <h2>4 · The AI residents</h2>
+  <p>Each real person became one AI resident. The model saw only that person's <b>13 background answers</b>, copied from the
+    survey in its own words, then the same spending questions with the same wording that person heard:</p>
+  <div class="prompt"><div class="prompt-label">What the model was told</div>
+    <p><b>Instruction:</b> You are taking part in a survey research study. You will be given a description of a person. Answer every question the way that person would most likely answer it. Do not explain. Reply with JSON only.</p>
+    <dl><dt>Age</dt><dd>41</dd><dt>Sex</dt><dd>female</dd><dt>Race</dt><dd>other</dd><dt>Hispanic origin</dt><dd>not hispanic</dd><dt>Highest degree</dt><dd>associate/junior college</dd><dt>Total family income</dt><dd>$60,000 to $74,999</dd><dt>Region of the United States</dt><dd>south</dd><dt>Lives in</dt><dd>a suburb of a large central city</dd><dt>Political party</dt><dd>independent, close to democrat</dd><dt>Political views</dt><dd>moderate, middle of the road</dd><dt>Religion</dt><dd>catholic</dd><dt>Marital status</dt><dd>married</dd><dt>Work</dt><dd>working full time</dd></dl>
+    <p class="note">Made-up example in the same format; not a real respondent. No name, city or ZIP code: location is only the
+      region and the size of place.</p></div>
+  <p>Two models, <b>gpt-5.4-mini</b> and <b>gpt-6.1-sol</b>, each asked three separate times with the identical prompt:
+    1,800 recorded answers (Oct 7, 2026). This follows the published “silicon sampling” design
+    (Argyle et al., <i>Political Analysis</i>, 2023).</p>
+
+  <h2>5 · The three checks</h2>
+  <table class="checks"><thead><tr><th>Check a city would need</th><th>Real people</th><th>AI residents</th><th>Passed?</th></tr></thead><tbody>
+    <tr><td><b>Right answer for each person?</b> Share of answers that match the real person's own.</td>
+      <td>The real person’s own answer</td>
+      <td>gpt-5.4-mini 52% · gpt-6.1-sol 56%</td><td class="no">No</td></tr>
+    <tr><td><b>Keeps the disagreement inside groups?</b> Share of each party giving that party's most common answer.</td>
+      <td>Democrats 64% · Independents 54% · Republicans 54%</td>
+      <td>gpt-6.1-sol: 90% · 75% · 74%</td><td class="no">No</td></tr>
+    <tr><td><b>Reacts to wording like people?</b> Gap in “too little” between wording A and B.</td>
+      <td>Big cities 33 points · crime 27 points</td>
+      <td>gpt-5.4-mini 46 · 75 points; gpt-6.1-sol 10 · 38 points</td><td class="no">No</td></tr>
+  </tbody></table>
+  <p class="note">Limits: demographics only (no interview); the instruction asks for the person's “most likely” answer, which
+    itself pulls toward the typical answer; groups are small and unweighted; one survey, two models, one date. Published work
+    finds the same pattern (Bisbee et al., <i>Political Analysis</i>, 2024; Wang, Morgenstern &amp; Dickerson, 2025).</p>
+
+  <h2>6 · What the story shows</h2>
+  <ol class="chapters">
+    <li><b>The pitch</b>: the vendor's offer.</li>
+    <li><b>Two people</b>: two real respondents, their real answer, and the AI's three tries for each.</li>
+    <li><b>296 people</b>: every party member's real answer on highways and bridges, then their AI twin's.</li>
+    <li><b>Wording</b>: the two wordings for big cities and crime, real people against both models.</li>
+    <li><b>Verdict</b>: how often the AI matched the real person.</li>
+  </ol>
+  <button id="about-close" class="go">▶ Watch the story (90 s)</button>
+  <p class="cite">Data: Davern, Michael; Bautista, Rene; Freese, Jeremy; Herd, Pamela; and Morgan, Stephen L. General Social Survey 1972-2024. [Machine-readable data file]. NORC at the University of Chicago, 2026 (2024 Release 3a).</p>
+</div></div>
+<div id="viewport"><div id="stage">
+  <section class="scene" id="s0">
+    <div class="kicker">Module 11 · Can the public trust a smart city? · a recorded experiment</div>
+    <div class="title" style="top:290px;font-size:80px">Should the city ask AI residents<br>instead of real ones?</div>
+    <div class="question" style="top:560px;font-size:36px;line-height:1.5"><b>The pitch:</b> skip the survey. 300 AI residents answer in an afternoon.<br><b>Our test:</b> 300 real Americans (2024 General Social Survey) and their AI twins,<br>built only from their demographics. 1,800 AI answers, every one recorded.</div>
+  </section>
+  <section class="scene" id="s1">
+    <div class="kicker">1 · Two real people</div>
+    <div class="question" style="top:120px">Are we spending too little, about right, or too much on <b>assistance to big cities</b>?</div>
+    <div class="cards" style="top:210px">
+      <div class="card" id="card0">
+        <h3>Person A</h3>
+        <dl class="facts"><dt>Age</dt><dd>39</dd><dt>Sex, race</dt><dd>female, black</dd><dt>Lives in</dt><dd>a large central city (over 250,000), south</dd>
+          <dt>Education</dt><dd>high school</dd><dt>Party</dt><dd>not very strong democrat</dd><dt>Views</dt><dd>moderate, middle of the road</dd></dl>
+        <div class="row"><span class="who" style="color:var(--people)">Real answer</span><span class="slot" id="r0"></span></div>
+        <div class="row"><span class="who" style="color:var(--mini)">AI · gpt-5.4-mini</span><span class="slot" id="m00"></span><span class="slot" id="m01"></span><span class="slot" id="m02"></span></div>
+        <div class="row"><span class="who" style="color:var(--sol)">AI · gpt-6.1-sol</span><span class="slot" id="o00"></span><span class="slot" id="o01"></span><span class="slot" id="o02"></span></div>
+      </div>
+      <div class="card" id="card1">
+        <h3>Person B</h3>
+        <dl class="facts"><dt>Age</dt><dd>19</dd><dt>Sex, race</dt><dd>male, white</dd><dt>Lives in</dt><dd>a suburb of a large central city, south</dd>
+          <dt>Education</dt><dd>high school</dd><dt>Party</dt><dd>strong republican</dd><dt>Views</dt><dd>moderate, middle of the road</dd></dl>
+        <div class="row"><span class="who" style="color:var(--people)">Real answer</span><span class="slot" id="r1"></span></div>
+        <div class="row"><span class="who" style="color:var(--mini)">AI · gpt-5.4-mini</span><span class="slot" id="m10"></span><span class="slot" id="m11"></span><span class="slot" id="m12"></span></div>
+        <div class="row"><span class="who" style="color:var(--sol)">AI · gpt-6.1-sol</span><span class="slot" id="o10"></span><span class="slot" id="o11"></span><span class="slot" id="o12"></span></div>
+      </div>
+    </div>
+  </section>
+  <section class="scene" id="s2">
+    <div class="kicker">2 · 296 people, one question</div>
+    <div class="question" style="top:120px">Are we spending too little, about right, or too much on <b>highways and bridges</b>?</div>
+    <svg id="dots" width="1920" height="1080" style="position:absolute;inset:0"></svg>
+  </section>
+  <section class="scene" id="s3">
+    <div class="kicker">3 · Change the words, change the answer</div>
+    <div class="question" style="top:120px">Share saying we spend <b>too little</b>. Each person saw one of the two wordings.</div>
+    <svg id="bars" width="1920" height="1080" style="position:absolute;inset:0"></svg>
+  </section>
+  <section class="scene" id="s4">
+    <div class="kicker">4 · The verdict</div>
+    <div class="question" style="top:120px">Gave the <b>real person’s own answer</b> (5 questions × 300 people)</div>
+    <svg id="score" width="1920" height="1080" style="position:absolute;inset:0"></svg>
+  </section>
+  <div class="caption" id="caption"></div>
+  <div class="foot">Data: General Social Survey 2024, NORC at the University of Chicago. AI answers recorded Oct 7, 2026 (gpt-5.4-mini, gpt-6.1-sol). Teaching demo.</div>
+</div></div>
+<div id="controls">
+  <button class="primary" id="play">▶ Play</button>
+  <input id="scrub" type="range" min="0" max="1000" value="0" aria-label="Position">
+  <span id="time">0:00</span>
+  <span id="chapters"></span>
+  <button id="about-open">About the test</button>
+</div>
+<script>
+const DATA = {"examples":[{"id":678,"age":"39","sex":"female","race":"black","region":"south","place":"a large central city (over 250,000)","degree":"high school","income":"$50,000 to $59,999","party":"not very strong democrat","views":"moderate, middle of the road","wording":"Assistance to big cities","real":"too much","mini":["too little","too little","about right"],"sol":["too little","too little","too little"]},{"id":950,"age":"19","sex":"male","race":"white","region":"south","place":"a suburb of a large central city","degree":"high school","income":"$90,000 to $109,999","party":"strong republican","views":"moderate, middle of the road","wording":"Assistance to big cities","real":"about right","mini":["too little","too much","too much"],"sol":["too much","too much","too much"]}],"blocks":[{"code":"D","label":"Democrats","dots":[{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"too little"}],"real":0.5182481751824818,"ai":1,"aiTooLittle":1},{"code":"I","label":"Independents","dots":[{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"too little"}],"real":0.3870967741935484,"ai":1,"aiTooLittle":1},{"code":"R","label":"Republicans","dots":[{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"too little"},{"real":"too little","ai":"about right"},{"real":"too little","ai":"about right"},{"real":"too little","ai":"about right"},{"real":"too little","ai":"about right"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"too little"},{"real":"about right","ai":"about right"},{"real":"about right","ai":"about right"},{"real":"about right","ai":"about right"},{"real":"about right","ai":"about right"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"too little"},{"real":"too much","ai":"about right"},{"real":"too much","ai":"about right"}],"real":0.5567010309278351,"ai":0.8969072164948454,"aiTooLittle":0.8969072164948454}],"wording":[{"a":"Solving the problems of the big cities","b":"Assistance to big cities","real":[0.54,0.209],"mini":[0.894,0.432],"sol":[0.553,0.453]},{"a":"Halting the rising crime rate","b":"Law enforcement","real":[0.72,0.453],"mini":[0.907,0.158],"sol":[0.82,0.439]}],"score":{"mini":0.519,"sol":0.562,"miniSame":0.711,"solSame":0.962},"n":300,"calls":1800};
+const COLOR = {'too little': '#38BDF8', 'about right': '#B9BDC6', 'too much': '#F472B6'};
+const SCENES = [
+  {id: 's0', start: 0, end: 10, label: 'The pitch'},
+  {id: 's1', start: 10, end: 34, label: 'Two people'},
+  {id: 's2', start: 34, end: 58, label: '296 people'},
+  {id: 's3', start: 58, end: 74, label: 'Wording'},
+  {id: 's4', start: 74, end: 90, label: 'Verdict'},
+];
+const DURATION = 90;
+const CAPTIONS = [
+  [0.5, 'A city wants to know what residents think. Surveys are slow and expensive.'],
+  [5, 'The pitch: ask AI residents instead. Should the city say yes? We tested it.'],
+  [10.5, 'Two real people. The AI only gets the facts on their card.'],
+  [14, 'Their real answers.'],
+  [17, 'The smaller model, asked three times: it changes its mind.'],
+  [22, 'The larger model gives the same answer every time…'],
+  [27, '…but it answered like a party stereotype: <b>more</b> money for the Democrat, <b>less</b> for the Republican. Both real people said otherwise.'],
+  [34.5, 'Each dot is one real person. Real people disagree, even inside each party.'],
+  [44, 'Now the same people as AI residents (gpt-6.1-sol)…'],
+  [49, '…and every group becomes a stereotype: almost everyone says “too little.”'],
+  [58.5, 'Change the words, and real people answer very differently.'],
+  [65, 'The AI gets the size wrong: the smaller model <b>overreacts</b>; the larger one <b>barely reacts</b> to the big-cities wording.'],
+  [74.5, 'Overall, even the better model matched the real person only 56% of the time.'],
+  [82, 'Our answer for the city: <b>no</b>.'],
+];
+const clamp = v => Math.max(0, Math.min(1, v));
+const ease = p => (p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2);
+const seg = (t, a, b) => ease(clamp((t - a) / (b - a)));
+const pct = v => Math.round(v * 100) + '%';
+const NS = 'http://www.w3.org/2000/svg';
+const el = (tag, attrs, text) => { const n = document.createElementNS(NS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); if (text !== undefined) n.textContent = text; return n; };
+const mix = (a, b, p) => { const h = c => [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16)); const x = h(a), y = h(b); return 'rgb(' + x.map((v, i) => Math.round(v + (y[i] - v) * p)).join(',') + ')'; };
+
+function chip(slot, answer, p, mark) {
+  const node = document.getElementById(slot);
+  if (p <= 0) { node.innerHTML = ''; return; }
+  node.innerHTML = '<span class="chip" style="color:' + COLOR[answer] + ';opacity:' + p + ';transform:scale(' + (0.7 + 0.3 * p) + ')">' + answer + (mark ? '<span class="mark" style="color:' + (mark === 'ok' ? 'var(--ok)' : 'var(--bad)') + '">' + (mark === 'ok' ? '✓' : '✗') + '</span>' : '') + '</span>';
+}
+
+function drawS1(t) {
+  DATA.examples.forEach((e, i) => {
+    const card = document.getElementById('card' + i);
+    const p = seg(t, 0.2 + i * 0.3, 1.4 + i * 0.3);
+    card.style.opacity = p; card.style.transform = 'translateY(' + (40 * (1 - p)) + 'px)';
+    chip('r' + i, e.real, seg(t, 4, 4.6));
+    const marks = t > 17;
+    e.mini.forEach((a, k) => chip('m' + i + k, a, seg(t, 7 + k * 1.2, 7.6 + k * 1.2), marks && (a === e.real ? 'ok' : 'bad')));
+    e.sol.forEach((a, k) => chip('o' + i + k, a, seg(t, 12 + k * 1.2, 12.6 + k * 1.2), marks && (a === e.real ? 'ok' : 'bad')));
+  });
+}
+
+let dotNodes = null;
+function buildDots() {
+  const svg = document.getElementById('dots');
+  dotNodes = [];
+  const r = 15, gap = 38, top = 300;
+  const cols = {D: 12, I: 8, R: 10};
+  const widths = DATA.blocks.map(b => cols[b.code] * gap);
+  const spare = (1920 - 220 - widths.reduce((a, b) => a + b, 0)) / 2;
+  let x0 = 110;
+  DATA.blocks.forEach((b, bi) => {
+    const c = cols[b.code];
+    svg.append(el('text', {x: x0 + widths[bi] / 2, y: top - 40, 'text-anchor': 'middle', fill: '#F2F4F8', 'font-size': 34, 'font-weight': 800}, b.label + ' (' + b.dots.length + ')'));
+    b.dots.forEach((d, i) => {
+      const circle = el('circle', {cx: x0 + (i % c) * gap + gap / 2, cy: top + Math.floor(i / c) * gap + gap / 2, r});
+      svg.append(circle);
+      dotNodes.push({circle, d, order: bi * 200 + i});
+    });
+    const rows = Math.ceil(b.dots.length / c);
+    const sy = top + rows * gap + 54;
+    b.statReal = el('text', {x: x0 + widths[bi] / 2, y: sy, 'text-anchor': 'middle', fill: '#22D3EE', 'font-size': 32, 'font-weight': 700}, 'Real: ' + pct(b.real));
+    b.statAi = el('text', {x: x0 + widths[bi] / 2, y: sy + 44, 'text-anchor': 'middle', fill: '#E8913C', 'font-size': 32, 'font-weight': 800}, 'AI: ' + pct(b.ai));
+    svg.append(b.statReal, b.statAi);
+    x0 += widths[bi] + spare;
+  });
+  svg.note = el('text', {x: 110, y: 905, fill: '#AAB2C0', 'font-size': 27}, 'Under each party: the share giving that party’s most common answer.');
+  svg.append(svg.note);
+  let lx = 1120;
+  [['too little', 'Too little'], ['about right', 'About right'], ['too much', 'Too much']].forEach(([k, label]) => {
+    svg.append(el('circle', {cx: lx, cy: 196, r: 13, fill: COLOR[k]}));
+    svg.append(el('text', {x: lx + 24, y: 206, fill: '#AAB2C0', 'font-size': 28}, label));
+    lx += 230;
+  });
+  svg.labelNow = el('text', {x: 110, y: 206, fill: '#22D3EE', 'font-size': 32, 'font-weight': 800}, 'Real answers');
+  svg.append(svg.labelNow);
+}
+
+function drawS2(t) {
+  if (!dotNodes) buildDots();
+  const n = dotNodes.length;
+  for (const {circle, d, order} of dotNodes) {
+    const k = order / 600;
+    const appear = seg(t, 0.3 + k * 2.2, 0.8 + k * 2.2);
+    const morph = seg(t, 10 + k * 3, 11 + k * 3);
+    circle.setAttribute('fill', mix(COLOR[d.real], COLOR[d.ai], morph));
+    circle.setAttribute('opacity', appear);
+  }
+  const svg = document.getElementById('dots');
+  const ai = t >= 11.5;
+  svg.labelNow.textContent = ai ? 'AI residents (gpt-6.1-sol)' : 'Real answers';
+  svg.labelNow.setAttribute('fill', ai ? '#E8913C' : '#22D3EE');
+  for (const b of DATA.blocks) {
+    b.statReal.setAttribute('opacity', seg(t, 3, 4));
+    b.statAi.setAttribute('opacity', seg(t, 15, 16));
+  }
+  svg.note.setAttribute('opacity', seg(t, 3, 4));
+}
+
+let barsBuilt = null;
+function drawS3(t) {
+  const svg = document.getElementById('bars');
+  if (!barsBuilt) {
+    barsBuilt = [];
+    const base = 790, h = 460, bw = 92;
+    svg.append(el('line', {x1: 110, x2: 1810, y1: base, y2: base, stroke: '#2A2F3A', 'stroke-width': 2}));
+    DATA.wording.forEach((g, gi) => {
+      const gx = 150 + gi * 860;
+      [0, 1].forEach(k => {
+        const sx = gx + k * 400;
+        [['People', g.real[k], '#22D3EE'], ['AI mini', g.mini[k], '#A78BFA'], ['AI sol', g.sol[k], '#E8913C']].forEach(([name, v, color], si) => {
+          const x = sx + si * (bw + 14);
+          const rect = el('rect', {x, width: bw, rx: 8, fill: color});
+          const label = el('text', {x: x + bw / 2, 'text-anchor': 'middle', fill: '#F2F4F8', 'font-size': 30, 'font-weight': 800}, pct(v));
+          svg.append(rect, label);
+          barsBuilt.push({rect, label, v, base, h, delay: gi * 1.6 + k * 0.4 + si * 0.15});
+        });
+        const words = (k === 0 ? g.a : g.b).split(' ');
+        const lines = words.reduce((acc, wd) => { if (acc.length && (acc[acc.length - 1] + ' ' + wd).length <= 22) acc[acc.length - 1] += ' ' + wd; else acc.push(wd); return acc; }, []);
+        lines.forEach((ln, li) => svg.append(el('text', {x: sx + (3 * bw + 28) / 2, y: base + 42 + li * 34, 'text-anchor': 'middle', fill: '#AAB2C0', 'font-size': 28}, '“' === ln[0] ? ln : (li === 0 ? '“' : '') + ln + (li === lines.length - 1 ? '”' : ''))));
+      });
+    });
+    let lx = 110;
+    [['People (GSS 2024)', '#22D3EE'], ['AI: gpt-5.4-mini', '#A78BFA'], ['AI: gpt-6.1-sol', '#E8913C']].forEach(([name, color]) => {
+      svg.append(el('rect', {x: lx, y: 226, width: 30, height: 30, rx: 5, fill: color}));
+      svg.append(el('text', {x: lx + 42, y: 252, fill: '#F2F4F8', 'font-size': 30}, name));
+      lx += 420;
+    });
+  }
+  for (const b of barsBuilt) {
+    const p = seg(t, 1 + b.delay, 2.4 + b.delay);
+    const hh = b.v * b.h * p;
+    b.rect.setAttribute('y', b.base - hh); b.rect.setAttribute('height', Math.max(0, hh));
+    b.label.setAttribute('y', b.base - hh - 14); b.label.setAttribute('opacity', p);
+  }
+}
+
+let scoreBuilt = null;
+function drawS4(t) {
+  const svg = document.getElementById('score');
+  const s = DATA.score;
+  if (!scoreBuilt) {
+    scoreBuilt = [];
+    const L = 760, W = 950, top = 330;
+    [['AI residents: gpt-5.4-mini', s.mini, '#A78BFA'], ['AI residents: gpt-6.1-sol', s.sol, '#E8913C']].forEach(([name, v, color], i) => {
+      const y = top + i * 130;
+      svg.append(el('text', {x: L - 26, y: y + 52, 'text-anchor': 'end', fill: '#F2F4F8', 'font-size': 34}, name));
+      const rect = el('rect', {x: L, y: y + 12, height: 64, rx: 10, fill: color});
+      const label = el('text', {y: y + 56, fill: '#F2F4F8', 'font-size': 38, 'font-weight': 800}, pct(v));
+      svg.append(rect, label);
+      scoreBuilt.push({rect, label, v, L, W, delay: i * 0.5});
+    });
+    scoreBuilt.same = el('text', {x: 110, y: 700, fill: '#AAB2C0', 'font-size': 34}, 'Same answer when asked 3 times: gpt-5.4-mini ' + pct(s.miniSame) + ', gpt-6.1-sol ' + pct(s.solSame) + '.');
+    scoreBuilt.take = el('text', {x: 960, y: 865, 'text-anchor': 'middle', fill: '#E8913C', 'font-size': 54, 'font-weight': 800}, 'AI residents gave stereotypes, not residents’ views.');
+    scoreBuilt.take2 = el('text', {x: 960, y: 935, 'text-anchor': 'middle', fill: '#F2F4F8', 'font-size': 44, 'font-weight': 700}, 'Public input has to come from the public.');
+    svg.append(scoreBuilt.same, scoreBuilt.take, scoreBuilt.take2);
+  }
+  for (const b of scoreBuilt) {
+    const p = seg(t, 0.8 + b.delay, 2 + b.delay);
+    b.rect.setAttribute('width', b.v * b.W * p);
+    b.label.setAttribute('x', b.L + b.v * b.W * p + 16);
+    b.label.setAttribute('opacity', p);
+  }
+  scoreBuilt.same.setAttribute('opacity', seg(t, 4.5, 5.3));
+  scoreBuilt.take.setAttribute('opacity', seg(t, 6.5, 7.5));
+  scoreBuilt.take2.setAttribute('opacity', seg(t, 8, 9));
+}
+
+const DRAW = {s1: drawS1, s2: drawS2, s3: drawS3, s4: drawS4};
+function renderAt(t) {
+  for (const sc of SCENES) {
+    const node = document.getElementById(sc.id);
+    const o = Math.min(seg(t, sc.start, sc.start + 0.6), sc.end >= DURATION ? 1 : 1 - seg(t, sc.end - 0.6, sc.end));
+    node.style.opacity = o;
+    node.style.visibility = o > 0.001 ? 'visible' : 'hidden';
+    if (o > 0.001 && DRAW[sc.id]) DRAW[sc.id](t - sc.start);
+  }
+  const cap = CAPTIONS.filter(c => c[0] <= t).pop();
+  const capNode = document.getElementById('caption');
+  if (cap) {
+    capNode.innerHTML = cap[1];
+    const next = CAPTIONS.find(c => c[0] > t);
+    const fadeOut = next ? 1 - seg(t, next[0] - 0.35, next[0]) : 1;
+    capNode.style.opacity = Math.min(seg(t, cap[0], cap[0] + 0.35), fadeOut);
+  } else capNode.style.opacity = 0;
+}
+
+function fit() {
+  const vp = document.getElementById('viewport');
+  const k = Math.min(vp.clientWidth / 1920, vp.clientHeight / 1080);
+  const stage = document.getElementById('stage');
+  stage.style.transform = 'scale(' + k + ')';
+  stage.style.left = (vp.clientWidth - 1920 * k) / 2 + 'px';
+  stage.style.top = (vp.clientHeight - 1080 * k) / 2 + 'px';
+}
+
+const record = new URLSearchParams(location.search).has('record');
+if (record) document.body.classList.add('record');
+window.addEventListener('resize', fit);
+fit();
+let now = 0, playing = false, last = 0;
+const scrub = document.getElementById('scrub'), playBtn = document.getElementById('play'), timeLabel = document.getElementById('time');
+const fmt = s => Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+function show(t) {
+  now = Math.max(0, Math.min(DURATION, t));
+  renderAt(now);
+  scrub.value = Math.round(now / DURATION * 1000);
+  timeLabel.textContent = fmt(now) + ' / ' + fmt(DURATION);
+  document.querySelectorAll('#chapters button').forEach((b, i) => b.setAttribute('aria-current', String(now >= SCENES[i].start && now < SCENES[i].end)));
+}
+function tick(ts) {
+  if (!playing) return;
+  now += (ts - last) / 1000; last = ts;
+  if (now >= DURATION) { show(DURATION); setPlaying(false); return; }
+  show(now);
+  requestAnimationFrame(tick);
+}
+function setPlaying(v) {
+  playing = v; playBtn.textContent = v ? '❚❚ Pause' : '▶ Play';
+  if (v) { if (now >= DURATION) now = 0; last = performance.now(); requestAnimationFrame(tick); }
+}
+playBtn.onclick = () => setPlaying(!playing);
+scrub.oninput = () => show(scrub.value / 1000 * DURATION);
+document.getElementById('chapters').append(...SCENES.map(sc => { const b = document.createElement('button'); b.textContent = sc.label; b.onclick = () => show(sc.start + 0.7); return b; }));
+window.addEventListener('keydown', e => { if (e.code === 'Space' && document.getElementById('about').hidden) { e.preventDefault(); setPlaying(!playing); } });
+const about = document.getElementById('about');
+document.getElementById('about-close').onclick = () => { about.hidden = true; setPlaying(true); };
+document.getElementById('about-open').onclick = () => { setPlaying(false); about.hidden = false; about.scrollTop = 0; };
+window.__story = {duration: DURATION, renderAt};
+show(record ? 0 : 0.7);
+</script>
+</body></html>
